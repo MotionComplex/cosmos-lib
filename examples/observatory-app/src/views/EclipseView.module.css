@@ -1,0 +1,180 @@
+.page {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding-bottom: 60px;
+  animation: fadeUp 0.5s var(--ease-out) both;
+}
+
+.header { padding: 20px 0 0; }
+
+.title {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -1px;
+}
+
+.subtitle {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+/* Timeline */
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: relative;
+}
+
+.eclipseCard {
+  display: flex;
+  gap: 24px;
+  position: relative;
+  animation: fadeUp 0.5s var(--ease-out) both;
+}
+
+.eclipseCard:nth-child(1) { animation-delay: 0ms; }
+.eclipseCard:nth-child(2) { animation-delay: 80ms; }
+.eclipseCard:nth-child(3) { animation-delay: 160ms; }
+.eclipseCard:nth-child(4) { animation-delay: 240ms; }
+.eclipseCard:nth-child(5) { animation-delay: 320ms; }
+
+.eclipseLine {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 20px;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.eclipseLine::after {
+  content: '';
+  position: absolute;
+  top: 20px;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1px;
+  background: var(--border);
+}
+
+.eclipseCard:last-child .eclipseLine::after {
+  display: none;
+}
+
+.eclipseDot {
+  width: 12px;
+  height: 12px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+  margin-top: 4px;
+  position: relative;
+  z-index: 1;
+}
+
+.eclipseContent {
+  flex: 1;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+  margin-bottom: 16px;
+  transition: all var(--duration-base) var(--ease-out);
+}
+
+.eclipseContent:hover {
+  border-color: var(--border-hover);
+}
+
+.eclipseTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.eclipseDate {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.eclipseCountdown {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent);
+  padding: 2px 10px;
+  background: var(--accent-dim);
+  border-radius: var(--radius-full);
+}
+
+.eclipseName {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+  margin-bottom: 16px;
+}
+
+.eclipseStats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.eclipseStat {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.eclipseStatLabel {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.eclipseStatValue {
+  font-size: 13px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  text-transform: capitalize;
+}
+
+.magBar {
+  height: 3px;
+  background: var(--bg-surface);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.magFill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.8s var(--ease-out);
+}
+
+.empty {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 14px;
+  padding: 40px 0;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translate3d(0, 12px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@media (max-width: 768px) {
+  .page { padding: 0 4px 80px; }
+  .eclipseStats { grid-template-columns: repeat(2, 1fr); }
+}

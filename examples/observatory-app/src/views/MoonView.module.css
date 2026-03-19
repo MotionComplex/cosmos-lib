@@ -1,0 +1,218 @@
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding-bottom: 60px;
+  animation: fadeUp 0.5s var(--ease-out) both;
+}
+
+.header { padding: 20px 0 0; }
+
+.title {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -1px;
+}
+
+.subtitle {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+/* Phase hero */
+.phaseHero {
+  display: flex;
+  align-items: center;
+  gap: 48px;
+  padding: 40px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  animation: fadeUp 0.6s var(--ease-out) 100ms both;
+}
+
+.phaseVisual {
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 30px rgba(200, 200, 210, 0.1));
+}
+
+.phaseInfo {
+  flex: 1;
+}
+
+.phaseName {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -1px;
+  text-transform: capitalize;
+  display: block;
+  margin-bottom: 24px;
+  background: linear-gradient(135deg, var(--text-primary), var(--text-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.phaseNumbers {
+  display: flex;
+  gap: 32px;
+}
+
+.phaseNum {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.phaseNumValue {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.5px;
+}
+
+.phaseNumLabel {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* Data grid */
+.dataGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.dataCard {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+}
+
+.dataTitle {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+
+.dataRows {
+  display: flex;
+  flex-direction: column;
+}
+
+.dataRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.dataRow:last-child { border-bottom: none; }
+
+.dataValue {
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-primary);
+}
+
+/* Phase list */
+.phaseList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.phaseItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px;
+  border-radius: var(--radius-sm);
+  transition: background var(--duration-fast);
+}
+
+.phaseItem:hover {
+  background: var(--bg-surface);
+}
+
+.phaseItemName {
+  font-size: 13px;
+  font-weight: 500;
+  display: block;
+}
+
+.phaseItemDate {
+  font-size: 12px;
+  color: var(--text-secondary);
+  display: block;
+}
+
+/* Calendar */
+.calendarSection {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+}
+
+.calendar {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(48px, 1fr));
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.calDay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 4px;
+  border-radius: var(--radius-sm);
+  cursor: default;
+  transition: background var(--duration-fast);
+}
+
+.calDay:hover {
+  background: var(--bg-surface);
+}
+
+.calDate {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translate3d(0, 12px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@media (max-width: 900px) {
+  .dataGrid { grid-template-columns: 1fr; }
+  .phaseHero { flex-direction: column; align-items: center; text-align: center; gap: 24px; padding: 32px 24px; }
+  .phaseNumbers { justify-content: center; }
+}
+
+@media (max-width: 768px) {
+  .page { padding: 0 4px 80px; }
+  .phaseNumbers { flex-direction: column; gap: 16px; }
+}
