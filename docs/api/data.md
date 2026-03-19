@@ -115,11 +115,97 @@ nearby.forEach(r => console.log(`${r.object.name}: ${r.separation.toFixed(2)} de
 
 ---
 
-## Image Helpers
+## Image Pipeline
 
-### `Data.imageUrls(id: string, width?: number): string[]`
+The image pipeline resolves the best available image for any celestial object through a multi-source cascade. Coordinate-based sources (Pan-STARRS, DSS) guarantee image accuracy by fetching from exact sky positions, not text search.
 
-Get static Wikimedia image URLs from the curated fallback registry. No API call needed.
+See the [Image Pipeline Guide](../guides/image-pipeline.md) for architecture diagrams and performance strategies.
+
+### `Data.getImage(id, name, opts?): Promise<ObjectImageResult | null>`
+
+Unified image pipeline. Resolves the best available image with built-in auto-prefetching of nearby objects.
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `id` | `string` | | Object ID (e.g. `'mars'`, `'m42'`, `'sirius'`). |
+| `name` | `string` | | Display name used for text-search fallback. |
+| `opts` | `GetImageOptions` | `{}` | See options table below. |
+
+**Options (`GetImageOptions`):**
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `width` | `number` | `1200` | Desired image width in pixels. |
+| `srcsetWidths` | `number[]` | `[640, 1024, 1600]` | Widths for the responsive `srcset` (Wikimedia source only). |
+| `source` | `'nasa' \| 'esa' \| 'all'` | `'nasa'` | Which text-search API to use as last resort. |
+| `cutoutTimeout` | `number` | `15000` | Timeout in ms for coordinate-based cutout requests. |
+| `skipCutouts` | `boolean` | `false` | Skip Pan-STARRS and DSS cutout sources entirely. |
+| `prefetch` | `false \| { radius?, limit? }` | `{ radius: 5, limit: 8 }` | Auto-prefetch nearby objects after resolving. Set `false` to disable. |
+
+**Returns:** `Promise<ObjectImageResult | null>`
+
+```ts
+interface ObjectImageResult {
+  src: string                                             // Primary image URL
+  srcset: string | null                                   // Responsive srcset (Wikimedia only)
+  placeholder: string | null                              // 64px blur-up placeholder (Wikimedia only)
+  credit: string                                          // Attribution string
+  source: 'static' | 'panstarrs' | 'dss' | 'nasa' | 'esa'  // Which source resolved
+}
+```
+
+**Cascade order:**
+
+| Priority | Source | When used | Accuracy |
+|---|---|---|---|
+| 1 | In-memory cache | Always checked first | Cached result |
+| 2 | Wikimedia static | Object in curated registry (~38 objects) | Hand-picked, iconic |
+| 3 | Pan-STARRS DR2 | Object has RA/Dec, dec > -30 | Coordinate-based (guaranteed) |
+| 4 | DSS (MAST) | Object has RA/Dec, full sky | Coordinate-based (guaranteed) |
+| 5 | NASA/ESA text search | Last resort | Name-based (best effort) |
+
+```ts
+// Basic usage -- just works
+const img = await Data.getImage('m42', 'Orion Nebula', { width: 1200 })
+if (img) {
+  heroEl.src = img.src
+  heroEl.srcset = img.srcset ?? ''
+  creditEl.textContent = img.credit
+}
+
+// Check the source
+console.log(img.source) // 'static' for curated, 'panstarrs' for cutout, etc.
+
+// Disable auto-prefetch
+const img2 = await Data.getImage('m42', 'Orion Nebula', { prefetch: false })
+
+// Skip cutouts (faster, but less accurate for non-curated objects)
+const img3 = await Data.getImage('m42', 'Orion Nebula', { skipCutouts: true })
+```
+
+### `Data.prefetchImages(ids: string[]): void`
+
+Fire-and-forget batch prefetch. Resolves images for all IDs concurrently in the background and stores results in the in-memory cache. Subsequent `Data.getImage()` calls for these objects resolve instantly.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `ids` | `string[]` | Object IDs to prefetch. |
+
+```ts
+// Prefetch when a list view renders
+Data.prefetchImages(filteredObjects.map(o => o.id))
+
+// Later, when user taps an object:
+const img = await Data.getImage('m2', 'M2') // instant from cache
+```
+
+### Static Image Helpers
+
+These lower-level helpers access the curated Wikimedia registry directly, without the full pipeline cascade.
+
+#### `Data.imageUrls(id: string, width?: number): string[]`
+
+Get static Wikimedia image URLs. No API call needed.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
@@ -133,9 +219,9 @@ Data.imageUrls('m42', 1280) // => ['https://upload.wikimedia.org/...']
 Data.imageUrls('mercury')   // => []
 ```
 
-### `Data.progressiveImage(id: string, width?: number): ProgressiveImageOptions | null`
+#### `Data.progressiveImage(id: string, width?: number): ProgressiveImageOptions | null`
 
-Build a progressive-loading image config from the static fallback registry: a 64 px placeholder, a standard-resolution source, and a 2x HD source.
+Build a progressive-loading image config: a 64 px placeholder, a standard-resolution source, and a 2x HD source.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
@@ -149,7 +235,7 @@ Data.progressiveImage('m42', 1024)
 // => { placeholder: '...64px...', src: '...1024px...', srcHD: '...2048px...' }
 ```
 
-### `Data.imageSrcset(id: string, widths?: number[]): string | null`
+#### `Data.imageSrcset(id: string, widths?: number[]): string | null`
 
 Generate an HTML `srcset` string from the static fallback registry.
 
@@ -158,16 +244,16 @@ Generate an HTML `srcset` string from the static fallback registry.
 | `id` | `string` | | Object ID. |
 | `widths` | `number[]` | `[640, 1280, 1920]` | Array of pixel widths to include. |
 
-**Returns:** `string | null` -- a comma-separated `srcset`-formatted string, or `null` if no images registered.
+**Returns:** `string | null`
 
 ```ts
 Data.imageSrcset('m31')
 // => '...640px-... 640w, ...1280px-... 1280w, ...1920px-... 1920w'
 ```
 
-### `Data.resolveImages(name: string, opts?: ResolveImageOptions): Promise<ResolvedImage[]>`
+#### `Data.resolveImages(name: string, opts?: ResolveImageOptions): Promise<ResolvedImage[]>`
 
-Search NASA and/or ESA APIs for images of any celestial object by name. Unlike the static helpers above, this works for any object -- not limited to the curated fallback registry.
+Search NASA and/or ESA APIs for images by name. Unlike the static helpers, this works for any object. This is the last-resort text-search source used internally by `Data.getImage()`.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|

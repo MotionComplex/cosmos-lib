@@ -4,7 +4,7 @@ import { BRIGHT_STARS } from './stars.js'
 import { CONSTELLATIONS } from './constellations.js'
 import { MESSIER_CATALOG } from './messier.js'
 import { METEOR_SHOWERS } from './showers.js'
-import { IMAGE_FALLBACKS, resolveImages } from './images.js'
+import { IMAGE_FALLBACKS, resolveImages, getObjectImage, prefetchImages, _setCatalogLookup, _setNearbyFn } from './images.js'
 import { AstroMath } from '../math.js'
 import { Media } from '../media.js'
 import type { CelestialObject, ObjectType, ProximityResult, EquatorialCoord, ProgressiveImageOptions } from '../types.js'
@@ -28,7 +28,9 @@ export { BRIGHT_STARS } from './stars.js'
 export { CONSTELLATIONS } from './constellations.js'
 export { MESSIER_CATALOG } from './messier.js'
 export { METEOR_SHOWERS } from './showers.js'
-export { IMAGE_FALLBACKS, resolveImages } from './images.js'
+export { IMAGE_FALLBACKS, resolveImages, getObjectImage, prefetchImages } from './images.js'
+export { computeFov, tryPanSTARRS, tryDSS } from './cutouts.js'
+export type { CutoutResult, CutoutOptions } from './cutouts.js'
 
 // ── Adapters ──────────────────────────────────────────────────────────────────
 
@@ -73,6 +75,7 @@ function messierToCelestial(m: MessierObject): CelestialObject {
     magnitude: m.mag,
     description: m.description,
     tags: ['messier', m.type],
+    ...(m.size_arcmin != null ? { size_arcmin: m.size_arcmin } : {}),
   }
 }
 
@@ -91,6 +94,25 @@ const byName = new Map<string, CelestialObject>(
   UNIFIED.flatMap(o =>
     [o.name, ...o.aliases].map(a => [a.toLowerCase(), o])
   )
+)
+
+// Wire catalog data into the image pipeline (avoids circular import)
+_setCatalogLookup((id: string) => {
+  const obj = byId.get(id)
+  if (!obj) return null
+  return { ra: obj.ra, dec: obj.dec, size_arcmin: obj.size_arcmin, type: obj.type, name: obj.name }
+})
+_setNearbyFn((center: EquatorialCoord, radiusDeg: number) =>
+  UNIFIED
+    .filter((o): o is CelestialObject & { ra: number; dec: number } =>
+      o.ra !== null && o.dec !== null
+    )
+    .map(o => ({
+      object: o,
+      separation: AstroMath.angularSeparation(center, { ra: o.ra, dec: o.dec }),
+    }))
+    .filter(r => r.separation <= radiusDeg)
+    .sort((a, b) => a.separation - b.separation)
 )
 
 // Star lookup maps
@@ -413,6 +435,47 @@ export const Data = {
    * ```
    */
   resolveImages,
+
+  /**
+   * Unified image pipeline — resolves the best available image for any
+   * celestial object and returns it in an optimized, ready-to-render format.
+   *
+   * Runs a cascading lookup: static registry (instant) → NASA → ESA.
+   * Results from API sources are cached in memory. The consumer only needs
+   * to provide the object ID and name — the pipeline handles source selection,
+   * URL construction, and responsive `srcset` generation.
+   *
+   * @param id   - Object ID (e.g. `'mars'`, `'m42'`, `'sirius'`).
+   * @param name - Display name for API search fallback (e.g. `'Mars'`).
+   * @param opts - Width, srcset, and source preferences.
+   * @returns The best available image, or `null` if nothing was found.
+   *
+   * @example
+   * ```ts
+   * const img = await Data.getImage('mars', 'Mars')
+   * if (img) {
+   *   heroEl.src = img.src
+   *   heroEl.srcset = img.srcset ?? ''
+   *   creditEl.textContent = img.credit
+   * }
+   * ```
+   */
+  getImage: getObjectImage,
+
+  /**
+   * Prefetch images for a list of object IDs in the background.
+   *
+   * Results are stored in the in-memory cache so subsequent
+   * {@link Data.getImage} calls resolve instantly.
+   *
+   * @param ids - Object IDs to prefetch.
+   *
+   * @example
+   * ```ts
+   * Data.prefetchImages(filteredObjects.map(o => o.id))
+   * ```
+   */
+  prefetchImages,
 
   // ── Bright star queries ────────────────────────────────────────────────
 

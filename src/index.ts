@@ -30,8 +30,8 @@ export { Sun }                                 from './sun.js'
 export { Moon }                                from './moon.js'
 export { Eclipse }                             from './eclipse.js'
 export type { EclipseEvent }                   from './eclipse.js'
-export { Data, SOLAR_SYSTEM, DEEP_SKY_EXTRAS, BRIGHT_STARS, CONSTELLATIONS, MESSIER_CATALOG, METEOR_SHOWERS, IMAGE_FALLBACKS, resolveImages } from './data/index.js'
-export type { SolarSystemBody, BrightStar, Constellation, MessierObject, MeteorShower, ResolvedImage, ResolveImageOptions } from './data/index.js'
+export { Data, SOLAR_SYSTEM, DEEP_SKY_EXTRAS, BRIGHT_STARS, CONSTELLATIONS, MESSIER_CATALOG, METEOR_SHOWERS, IMAGE_FALLBACKS, resolveImages, getObjectImage, prefetchImages, computeFov, tryPanSTARRS, tryDSS } from './data/index.js'
+export type { SolarSystemBody, BrightStar, Constellation, MessierObject, MeteorShower, ResolvedImage, ResolveImageOptions, CutoutResult, CutoutOptions } from './data/index.js'
 export { PLANET_TEXTURES, STAR_TEXTURES }      from './data/textures.js'
 export type { TextureInfo }                    from './data/textures.js'
 export { Media }                               from './media.js'
@@ -80,6 +80,8 @@ export type {
   ImageRef,
   ProgressiveImageOptions,
   CloudinaryOptions,
+  ObjectImageResult,
+  GetImageOptions,
   ProjectionName,
   SkyMapRenderOptions,
   ProjectedObject,

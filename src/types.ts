@@ -87,6 +87,8 @@ export interface CelestialObject {
   binary?: boolean
   /** Whether the object is a known triple system. */
   triple?: boolean
+  /** Angular diameter in arcminutes (for extended objects like nebulae, clusters, galaxies). */
+  size_arcmin?: number
 }
 
 /**
@@ -503,6 +505,50 @@ export interface CloudinaryOptions {
   f?: string | 'auto'
   /** Crop mode (e.g. `'fill'`, `'fit'`). */
   crop?: string
+}
+
+// ─── Image pipeline types ────────────────────────────────────────────────────
+
+/**
+ * Unified image result returned by the {@link Data.getImage} pipeline.
+ *
+ * Contains everything a consumer needs to display an optimized, responsive
+ * image with proper attribution — regardless of which source it came from.
+ */
+export interface ObjectImageResult {
+  /** Primary image URL at the requested width. */
+  src: string
+  /** Responsive `srcset` string (e.g. `'...640w, ...1024w, ...1600w'`), or `null`. */
+  srcset: string | null
+  /** Tiny placeholder URL for blur-up loading, or `null`. */
+  placeholder: string | null
+  /** Attribution / credit string. */
+  credit: string
+  /** Where the image came from. */
+  source: 'static' | 'panstarrs' | 'dss' | 'nasa' | 'esa'
+}
+
+/**
+ * Options for {@link Data.getImage}.
+ */
+export interface GetImageOptions {
+  /** Desired image width in pixels. @defaultValue `1200` */
+  width?: number
+  /** Widths for the responsive `srcset`. @defaultValue `[640, 1024, 1600]` */
+  srcsetWidths?: number[]
+  /** Which API sources to search if no static image exists. @defaultValue `'nasa'` */
+  source?: 'nasa' | 'esa' | 'all'
+  /** Timeout in ms for coordinate-based cutout requests. @defaultValue `15000` */
+  cutoutTimeout?: number
+  /** Skip coordinate-based cutout sources (Pan-STARRS, DSS) entirely. @defaultValue `false` */
+  skipCutouts?: boolean
+  /**
+   * Auto-prefetch nearby objects after resolving. Set `false` to disable.
+   * When enabled, nearby objects are fetched in the background so spatial
+   * browsing feels instant.
+   * @defaultValue `{ radius: 5, limit: 8 }`
+   */
+  prefetch?: false | { radius?: number; limit?: number }
 }
 
 // ─── SkyMap types ─────────────────────────────────────────────────────────────

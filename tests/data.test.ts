@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { Data, IMAGE_FALLBACKS } from '../src/data'
+import { computeFov } from '../src/data/cutouts'
 
 describe('Data — image helpers', () => {
   describe('imageUrls', () => {
@@ -10,7 +11,7 @@ describe('Data — image helpers', () => {
     })
 
     it('returns empty array for objects without static images', () => {
-      expect(Data.imageUrls('sun')).toHaveLength(0)
+      expect(Data.imageUrls('capella')).toHaveLength(0)
     })
 
     it('returns empty array for nonexistent id', () => {
@@ -33,7 +34,7 @@ describe('Data — image helpers', () => {
     })
 
     it('returns null for objects without static images', () => {
-      expect(Data.progressiveImage('sun')).toBeNull()
+      expect(Data.progressiveImage('capella')).toBeNull()
     })
 
     it('returns null for nonexistent id', () => {
@@ -64,7 +65,7 @@ describe('Data — image helpers', () => {
     })
 
     it('returns null for objects without static images', () => {
-      expect(Data.imageSrcset('sun')).toBeNull()
+      expect(Data.imageSrcset('capella')).toBeNull()
     })
 
     it('returns null for nonexistent id', () => {
@@ -252,6 +253,71 @@ describe('Data', () => {
     it('returns empty array when no objects are within radius', () => {
       const results = Data.nearby({ ra: 45.123, dec: 12.456 }, 0.00001)
       expect(results).toHaveLength(0)
+    })
+  })
+
+  describe('size_arcmin propagation', () => {
+    it('propagates size_arcmin from Messier catalog to unified object', () => {
+      const m42 = Data.get('m42')
+      expect(m42).not.toBeNull()
+      expect(m42!.size_arcmin).toBe(85)
+    })
+
+    it('propagates size_arcmin for deep-sky extras', () => {
+      const helix = Data.get('ngc7293')
+      expect(helix).not.toBeNull()
+      expect(helix!.size_arcmin).toBe(25)
+    })
+
+    it('does not have size_arcmin for stars (point sources)', () => {
+      const sirius = Data.get('sirius')
+      expect(sirius).not.toBeNull()
+      expect(sirius!.size_arcmin).toBeUndefined()
+    })
+
+    it('does not have size_arcmin for solar system bodies', () => {
+      const mars = Data.get('mars')
+      expect(mars).not.toBeNull()
+      expect(mars!.size_arcmin).toBeUndefined()
+    })
+  })
+
+  describe('computeFov', () => {
+    it('uses size_arcmin with padding when available', () => {
+      // 10 arcmin * 1.6 padding = 16
+      expect(computeFov(10, 'nebula')).toBe(16)
+    })
+
+    it('uses type default when size_arcmin is undefined', () => {
+      expect(computeFov(undefined, 'star')).toBe(15)
+      expect(computeFov(undefined, 'nebula')).toBe(20)
+      expect(computeFov(undefined, 'galaxy')).toBe(12)
+    })
+
+    it('clamps to minimum FOV', () => {
+      // 1 arcmin * 1.6 = 1.6, but floor is 4
+      expect(computeFov(1, 'nebula')).toBe(4)
+    })
+
+    it('clamps to maximum FOV', () => {
+      // 190 arcmin * 1.6 = 304, but ceiling is 120
+      expect(computeFov(190, 'galaxy')).toBe(120)
+    })
+
+    it('respects custom padding and clamp options', () => {
+      expect(computeFov(10, 'nebula', { padding: 2.0 })).toBe(20)
+      expect(computeFov(10, 'nebula', { minFov: 20 })).toBe(20)
+      expect(computeFov(10, 'nebula', { maxFov: 10 })).toBe(10)
+    })
+
+    it('falls back to 15 arcmin for unknown types', () => {
+      expect(computeFov(undefined, 'unknown-type')).toBe(15)
+    })
+  })
+
+  describe('Data.prefetchImages', () => {
+    it('is a function on the Data facade', () => {
+      expect(typeof Data.prefetchImages).toBe('function')
     })
   })
 })

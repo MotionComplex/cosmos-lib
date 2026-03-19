@@ -15,10 +15,10 @@
  * This view demonstrates the full coordinate pipeline for different object types:
  * → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/guides/coordinate-systems.md Coordinate Systems Guide}
  */
-import { useMemo, useState, useRef } from "react";
+import { useMemo, useState, useRef, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Data, AstroMath, Units, Sun, Moon, CONSTANTS } from "cosmos-lib";
-import type { PlanetName } from "cosmos-lib";
+import type { PlanetName, ObjectImageResult } from "cosmos-lib";
 import { useObserverCtx } from "../App";
 import { useNow } from "../hooks/useNow";
 import { formatTime } from "../utils/formatTime";
@@ -29,7 +29,7 @@ import styles from "./ObjectDetail.module.css";
 const DOCS_ENTRIES: DocEntry[] = [
   {
     module: "Data",
-    functions: ["get", "getByName", "nearby", "imageUrls"],
+    functions: ["get", "getByName", "nearby", "getImage"],
     description:
       "Looks up the object by ID or name, finds nearby objects within 5°, and resolves image URLs for the hero section.",
     docsPath: "docs/api/data.md",
@@ -182,14 +182,6 @@ export function ObjectDetail() {
             .slice(0, 8)
         : [];
 
-    // Optimised image loading — docs: docs/api/data.md#dataimagesrcset
-    // Use progressiveImage for blur-up placeholder → final image
-    const progressive = Data.progressiveImage(obj.id, 1200);
-    // Responsive srcset for the hero image
-    const srcset = Data.imageSrcset(obj.id, [640, 1024, 1600]);
-    // Fallback: single URL at a reasonable width (not full-res original)
-    const imageUrls = Data.imageUrls(obj.id, 1200);
-
     return {
       obj,
       ra,
@@ -201,13 +193,10 @@ export function ObjectDetail() {
       isPlanet,
       isSun,
       isMoon,
-      imageUrls,
-      progressive,
-      srcset,
     };
   }, [id, observer, now]);
 
-  // Progressive image loading state — keyed by object id so it resets on navigation
+  // Image loading state — keyed by object id so it resets on navigation
   const [imgState, setImgState] = useState<{
     id: string | undefined;
     loaded: boolean;
@@ -217,6 +206,26 @@ export function ObjectDetail() {
   }
   const imgLoaded = imgState.loaded;
   const imgRef = useRef<HTMLImageElement>(null);
+
+  // Unified image pipeline — Data.getImage runs the cascade:
+  // static registry (instant) → NASA API → ESA API, with caching.
+  const [heroImageState, setHeroImageState] = useState<{
+    id: string | undefined;
+    image: ObjectImageResult | null;
+    loading: boolean;
+  }>({ id: undefined, image: null, loading: false });
+  if (heroImageState.id !== id) {
+    setHeroImageState({ id, image: null, loading: true });
+  }
+  const heroImage = heroImageState.image;
+  useEffect(() => {
+    if (!data || !heroImageState.loading) return;
+    let cancelled = false;
+    Data.getImage(data.obj.id, data.obj.name, { width: 1200 }).then(result => {
+      if (!cancelled) setHeroImageState(prev => ({ ...prev, image: result, loading: false }));
+    });
+    return () => { cancelled = true; };
+  }, [data, heroImageState.loading]);
 
   if (!data) {
     return (
@@ -231,19 +240,8 @@ export function ObjectDetail() {
     );
   }
 
-  const {
-    obj,
-    ra,
-    dec,
-    hz,
-    rts,
-    extraInfo,
-    nearby,
-    imageUrls,
-    progressive,
-    srcset,
-  } = data;
-  const hasImage = imageUrls.length > 0;
+  const { obj, ra, dec, hz, rts, extraInfo, nearby } = data;
+  const hasImage = heroImage !== null;
 
   return (
     <div className={styles.page}>
@@ -253,8 +251,8 @@ export function ObjectDetail() {
           <div className={styles.heroBg}>
             <img
               ref={imgRef}
-              src={progressive?.src ?? imageUrls[0]}
-              srcSet={srcset ?? undefined}
+              src={heroImage!.src}
+              srcSet={heroImage!.srcset ?? undefined}
               sizes="(max-width: 768px) 100vw, 1000px"
               alt=""
               aria-hidden="true"
