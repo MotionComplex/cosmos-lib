@@ -19,7 +19,20 @@ import { AstroMath, Data, CONSTANTS, Units } from 'cosmos-lib'
 import type { PlanetName } from 'cosmos-lib'
 import { useObserverCtx } from '../App'
 import { useNow } from '../hooks/useNow'
+import { DocsReference } from '../components/DocsReference'
+import type { DocEntry } from '../components/DocsReference'
 import styles from './SolarSystem.module.css'
+
+const DOCS_ENTRIES: DocEntry[] = [
+  { module: 'AstroMath', functions: ['planetEcliptic', 'eclipticToEquatorial', 'equatorialToHorizontal'], description: 'Computes each planet\'s ecliptic position, converts through equatorial to horizontal coordinates to determine visibility and orrery placement.', docsPath: 'docs/api/math.md' },
+  { module: 'Data', functions: ['getByName'], description: 'Looks up catalog metadata (magnitude, description) for each planet by name.', docsPath: 'docs/api/data.md' },
+  { module: 'CONSTANTS', functions: ['AU_TO_KM'], description: 'Converts heliocentric distance from AU to kilometres for the distance display.', docsPath: 'docs/api/constants-and-units.md#constants' },
+  { module: 'Units', functions: ['formatDistance'], description: 'Auto-formats distances into human-readable strings with appropriate units (km, AU, ly).', docsPath: 'docs/api/constants-and-units.md#formatting' },
+]
+
+const DOCS_GUIDES = [
+  { label: 'Coordinate Systems', path: 'docs/guides/coordinate-systems.md' },
+]
 
 const PLANETS: PlanetName[] = ['mercury', 'venus', 'earth', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune']
 
@@ -199,6 +212,7 @@ export function SolarSystem() {
           </div>
         ))}
       </div>
+      <DocsReference entries={DOCS_ENTRIES} guides={DOCS_GUIDES} />
     </div>
   )
 }

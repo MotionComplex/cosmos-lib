@@ -18,7 +18,19 @@ import { Data, AstroMath, Units } from 'cosmos-lib'
 import type { ObjectType, CelestialObject } from 'cosmos-lib'
 import { useObserverCtx } from '../App'
 import { useNow } from '../hooks/useNow'
+import { DocsReference } from '../components/DocsReference'
+import type { DocEntry } from '../components/DocsReference'
 import styles from './Catalog.module.css'
+
+const DOCS_ENTRIES: DocEntry[] = [
+  { module: 'Data', functions: ['search', 'getByType', 'all'], description: 'Powers the search bar (fuzzy text matching), type filter buttons, and the full catalog listing.', docsPath: 'docs/api/data.md' },
+  { module: 'AstroMath', functions: ['equatorialToHorizontal'], description: 'Converts each object\'s RA/Dec to altitude so cards can show current visibility and sort by altitude.', docsPath: 'docs/api/math.md#astromathequatorialtohorizontal' },
+  { module: 'Units', functions: ['formatRA'], description: 'Formats Right Ascension from decimal degrees into hours/minutes/seconds notation on each card.', docsPath: 'docs/api/constants-and-units.md#formatting' },
+]
+
+const DOCS_GUIDES = [
+  { label: 'Catalog Data', path: 'docs/guides/catalog-data.md' },
+]
 
 const TYPES: { key: ObjectType | 'all'; label: string }[] = [
   { key: 'all', label: 'All' },
@@ -171,6 +183,8 @@ export function Catalog() {
       {results.length > 60 && (
         <p className={styles.moreHint}>Showing 60 of {results.length} results. Refine your search to see more.</p>
       )}
+
+      <DocsReference entries={DOCS_ENTRIES} guides={DOCS_GUIDES} />
     </div>
   )
 }

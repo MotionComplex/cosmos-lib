@@ -18,7 +18,21 @@ import { useObserverCtx } from '../App'
 import { useNow } from '../hooks/useNow'
 import { MoonPhaseIcon } from '../components/MoonPhaseIcon'
 import { formatTime } from '../utils/formatTime'
+import { DocsReference } from '../components/DocsReference'
+import type { DocEntry } from '../components/DocsReference'
 import styles from './Observatory.module.css'
+
+const DOCS_ENTRIES: DocEntry[] = [
+  { module: 'Sun', functions: ['position', 'twilight', 'equationOfTime'], description: 'Computes the Sun\'s coordinates for the altitude/azimuth display, sunrise/sunset/twilight times, and the equation of time correction.', docsPath: 'docs/api/sun-moon-eclipse.md#sun' },
+  { module: 'Moon', functions: ['position', 'phase', 'riseTransitSet'], description: 'Provides the Moon\'s sky position, current phase name and illumination percentage, and moonrise/moonset times.', docsPath: 'docs/api/sun-moon-eclipse.md#moon' },
+  { module: 'AstroMath', functions: ['equatorialToHorizontal', 'toJulian', 'j2000Days', 'lst'], description: 'Converts RA/Dec to altitude/azimuth for the observer, computes Julian Date and J2000 days for the time cards, and Local Sidereal Time.', docsPath: 'docs/api/math.md' },
+  { module: 'Eclipse', functions: ['nextSolar', 'nextLunar'], description: 'Finds the next upcoming solar or lunar eclipse to display in the eclipse preview card.', docsPath: 'docs/api/sun-moon-eclipse.md#eclipse' },
+  { module: 'Data', functions: ['getActiveShowers', 'all'], description: 'Retrieves currently active meteor showers and the full object catalog to find bright objects visible above the horizon.', docsPath: 'docs/api/data.md' },
+]
+
+const DOCS_GUIDES = [
+  { label: 'Coordinate Systems', path: 'docs/guides/coordinate-systems.md' },
+]
 
 function formatDeg(deg: number) {
   return `${deg.toFixed(1)}°`
@@ -285,6 +299,7 @@ export function Observatory() {
           </div>
         </section>
       )}
+      <DocsReference entries={DOCS_ENTRIES} guides={DOCS_GUIDES} />
     </div>
   )
 }

@@ -22,7 +22,22 @@ import type { PlanetName } from 'cosmos-lib'
 import { useObserverCtx } from '../App'
 import { useNow } from '../hooks/useNow'
 import { formatTime } from '../utils/formatTime'
+import { DocsReference } from '../components/DocsReference'
+import type { DocEntry } from '../components/DocsReference'
 import styles from './ObjectDetail.module.css'
+
+const DOCS_ENTRIES: DocEntry[] = [
+  { module: 'Data', functions: ['get', 'getByName', 'nearby', 'imageUrls'], description: 'Looks up the object by ID or name, finds nearby objects within 5°, and resolves image URLs for the hero section.', docsPath: 'docs/api/data.md' },
+  { module: 'AstroMath', functions: ['planetEcliptic', 'eclipticToEquatorial', 'equatorialToHorizontal', 'riseTransitSet'], description: 'Computes real-time coordinates for planets (ecliptic → equatorial → horizontal pipeline) and rise/transit/set times for any object.', docsPath: 'docs/api/math.md' },
+  { module: 'Sun', functions: ['position', 'twilight', 'equationOfTime'], description: 'Provides Sun-specific ephemeris data when viewing the Sun detail page: coordinates, full twilight schedule, and equation of time.', docsPath: 'docs/api/sun-moon-eclipse.md#sun' },
+  { module: 'Moon', functions: ['position', 'phase', 'libration'], description: 'Provides Moon-specific data when viewing the Moon detail page: position, current phase, and libration angles.', docsPath: 'docs/api/sun-moon-eclipse.md#moon' },
+  { module: 'CONSTANTS', functions: ['AU_TO_KM'], description: 'Converts planetary distances from AU to kilometres for display.', docsPath: 'docs/api/constants-and-units.md#constants' },
+  { module: 'Units', functions: ['formatRA', 'formatDistance'], description: 'Formats Right Ascension and distances into human-readable strings for the coordinate and property tables.', docsPath: 'docs/api/constants-and-units.md#formatting' },
+]
+
+const DOCS_GUIDES = [
+  { label: 'Coordinate Systems', path: 'docs/guides/coordinate-systems.md' },
+]
 
 const PLANET_NAMES = ['mercury', 'venus', 'earth', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune']
 
@@ -296,6 +311,7 @@ export function ObjectDetail() {
           </div>
         </div>
       )}
+      <DocsReference entries={DOCS_ENTRIES} guides={DOCS_GUIDES} />
     </div>
   )
 }

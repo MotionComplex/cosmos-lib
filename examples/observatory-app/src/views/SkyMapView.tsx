@@ -13,7 +13,20 @@ import { renderSkyMap, Data, AstroMath } from 'cosmos-lib'
 import type { ProjectionName, SkyMapRenderOptions } from 'cosmos-lib'
 import { useObserverCtx } from '../App'
 import { useNow } from '../hooks/useNow'
+import { DocsReference } from '../components/DocsReference'
+import type { DocEntry } from '../components/DocsReference'
 import styles from './SkyMapView.module.css'
+
+const DOCS_ENTRIES: DocEntry[] = [
+  { module: 'SkyMap', functions: ['renderSkyMap'], description: 'Renders the interactive star chart onto the canvas with configurable projection, grid, labels, and constellation overlays.', docsPath: 'docs/api/skymap.md' },
+  { module: 'AstroMath', functions: ['lst'], description: 'Calculates Local Sidereal Time to centre the map on the sky currently above the observer.', docsPath: 'docs/api/math.md#sidereal-time' },
+  { module: 'Data', functions: ['all', 'constellations'], description: 'Loads the full celestial object catalog and constellation stick-figure data for rendering.', docsPath: 'docs/api/data.md' },
+]
+
+const DOCS_GUIDES = [
+  { label: 'Sky Map Projections', path: 'docs/api/skymap.md#projections' },
+  { label: 'Coordinate Systems', path: 'docs/guides/coordinate-systems.md' },
+]
 
 const PROJECTIONS: { key: ProjectionName; label: string }[] = [
   { key: 'stereographic', label: 'Stereo' },
@@ -134,6 +147,7 @@ export function SkyMapView() {
           </div>
         </div>
       </div>
+      <DocsReference entries={DOCS_ENTRIES} guides={DOCS_GUIDES} />
     </div>
   )
 }

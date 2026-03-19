@@ -16,7 +16,15 @@ import { useObserverCtx } from '../App'
 import { useNow } from '../hooks/useNow'
 import { MoonPhaseIcon } from '../components/MoonPhaseIcon'
 import { formatTime } from '../utils/formatTime'
+import { DocsReference } from '../components/DocsReference'
+import type { DocEntry } from '../components/DocsReference'
 import styles from './MoonView.module.css'
+
+const DOCS_ENTRIES: DocEntry[] = [
+  { module: 'Moon', functions: ['position', 'phase', 'nextPhase', 'riseTransitSet', 'libration'], description: 'Drives the entire view: geocentric position for the coordinate table, phase data for the hero display, upcoming phase dates, rise/set times, and libration angles.', docsPath: 'docs/api/sun-moon-eclipse.md#moon' },
+  { module: 'AstroMath', functions: ['equatorialToHorizontal'], description: 'Converts the Moon\'s RA/Dec to altitude and azimuth for the observer\'s location.', docsPath: 'docs/api/math.md#astromathequatorialtohorizontal' },
+  { module: 'Units', functions: ['formatRA'], description: 'Formats the Moon\'s Right Ascension into hours/minutes/seconds for the position table.', docsPath: 'docs/api/constants-and-units.md#formatting' },
+]
 
 function formatDate(d: Date) {
   return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
@@ -207,6 +215,7 @@ export function MoonView() {
           ))}
         </div>
       </div>
+      <DocsReference entries={DOCS_ENTRIES} />
     </div>
   )
 }

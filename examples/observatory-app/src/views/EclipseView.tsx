@@ -7,7 +7,13 @@
  */
 import { useMemo } from 'react'
 import { Eclipse } from 'cosmos-lib'
+import { DocsReference } from '../components/DocsReference'
+import type { DocEntry } from '../components/DocsReference'
 import styles from './EclipseView.module.css'
+
+const DOCS_ENTRIES: DocEntry[] = [
+  { module: 'Eclipse', functions: ['search'], description: 'Searches for all solar and lunar eclipses in a 3-year window, returning type, subtype, date, and magnitude for the timeline.', docsPath: 'docs/api/sun-moon-eclipse.md#eclipse' },
+]
 
 export function EclipseView() {
   const eclipses = useMemo(() => {
@@ -106,6 +112,7 @@ export function EclipseView() {
           })
         )}
       </div>
+      <DocsReference entries={DOCS_ENTRIES} />
     </div>
   )
 }
