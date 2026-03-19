@@ -1,3 +1,18 @@
+/**
+ * SolarSystem — Real-time orrery with planetary positions and details.
+ *
+ * cosmos-lib docs used in this file:
+ * - AstroMath.planetEcliptic               → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/api/math.md#astromathplanetecliptic Planetary Ephemeris docs}
+ * - AstroMath.eclipticToEquatorial          → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/api/math.md#coordinate-transforms Coordinate Transform docs}
+ * - AstroMath.equatorialToHorizontal        → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/api/math.md#astromathequatorialtohorizontal}
+ * - Data.getByName                          → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/api/data.md#datagetbyname Data API docs}
+ * - CONSTANTS.AU_TO_KM                      → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/api/constants-and-units.md#constants Constants docs}
+ * - Units.formatDistance                    → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/api/constants-and-units.md#formatting Units docs}
+ * - PlanetName type                         → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/types.md#ephemeris Type Reference}
+ *
+ * Conceptual guide for the ecliptic → equatorial → horizontal pipeline:
+ * → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/guides/coordinate-systems.md Coordinate Systems Guide}
+ */
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AstroMath, Data, CONSTANTS, Units } from 'cosmos-lib'
@@ -37,12 +52,18 @@ export function SolarSystem() {
 
   const planets = useMemo(() => {
     return PLANETS.map(name => {
+      // Compute ecliptic position — docs: docs/api/math.md#astromathplanetecliptic
       const pos = AstroMath.planetEcliptic(name, now)
+
+      // Convert ecliptic → equatorial → horizontal (full pipeline)
+      // docs: docs/guides/coordinate-systems.md#converting-between-systems
       const eq = AstroMath.eclipticToEquatorial({
         lon: pos.lon,
         lat: pos.lat,
       })
       const hz = AstroMath.equatorialToHorizontal(eq, { ...observer, date: now })
+
+      // Look up catalog data for the planet — docs: docs/api/data.md#datagetbyname
       const obj = Data.getByName(name)
       const distFromSun = pos.r
 

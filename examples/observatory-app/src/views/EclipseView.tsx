@@ -1,9 +1,17 @@
+/**
+ * EclipseView — 3-year forecast of upcoming solar & lunar eclipses.
+ *
+ * cosmos-lib docs used in this file:
+ * - Eclipse.search (find eclipses in a date range) → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/api/sun-moon-eclipse.md#eclipsesearch Eclipse API docs}
+ * - EclipseEvent interface (type, subtype, date, magnitude) → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/types.md#ephemeris Type Reference}
+ */
 import { useMemo } from 'react'
 import { Eclipse } from 'cosmos-lib'
 import styles from './EclipseView.module.css'
 
 export function EclipseView() {
   const eclipses = useMemo(() => {
+    // Search for all eclipses in the next 3 years — docs: docs/api/sun-moon-eclipse.md#eclipsesearch
     const now = new Date()
     const end = new Date(now)
     end.setFullYear(end.getFullYear() + 3)

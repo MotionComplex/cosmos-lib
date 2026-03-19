@@ -1,3 +1,20 @@
+/**
+ * ObjectDetail — Detail view for any celestial object (star, planet, nebula, etc.).
+ *
+ * cosmos-lib docs used in this file:
+ * - Data.get, Data.getByName, Data.nearby, Data.imageUrls → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/api/data.md Data API docs}
+ * - AstroMath.planetEcliptic           → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/api/math.md#astromathplanetecliptic Planetary Ephemeris docs}
+ * - AstroMath.eclipticToEquatorial     → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/api/math.md#coordinate-transforms Coordinate Transform docs}
+ * - AstroMath.equatorialToHorizontal   → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/api/math.md#astromathequatorialtohorizontal}
+ * - AstroMath.riseTransitSet           → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/api/math.md#astromathriseTransitset Rise/Transit/Set docs}
+ * - Sun.position, Sun.twilight, Sun.equationOfTime → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/api/sun-moon-eclipse.md#sun Sun API docs}
+ * - Moon.position, Moon.phase, Moon.libration      → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/api/sun-moon-eclipse.md#moon Moon API docs}
+ * - CONSTANTS.AU_TO_KM                 → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/api/constants-and-units.md#constants Constants docs}
+ * - Units.formatRA, Units.formatDistance → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/api/constants-and-units.md#formatting Units docs}
+ *
+ * This view demonstrates the full coordinate pipeline for different object types:
+ * → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/guides/coordinate-systems.md Coordinate Systems Guide}
+ */
 import { useMemo } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { Data, AstroMath, Units, Sun, Moon, CONSTANTS } from 'cosmos-lib'
@@ -17,6 +34,8 @@ export function ObjectDetail() {
 
   const data = useMemo(() => {
     if (!id) return null
+
+    // Look up by ID first, then by name — docs: docs/api/data.md#dataget
     const obj = Data.get(id) || Data.getByName(id)
     if (!obj) return null
 
@@ -30,6 +49,8 @@ export function ObjectDetail() {
     let extraInfo: Record<string, string> = {}
 
     if (isPlanet) {
+      // Planet ephemeris: ecliptic → equatorial pipeline
+      // docs: docs/api/math.md#astromathplanetecliptic
       const pos = AstroMath.planetEcliptic(id.toLowerCase() as PlanetName, now)
       const eq = AstroMath.eclipticToEquatorial({ lon: pos.lon, lat: pos.lat })
       ra = eq.ra
@@ -43,6 +64,7 @@ export function ObjectDetail() {
     }
 
     if (isSun) {
+      // Sun-specific data — docs: docs/api/sun-moon-eclipse.md#sun
       const sunPos = Sun.position(now)
       ra = sunPos.ra
       dec = sunPos.dec
@@ -63,6 +85,7 @@ export function ObjectDetail() {
     }
 
     if (isMoon) {
+      // Moon-specific data — docs: docs/api/sun-moon-eclipse.md#moon
       const moonPos = Moon.position(now)
       ra = moonPos.ra
       dec = moonPos.dec
@@ -84,12 +107,12 @@ export function ObjectDetail() {
       rts = AstroMath.riseTransitSet({ ra, dec }, obs)
     }
 
-    // Get nearby objects
+    // Proximity search for nearby objects — docs: docs/api/data.md#datanearby
     const nearby = ra != null && dec != null
       ? Data.nearby({ ra, dec }, 5).filter(r => r.object.id !== obj.id).slice(0, 8)
       : []
 
-    // Image URLs
+    // Image URLs from the fallback registry — docs: docs/api/data.md#dataimageurls
     const imageUrls = Data.imageUrls(obj.id)
 
     return { obj, ra, dec, hz, rts, extraInfo, nearby, isPlanet, isSun, isMoon, imageUrls }

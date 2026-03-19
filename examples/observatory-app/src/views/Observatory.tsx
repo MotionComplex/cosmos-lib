@@ -1,3 +1,16 @@
+/**
+ * Observatory — Main dashboard showing real-time Sun, Moon, and sky data.
+ *
+ * cosmos-lib docs used in this file:
+ * - Sun.position, Sun.twilight, Sun.equationOfTime → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/api/sun-moon-eclipse.md#sun Sun API docs}
+ * - Moon.position, Moon.phase, Moon.riseTransitSet  → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/api/sun-moon-eclipse.md#moon Moon API docs}
+ * - AstroMath.equatorialToHorizontal, toJulian, j2000Days, lst → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/api/math.md Math API docs}
+ * - Eclipse.nextSolar, Eclipse.nextLunar             → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/api/sun-moon-eclipse.md#eclipse Eclipse API docs}
+ * - Data.getActiveShowers, Data.all                   → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/api/data.md Data API docs}
+ *
+ * Conceptual guide for coordinate transforms used here:
+ * → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/guides/coordinate-systems.md Coordinate Systems Guide}
+ */
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Sun, Moon, AstroMath, Data, Eclipse } from 'cosmos-lib'
@@ -18,12 +31,16 @@ export function Observatory() {
 
   const data = useMemo(() => {
     const obs = { ...observer, date: now }
+
+    // Sun position & twilight — docs: docs/api/sun-moon-eclipse.md#sun
     const sunPos = Sun.position(now)
     const sunHoriz = AstroMath.equatorialToHorizontal(
       { ra: sunPos.ra, dec: sunPos.dec },
       obs
     )
     const twilight = Sun.twilight(obs)
+
+    // Moon position, phase & rise/set — docs: docs/api/sun-moon-eclipse.md#moon
     const moonPos = Moon.position(now)
     const moonHoriz = AstroMath.equatorialToHorizontal(
       { ra: moonPos.ra, dec: moonPos.dec },
@@ -31,17 +48,28 @@ export function Observatory() {
     )
     const moonPhase = Moon.phase(now)
     const moonRTS = Moon.riseTransitSet(obs)
+
+    // Astronomical time calculations — docs: docs/api/math.md#time
     const jd = AstroMath.toJulian(now)
     const j2k = AstroMath.j2000Days(now)
+
+    // Local Sidereal Time — docs: docs/api/math.md#sidereal-time
     const lst = AstroMath.lst(now, observer.lng)
     const siderealH = Math.floor(lst / 15)
     const siderealM = Math.floor((lst / 15 - siderealH) * 60)
     const siderealTime = `${String(siderealH).padStart(2, '0')}:${String(siderealM).padStart(2, '0')}`
+
+    // Equation of Time — docs: docs/api/sun-moon-eclipse.md#sunequationoftime
     const eot = Sun.equationOfTime(now)
+
+    // Eclipse prediction — docs: docs/api/sun-moon-eclipse.md#eclipse
     const nextEclipse = Eclipse.nextSolar(now) || Eclipse.nextLunar(now)
+
+    // Active meteor showers — docs: docs/api/data.md#datagetactiveshowers
     const activeShowers = Data.getActiveShowers(now)
 
-    // What's visible tonight - get bright objects above horizon
+    // What's visible tonight — uses Data.all() + equatorialToHorizontal
+    // docs: docs/api/data.md#dataall, docs/api/math.md#coordinate-transforms
     const brightObjects = Data.all()
       .filter(o => o.ra != null && o.dec != null && o.magnitude != null)
       .sort((a, b) => (a.magnitude ?? 99) - (b.magnitude ?? 99))

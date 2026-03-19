@@ -1,3 +1,15 @@
+/**
+ * MoonView — Lunar ephemeris dashboard with phase tracker and 30-day calendar.
+ *
+ * cosmos-lib docs used in this file:
+ * - Moon.position    → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/api/sun-moon-eclipse.md#moonposition Moon API docs}
+ * - Moon.phase       → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/api/sun-moon-eclipse.md#moonphase Moon API docs}
+ * - Moon.nextPhase   → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/api/sun-moon-eclipse.md#moonnextphase Moon API docs}
+ * - Moon.riseTransitSet → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/api/sun-moon-eclipse.md#moonrisetransitset Moon API docs}
+ * - Moon.libration   → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/api/sun-moon-eclipse.md#moonlibration Moon API docs}
+ * - AstroMath.equatorialToHorizontal → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/api/math.md#astromathequatorialtohorizontal Math API docs}
+ * - Units.formatRA   → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/api/constants-and-units.md#formatting Units docs}
+ */
 import { useMemo } from 'react'
 import { Moon, AstroMath, Units } from 'cosmos-lib'
 import { useObserverCtx } from '../App'
@@ -15,22 +27,31 @@ export function MoonView() {
   const now = useNow(5000)
 
   const data = useMemo(() => {
+    // Geocentric lunar position — docs: docs/api/sun-moon-eclipse.md#moonposition
     const pos = Moon.position(now)
+
+    // Phase info (illumination, age, name) — docs: docs/api/sun-moon-eclipse.md#moonphase
     const phase = Moon.phase(now)
+
+    // Convert equatorial → horizontal for observer — docs: docs/api/math.md#astromathequatorialtohorizontal
     const hz = AstroMath.equatorialToHorizontal(
       { ra: pos.ra, dec: pos.dec },
       { ...observer, date: now }
     )
+
+    // Moon rise, transit, set — docs: docs/api/sun-moon-eclipse.md#moonrisetransitset
     const rts = Moon.riseTransitSet({ ...observer, date: now })
+
+    // Optical libration — docs: docs/api/sun-moon-eclipse.md#moonlibration
     const lib = Moon.libration(now)
 
-    // Calculate next phases
+    // Find the next occurrence of each major phase — docs: docs/api/sun-moon-eclipse.md#moonnextphase
     const nextNew = Moon.nextPhase(now, 'new')
     const nextFirst = Moon.nextPhase(now, 'first-quarter')
     const nextFull = Moon.nextPhase(now, 'full')
     const nextLast = Moon.nextPhase(now, 'last-quarter')
 
-    // Generate phase calendar for next 30 days
+    // Generate 30-day phase calendar using Moon.phase on each day
     const calendar: { date: Date; phase: number; illumination: number }[] = []
     for (let i = 0; i < 30; i++) {
       const d = new Date(now)

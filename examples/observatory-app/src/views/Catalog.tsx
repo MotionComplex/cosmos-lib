@@ -1,3 +1,17 @@
+/**
+ * Catalog — Searchable, filterable list of all celestial objects.
+ *
+ * cosmos-lib docs used in this file:
+ * - Data.search (fuzzy text search)           → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/api/data.md#datasearch Data API docs}
+ * - Data.getByType (filter by object class)   → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/api/data.md#datagetbytype Data API docs}
+ * - Data.all (full catalog)                   → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/api/data.md#dataall Data API docs}
+ * - AstroMath.equatorialToHorizontal          → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/api/math.md#astromathequatorialtohorizontal Math API docs}
+ * - Units.formatRA                            → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/api/constants-and-units.md#formatting Units docs}
+ * - ObjectType, CelestialObject types         → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/types.md Type Reference}
+ *
+ * For more on how catalog data is structured:
+ * → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/guides/catalog-data.md Catalog Data Guide}
+ */
 import { useState, useMemo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Data, AstroMath, Units } from 'cosmos-lib'
@@ -27,15 +41,19 @@ export function Catalog() {
   const results = useMemo(() => {
     let objects: CelestialObject[]
 
+    // Three query modes — docs: docs/api/data.md
     if (query.trim()) {
+      // Fuzzy search across names, aliases, and descriptions
       objects = Data.search(query)
     } else if (typeFilter !== 'all') {
+      // Filter by ObjectType ('star' | 'planet' | 'nebula' | ...)
       objects = Data.getByType(typeFilter)
     } else {
       objects = Data.all()
     }
 
-    // Add altitude info
+    // Enrich each object with current altitude above the observer's horizon
+    // docs: docs/api/math.md#astromathequatorialtohorizontal
     const obs = { ...observer, date: now }
     const enriched = objects.map(obj => {
       let alt: number | null = null
