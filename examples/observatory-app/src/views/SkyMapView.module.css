@@ -139,6 +139,126 @@
   cursor: pointer;
 }
 
+/* ── Info panel (selected object) ─────────────────────────────────────── */
+
+.infoPanel {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  min-width: 200px;
+  max-width: 280px;
+  background: rgba(6, 6, 15, 0.9);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  animation: fadeIn 0.2s var(--ease-out) both;
+}
+
+.infoPanelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.infoPanelName {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.3px;
+}
+
+.infoPanelClose {
+  font-size: 18px;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0 2px;
+  line-height: 1;
+  transition: color var(--duration-fast);
+}
+
+.infoPanelClose:hover {
+  color: var(--text-primary);
+}
+
+.infoPanelBody {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.infoPanelType {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--accent);
+  background: var(--accent-dim);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+}
+
+.infoPanelMag,
+.infoPanelSpec {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.infoPanelAction {
+  display: block;
+  width: 100%;
+  padding: 8px 0;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--accent);
+  text-align: center;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-smooth);
+}
+
+.infoPanelAction:hover {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+}
+
+/* ── FOV dropdown ─────────────────────────────────────────────────────── */
+
+.fovSelect {
+  padding-left: 8px;
+  border-left: 1px solid var(--border);
+}
+
+.fovDropdown {
+  font-size: 11px;
+  color: var(--text-secondary);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 4px 8px;
+  cursor: pointer;
+  outline: none;
+}
+
+.fovDropdown:hover {
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+}
+
+.fovDropdown option {
+  background: var(--bg-card);
+  color: var(--text-primary);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translate3d(0, -4px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
 @keyframes fadeUp {
   from { opacity: 0; transform: translate3d(0, 12px, 0); }
   to { opacity: 1; transform: translate3d(0, 0, 0); }
