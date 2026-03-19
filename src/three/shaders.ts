@@ -1,3 +1,21 @@
+/**
+ * Built-in GLSL shader sources used by the Three.js integration layer.
+ *
+ * Currently contains the atmosphere glow shaders consumed by
+ * {@link createAtmosphere}. The shaders implement a Fresnel-based rim-lighting
+ * effect rendered on the back face of a slightly oversized sphere with additive
+ * blending.
+ *
+ * **`atmosphereVert`** -- Vertex shader that computes per-vertex view direction
+ * and normal vectors in world space.
+ *
+ * **`atmosphereFrag`** -- Fragment shader with the following uniforms:
+ * - `uAtmColor` (`vec3`) -- atmosphere RGB colour.
+ * - `uIntensity` (`float`) -- glow intensity multiplier.
+ *
+ * The fragment alpha is derived from `pow(rim, 3.0) * uIntensity`, where `rim`
+ * is `1.0 - abs(dot(normal, viewDir))`.
+ */
 export const SHADERS = {
   atmosphereVert: /* glsl */`
     varying vec3 vNormal;

@@ -1,9 +1,18 @@
 /**
- * Complete Messier Catalog — all 110 objects.
+ * Complete Messier Catalog -- all 110 objects.
+ *
  * Source: SEDS Messier Database.
  * Coordinates are J2000 equatorial.
+ *
+ * @module
  */
 
+/**
+ * A Messier catalog entry with position, photometry, and classification.
+ *
+ * Each object has a Messier number (1-110), an optional NGC/IC cross-reference,
+ * and is typed as `'nebula'`, `'cluster'`, or `'galaxy'` with a more specific subtype.
+ */
 export interface MessierObject {
   /** Messier number (1-110) */
   messier: number
@@ -31,6 +40,26 @@ export interface MessierObject {
   description: string
 }
 
+/**
+ * The complete Messier catalog: all 110 deep-sky objects cataloged by
+ * Charles Messier in the 18th century.
+ *
+ * Includes nebulae, star clusters, and galaxies with J2000 coordinates,
+ * apparent magnitudes, angular sizes, and distances.
+ *
+ * @example
+ * ```ts
+ * import { MESSIER_CATALOG } from '@motioncomplex/cosmos-lib'
+ *
+ * const m42 = MESSIER_CATALOG.find(m => m.messier === 42)
+ * console.log(m42?.name)         // 'Orion Nebula'
+ * console.log(m42?.distance_kly) // 1.34
+ *
+ * // Get all galaxies in the catalog
+ * const galaxies = MESSIER_CATALOG.filter(m => m.type === 'galaxy')
+ * console.log(galaxies.length) // 40
+ * ```
+ */
 export const MESSIER_CATALOG: readonly MessierObject[] = [
   { messier:1,   name:'Crab Nebula',            ngc:'NGC 1952', type:'nebula',  subtype:'supernova remnant',    constellation:'Tau', ra:83.633,  dec:22.015,  mag:8.4,  size_arcmin:6,     distance_kly:6.5,    description:'Supernova remnant from SN 1054, contains a pulsar' },
   { messier:2,   name:'M2',                     ngc:'NGC 7089', type:'cluster', subtype:'globular cluster',     constellation:'Aqr', ra:323.363, dec:-0.823,  mag:6.3,  size_arcmin:16,    distance_kly:37.5,   description:'Rich globular cluster' },

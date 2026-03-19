@@ -32,6 +32,13 @@ export { IMAGE_FALLBACKS, resolveImages } from './images.js'
 
 // ── Adapters ──────────────────────────────────────────────────────────────────
 
+/**
+ * Convert a {@link BrightStar} record into a unified {@link CelestialObject}.
+ *
+ * @internal
+ * @param s - The bright star record to convert.
+ * @returns A CelestialObject with type `'star'` and the star's spectral class.
+ */
 function starToCelestial(s: BrightStar): CelestialObject {
   return {
     id: s.id,
@@ -47,6 +54,13 @@ function starToCelestial(s: BrightStar): CelestialObject {
   }
 }
 
+/**
+ * Convert a {@link MessierObject} record into a unified {@link CelestialObject}.
+ *
+ * @internal
+ * @param m - The Messier catalog entry to convert.
+ * @returns A CelestialObject whose `id` is `m{number}` and aliases include the NGC designation.
+ */
 function messierToCelestial(m: MessierObject): CelestialObject {
   return {
     id: `m${m.messier}`,
@@ -94,37 +108,138 @@ const messierByNumber = new Map<number, MessierObject>(
   MESSIER_CATALOG.map(m => [m.messier, m])
 )
 
+/**
+ * Unified data-access facade for all built-in astronomical catalogs.
+ *
+ * Merges solar-system bodies, bright stars, Messier objects, and deep-sky
+ * extras into a single searchable collection. Also exposes typed accessors
+ * for individual catalogs (stars, constellations, Messier, meteor showers)
+ * and image-resolution helpers.
+ *
+ * @example
+ * ```ts
+ * import { Data } from '@motioncomplex/cosmos-lib'
+ *
+ * const orion = Data.search('orion')
+ * const sirius = Data.getByName('Sirius')
+ * const m42 = Data.getMessier(42)
+ * ```
+ */
 export const Data = {
   // ── Unified queries ────────────────────────────────────────────────────
 
-  /** Get object by exact id. Returns null if not found. */
+  /**
+   * Look up a celestial object by its exact identifier.
+   *
+   * @param id - The unique object ID (e.g. `'mars'`, `'m42'`, `'sirius'`).
+   * @returns The matching {@link CelestialObject}, or `null` if not found.
+   *
+   * @example
+   * ```ts
+   * const mars = Data.get('mars')
+   * // => { id: 'mars', name: 'Mars', type: 'planet', ... }
+   *
+   * const missing = Data.get('nonexistent')
+   * // => null
+   * ```
+   */
   get(id: string): CelestialObject | null {
     return byId.get(id) ?? null
   },
 
-  /** Get object by name or alias (case-insensitive). Returns null if not found. */
+  /**
+   * Look up a celestial object by name or any known alias (case-insensitive).
+   *
+   * @param name - The common name or alias (e.g. `'Sirius'`, `'Morning Star'`, `'NGC 1976'`).
+   * @returns The matching {@link CelestialObject}, or `null` if no match.
+   *
+   * @example
+   * ```ts
+   * const sirius = Data.getByName('Sirius')
+   * // => { id: 'sirius', name: 'Sirius', type: 'star', ... }
+   *
+   * const venus = Data.getByName('morning star')
+   * // => { id: 'venus', name: 'Venus', ... }
+   * ```
+   */
   getByName(name: string): CelestialObject | null {
     return byName.get(name.toLowerCase()) ?? null
   },
 
-  /** Return a copy of the full unified catalog. */
+  /**
+   * Return a shallow copy of the full unified catalog.
+   *
+   * The returned array is a new instance on every call, so it is safe to
+   * sort, filter, or mutate without affecting the internal data.
+   *
+   * @returns A new array containing every {@link CelestialObject} in the catalog.
+   *
+   * @example
+   * ```ts
+   * const catalog = Data.all()
+   * console.log(catalog.length) // ~420+ objects
+   * ```
+   */
   all(): CelestialObject[] {
     return [...UNIFIED]
   },
 
-  /** Filter by object type. */
+  /**
+   * Filter the unified catalog by object type.
+   *
+   * @param type - The {@link ObjectType} to filter on (e.g. `'planet'`, `'nebula'`, `'galaxy'`).
+   * @returns All objects matching the given type.
+   *
+   * @example
+   * ```ts
+   * const nebulae = Data.getByType('nebula')
+   * // => [{ id: 'm1', name: 'Crab Nebula', ... }, ...]
+   *
+   * const planets = Data.getByType('planet')
+   * // => [{ id: 'mercury', ... }, { id: 'venus', ... }, ...]
+   * ```
+   */
   getByType(type: ObjectType): CelestialObject[] {
     return UNIFIED.filter(o => o.type === type)
   },
 
-  /** Filter by tag string (e.g. 'messier', 'stellar-nursery'). */
+  /**
+   * Filter the unified catalog by a tag string.
+   *
+   * @param tag - A tag to match (e.g. `'messier'`, `'solar-system'`, `'globular'`).
+   * @returns All objects whose `tags` array includes the given string.
+   *
+   * @example
+   * ```ts
+   * const messierObjects = Data.getByTag('messier')
+   * // => all 110 Messier catalog entries
+   *
+   * const solarSystem = Data.getByTag('solar-system')
+   * // => Sun, planets, and Moon
+   * ```
+   */
   getByTag(tag: string): CelestialObject[] {
     return UNIFIED.filter(o => o.tags.includes(tag))
   },
 
   /**
    * Fuzzy search across name, aliases, description, and tags.
-   * Results are sorted by relevance score (highest first).
+   *
+   * Results are ranked by a weighted relevance score: exact ID and name
+   * matches rank highest, followed by alias matches, partial name matches,
+   * description hits, and tag hits. Results are sorted highest-score first.
+   *
+   * @param query - The search term (case-insensitive). An empty string returns `[]`.
+   * @returns Matching {@link CelestialObject CelestialObjects} sorted by relevance.
+   *
+   * @example
+   * ```ts
+   * const results = Data.search('orion')
+   * // => [Orion Nebula (M42), De Mairan's Nebula (M43), Betelgeuse, ...]
+   *
+   * const galaxies = Data.search('spiral')
+   * // => all objects with 'spiral' in name, subtype, description, or tags
+   * ```
    */
   search(query: string): CelestialObject[] {
     const q = query.toLowerCase().trim()
@@ -151,8 +266,24 @@ export const Data = {
 
   /**
    * Find all objects within a given angular radius of a sky position.
-   * Only considers objects with known RA/Dec (not solar-system bodies).
-   * Results sorted by separation (nearest first).
+   *
+   * Only considers objects with known RA/Dec coordinates (solar-system
+   * bodies with `null` RA/Dec are excluded). Results are sorted by
+   * angular separation, nearest first.
+   *
+   * @param center - The sky position to search around, in J2000 equatorial coordinates.
+   * @param radiusDeg - Search radius in degrees.
+   * @returns An array of {@link ProximityResult} objects, each containing the
+   *   matched object and its angular separation from the center.
+   *
+   * @example
+   * ```ts
+   * // Find objects within 5 degrees of the Orion Nebula
+   * const nearby = Data.nearby({ ra: 83.82, dec: -5.39 }, 5)
+   * nearby.forEach(r =>
+   *   console.log(`${r.object.name}: ${r.separation.toFixed(2)}deg`)
+   * )
+   * ```
    */
   nearby(center: EquatorialCoord, radiusDeg: number): ProximityResult[] {
     return UNIFIED
@@ -171,7 +302,22 @@ export const Data = {
 
   /**
    * Get static Wikimedia image URLs for an object from the fallback registry.
-   * Returns an empty array if the object has no static images.
+   *
+   * Uses the curated {@link IMAGE_FALLBACKS} registry (no API call needed).
+   * Returns an empty array if the object has no static images registered.
+   *
+   * @param id - The object ID (e.g. `'m42'`, `'m31'`).
+   * @param width - Optional pixel width for Wikimedia thumbnail resizing.
+   * @returns An array of Wikimedia Commons thumbnail URLs.
+   *
+   * @example
+   * ```ts
+   * const urls = Data.imageUrls('m42', 1280)
+   * // => ['https://upload.wikimedia.org/...Orion_Nebula.../1280px-...']
+   *
+   * const empty = Data.imageUrls('mercury')
+   * // => []
+   * ```
    */
   imageUrls(id: string, width?: number): string[] {
     const images = IMAGE_FALLBACKS[id]
@@ -180,8 +326,21 @@ export const Data = {
   },
 
   /**
-   * Build a ProgressiveImageOptions config from the static fallback registry.
-   * Returns null if the object has no static images.
+   * Build a {@link ProgressiveImageOptions} config from the static fallback registry.
+   *
+   * Produces a tiny 64 px placeholder, a standard-resolution source, and a
+   * 2x HD source -- ready to feed into `Media.progressive()`.
+   * Returns `null` if the object has no static images registered.
+   *
+   * @param id - The object ID (e.g. `'m42'`, `'m51'`).
+   * @param width - Target width in pixels for the standard source. Defaults to `800`.
+   * @returns A {@link ProgressiveImageOptions} object, or `null`.
+   *
+   * @example
+   * ```ts
+   * const prog = Data.progressiveImage('m42', 1024)
+   * // => { placeholder: '...64px...', src: '...1024px...', srcHD: '...2048px...' }
+   * ```
    */
   progressiveImage(id: string, width = 800): ProgressiveImageOptions | null {
     const images = IMAGE_FALLBACKS[id]
@@ -195,8 +354,21 @@ export const Data = {
   },
 
   /**
-   * Generate a srcset string from the static fallback registry.
-   * Returns null if the object has no static images.
+   * Generate an HTML `srcset` string from the static fallback registry.
+   *
+   * Produces a comma-separated list of `<url> <width>w` entries suitable
+   * for the `srcset` attribute of an `<img>` element.
+   * Returns `null` if the object has no static images registered.
+   *
+   * @param id - The object ID (e.g. `'m31'`).
+   * @param widths - Array of pixel widths to include. Defaults to `[640, 1280, 1920]`.
+   * @returns A `srcset`-formatted string, or `null`.
+   *
+   * @example
+   * ```ts
+   * const srcset = Data.imageSrcset('m31')
+   * // => '...640px-... 640w, ...1280px-... 1280w, ...1920px-... 1920w'
+   * ```
    */
   imageSrcset(id: string, widths: number[] = [640, 1280, 1920]): string | null {
     const images = IMAGE_FALLBACKS[id]
@@ -206,35 +378,94 @@ export const Data = {
   },
 
   /**
-   * Search NASA and/or ESA APIs for images of any object by name.
-   * Returns multi-resolution image results suitable for progressive loading,
-   * fallback chains, or Three.js textures.
+   * Search NASA and/or ESA APIs for images of any celestial object by name.
    *
-   * Works for ANY object — not limited to the static fallback registry.
+   * Returns multi-resolution {@link ResolvedImage} results suitable for
+   * progressive loading, fallback chains, or Three.js textures.
+   * Unlike the static `imageUrls` / `imageSrcset` helpers, this method
+   * works for **any** object -- it is not limited to the curated fallback registry.
+   *
+   * @param name - Object name to search (e.g. `'Orion Nebula'`, `'M42'`, `'Sirius'`).
+   * @param opts - Optional {@link ResolveImageOptions} to control source and limit.
+   * @returns A promise resolving to an array of {@link ResolvedImage} results.
+   *
+   * @example
+   * ```ts
+   * const images = await Data.resolveImages('Crab Nebula', { source: 'all', limit: 3 })
+   * images.forEach(img => console.log(img.title, img.urls[0]))
+   * ```
    */
   resolveImages,
 
   // ── Bright star queries ────────────────────────────────────────────────
 
-  /** Get all bright stars (~300 IAU named stars). */
+  /**
+   * Get all bright stars in the catalog (~200 IAU named stars).
+   *
+   * @returns The full {@link BRIGHT_STARS} array (readonly).
+   *
+   * @example
+   * ```ts
+   * const stars = Data.stars()
+   * console.log(stars[0].name) // 'Sirius'
+   * ```
+   */
   stars(): readonly BrightStar[] {
     return BRIGHT_STARS
   },
 
-  /** Get a bright star by IAU proper name (case-insensitive). */
+  /**
+   * Look up a bright star by its IAU proper name (case-insensitive).
+   *
+   * @param name - The IAU proper name (e.g. `'Sirius'`, `'Betelgeuse'`, `'Polaris'`).
+   * @returns The matching {@link BrightStar}, or `null` if not found.
+   *
+   * @example
+   * ```ts
+   * const sirius = Data.getStarByName('Sirius')
+   * // => { id: 'sirius', name: 'Sirius', con: 'CMa', mag: -1.46, ... }
+   * ```
+   */
   getStarByName(name: string): BrightStar | null {
     return starByName.get(name.toLowerCase()) ?? null
   },
 
-  /** Get all bright stars in a given constellation (3-letter IAU abbreviation). */
+  /**
+   * Get all bright stars belonging to a given constellation.
+   *
+   * @param con - The 3-letter IAU constellation abbreviation (case-insensitive),
+   *   e.g. `'Ori'`, `'CMa'`, `'UMa'`.
+   * @returns All {@link BrightStar BrightStars} in that constellation.
+   *
+   * @example
+   * ```ts
+   * const orionStars = Data.getStarsByConstellation('Ori')
+   * // => [Rigel, Betelgeuse, Bellatrix, Alnilam, Alnitak, Mintaka, Saiph]
+   * ```
+   */
   getStarsByConstellation(con: string): BrightStar[] {
     const upper = con.toUpperCase()
     return BRIGHT_STARS.filter(s => s.con.toUpperCase() === upper)
   },
 
   /**
-   * Find bright stars within a given angular radius.
-   * Results sorted by separation (nearest first).
+   * Find bright stars within a given angular radius of a sky position.
+   *
+   * Results are sorted by angular separation (nearest first).
+   *
+   * @param center - The sky position to search around, in J2000 equatorial coordinates.
+   * @param radiusDeg - Search radius in degrees.
+   * @returns An array of objects, each containing the matched {@link BrightStar}
+   *   and its angular `separation` in degrees from the center.
+   *
+   * @example
+   * ```ts
+   * // Find bright stars within 10 degrees of Sirius
+   * const nearby = Data.nearbyStars({ ra: 101.287, dec: -16.716 }, 10)
+   * nearby.forEach(r =>
+   *   console.log(`${r.star.name}: ${r.separation.toFixed(2)}deg`)
+   * )
+   * ```
    */
   nearbyStars(center: EquatorialCoord, radiusDeg: number): Array<{ star: BrightStar; separation: number }> {
     return BRIGHT_STARS
@@ -248,38 +479,108 @@ export const Data = {
 
   // ── Constellation queries ────────────────────────────────────────────────
 
-  /** Get all 88 IAU constellations. */
+  /**
+   * Get all 88 IAU constellations.
+   *
+   * @returns The full {@link CONSTELLATIONS} array (readonly).
+   *
+   * @example
+   * ```ts
+   * const all = Data.constellations()
+   * console.log(all.length) // 88
+   * ```
+   */
   constellations(): readonly Constellation[] {
     return CONSTELLATIONS
   },
 
-  /** Get a constellation by 3-letter IAU abbreviation (case-insensitive). */
+  /**
+   * Look up a constellation by its 3-letter IAU abbreviation (case-insensitive).
+   *
+   * @param abbr - The abbreviation (e.g. `'Ori'`, `'UMa'`, `'Sco'`).
+   * @returns The matching {@link Constellation}, or `null` if not found.
+   *
+   * @example
+   * ```ts
+   * const orion = Data.getConstellation('Ori')
+   * // => { abbr: 'Ori', name: 'Orion', genitive: 'Orionis', area: 594, ... }
+   * ```
+   */
   getConstellation(abbr: string): Constellation | null {
     return conByAbbr.get(abbr.toLowerCase()) ?? null
   },
 
   // ── Messier catalog queries ────────────────────────────────────────────
 
-  /** Get all 110 Messier objects. */
+  /**
+   * Get all 110 Messier objects.
+   *
+   * @returns The full {@link MESSIER_CATALOG} array (readonly).
+   *
+   * @example
+   * ```ts
+   * const catalog = Data.messier()
+   * console.log(catalog.length) // 110
+   * ```
+   */
   messier(): readonly MessierObject[] {
     return MESSIER_CATALOG
   },
 
-  /** Get a Messier object by number (1-110). */
+  /**
+   * Look up a Messier object by its catalog number.
+   *
+   * @param number - The Messier number, from 1 to 110.
+   * @returns The matching {@link MessierObject}, or `null` if out of range.
+   *
+   * @example
+   * ```ts
+   * const m42 = Data.getMessier(42)
+   * // => { messier: 42, name: 'Orion Nebula', type: 'nebula', mag: 4.0, ... }
+   *
+   * const m1 = Data.getMessier(1)
+   * // => { messier: 1, name: 'Crab Nebula', ... }
+   * ```
+   */
   getMessier(number: number): MessierObject | null {
     return messierByNumber.get(number) ?? null
   },
 
   // ── Meteor shower queries ──────────────────────────────────────────────
 
-  /** Get all meteor showers. */
+  /**
+   * Get all meteor showers in the catalog (~23 significant annual showers).
+   *
+   * @returns The full {@link METEOR_SHOWERS} array (readonly).
+   *
+   * @example
+   * ```ts
+   * const showers = Data.showers()
+   * const perseids = showers.find(s => s.id === 'perseids')
+   * console.log(perseids?.zhr) // 100
+   * ```
+   */
   showers(): readonly MeteorShower[] {
     return METEOR_SHOWERS
   },
 
   /**
    * Get meteor showers that are active on a given date.
-   * Compares the Sun's ecliptic longitude against each shower's activity window.
+   *
+   * Computes the Sun's ecliptic longitude for the date and compares it
+   * against each shower's peak solar longitude, returning those within
+   * a +/-20 degree activity window.
+   *
+   * @param date - The date to check for active showers.
+   * @returns An array of {@link MeteorShower MeteorShowers} active on the given date.
+   *
+   * @example
+   * ```ts
+   * // Check for active showers on August 12 (Perseid peak)
+   * const active = Data.getActiveShowers(new Date('2025-08-12'))
+   * console.log(active.map(s => s.name))
+   * // => ['Perseids', 'Kappa Cygnids', ...]
+   * ```
    */
   getActiveShowers(date: Date): MeteorShower[] {
     const earth = AstroMath.planetEcliptic('earth', date)

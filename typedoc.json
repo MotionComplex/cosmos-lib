@@ -1,0 +1,11 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": ["src/index.ts", "src/three/index.ts"],
+  "out": "docs/api-reference",
+  "plugin": ["typedoc-plugin-markdown"],
+  "readme": "none",
+  "excludeInternal": true,
+  "excludePrivate": true,
+  "categorizeByGroup": true,
+  "githubPages": false
+}
