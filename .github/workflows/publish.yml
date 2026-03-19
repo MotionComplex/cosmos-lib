@@ -49,10 +49,5 @@ jobs:
 
       - name: Publish to GitHub Packages
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          if [ -z "$NODE_AUTH_TOKEN" ]; then
-            echo "::error::NPM_TOKEN secret is missing or empty. Add a GitHub PAT (classic) with write:packages in Settings → Secrets and variables → Actions as NPM_TOKEN."
-            exit 1
-          fi
-          npm publish
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm publish
