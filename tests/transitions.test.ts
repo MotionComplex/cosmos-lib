@@ -139,15 +139,17 @@ describe('Transitions', () => {
 
     it("sets pointerEvents to 'auto' when fading in", async () => {
       const el = makeEl()
-      await fade(el, 'in', 0)
+      const promise = fade(el, 'in', 0)
       await vi.runAllTimersAsync()
+      await promise
       expect(el.style.pointerEvents).toBe('auto')
     })
 
     it("sets pointerEvents to 'none' when fading out", async () => {
       const el = makeEl()
-      await fade(el, 'out', 0)
+      const promise = fade(el, 'out', 0)
       await vi.runAllTimersAsync()
+      await promise
       expect(el.style.pointerEvents).toBe('none')
     })
 
@@ -157,7 +159,7 @@ describe('Transitions', () => {
       const promise  = fade(el, 'out', 300).then(() => { resolved = true })
 
       expect(resolved).toBe(false)
-      await vi.advanceTimersByTimeAsync(300)
+      await vi.advanceTimersByTimeAsync(400) // duration(300) + safety(50)
       await promise
       expect(resolved).toBe(true)
     })
@@ -188,10 +190,14 @@ describe('Transitions', () => {
       const el     = makeEl()
       document.body.appendChild(el)
       // getBoundingClientRect returns zeros in jsdom/happy-dom — that's fine,
-      // we just want to verify onDone fires
+      // we just want to verify onDone fires via the safety timeout
       const onDone = vi.fn()
       heroExpand(el, { duration: 100, onDone })
-      await vi.runAllTimersAsync()
+      // Flush RAF x2 (heroExpand uses nested requestAnimationFrame)
+      await vi.advanceTimersByTimeAsync(0)
+      await vi.advanceTimersByTimeAsync(0)
+      // Advance past duration + safety timeout (100 + 100)
+      await vi.advanceTimersByTimeAsync(250)
       expect(onDone).toHaveBeenCalledOnce()
     })
 
@@ -199,7 +205,10 @@ describe('Transitions', () => {
       const el = makeEl()
       document.body.appendChild(el)
       heroExpand(el, { duration: 100 })
-      await vi.runAllTimersAsync()
+      // Flush RAF x2 then advance past safety timeout
+      await vi.advanceTimersByTimeAsync(0)
+      await vi.advanceTimersByTimeAsync(0)
+      await vi.advanceTimersByTimeAsync(250)
       expect(el.style.transform).toBe('')
     })
   })

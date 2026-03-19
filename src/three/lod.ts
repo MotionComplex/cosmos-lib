@@ -11,6 +11,13 @@ interface LODEntry {
   highTex:     THREE.Texture | null
 }
 
+export interface LODOptions {
+  /** Callback when a high-res texture fails to load. */
+  onError?: (mesh: THREE.Mesh, error: unknown) => void
+  /** Timeout in milliseconds for texture loads (0 = no timeout). */
+  timeout?: number
+}
+
 /**
  * Manages texture resolution for a set of meshes based on camera distance.
  * Register objects with low- and high-res texture URLs, then call
@@ -20,11 +27,13 @@ export class LODTextureManager {
   private _THREE:   typeof import('three')
   private _loader:  THREE.TextureLoader
   private _entries: LODEntry[] = []
+  private _opts:    LODOptions
 
-  constructor(THREE: typeof import('three')) {
+  constructor(THREE: typeof import('three'), opts: LODOptions = {}) {
     this._THREE  = THREE
     this._loader = new THREE.TextureLoader()
     this._loader.setCrossOrigin?.('anonymous')
+    this._opts = opts
   }
 
   /**
@@ -57,6 +66,18 @@ export class LODTextureManager {
   }
 
   /**
+   * Unregister a mesh from LOD management and dispose its textures.
+   */
+  unregister(mesh: THREE.Mesh): void {
+    const idx = this._entries.findIndex(e => e.mesh === mesh)
+    if (idx === -1) return
+    const entry = this._entries[idx]!
+    entry.lowTex?.dispose()
+    entry.highTex?.dispose()
+    this._entries.splice(idx, 1)
+  }
+
+  /**
    * Call this every frame in your render loop.
    * Swaps textures based on current camera distance.
    */
@@ -72,15 +93,39 @@ export class LODTextureManager {
       // Switch to high-res when camera is close enough
       if (dist < entry.lodDistance && entry.currentLOD === 'low' && !entry.loading) {
         entry.loading = true
-        this._loader.load(entry.highUrl, texture => {
-          texture.colorSpace = THREE.SRGBColorSpace
-          entry.highTex      = texture
-          const mat = entry.mesh.material as THREE.MeshStandardMaterial
-          mat.map = texture
-          mat.needsUpdate = true
-          entry.currentLOD = 'high'
-          entry.loading    = false
-        })
+
+        // Set up optional timeout
+        let timedOut = false
+        let timeoutId: ReturnType<typeof setTimeout> | null = null
+        if (this._opts.timeout && this._opts.timeout > 0) {
+          timeoutId = setTimeout(() => {
+            timedOut = true
+            entry.loading = false
+            this._opts.onError?.(entry.mesh, new Error(`Texture load timed out after ${this._opts.timeout}ms`))
+          }, this._opts.timeout)
+        }
+
+        this._loader.load(
+          entry.highUrl,
+          texture => {
+            if (timedOut) { texture.dispose(); return }
+            if (timeoutId) clearTimeout(timeoutId)
+            texture.colorSpace = THREE.SRGBColorSpace
+            entry.highTex      = texture
+            const mat = entry.mesh.material as THREE.MeshStandardMaterial
+            mat.map = texture
+            mat.needsUpdate = true
+            entry.currentLOD = 'high'
+            entry.loading    = false
+          },
+          undefined,
+          (error) => {
+            if (timedOut) return
+            if (timeoutId) clearTimeout(timeoutId)
+            entry.loading = false
+            this._opts.onError?.(entry.mesh, error)
+          },
+        )
       }
 
       // Revert to low-res when camera moves away (with hysteresis to prevent thrashing)

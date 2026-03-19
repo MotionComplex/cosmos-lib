@@ -186,6 +186,42 @@ export function renderSkyMap(
     }
   }
 
+  // Constellation lines
+  if (opts.showConstellationLines && opts.constellations) {
+    ctx.strokeStyle = opts.constellationLineColor ?? 'rgba(100,149,237,0.35)'
+    ctx.lineWidth   = 0.8
+
+    for (const con of opts.constellations) {
+      for (const seg of con.stickFigure) {
+        const p1 = project({ ra: seg[0]!, dec: seg[1]! })
+        const p2 = project({ ra: seg[2]!, dec: seg[3]! })
+        if (!p1.visible || !p2.visible) continue
+        if (p1.x < -50 || p1.x > W + 50 || p2.x < -50 || p2.x > W + 50) continue
+
+        ctx.beginPath()
+        ctx.moveTo(p1.x, p1.y)
+        ctx.lineTo(p2.x, p2.y)
+        ctx.stroke()
+      }
+    }
+  }
+
+  // Constellation labels
+  if (opts.showConstellationLabels && opts.constellations) {
+    ctx.fillStyle = opts.constellationLabelColor ?? 'rgba(100,149,237,0.5)'
+    ctx.font      = '11px sans-serif'
+    ctx.textAlign = 'center'
+
+    for (const con of opts.constellations) {
+      const p = project({ ra: con.ra, dec: con.dec })
+      if (!p.visible) continue
+      if (p.x < 0 || p.x > W || p.y < 0 || p.y > H) continue
+      ctx.fillText(con.name, p.x, p.y)
+    }
+
+    ctx.textAlign = 'left' // reset
+  }
+
   // Objects
   for (const obj of objects) {
     if (obj.ra === null || obj.dec === null) continue

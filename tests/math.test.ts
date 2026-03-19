@@ -225,5 +225,180 @@ describe('AstroMath', () => {
       expect(pos.r).toBeGreaterThan(4.9)
       expect(pos.r).toBeLessThan(5.5)
     })
+
+    it('computes ecliptic latitude (not zero) for inclined planets', () => {
+      const mercury = AstroMath.planetEcliptic('mercury', J2000_DATE)
+      // Mercury has 7° inclination — lat should be non-trivial at most epochs
+      // Just verify it's not always zero anymore
+      const dates = [
+        new Date('2024-03-15T00:00:00Z'),
+        new Date('2024-06-15T00:00:00Z'),
+        new Date('2024-09-15T00:00:00Z'),
+      ]
+      const lats = dates.map(d => AstroMath.planetEcliptic('mercury', d).lat)
+      const anyNonZero = lats.some(lat => Math.abs(lat) > 0.1)
+      expect(anyNonZero).toBe(true)
+    })
+  })
+
+  // ── Kepler solver ───────────────────────────────────────────────────────────
+  describe('solveKepler', () => {
+    it('returns M for circular orbit (e=0)', () => {
+      const M = 1.5 // radians
+      const E = AstroMath.solveKepler(M, 0)
+      expect(E).toBeCloseTo(M, 10)
+    })
+
+    it('converges for Mercury eccentricity (e=0.2056)', () => {
+      const M = Math.PI / 4
+      const E = AstroMath.solveKepler(M, 0.2056)
+      // Verify: E - e*sin(E) = M
+      const residual = E - 0.2056 * Math.sin(E) - M
+      expect(Math.abs(residual)).toBeLessThan(1e-10)
+    })
+
+    it('converges for high eccentricity (e=0.9)', () => {
+      const M = 0.5
+      const E = AstroMath.solveKepler(M, 0.9)
+      const residual = E - 0.9 * Math.sin(E) - M
+      expect(Math.abs(residual)).toBeLessThan(1e-10)
+    })
+  })
+
+  // ── Precession ──────────────────────────────────────────────────────────────
+  describe('precess', () => {
+    it('no change when precessing to same epoch', () => {
+      const eq = { ra: 41.0540, dec: 49.2277 }
+      const result = AstroMath.precess(eq, 2_451_545.0, 2_451_545.0)
+      expect(result.ra).toBeCloseTo(eq.ra, 5)
+      expect(result.dec).toBeCloseTo(eq.dec, 5)
+    })
+
+    it('Theta Persei: J2000 → 2028-11-13 (Meeus Example 21.b)', () => {
+      // Theta Persei at J2000: RA = 2h 44m 11.986s = 41.04994°, Dec = +49°13'42.48" = 49.22847°
+      const eq = { ra: 41.04994, dec: 49.22847 }
+      const jdFrom = 2_451_545.0 // J2000
+      const jdTo   = 2_462_088.69 // 2028-11-13.19 TDT
+
+      const result = AstroMath.precess(eq, jdFrom, jdTo)
+      // Expected: RA ≈ 41.547° (2h 46m 11.331s), Dec ≈ 49.3520° (+49°21'07.1")
+      expect(result.ra).toBeCloseTo(41.55, 0)
+      expect(result.dec).toBeCloseTo(49.35, 0)
+    })
+  })
+
+  // ── Nutation ────────────────────────────────────────────────────────────────
+  describe('nutation', () => {
+    it('returns small values near J2000', () => {
+      const n = AstroMath.nutation(2_451_545.0)
+      // dPsi and dEpsilon should be on the order of arcseconds (< 0.01°)
+      expect(Math.abs(n.dPsi)).toBeLessThan(0.01)
+      expect(Math.abs(n.dEpsilon)).toBeLessThan(0.01)
+    })
+
+    it('Meeus Example 22.a: 1987 April 10', () => {
+      // JD = 2446895.5 (1987 Apr 10, 0h TDT)
+      const n = AstroMath.nutation(2_446_895.5)
+      // Expected: dPsi ≈ -3.788" = -0.001052°, dEpsilon ≈ 9.443" = 0.002623°
+      expect(n.dPsi * 3600).toBeCloseTo(-3.8, 0) // arcseconds
+      expect(n.dEpsilon * 3600).toBeCloseTo(9.4, 0) // arcseconds
+    })
+  })
+
+  // ── True obliquity ──────────────────────────────────────────────────────────
+  describe('trueObliquity', () => {
+    it('near 23.44° at J2000', () => {
+      const eps = AstroMath.trueObliquity(2_451_545.0)
+      expect(eps).toBeCloseTo(23.44, 1)
+    })
+  })
+
+  // ── GAST ────────────────────────────────────────────────────────────────────
+  describe('gast', () => {
+    it('is close to GMST (within ~1°)', () => {
+      const gmst = AstroMath.gmst(J2000_DATE)
+      const gast = AstroMath.gast(J2000_DATE)
+      expect(Math.abs(gast - gmst)).toBeLessThan(0.1)
+    })
+  })
+
+  // ── Atmospheric refraction ──────────────────────────────────────────────────
+  describe('refraction', () => {
+    it('at the horizon (0°) refraction ≈ 29 arcminutes (Saemundsson)', () => {
+      const r = AstroMath.refraction(0)
+      expect(r * 60).toBeCloseTo(29, -1) // ~29 arcminutes (Saemundsson formula)
+    })
+
+    it('at 90° altitude refraction ≈ 0', () => {
+      const r = AstroMath.refraction(90)
+      expect(r).toBeCloseTo(0, 2)
+    })
+
+    it('refraction decreases with altitude', () => {
+      const r0  = AstroMath.refraction(0)
+      const r10 = AstroMath.refraction(10)
+      const r45 = AstroMath.refraction(45)
+      expect(r0).toBeGreaterThan(r10)
+      expect(r10).toBeGreaterThan(r45)
+    })
+  })
+
+  // ── Proper motion ───────────────────────────────────────────────────────────
+  describe('applyProperMotion', () => {
+    it('no change when dt=0', () => {
+      const eq = { ra: 101.287, dec: -16.716 }
+      const result = AstroMath.applyProperMotion(eq, -546.01, -1223.07, 2000, 2000)
+      expect(result.ra).toBeCloseTo(eq.ra, 8)
+      expect(result.dec).toBeCloseTo(eq.dec, 8)
+    })
+
+    it('Sirius: proper motion over 50 years shifts coordinates', () => {
+      // Sirius: pmRA = -546.01 mas/yr, pmDec = -1223.07 mas/yr
+      const eq = { ra: 101.287, dec: -16.716 }
+      const result = AstroMath.applyProperMotion(eq, -546.01, -1223.07, 2000, 2050)
+      // Over 50 years, dec shifts by -1223.07 * 50 / 3600000 ≈ -0.017°
+      expect(result.dec).toBeLessThan(eq.dec)
+      expect(result.dec).toBeCloseTo(eq.dec - 0.017, 2)
+    })
+  })
+
+  // ── Rise/Transit/Set ────────────────────────────────────────────────────────
+  describe('riseTransitSet', () => {
+    it('returns rise, transit, set for a normal case', () => {
+      // Sirius from London
+      const rts = AstroMath.riseTransitSet(
+        { ra: 101.287, dec: -16.716 },
+        { lat: 51.5, lng: -0.1278, date: new Date('2024-01-15T12:00:00Z') },
+      )
+      expect(rts.rise).toBeInstanceOf(Date)
+      expect(rts.transit).toBeInstanceOf(Date)
+      expect(rts.set).toBeInstanceOf(Date)
+    })
+
+    it('rise and set occur on the same day', () => {
+      const rts = AstroMath.riseTransitSet(
+        { ra: 101.287, dec: -16.716 },
+        { lat: 51.5, lng: -0.1278, date: new Date('2024-01-15T12:00:00Z') },
+      )
+      if (rts.rise && rts.set) {
+        // Both should be within 24 hours of midnight
+        const midnight = new Date('2024-01-15T00:00:00Z').valueOf()
+        expect(rts.rise.valueOf()).toBeGreaterThanOrEqual(midnight)
+        expect(rts.rise.valueOf()).toBeLessThan(midnight + 86_400_000)
+        expect(rts.set.valueOf()).toBeGreaterThanOrEqual(midnight)
+        expect(rts.set.valueOf()).toBeLessThan(midnight + 86_400_000)
+      }
+    })
+
+    it('circumpolar object (Polaris from London) has null rise/set', () => {
+      // Polaris: dec ≈ 89.26° — always above horizon from lat 51.5
+      const rts = AstroMath.riseTransitSet(
+        { ra: 37.95, dec: 89.26 },
+        { lat: 51.5, lng: -0.1278, date: new Date('2024-06-15T12:00:00Z') },
+      )
+      // Circumpolar — cosH0 < -1 → never sets
+      expect(rts.rise).toBeNull()
+      expect(rts.set).toBeNull()
+    })
   })
 })

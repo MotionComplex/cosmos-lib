@@ -21,6 +21,7 @@ export class CameraFlight {
   private _controls: OrbitControls
   private _THREE:    typeof import('three')
   private _active  = false
+  private _orbitHandles = new Set<StopHandle>()
 
   constructor(
     camera:   THREE.Camera,
@@ -77,6 +78,7 @@ export class CameraFlight {
 
   /**
    * Continuously orbit the camera around a world point.
+   * Uses delta-time for frame-rate independent rotation.
    * Returns a `{ stop }` handle to halt the orbit.
    */
   orbitAround(
@@ -88,10 +90,21 @@ export class CameraFlight {
     const c        = new THREE.Vector3(center.x, center.y, center.z)
     let angle      = 0
     let running    = true
+    let lastTime   = performance.now()
 
-    const tick = (): void => {
+    const handle: StopHandle = {
+      stop: () => {
+        running = false
+        this._orbitHandles.delete(handle)
+      },
+    }
+    this._orbitHandles.add(handle)
+
+    const tick = (now: number): void => {
       if (!running) return
-      angle += speed
+      const dt = (now - lastTime) / 1000 // seconds
+      lastTime = now
+      angle += speed * dt * 60 // normalized to 60fps equivalent
       ;(this._camera as THREE.PerspectiveCamera).position.set(
         c.x + Math.cos(angle) * radius,
         c.y + elevation * radius,
@@ -103,12 +116,19 @@ export class CameraFlight {
     }
     requestAnimationFrame(tick)
 
-    return { stop: () => { running = false } }
+    return handle
   }
 
   /** Cancel any in-progress flight. */
   cancel(): void {
     this._active = false
+  }
+
+  /** Stop all active orbits and cancel any in-progress flight. */
+  dispose(): void {
+    this.cancel()
+    for (const h of this._orbitHandles) h.stop()
+    this._orbitHandles.clear()
   }
 
   // ── Private ───────────────────────────────────────────────────────────────

@@ -227,7 +227,9 @@ export function createStarField(
     sizeAttenuation: true,
   })
 
-  return new THREE.Points(geo, mat)
+  const points = new THREE.Points(geo, mat)
+  points.userData['dispose'] = () => { geo.dispose(); mat.dispose() }
+  return points
 }
 
 /**
@@ -249,8 +251,8 @@ export function createOrbit(
   const geo = new THREE.BufferGeometry()
   geo.setAttribute('position', new THREE.Float32BufferAttribute(pts, 3))
 
-  return new THREE.Line(
-    geo,
-    new THREE.LineBasicMaterial({ color, transparent: true, opacity }),
-  )
+  const mat = new THREE.LineBasicMaterial({ color, transparent: true, opacity })
+  const line = new THREE.Line(geo, mat)
+  line.userData['dispose'] = () => { geo.dispose(); mat.dispose() }
+  return line
 }

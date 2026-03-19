@@ -118,24 +118,24 @@ describe('renderSkyMap', () => {
     expect(() => renderSkyMap(canvas, [], {})).not.toThrow()
   })
 
-  it('runs without throwing with real catalog data', () => {
-    const { Data } = require('../src/data')
+  it('runs without throwing with real catalog data', async () => {
+    const { Data } = await import('../src/data/index')
     const canvas   = makeCanvas()
     expect(() =>
       renderSkyMap(canvas, Data.all(), { projection: 'stereographic', center: CENTER })
     ).not.toThrow()
   })
 
-  it('runs with mollweide projection', () => {
-    const { Data } = require('../src/data')
+  it('runs with mollweide projection', async () => {
+    const { Data } = await import('../src/data/index')
     const canvas   = makeCanvas(1000, 500)
     expect(() =>
       renderSkyMap(canvas, Data.all(), { projection: 'mollweide' })
     ).not.toThrow()
   })
 
-  it('runs with gnomonic projection', () => {
-    const { Data } = require('../src/data')
+  it('runs with gnomonic projection', async () => {
+    const { Data } = await import('../src/data/index')
     const canvas   = makeCanvas()
     expect(() =>
       renderSkyMap(canvas, Data.all(), { projection: 'gnomonic', center: CENTER })

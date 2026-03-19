@@ -120,6 +120,81 @@ export interface PlanetPosition extends EclipticCoord {
   nu: number
 }
 
+// ─── Nutation ─────────────────────────────────────────────────────────────────
+
+export interface NutationResult {
+  /** Nutation in longitude (degrees) */
+  dPsi: number
+  /** Nutation in obliquity (degrees) */
+  dEpsilon: number
+}
+
+// ─── Rise / Transit / Set ─────────────────────────────────────────────────────
+
+export interface RiseTransitSet {
+  /** Rise time (null if circumpolar or never rises) */
+  rise: Date | null
+  /** Transit (meridian crossing) time */
+  transit: Date
+  /** Set time (null if circumpolar or never sets) */
+  set: Date | null
+}
+
+// ─── Moon ─────────────────────────────────────────────────────────────────────
+
+export type MoonPhaseName =
+  | 'new'
+  | 'waxing-crescent'
+  | 'first-quarter'
+  | 'waxing-gibbous'
+  | 'full'
+  | 'waning-gibbous'
+  | 'last-quarter'
+  | 'waning-crescent'
+
+export interface MoonPhase {
+  /** Phase angle 0..1 (0=new, 0.25=first quarter, 0.5=full, 0.75=last quarter) */
+  phase: number
+  /** Illuminated fraction 0..1 */
+  illumination: number
+  /** Days since last new moon */
+  age: number
+  /** Human-readable phase name */
+  name: MoonPhaseName
+}
+
+export interface MoonPosition extends EquatorialCoord {
+  /** Distance from Earth in km */
+  distance_km: number
+  /** Ecliptic longitude in degrees */
+  eclipticLon: number
+  /** Ecliptic latitude in degrees */
+  eclipticLat: number
+  /** Horizontal parallax in degrees */
+  parallax: number
+}
+
+// ─── Sun / Twilight ───────────────────────────────────────────────────────────
+
+export interface SunPosition extends EquatorialCoord {
+  /** Distance from Earth in AU */
+  distance_AU: number
+  /** Ecliptic longitude in degrees */
+  eclipticLon: number
+}
+
+export interface TwilightTimes {
+  astronomicalDawn: Date | null
+  nauticalDawn: Date | null
+  civilDawn: Date | null
+  sunrise: Date | null
+  solarNoon: Date
+  sunset: Date | null
+  civilDusk: Date | null
+  nauticalDusk: Date | null
+  astronomicalDusk: Date | null
+}
+
 // ─── NASA API types ───────────────────────────────────────────────────────────
 
 export interface NASAImageResult {
@@ -194,6 +269,16 @@ export interface SkyMapRenderOptions {
   background?: string
   gridColor?: string
   labelColor?: string
+  /** Show constellation stick-figure lines. Requires constellation data. */
+  showConstellationLines?: boolean
+  /** Show constellation name labels at center positions. */
+  showConstellationLabels?: boolean
+  /** Color for constellation stick-figure lines. */
+  constellationLineColor?: string
+  /** Color for constellation name labels. */
+  constellationLabelColor?: string
+  /** Constellation data to render. Pass CONSTELLATIONS array from data module. */
+  constellations?: Array<{ ra: number; dec: number; name: string; stickFigure: number[][] }>
 }
 
 // ─── Transition types ─────────────────────────────────────────────────────────
@@ -201,6 +286,7 @@ export interface SkyMapRenderOptions {
 export interface MorphOptions {
   duration?: number
   easing?: string
+  signal?: AbortSignal
 }
 
 export interface StaggerOptions {
@@ -209,10 +295,12 @@ export interface StaggerOptions {
   duration?: number
   from?: 'top' | 'bottom' | 'left' | 'right'
   distance?: string
+  signal?: AbortSignal
 }
 
 export interface HeroExpandOptions {
   duration?: number
   easing?: string
   onDone?: () => void
+  signal?: AbortSignal
 }

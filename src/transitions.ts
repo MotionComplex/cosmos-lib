@@ -8,7 +8,9 @@ export async function morph(
   updateFn: () => void | Promise<void>,
   opts: MorphOptions = {},
 ): Promise<void> {
-  const { duration = 400, easing = 'ease-in-out' } = opts
+  const { duration = 400, easing = 'ease-in-out', signal } = opts
+
+  if (signal?.aborted) return
 
   if (!('startViewTransition' in document)) {
     await updateFn()
@@ -27,6 +29,7 @@ export async function morph(
 
 /**
  * Stagger-reveal all direct children of a container element.
+ * Uses requestAnimationFrame for robust timing.
  * Returns a Promise that resolves when the last element finishes animating.
  */
 export function staggerIn(
@@ -39,7 +42,10 @@ export function staggerIn(
     duration = 500,
     from     = 'bottom',
     distance = '20px',
+    signal,
   } = opts
+
+  if (signal?.aborted) return Promise.resolve()
 
   const AXIS: Record<NonNullable<StaggerOptions['from']>, string> = {
     top:    `translateY(-${distance})`,
@@ -56,23 +62,58 @@ export function staggerIn(
     el.style.transition = 'none'
   })
 
+  if (children.length === 0) return Promise.resolve()
+
   return new Promise(resolve => {
-    children.forEach((el, i) => {
-      setTimeout(() => {
-        el.style.transition = `opacity ${duration}ms ease, transform ${duration}ms cubic-bezier(0.2,0,0,1)`
+    const start = performance.now() + delay
+
+    const onAbort = (): void => {
+      // Reset styles on abort
+      children.forEach(el => {
         el.style.opacity    = '1'
         el.style.transform  = 'none'
-        if (i === children.length - 1) {
-          setTimeout(resolve, duration)
+        el.style.transition = ''
+      })
+      resolve()
+    }
+    signal?.addEventListener('abort', onAbort, { once: true })
+
+    const tick = (now: number): void => {
+      if (signal?.aborted) return
+
+      let allDone = true
+      for (let i = 0; i < children.length; i++) {
+        const childStart = start + i * stagger
+        if (now >= childStart) {
+          const el = children[i]!
+          if (el.style.opacity === '0') {
+            el.style.transition = `opacity ${duration}ms ease, transform ${duration}ms cubic-bezier(0.2,0,0,1)`
+            el.style.opacity    = '1'
+            el.style.transform  = 'none'
+          }
+          // Check if animation would still be running
+          if (now < childStart + duration) allDone = false
+        } else {
+          allDone = false
         }
-      }, delay + i * stagger)
-    })
-    if (children.length === 0) resolve()
+      }
+
+      if (allDone) {
+        signal?.removeEventListener('abort', onAbort)
+        resolve()
+      } else {
+        requestAnimationFrame(tick)
+      }
+    }
+
+    // Trigger reflow, then start RAF loop
+    requestAnimationFrame(() => requestAnimationFrame(tick))
   })
 }
 
 /**
  * Stagger-hide all direct children of a container element.
+ * Uses requestAnimationFrame for robust timing.
  * Returns a Promise that resolves when the last element finishes animating.
  */
 export function staggerOut(
@@ -84,7 +125,10 @@ export function staggerOut(
     duration = 300,
     from     = 'bottom',
     distance = '12px',
+    signal,
   } = opts
+
+  if (signal?.aborted) return Promise.resolve()
 
   const AXIS: Record<NonNullable<StaggerOptions['from']>, string> = {
     top:    `translateY(-${distance})`,
@@ -94,20 +138,51 @@ export function staggerOut(
   }
   const target = AXIS[from]
 
-  const children = [...container.children].reverse() as HTMLElement[]
+  const children = ([...container.children] as HTMLElement[]).reverse()
+
+  if (children.length === 0) return Promise.resolve()
 
   return new Promise(resolve => {
-    children.forEach((el, i) => {
-      setTimeout(() => {
-        el.style.transition = `opacity ${duration}ms ease, transform ${duration}ms ease`
+    const start = performance.now()
+
+    const onAbort = (): void => {
+      children.forEach(el => {
         el.style.opacity    = '0'
         el.style.transform  = target
-        if (i === children.length - 1) {
-          setTimeout(resolve, duration)
+        el.style.transition = ''
+      })
+      resolve()
+    }
+    signal?.addEventListener('abort', onAbort, { once: true })
+
+    const tick = (now: number): void => {
+      if (signal?.aborted) return
+
+      let allDone = true
+      for (let i = 0; i < children.length; i++) {
+        const childStart = start + i * stagger
+        if (now >= childStart) {
+          const el = children[i]!
+          if (el.style.opacity !== '0') {
+            el.style.transition = `opacity ${duration}ms ease, transform ${duration}ms ease`
+            el.style.opacity    = '0'
+            el.style.transform  = target
+          }
+          if (now < childStart + duration) allDone = false
+        } else {
+          allDone = false
         }
-      }, i * stagger)
-    })
-    if (children.length === 0) resolve()
+      }
+
+      if (allDone) {
+        signal?.removeEventListener('abort', onAbort)
+        resolve()
+      } else {
+        requestAnimationFrame(tick)
+      }
+    }
+
+    requestAnimationFrame(tick)
   })
 }
 
@@ -124,7 +199,14 @@ export function fade(
     el.style.transition    = `opacity ${duration}ms ease`
     el.style.opacity       = direction === 'in' ? '1' : '0'
     el.style.pointerEvents = direction === 'in' ? 'auto' : 'none'
-    setTimeout(resolve, duration)
+
+    const done = (): void => {
+      el.removeEventListener('transitionend', done)
+      resolve()
+    }
+    el.addEventListener('transitionend', done, { once: true })
+    // Safety fallback in case transitionend doesn't fire
+    setTimeout(resolve, duration + 50)
   })
 }
 
@@ -154,7 +236,9 @@ export async function crossfade(
  * the viewport using the FLIP technique (no GSAP dependency).
  */
 export function heroExpand(element: HTMLElement, opts: HeroExpandOptions = {}): void {
-  const { duration = 500, easing = 'cubic-bezier(0.4,0,0.2,1)', onDone } = opts
+  const { duration = 500, easing = 'cubic-bezier(0.4,0,0.2,1)', onDone, signal } = opts
+
+  if (signal?.aborted) return
 
   const first  = element.getBoundingClientRect()
   const scaleX = window.innerWidth  / first.width
@@ -167,14 +251,21 @@ export function heroExpand(element: HTMLElement, opts: HeroExpandOptions = {}): 
   element.style.transform       = 'translate(0,0) scale(1,1)'
 
   requestAnimationFrame(() => {
+    if (signal?.aborted) return
     requestAnimationFrame(() => {
+      if (signal?.aborted) return
       element.style.transition = `transform ${duration}ms ${easing}`
       element.style.transform  = `translate(${tx}px, ${ty}px) scale(${scaleX}, ${scaleY})`
-      setTimeout(() => {
+
+      const cleanup = (): void => {
+        element.removeEventListener('transitionend', cleanup)
         element.style.transform  = ''
         element.style.transition = ''
         onDone?.()
-      }, duration)
+      }
+      element.addEventListener('transitionend', cleanup, { once: true })
+      // Safety fallback
+      setTimeout(cleanup, duration + 100)
     })
   })
 }
@@ -191,7 +282,9 @@ export function heroCollapse(
   opts: HeroExpandOptions = {},
   overlayEl?: HTMLElement,
 ): void {
-  const { duration = 400, easing = 'cubic-bezier(0.4,0,0.2,1)', onDone } = opts
+  const { duration = 400, easing = 'cubic-bezier(0.4,0,0.2,1)', onDone, signal } = opts
+
+  if (signal?.aborted) return
 
   const final  = targetElement.getBoundingClientRect()
   const scaleX = final.width  / window.innerWidth
@@ -199,8 +292,9 @@ export function heroCollapse(
   const tx     = final.left + final.width  / 2 - window.innerWidth  / 2
   const ty     = final.top  + final.height / 2 - window.innerHeight / 2
 
+  const isOwned = !overlayEl
   const overlay = overlayEl ?? document.createElement('div')
-  if (!overlayEl) {
+  if (isOwned) {
     Object.assign(overlay.style, {
       position:        'fixed',
       inset:           '0',
@@ -213,13 +307,19 @@ export function heroCollapse(
 
   overlay.style.transition = `transform ${duration}ms ${easing}, opacity ${duration * 0.6}ms ease ${duration * 0.4}ms`
 
+  const cleanup = (): void => {
+    overlay.removeEventListener('transitionend', cleanup)
+    if (isOwned) overlay.remove()
+    onDone?.()
+  }
+
   requestAnimationFrame(() => {
+    if (signal?.aborted) { cleanup(); return }
     overlay.style.transform = `translate(${tx}px, ${ty}px) scale(${scaleX}, ${scaleY})`
     overlay.style.opacity   = '0'
-    setTimeout(() => {
-      if (!overlayEl) overlay.remove()
-      onDone?.()
-    }, duration + 50)
+    overlay.addEventListener('transitionend', cleanup, { once: true })
+    // Safety fallback: ensure cleanup always runs
+    setTimeout(cleanup, duration + 100)
   })
 }
 
