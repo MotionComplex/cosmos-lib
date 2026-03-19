@@ -1,3 +1,26 @@
+/**
+ * `@motioncomplex/cosmos-lib` -- Astronomical calculation and visualisation library.
+ *
+ * This is the main entry point. It re-exports every core module as named
+ * exports so consumers can tree-shake to only what they use:
+ *
+ * ```ts
+ * import { Sun, Moon, Units, CONSTANTS } from '@motioncomplex/cosmos-lib'
+ * ```
+ *
+ * A convenience `Cosmos` default export is also available that bundles all
+ * modules into a single namespace object (see {@link Cosmos}).
+ *
+ * Three.js scene helpers (planet/nebula factories, camera flights, LOD
+ * management) live in the separate `/three` sub-path and are **not** included
+ * here to keep the core bundle free of any Three.js dependency:
+ *
+ * ```ts
+ * import { createPlanet, CameraFlight } from '@motioncomplex/cosmos-lib/three'
+ * ```
+ *
+ * @packageDocumentation
+ */
 export { CONSTANTS } from './constants.js';
 export { Units } from './units.js';
 export { AstroMath } from './math.js';
@@ -17,6 +40,25 @@ export type { ObjectType, DistanceUnit, Distance, CelestialObject, SearchResult,
 import { resolveSimbad } from './api.js';
 import { renderSkyMap, stereographic, mollweide, gnomonic } from './skymap.js';
 import { morph, staggerIn, staggerOut, fade, crossfade, heroExpand, heroCollapse } from './transitions.js';
+/**
+ * Convenience namespace object that mirrors the original `cosmos.js` API.
+ *
+ * Use the default import when you prefer a single namespace over individual
+ * named imports:
+ *
+ * ```ts
+ * import Cosmos from '@motioncomplex/cosmos-lib'
+ *
+ * const jd = Cosmos.Math.julianDate(new Date())
+ * const sunPos = Cosmos.Sun.position(jd)
+ * ```
+ *
+ * For tree-shaking, prefer the named exports instead:
+ *
+ * ```ts
+ * import { AstroMath, Sun } from '@motioncomplex/cosmos-lib'
+ * ```
+ */
 declare const Cosmos: {
     readonly CONSTANTS: {
         readonly AU_TO_KM: 149597870.7;

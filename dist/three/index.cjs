@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
-const media = require("../media-V7DDwLAB.cjs");
+const media = require("../media-07v7YIni.cjs");
 const SHADERS = {
   atmosphereVert: (
     /* glsl */
@@ -237,6 +237,11 @@ function createOrbit(distance, opts = {}, THREE) {
   return line;
 }
 class LODTextureManager {
+  /**
+   * @param THREE - The Three.js module, passed at runtime to avoid a hard
+   *                dependency on `three` in the library bundle.
+   * @param opts  - Optional error and timeout configuration.
+   */
   constructor(THREE, opts = {}) {
     var _a, _b;
     this._entries = [];
@@ -246,14 +251,18 @@ class LODTextureManager {
     this._opts = opts;
   }
   /**
-   * Register a mesh for LOD management.
-   * The low-res texture is loaded immediately.
-   * The high-res texture is loaded lazily when the camera enters `lodDistance`.
+   * Register a mesh for LOD texture management.
    *
-   * @param mesh          target mesh (must have a MeshStandardMaterial or similar)
-   * @param lowResUrl     low-resolution texture URL — loaded immediately
-   * @param highResUrl    high-resolution texture URL — loaded on demand
-   * @param lodDistance   camera distance threshold in scene units
+   * The low-res texture is loaded immediately and applied to the mesh's
+   * material. The high-res texture is loaded lazily the first time the camera
+   * comes within `lodDistance` of the mesh.
+   *
+   * @param mesh        - Target mesh whose material will be swapped. Must use a
+   *                      `MeshStandardMaterial` (or compatible) with a `map` slot.
+   * @param lowResUrl   - URL for the low-resolution texture, loaded eagerly.
+   * @param highResUrl  - URL for the high-resolution texture, loaded on demand.
+   * @param lodDistance - Camera distance threshold (in scene units) at which the
+   *                      high-res texture is loaded and applied.
    */
   register(mesh, lowResUrl, highResUrl, lodDistance) {
     const THREE = this._THREE;
@@ -275,6 +284,13 @@ class LODTextureManager {
   }
   /**
    * Unregister a mesh from LOD management and dispose its textures.
+   *
+   * After calling this, the mesh's material `map` will still reference the
+   * last-applied texture, but the texture GPU memory is freed. Assign a new
+   * texture or remove the mesh from the scene as needed.
+   *
+   * @param mesh - The mesh previously passed to {@link register}. If the mesh
+   *               was never registered, this is a no-op.
    */
   unregister(mesh) {
     var _a, _b;
@@ -286,8 +302,15 @@ class LODTextureManager {
     this._entries.splice(idx, 1);
   }
   /**
-   * Call this every frame in your render loop.
-   * Swaps textures based on current camera distance.
+   * Evaluate all registered meshes and swap textures as needed.
+   *
+   * Call this once per frame inside your render loop. For each mesh the
+   * manager checks the camera-to-mesh distance and:
+   * - loads the high-res texture when the camera enters `lodDistance`, and
+   * - reverts to the low-res texture when the camera moves beyond
+   *   `lodDistance * 1.6` (hysteresis to prevent thrashing).
+   *
+   * @param camera - The active Three.js camera used for distance checks.
    */
   update(camera) {
     var _a;
@@ -345,7 +368,13 @@ class LODTextureManager {
       }
     }
   }
-  /** Dispose all registered textures and clear the registry. */
+  /**
+   * Dispose all registered textures (both low- and high-res) and clear the
+   * internal registry.
+   *
+   * After calling this, no further {@link update} calls will have any effect
+   * until new meshes are registered.
+   */
   dispose() {
     var _a, _b;
     for (const entry of this._entries) {
@@ -356,6 +385,13 @@ class LODTextureManager {
   }
 }
 class CameraFlight {
+  /**
+   * @param camera   - The Three.js camera to animate.
+   * @param controls - An `OrbitControls`-compatible object whose `target` is
+   *                   updated in sync with the camera position.
+   * @param THREE    - The Three.js module, passed at runtime to avoid a hard
+   *                   dependency on `three` in the library bundle.
+   */
   constructor(camera, controls, THREE) {
     this._active = false;
     this._orbitHandles = /* @__PURE__ */ new Set();
@@ -364,11 +400,17 @@ class CameraFlight {
     this._THREE = THREE;
   }
   /**
-   * Fly the camera to a world position while pointing at a target.
+   * Fly the camera to a world-space position while smoothly re-targeting the
+   * look-at point. The animation uses `requestAnimationFrame` internally and
+   * is frame-rate independent.
    *
-   * @param toPosition  destination camera position
-   * @param toTarget    destination look-at point (OrbitControls target)
-   * @param opts        animation options
+   * Only one flight can be active at a time; starting a new flight implicitly
+   * cancels any in-progress one.
+   *
+   * @param toPosition - Destination camera position in world coordinates.
+   * @param toTarget   - Destination look-at point (`OrbitControls.target`).
+   * @param opts       - Animation options (duration, easing curve, completion callback).
+   * @returns `void` -- listen for completion via `opts.onDone`.
    */
   flyTo(toPosition, toTarget, opts = {}) {
     const { duration = 2e3, easing = "inOut", onDone } = opts;
@@ -397,9 +439,15 @@ class CameraFlight {
     requestAnimationFrame(tick);
   }
   /**
-   * Continuously orbit the camera around a world point.
-   * Uses delta-time for frame-rate independent rotation.
-   * Returns a `{ stop }` handle to halt the orbit.
+   * Continuously orbit the camera around a world-space point.
+   *
+   * Uses delta-time for frame-rate independent rotation. Multiple orbits
+   * can be active simultaneously; each returns an independent stop handle.
+   * All active orbits are terminated when {@link dispose} is called.
+   *
+   * @param center - The world-space point to orbit around.
+   * @param opts   - Orbit configuration (radius, angular speed, elevation).
+   * @returns A `{ stop }` handle. Call `handle.stop()` to halt the orbit.
    */
   orbitAround(center, opts = {}) {
     const { radius = 200, speed = 5e-4, elevation = 0.2 } = opts;
@@ -432,11 +480,22 @@ class CameraFlight {
     requestAnimationFrame(tick);
     return handle;
   }
-  /** Cancel any in-progress flight. */
+  /**
+   * Cancel any in-progress {@link flyTo} animation.
+   *
+   * Active {@link orbitAround} loops are **not** affected -- use
+   * {@link dispose} to stop everything.
+   */
   cancel() {
     this._active = false;
   }
-  /** Stop all active orbits and cancel any in-progress flight. */
+  /**
+   * Stop all active orbits and cancel any in-progress flight.
+   *
+   * Call this when tearing down the scene or when the `CameraFlight`
+   * instance is no longer needed to ensure no lingering `requestAnimationFrame`
+   * callbacks remain.
+   */
   dispose() {
     this.cancel();
     for (const h of this._orbitHandles) h.stop();

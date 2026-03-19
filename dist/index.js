@@ -1,43 +1,127 @@
-import { M as Media } from "./media-dgqUx6Fy.js";
+import { M as Media } from "./media-DFFubqCx.js";
 const CONSTANTS = {
+  /** One Astronomical Unit in kilometres (IAU 2012 exact definition). */
   AU_TO_KM: 1495978707e-1,
+  /** One light-year in kilometres. */
   LY_TO_KM: 94607304725808e-1,
+  /** One parsec in light-years. */
   PC_TO_LY: 3.261563777,
+  /** One parsec in kilometres. */
   PC_TO_KM: 3085677581e4,
+  /** Speed of light in km/s (exact, SI definition). */
   C_KM_S: 299792.458,
+  /** Newtonian gravitational constant in m^3 kg^-1 s^-2 (CODATA 2018). */
   G: 6674e-14,
+  /** Solar mass in kilograms. */
   SOLAR_MASS_KG: 1989e27,
+  /** Solar radius in kilometres. */
   SOLAR_RADIUS_KM: 695700,
+  /** Earth mass in kilograms. */
   EARTH_MASS_KG: 5972e21,
+  /** Mean Earth radius in kilometres (IUGG). */
   EARTH_RADIUS_KM: 6371,
-  /** Julian date of the J2000.0 epoch */
+  /** Julian Date of the J2000.0 epoch (2000-01-01T12:00:00 TT). */
   J2000: 2451545,
-  /** Obliquity of the ecliptic at J2000.0 (degrees) */
+  /** Mean obliquity of the ecliptic at J2000.0, in degrees. */
   ECLIPTIC_OBL: 23.4392911,
+  /** Conversion factor: degrees to radians. */
   DEG_TO_RAD: Math.PI / 180,
+  /** Conversion factor: radians to degrees. */
   RAD_TO_DEG: 180 / Math.PI
 };
 const Units = {
   // ── Distance ───────────────────────────────────────────────────────────────
+  /**
+   * Convert Astronomical Units to kilometres.
+   * @param au - Distance in AU.
+   * @returns Distance in kilometres.
+   */
   auToKm: (au) => au * CONSTANTS.AU_TO_KM,
+  /**
+   * Convert kilometres to Astronomical Units.
+   * @param km - Distance in kilometres.
+   * @returns Distance in AU.
+   */
   kmToAu: (km) => km / CONSTANTS.AU_TO_KM,
+  /**
+   * Convert light-years to parsecs.
+   * @param ly - Distance in light-years.
+   * @returns Distance in parsecs.
+   */
   lyToPc: (ly) => ly / CONSTANTS.PC_TO_LY,
+  /**
+   * Convert parsecs to light-years.
+   * @param pc - Distance in parsecs.
+   * @returns Distance in light-years.
+   */
   pcToLy: (pc) => pc * CONSTANTS.PC_TO_LY,
+  /**
+   * Convert parsecs to kilometres.
+   * @param pc - Distance in parsecs.
+   * @returns Distance in kilometres.
+   */
   pcToKm: (pc) => pc * CONSTANTS.PC_TO_KM,
+  /**
+   * Convert light-years to kilometres.
+   * @param ly - Distance in light-years.
+   * @returns Distance in kilometres.
+   */
   lyToKm: (ly) => ly * CONSTANTS.LY_TO_KM,
+  /**
+   * Convert kilometres to light-years.
+   * @param km - Distance in kilometres.
+   * @returns Distance in light-years.
+   */
   kmToLy: (km) => km / CONSTANTS.LY_TO_KM,
   // ── Angular ────────────────────────────────────────────────────────────────
+  /**
+   * Convert degrees to radians.
+   * @param d - Angle in degrees.
+   * @returns Angle in radians.
+   */
   degToRad: (d) => d * CONSTANTS.DEG_TO_RAD,
+  /**
+   * Convert radians to degrees.
+   * @param r - Angle in radians.
+   * @returns Angle in degrees.
+   */
   radToDeg: (r) => r * CONSTANTS.RAD_TO_DEG,
+  /**
+   * Convert arcseconds to degrees.
+   * @param a - Angle in arcseconds.
+   * @returns Angle in degrees.
+   */
   arcsecToDeg: (a) => a / 3600,
+  /**
+   * Convert degrees to arcseconds.
+   * @param d - Angle in degrees.
+   * @returns Angle in arcseconds.
+   */
   degToArcsec: (d) => d * 3600,
-  /** Right Ascension: hours → degrees */
+  /**
+   * Convert Right Ascension from hours to degrees.
+   * @param h - RA in hours (0–24).
+   * @returns RA in degrees (0–360).
+   */
   hrsToDeg: (h) => h * 15,
-  /** Right Ascension: degrees → hours */
+  /**
+   * Convert Right Ascension from degrees to hours.
+   * @param d - RA in degrees (0–360).
+   * @returns RA in hours (0–24).
+   */
   degToHrs: (d) => d / 15,
   /**
-   * Format a distance in km into a human-readable string,
-   * automatically choosing the most appropriate unit.
+   * Format a distance in kilometres into a human-readable string,
+   * automatically choosing the most appropriate unit (km, AU, ly, or Mly).
+   *
+   * @param km - Distance in kilometres.
+   * @returns Formatted string with unit suffix.
+   *
+   * @example
+   * ```ts
+   * Units.formatDistance(384_400)               // '0.002570 AU'
+   * Units.formatDistance(9_460_730_472_580 * 8.6) // '8.600 ly'
+   * ```
    */
   formatDistance(km) {
     const au = km / CONSTANTS.AU_TO_KM;
@@ -49,7 +133,15 @@ const Units = {
   },
   /**
    * Format decimal degrees as d°m′s″ (signed).
-   * e.g. -16.716 → "-16°42′57.6″"
+   *
+   * @param deg - Angle in decimal degrees.
+   * @returns Formatted DMS string.
+   *
+   * @example
+   * ```ts
+   * Units.formatAngle(-16.716)  // '-16°42′57.6″'
+   * Units.formatAngle(83.822)   // '83°49′19.2″'
+   * ```
    */
   formatAngle(deg) {
     const sign = deg < 0 ? "-" : "";
@@ -60,8 +152,16 @@ const Units = {
     return `${sign}${d}°${m}′${s.toFixed(1)}″`;
   },
   /**
-   * Format Right Ascension in decimal degrees → HH h MM m SS.s s
-   * e.g. 83.822 → "5h 35m 17.3s"
+   * Format Right Ascension from decimal degrees into hours/minutes/seconds.
+   *
+   * @param deg - RA in decimal degrees (0–360).
+   * @returns Formatted string like `'5h 35m 17.3s'`.
+   *
+   * @example
+   * ```ts
+   * Units.formatRA(83.822)  // '5h 35m 17.3s'
+   * Units.formatRA(0)       // '0h 0m 0.0s'
+   * ```
    */
   formatRA(deg) {
     const total = (deg % 360 + 360) % 360;
@@ -75,38 +175,123 @@ const D$3 = CONSTANTS.DEG_TO_RAD;
 const R$1 = CONSTANTS.RAD_TO_DEG;
 const AstroMath = {
   // ── Time ──────────────────────────────────────────────────────────────────
-  /** JavaScript Date → Julian Date Number */
+  /**
+   * Convert a JavaScript Date to a Julian Date number.
+   *
+   * The Julian Date is a continuous count of days since the beginning of the
+   * Julian period (January 1, 4713 BC, 12:00 TT).
+   *
+   * @param date - The JavaScript Date to convert. Defaults to the current date/time.
+   * @returns The Julian Date as a floating-point number.
+   *
+   * @example
+   * ```ts
+   * // J2000.0 epoch: 2000-01-01T12:00:00Z
+   * AstroMath.toJulian(new Date('2000-01-01T12:00:00Z'))
+   * // => 2451545.0
+   * ```
+   */
   toJulian(date = /* @__PURE__ */ new Date()) {
     return date.valueOf() / 864e5 + 24405875e-1;
   },
-  /** Julian Date → JavaScript Date */
+  /**
+   * Convert a Julian Date number back to a JavaScript Date.
+   *
+   * @param jd - The Julian Date to convert.
+   * @returns A JavaScript Date representing the same instant.
+   *
+   * @example
+   * ```ts
+   * AstroMath.fromJulian(2451545.0)
+   * // => Date('2000-01-01T12:00:00.000Z')
+   * ```
+   */
   fromJulian(jd) {
     return new Date((jd - 24405875e-1) * 864e5);
   },
-  /** Days since J2000.0 */
+  /**
+   * Compute the number of days elapsed since the J2000.0 epoch
+   * (2000-01-01T12:00:00 TT, JD 2451545.0).
+   *
+   * @param date - The observation date. Defaults to the current date/time.
+   * @returns Fractional days since J2000.0 (negative for dates before the epoch).
+   *
+   * @example
+   * ```ts
+   * // One Julian century after J2000.0
+   * AstroMath.j2000Days(new Date('2100-01-01T12:00:00Z'))
+   * // => ~36525.0
+   * ```
+   */
   j2000Days(date = /* @__PURE__ */ new Date()) {
     return this.toJulian(date) - CONSTANTS.J2000;
   },
   /**
-   * Greenwich Mean Sidereal Time in degrees.
+   * Greenwich Mean Sidereal Time (GMST) in degrees.
+   *
    * Accurate to ~0.1 s over several centuries around J2000.
+   *
+   * @param date - The observation date. Defaults to the current date/time.
+   * @returns GMST in degrees, normalised to the range [0, 360).
+   *
+   * @remarks
+   * Uses the linear approximation from Meeus, "Astronomical Algorithms", Chapter 12.
+   * For higher accuracy near the current epoch, see {@link gast} which includes
+   * the nutation correction (equation of the equinoxes).
+   *
+   * @example
+   * ```ts
+   * // GMST at J2000.0 epoch
+   * AstroMath.gmst(new Date('2000-01-01T12:00:00Z'))
+   * // => 280.46061837
+   * ```
    */
   gmst(date = /* @__PURE__ */ new Date()) {
     const d = this.j2000Days(date);
     return ((280.46061837 + 360.98564736629 * d) % 360 + 360) % 360;
   },
   /**
-   * Local Sidereal Time in degrees.
-   * @param date        observation time
-   * @param longitudeDeg observer's geographic longitude (east positive)
+   * Local Sidereal Time (LST) in degrees.
+   *
+   * LST equals GMST plus the observer's geographic longitude.
+   *
+   * @param date - The observation date/time.
+   * @param longitudeDeg - Observer's geographic longitude in degrees (east positive, west negative).
+   * @returns LST in degrees, normalised to the range [0, 360).
+   *
+   * @example
+   * ```ts
+   * // LST for an observer in London (lng = -0.1) at J2000.0
+   * AstroMath.lst(new Date('2000-01-01T12:00:00Z'), -0.1)
+   * // => ~280.36
+   * ```
    */
   lst(date, longitudeDeg) {
     return ((this.gmst(date) + longitudeDeg) % 360 + 360) % 360;
   },
   // ── Coordinate transforms ─────────────────────────────────────────────────
   /**
-   * Equatorial (RA/Dec) → Horizontal (Altitude/Azimuth).
-   * All angles in degrees.
+   * Convert equatorial coordinates (RA/Dec) to horizontal coordinates (Altitude/Azimuth).
+   *
+   * Azimuth is measured from North (0) through East (90), South (180), West (270).
+   * All angles are in degrees.
+   *
+   * @param eq - Equatorial coordinates with `ra` (right ascension) and `dec` (declination) in degrees.
+   * @param obs - Observer parameters including `lat` (latitude), `lng` (longitude), and optional `date`.
+   * @returns Horizontal coordinates with `alt` (altitude) and `az` (azimuth) in degrees.
+   *
+   * @remarks
+   * Based on the standard spherical-trigonometry transformation.
+   * See Meeus, "Astronomical Algorithms", Chapter 13.
+   *
+   * @example
+   * ```ts
+   * // Sirius (RA=101.287, Dec=-16.716) as seen from London (lat=51.5, lng=-0.1)
+   * const sirius = { ra: 101.287, dec: -16.716 }
+   * const london = { lat: 51.5, lng: -0.1, date: new Date('2024-01-15T22:00:00Z') }
+   * AstroMath.equatorialToHorizontal(sirius, london)
+   * // => { alt: <altitude>, az: <azimuth> }
+   * ```
    */
   equatorialToHorizontal(eq, obs) {
     const date = obs.date ?? /* @__PURE__ */ new Date();
@@ -123,8 +308,25 @@ const AstroMath = {
     return { alt, az };
   },
   /**
-   * Horizontal (Altitude/Azimuth) → Equatorial (RA/Dec).
-   * All angles in degrees.
+   * Convert horizontal coordinates (Altitude/Azimuth) to equatorial coordinates (RA/Dec).
+   *
+   * This is the inverse of {@link equatorialToHorizontal}. All angles are in degrees.
+   *
+   * @param hor - Horizontal coordinates with `alt` (altitude) and `az` (azimuth) in degrees.
+   * @param obs - Observer parameters including `lat` (latitude), `lng` (longitude), and optional `date`.
+   * @returns Equatorial coordinates with `ra` (right ascension) and `dec` (declination) in degrees.
+   *
+   * @remarks
+   * See Meeus, "Astronomical Algorithms", Chapter 13.
+   *
+   * @example
+   * ```ts
+   * // An object at alt=25, az=180 (due south) from Lucerne (lat=47.05, lng=8.31)
+   * const hor = { alt: 25, az: 180 }
+   * const lucerne = { lat: 47.05, lng: 8.31, date: new Date('2024-03-20T21:00:00Z') }
+   * AstroMath.horizontalToEquatorial(hor, lucerne)
+   * // => { ra: <right ascension>, dec: <declination> }
+   * ```
    */
   horizontalToEquatorial(hor, obs) {
     const date = obs.date ?? /* @__PURE__ */ new Date();
@@ -141,8 +343,28 @@ const AstroMath = {
     return { ra, dec };
   },
   /**
-   * Ecliptic → Equatorial (J2000).
-   * All angles in degrees.
+   * Convert ecliptic coordinates to equatorial coordinates (J2000 epoch).
+   *
+   * Uses the mean obliquity of the ecliptic at J2000.0 (23.4393 degrees).
+   * All angles are in degrees.
+   *
+   * @param ecl - Ecliptic coordinates with `lon` (ecliptic longitude) and `lat` (ecliptic latitude) in degrees.
+   * @returns Equatorial coordinates with `ra` in [0, 360) and `dec` in [-90, 90] degrees.
+   *
+   * @remarks
+   * See Meeus, "Astronomical Algorithms", Chapter 13. Uses the standard rotation
+   * matrix for the obliquity of the ecliptic.
+   *
+   * @example
+   * ```ts
+   * // Convert the ecliptic coordinates of the vernal equinox
+   * AstroMath.eclipticToEquatorial({ lon: 0, lat: 0 })
+   * // => { ra: 0, dec: 0 }
+   *
+   * // A point on the ecliptic at lon=90
+   * AstroMath.eclipticToEquatorial({ lon: 90, lat: 0 })
+   * // => { ra: ~90, dec: ~23.44 }
+   * ```
    */
   eclipticToEquatorial(ecl) {
     const eps = CONSTANTS.ECLIPTIC_OBL * D$3;
@@ -158,9 +380,26 @@ const AstroMath = {
     return { ra: (ra % 360 + 360) % 360, dec };
   },
   /**
-   * Galactic → Equatorial (J2000).
-   * Standard IAU transformation.
-   * All angles in degrees.
+   * Convert galactic coordinates to equatorial coordinates (J2000 epoch).
+   *
+   * Uses the standard IAU galactic coordinate system with the North Galactic
+   * Pole at RA=192.85948, Dec=27.12825 and the ascending node of the galactic
+   * plane at l=122.93192.
+   *
+   * @param gal - Galactic coordinates with `l` (galactic longitude) and `b` (galactic latitude) in degrees.
+   * @returns Equatorial coordinates with `ra` in [0, 360) and `dec` in [-90, 90] degrees.
+   *
+   * @remarks
+   * Implements the standard IAU (1958) galactic coordinate transformation.
+   * See Meeus, "Astronomical Algorithms", Chapter 13, and
+   * Blaauw et al. (1960), MNRAS 121, 123.
+   *
+   * @example
+   * ```ts
+   * // Galactic centre (l=0, b=0) -> equatorial
+   * AstroMath.galacticToEquatorial({ l: 0, b: 0 })
+   * // => { ra: ~266.4, dec: ~-28.9 } (near Sagittarius A*)
+   * ```
    */
   galacticToEquatorial(gal) {
     const NGP_RA = 192.85948;
@@ -179,9 +418,27 @@ const AstroMath = {
   },
   // ── Angular separation ────────────────────────────────────────────────────
   /**
-   * Great-circle angular separation between two equatorial coordinates.
-   * Uses the haversine formula for numerical stability at small angles.
-   * Returns degrees.
+   * Compute the great-circle angular separation between two equatorial positions.
+   *
+   * Uses the haversine formula for numerical stability at small angular distances.
+   *
+   * @param a - First equatorial position with `ra` and `dec` in degrees.
+   * @param b - Second equatorial position with `ra` and `dec` in degrees.
+   * @returns Angular separation in degrees, in the range [0, 180].
+   *
+   * @remarks
+   * The haversine formula avoids the floating-point cancellation issues that
+   * affect the simpler cosine formula at small separations.
+   * See Meeus, "Astronomical Algorithms", Chapter 17.
+   *
+   * @example
+   * ```ts
+   * // Angular separation between Sirius and Betelgeuse
+   * const sirius     = { ra: 101.287, dec: -16.716 }
+   * const betelgeuse = { ra: 88.793, dec: 7.407 }
+   * AstroMath.angularSeparation(sirius, betelgeuse)
+   * // => ~27.07 degrees
+   * ```
    */
   angularSeparation(a, b) {
     const d1 = a.dec * D$3;
@@ -191,24 +448,90 @@ const AstroMath = {
     return 2 * Math.asin(Math.sqrt(Math.max(0, Math.min(1, hav)))) * R$1;
   },
   // ── Photometry ────────────────────────────────────────────────────────────
-  /** Absolute magnitude + distance (parsecs) → apparent magnitude */
+  /**
+   * Compute apparent magnitude from absolute magnitude and distance.
+   *
+   * Uses the distance modulus formula: m = M + 5 * log10(d / 10).
+   *
+   * @param absoluteMag - Absolute magnitude (M) of the object.
+   * @param distancePc - Distance to the object in parsecs.
+   * @returns Apparent magnitude (m) as seen from the observer.
+   *
+   * @example
+   * ```ts
+   * // Sirius: absolute magnitude M=1.42, distance=2.64 pc
+   * AstroMath.apparentMagnitude(1.42, 2.64)
+   * // => ~-1.46 (apparent magnitude)
+   * ```
+   */
   apparentMagnitude(absoluteMag, distancePc) {
     return absoluteMag + 5 * Math.log10(distancePc / 10);
   },
-  /** Apparent magnitude + distance (parsecs) → absolute magnitude */
+  /**
+   * Compute absolute magnitude from apparent magnitude and distance.
+   *
+   * Uses the inverse distance modulus formula: M = m - 5 * log10(d / 10).
+   *
+   * @param apparentMag - Apparent magnitude (m) of the object.
+   * @param distancePc - Distance to the object in parsecs.
+   * @returns Absolute magnitude (M), i.e. apparent magnitude at 10 parsecs.
+   *
+   * @example
+   * ```ts
+   * // Sirius: apparent magnitude m=-1.46, distance=2.64 pc
+   * AstroMath.absoluteMagnitude(-1.46, 2.64)
+   * // => ~1.42 (absolute magnitude)
+   * ```
+   */
   absoluteMagnitude(apparentMag, distancePc) {
     return apparentMag - 5 * Math.log10(distancePc / 10);
   },
-  /** Parallax in arcseconds → distance in parsecs */
+  /**
+   * Convert stellar parallax to distance.
+   *
+   * By definition, 1 parsec is the distance at which 1 AU subtends 1 arcsecond.
+   *
+   * @param parallaxArcsec - Trigonometric parallax in arcseconds. Must be positive.
+   * @returns Distance in parsecs.
+   *
+   * @example
+   * ```ts
+   * // Sirius parallax: 0.37921 arcsec
+   * AstroMath.parallaxToDistance(0.37921)
+   * // => ~2.637 parsecs
+   * ```
+   */
   parallaxToDistance(parallaxArcsec) {
     return 1 / parallaxArcsec;
   },
   // ── Kepler solver ────────────────────────────────────────────────────────
   /**
-   * Solve Kepler's equation M = E - e·sin(E) for eccentric anomaly E.
-   * Newton-Raphson iteration. M in radians, returns E in radians.
-   * Converges in 3-6 iterations for all planetary eccentricities.
+   * Solve Kepler's equation `M = E - e * sin(E)` for the eccentric anomaly E.
+   *
+   * Uses Newton-Raphson iteration with Meeus's initial-guess formula.
+   * Converges in 3-6 iterations for all planetary eccentricities (e < 1).
+   *
+   * @param M - Mean anomaly in **radians**.
+   * @param e - Orbital eccentricity (0 <= e < 1 for elliptical orbits).
+   * @param tol - Convergence tolerance in radians. Defaults to 1e-12.
+   * @returns Eccentric anomaly E in **radians**.
+   *
+   * @remarks
    * Source: Meeus, "Astronomical Algorithms" (2nd ed.), Chapter 30.
+   * The initial guess uses `E0 = M + e * sin(M) * (1 + e * cos(M))`,
+   * which provides rapid convergence for moderate eccentricities.
+   * The iteration is capped at 30 steps as a safety limit.
+   *
+   * @example
+   * ```ts
+   * // Earth's orbit: e=0.0167, mean anomaly = 1.0 rad
+   * AstroMath.solveKepler(1.0, 0.0167)
+   * // => ~1.0166 radians
+   *
+   * // Mars's orbit: e=0.0934, mean anomaly = pi/2 rad
+   * AstroMath.solveKepler(Math.PI / 2, 0.0934)
+   * // => ~1.6521 radians
+   * ```
    */
   solveKepler(M, e, tol = 1e-12) {
     let E = M + e * Math.sin(M) * (1 + e * Math.cos(M));
@@ -221,12 +544,33 @@ const AstroMath = {
   },
   // ── Planetary positions ───────────────────────────────────────────────────
   /**
-   * Planetary ephemeris using J2000 orbital elements with secular rates
-   * and iterative Kepler solver. Accurate to ~0.1° within several
-   * centuries of J2000. Returns ecliptic longitude, latitude, and
-   * heliocentric distance.
+   * Compute heliocentric ecliptic position of a planet.
    *
-   * Elements and secular rates from JPL (Standish 1992) via Meeus Table 31.A.
+   * Uses J2000 orbital elements with linear secular rates and an iterative
+   * Kepler solver. Accurate to ~0.1 degrees within several centuries of J2000.
+   *
+   * @param planet - Planet name: `'mercury'` | `'venus'` | `'earth'` | `'mars'` | `'jupiter'` | `'saturn'` | `'uranus'` | `'neptune'`.
+   * @param date - The observation date. Defaults to the current date/time.
+   * @returns A {@link PlanetPosition} object with heliocentric ecliptic `lon` (degrees),
+   *   `lat` (degrees), `r` (distance in AU), `M` (mean anomaly in degrees),
+   *   and `nu` (true anomaly in degrees).
+   *
+   * @remarks
+   * Orbital elements and secular rates are from JPL (Standish 1992) via
+   * Meeus, "Astronomical Algorithms", Table 31.A. The Kepler equation is solved
+   * iteratively by {@link solveKepler}. This method returns **heliocentric**
+   * coordinates; for geocentric positions, subtract Earth's position.
+   *
+   * @example
+   * ```ts
+   * // Mars position on 2024-07-04
+   * const mars = AstroMath.planetEcliptic('mars', new Date('2024-07-04T00:00:00Z'))
+   * // => { lon: <ecliptic longitude>, lat: <ecliptic latitude>, r: <AU>, M: <mean anomaly>, nu: <true anomaly> }
+   *
+   * // Jupiter position at J2000.0
+   * const jupiter = AstroMath.planetEcliptic('jupiter', new Date('2000-01-01T12:00:00Z'))
+   * // => { lon: ~34.4, lat: ~-1.3, r: ~5.03, ... }
+   * ```
    */
   planetEcliptic(planet, date = /* @__PURE__ */ new Date()) {
     const ELEMENTS = {
@@ -270,12 +614,31 @@ const AstroMath = {
   },
   // ── Precession ──────────────────────────────────────────────────────────
   /**
-   * Precess equatorial coordinates between epochs.
-   * Rigorous method using Lieske (1979) polynomials.
-   * Source: Meeus, Chapter 21.
-   * @param eq    J2000 equatorial coordinates
-   * @param jdFrom Julian date of source epoch (default J2000)
-   * @param jdTo   Julian date of target epoch
+   * Precess equatorial coordinates from one epoch to another.
+   *
+   * Uses the rigorous rotation-matrix method with Lieske (1979) precession
+   * polynomials for the three precession parameters (zeta_A, z_A, theta_A).
+   *
+   * @param eq - Equatorial coordinates at the source epoch, with `ra` and `dec` in degrees.
+   * @param jdFrom - Julian Date of the source epoch (e.g. 2451545.0 for J2000.0).
+   * @param jdTo - Julian Date of the target epoch.
+   * @returns Equatorial coordinates at the target epoch, with `ra` in [0, 360) and `dec` in degrees.
+   *
+   * @remarks
+   * Source: Meeus, "Astronomical Algorithms", Chapter 21.
+   * The Lieske (1979) polynomials are accurate to ~0.1 arcsecond over a few
+   * centuries around J2000.0. For longer time spans, use the Capitaine et al.
+   * (2003) IAU 2006 precession model.
+   *
+   * @example
+   * ```ts
+   * // Precess Sirius from J2000.0 to J2050.0
+   * const sirius = { ra: 101.287, dec: -16.716 }
+   * const j2000 = 2451545.0
+   * const j2050 = 2451545.0 + 50 * 365.25
+   * AstroMath.precess(sirius, j2000, j2050)
+   * // => { ra: ~101.61, dec: ~-16.79 }
+   * ```
    */
   precess(eq, jdFrom, jdTo) {
     const T = (jdFrom - 2451545) / 36525;
@@ -297,10 +660,29 @@ const AstroMath = {
   },
   // ── Nutation ────────────────────────────────────────────────────────────
   /**
-   * Nutation in longitude (dPsi) and obliquity (dEpsilon).
-   * First 13 terms of the IAU 1980 nutation series.
-   * Source: Meeus, Chapter 22, Table 22.A.
-   * Returns values in degrees.
+   * Compute nutation in longitude (dPsi) and nutation in obliquity (dEpsilon).
+   *
+   * Evaluates the first 13 terms of the IAU 1980 nutation series, which capture
+   * the dominant periodic terms with amplitudes down to ~0.01 arcsecond.
+   *
+   * @param jd - Julian Date of the observation.
+   * @returns A {@link NutationResult} with `dPsi` (nutation in longitude) and
+   *   `dEpsilon` (nutation in obliquity), both in degrees.
+   *
+   * @remarks
+   * Source: Meeus, "Astronomical Algorithms", Chapter 22, Table 22.A.
+   * The five fundamental arguments are the Moon's mean elongation (D),
+   * Sun's mean anomaly (M), Moon's mean anomaly (M'), Moon's argument of
+   * latitude (F), and the longitude of the ascending node of the Moon's
+   * orbit (Omega). Coefficients are in units of 0.0001 arcsecond.
+   *
+   * @example
+   * ```ts
+   * // Nutation at J2000.0
+   * const jd = 2451545.0
+   * AstroMath.nutation(jd)
+   * // => { dPsi: ~-0.00385, dEpsilon: ~-0.00165 } (degrees)
+   * ```
    */
   nutation(jd) {
     const T = (jd - 2451545) / 36525;
@@ -342,8 +724,23 @@ const AstroMath = {
     };
   },
   /**
-   * True obliquity of the ecliptic (mean + nutation correction).
-   * Returns degrees.
+   * Compute the true obliquity of the ecliptic (mean obliquity + nutation in obliquity).
+   *
+   * The mean obliquity polynomial is from Laskar (1986).
+   *
+   * @param jd - Julian Date of the observation.
+   * @returns True obliquity of the ecliptic in degrees.
+   *
+   * @remarks
+   * Combines the mean obliquity (a polynomial in T) with the nutation correction
+   * from {@link nutation}. See Meeus, "Astronomical Algorithms", Chapter 22.
+   *
+   * @example
+   * ```ts
+   * // True obliquity at J2000.0
+   * AstroMath.trueObliquity(2451545.0)
+   * // => ~23.439 degrees (mean obliquity plus small nutation correction)
+   * ```
    */
   trueObliquity(jd) {
     const T = (jd - 2451545) / 36525;
@@ -352,8 +749,26 @@ const AstroMath = {
     return meanEps + dEpsilon;
   },
   /**
-   * Greenwich Apparent Sidereal Time in degrees.
-   * GMST corrected for nutation (equation of the equinoxes).
+   * Greenwich Apparent Sidereal Time (GAST) in degrees.
+   *
+   * GAST equals GMST corrected by the equation of the equinoxes
+   * (nutation in longitude projected onto the equator).
+   *
+   * @param date - The observation date. Defaults to the current date/time.
+   * @returns GAST in degrees, normalised to the range [0, 360).
+   *
+   * @remarks
+   * The equation of the equinoxes is `dPsi * cos(epsilon)`, where dPsi is the
+   * nutation in longitude and epsilon is the true obliquity. This correction
+   * is typically on the order of a few arcseconds.
+   * See Meeus, "Astronomical Algorithms", Chapter 12.
+   *
+   * @example
+   * ```ts
+   * // GAST at J2000.0
+   * AstroMath.gast(new Date('2000-01-01T12:00:00Z'))
+   * // => ~280.46 degrees (GMST + small nutation correction)
+   * ```
    */
   gast(date = /* @__PURE__ */ new Date()) {
     const jd = this.toJulian(date);
@@ -365,11 +780,34 @@ const AstroMath = {
   },
   // ── Atmospheric refraction ──────────────────────────────────────────────
   /**
-   * Atmospheric refraction correction in degrees.
-   * Saemundsson's formula (Meeus, Chapter 16).
-   * @param apparentAlt apparent altitude in degrees
-   * @param tempC       temperature in Celsius (default 10)
-   * @param pressureMb  pressure in millibars (default 1010)
+   * Compute atmospheric refraction correction for a given apparent altitude.
+   *
+   * Uses Saemundsson's formula with pressure and temperature scaling.
+   * Returns zero for objects well below the horizon (apparent altitude < -1 degree).
+   *
+   * @param apparentAlt - Apparent (observed) altitude of the object in degrees.
+   * @param tempC - Air temperature in degrees Celsius. Defaults to 10.
+   * @param pressureMb - Atmospheric pressure in millibars. Defaults to 1010.
+   * @returns Refraction correction in degrees (always non-negative). Add this value
+   *   to the true altitude to obtain the apparent altitude, or subtract it from
+   *   the apparent altitude to obtain the true altitude.
+   *
+   * @remarks
+   * Saemundsson's formula as presented in Meeus, "Astronomical Algorithms", Chapter 16.
+   * The formula is valid for altitudes above about -0.5 degrees. For objects below -1
+   * degree, the function returns 0 as the refraction model is not meaningful there.
+   * At the horizon (alt ~0), the refraction is approximately 0.57 degrees (~34 arcminutes).
+   *
+   * @example
+   * ```ts
+   * // Refraction at the horizon (apparent altitude = 0) with standard conditions
+   * AstroMath.refraction(0)
+   * // => ~0.57 degrees (~34 arcminutes)
+   *
+   * // Refraction at 45 degrees altitude from Lucerne (500m elevation, ~955 mbar, 5 C)
+   * AstroMath.refraction(45, 5, 955)
+   * // => ~0.016 degrees (~58 arcseconds)
+   * ```
    */
   refraction(apparentAlt, tempC = 10, pressureMb = 1010) {
     if (apparentAlt < -1) return 0;
@@ -380,12 +818,34 @@ const AstroMath = {
   },
   // ── Proper motion ───────────────────────────────────────────────────────
   /**
-   * Apply proper motion to star coordinates.
-   * @param eq          J2000 equatorial coordinates
-   * @param pmRA        proper motion in RA (mas/year, includes cos(dec) factor)
-   * @param pmDec       proper motion in Dec (mas/year)
-   * @param fromEpoch   source epoch in years (e.g. 2000.0)
-   * @param toEpoch     target epoch in years
+   * Apply proper motion to propagate star coordinates to a different epoch.
+   *
+   * This is a linear approximation that is accurate for time spans of a few
+   * hundred years for most stars.
+   *
+   * @param eq - Equatorial coordinates at the source epoch, with `ra` and `dec` in degrees.
+   * @param pmRA - Proper motion in right ascension in milliarcseconds per year.
+   *   This must already include the cos(dec) factor (i.e. `pmRA*` as given in most
+   *   modern catalogues like Hipparcos/Gaia).
+   * @param pmDec - Proper motion in declination in milliarcseconds per year.
+   * @param fromEpoch - Source epoch as a Besselian/Julian year (e.g. 2000.0 for J2000).
+   * @param toEpoch - Target epoch as a Besselian/Julian year (e.g. 2025.0).
+   * @returns Equatorial coordinates at the target epoch, with `ra` in [0, 360) and `dec` clamped to [-90, 90].
+   *
+   * @remarks
+   * The pmRA value is divided by cos(dec) internally to convert from great-circle
+   * motion to coordinate motion before applying the linear offset.
+   * For very fast-moving stars (e.g. Barnard's Star) or long time intervals,
+   * consider using a full 6D space-motion propagation instead.
+   *
+   * @example
+   * ```ts
+   * // Propagate Sirius from J2000.0 to J2025.0
+   * // Sirius: pmRA = -546.01 mas/yr, pmDec = -1223.14 mas/yr
+   * const sirius = { ra: 101.287, dec: -16.716 }
+   * AstroMath.applyProperMotion(sirius, -546.01, -1223.14, 2000.0, 2025.0)
+   * // => { ra: ~101.283, dec: ~-16.724 }
+   * ```
    */
   applyProperMotion(eq, pmRA, pmDec, fromEpoch, toEpoch) {
     const dt = toEpoch - fromEpoch;
@@ -397,12 +857,47 @@ const AstroMath = {
   },
   // ── Rise / Transit / Set ────────────────────────────────────────────────
   /**
-   * Compute rise, transit, and set times for a celestial object.
-   * Source: Meeus, Chapter 15.
-   * @param eq  equatorial coordinates (RA/Dec in degrees, J2000)
-   * @param obs observer location and date (date = day of interest)
-   * @param h0  standard altitude in degrees (default -0.5667 for stars)
-   *            Use -0.8333 for Sun, +0.125 for Moon.
+   * Compute rise, transit (culmination), and set times for a celestial object.
+   *
+   * Calculates the UTC times at which the object crosses the standard altitude
+   * (rise/set) and reaches its highest point above the horizon (transit) on the
+   * given date. If the object is circumpolar or never rises, `rise` and `set`
+   * are returned as `null` while `transit` is still provided.
+   *
+   * @param eq - Equatorial coordinates of the object with `ra` and `dec` in degrees (J2000).
+   * @param obs - Observer parameters including `lat` (latitude in degrees), `lng` (longitude
+   *   in degrees, east positive), and optional `date` (the day of interest; defaults to now).
+   * @param h0 - Standard altitude in degrees that defines the rise/set event. Defaults to
+   *   -0.5667 (accounting for atmospheric refraction for point sources / stars).
+   *   Common values:
+   *   - Stars: -0.5667 (default)
+   *   - Sun (upper limb): -0.8333
+   *   - Moon (upper limb): +0.125
+   * @returns A {@link RiseTransitSet} object with `rise`, `transit`, and `set` as
+   *   JavaScript Date objects (or `null` for rise/set if the object is circumpolar
+   *   or never rises above h0).
+   *
+   * @remarks
+   * Source: Meeus, "Astronomical Algorithms", Chapter 15.
+   * This implementation assumes fixed RA/Dec over the course of the day, which is
+   * adequate for stars and adequate as a first approximation for planets. For the
+   * Sun and Moon, whose coordinates change significantly during a day, an iterative
+   * approach with interpolated coordinates yields better accuracy.
+   *
+   * @example
+   * ```ts
+   * // Rise/transit/set of Sirius from London on 2024-01-15
+   * const sirius = { ra: 101.287, dec: -16.716 }
+   * const london = { lat: 51.5, lng: -0.1, date: new Date('2024-01-15T00:00:00Z') }
+   * const rts = AstroMath.riseTransitSet(sirius, london)
+   * // => { rise: Date(~17:08 UTC), transit: Date(~00:02 UTC), set: Date(~06:56 UTC) }
+   *
+   * // Sun rise/set from Lucerne on the March equinox
+   * const sunEquinox = { ra: 0, dec: 0 }
+   * const lucerne = { lat: 47.05, lng: 8.31, date: new Date('2024-03-20T00:00:00Z') }
+   * AstroMath.riseTransitSet(sunEquinox, lucerne, -0.8333)
+   * // => { rise: Date(~05:30 UTC), transit: Date(~11:25 UTC), set: Date(~17:20 UTC) }
+   * ```
    */
   riseTransitSet(eq, obs, h0 = -0.5667) {
     const date = obs.date ?? /* @__PURE__ */ new Date();
@@ -437,7 +932,30 @@ const D$2 = CONSTANTS.DEG_TO_RAD;
 const Sun = {
   /**
    * Geocentric equatorial position of the Sun.
-   * Accuracy: ~0.01° for dates within a few centuries of J2000.
+   *
+   * Computes the Sun's right ascension, declination, distance, and ecliptic longitude
+   * for the given date. The position includes nutation corrections and uses the true
+   * obliquity of the ecliptic for the equatorial conversion.
+   *
+   * @remarks
+   * Accuracy is approximately 0.01° for dates within a few centuries of J2000.0 (2000-01-01 12:00 TT).
+   * The algorithm derives geocentric solar coordinates by inverting the heliocentric Earth
+   * position from VSOP87 theory.
+   *
+   * @param date - The date and time for which to compute the Sun's position. Defaults to the current date/time.
+   * @returns The Sun's geocentric equatorial position including RA (0-360°), declination, distance in AU, and ecliptic longitude.
+   *
+   * @example
+   * ```ts
+   * import { Sun } from '@motioncomplex/cosmos-lib'
+   *
+   * // Sun position at the 2024 vernal equinox
+   * const pos = Sun.position(new Date('2024-03-20T03:06:00Z'))
+   * console.log(`RA: ${pos.ra.toFixed(4)}°`)        // ~0° (vernal equinox point)
+   * console.log(`Dec: ${pos.dec.toFixed(4)}°`)       // ~0° at equinox
+   * console.log(`Distance: ${pos.distance_AU} AU`)   // ~0.996 AU
+   * console.log(`Ecliptic Lon: ${pos.eclipticLon.toFixed(4)}°`) // ~0° at equinox
+   * ```
    */
   position(date = /* @__PURE__ */ new Date()) {
     const earth = AstroMath.planetEcliptic("earth", date);
@@ -465,6 +983,25 @@ const Sun = {
   },
   /**
    * Solar noon (transit) for a given observer.
+   *
+   * Computes the time at which the Sun crosses the observer's local meridian,
+   * reaching its highest altitude for the day.
+   *
+   * @remarks
+   * Uses the standard solar altitude of -0.8333° which accounts for atmospheric
+   * refraction (34 arc-minutes) and the Sun's mean semi-diameter (16 arc-minutes).
+   *
+   * @param obs - Observer location and optional date. If `obs.date` is omitted, the current date/time is used.
+   * @returns A `Date` representing the moment of solar noon (local meridian transit).
+   *
+   * @example
+   * ```ts
+   * import { Sun } from '@motioncomplex/cosmos-lib'
+   *
+   * // Solar noon in London on the vernal equinox
+   * const noon = Sun.solarNoon({ lat: 51.5, lng: -0.1, date: new Date('2024-03-20') })
+   * console.log('Solar noon:', noon.toISOString()) // ~12:10 UTC
+   * ```
    */
   solarNoon(obs) {
     const date = obs.date ?? /* @__PURE__ */ new Date();
@@ -474,7 +1011,33 @@ const Sun = {
   },
   /**
    * Equation of time in minutes.
-   * Difference between apparent solar time and mean solar time.
+   *
+   * Computes the difference between apparent solar time and mean solar time.
+   * A positive value means the true Sun is ahead of the mean Sun (sundial reads
+   * later than clock time), and a negative value means it trails behind.
+   *
+   * @remarks
+   * The equation of time arises from the eccentricity of Earth's orbit and
+   * the obliquity of the ecliptic. It varies between approximately -14 and +16 minutes
+   * over the course of a year. The computation uses the Sun's mean longitude (L0)
+   * and apparent right ascension, converting the angular difference to minutes of time
+   * at 4 minutes per degree.
+   *
+   * @param date - The date and time for the calculation. Defaults to the current date/time.
+   * @returns The equation of time in minutes. Positive means the apparent Sun is ahead of mean time.
+   *
+   * @example
+   * ```ts
+   * import { Sun } from '@motioncomplex/cosmos-lib'
+   *
+   * // EoT at the vernal equinox 2024 (should be near -7 minutes)
+   * const eot = Sun.equationOfTime(new Date('2024-03-20'))
+   * console.log(`Equation of Time: ${eot.toFixed(2)} minutes`)
+   *
+   * // EoT varies through the year; check the November maximum
+   * const eotNov = Sun.equationOfTime(new Date('2024-11-03'))
+   * console.log(`EoT in November: ${eotNov.toFixed(2)} minutes`) // ~+16 min
+   * ```
    */
   equationOfTime(date = /* @__PURE__ */ new Date()) {
     const sunPos = this.position(date);
@@ -487,7 +1050,36 @@ const Sun = {
   },
   /**
    * Complete twilight times for an observer.
-   * Returns sunrise/sunset plus civil, nautical, and astronomical twilight.
+   *
+   * Returns sunrise/sunset plus civil, nautical, and astronomical twilight
+   * boundaries for the given observer location and date. Each twilight boundary
+   * corresponds to the Sun's centre reaching a specific altitude below the horizon.
+   *
+   * @remarks
+   * Standard solar altitudes used for each twilight type:
+   * - **Sunrise/Sunset**: -0.8333° (accounts for refraction and solar semi-diameter)
+   * - **Civil twilight**: -6° (sufficient light for outdoor activities without artificial lighting)
+   * - **Nautical twilight**: -12° (horizon still discernible at sea)
+   * - **Astronomical twilight**: -18° (sky fully dark for astronomical observations)
+   *
+   * At polar latitudes, some or all twilight phases may not occur on a given date.
+   * In such cases the corresponding fields will be `null`.
+   *
+   * @param obs - Observer location and optional date. If `obs.date` is omitted, the current date/time is used.
+   * @returns An object containing all nine twilight timestamps, from astronomical dawn through astronomical dusk.
+   *
+   * @example
+   * ```ts
+   * import { Sun } from '@motioncomplex/cosmos-lib'
+   *
+   * // Twilight times in London on the 2024 vernal equinox
+   * const tw = Sun.twilight({ lat: 51.5, lng: -0.1, date: new Date('2024-03-20') })
+   * console.log('Astronomical dawn:', tw.astronomicalDawn?.toISOString())
+   * console.log('Sunrise:', tw.sunrise?.toISOString())
+   * console.log('Solar noon:', tw.solarNoon.toISOString())
+   * console.log('Sunset:', tw.sunset?.toISOString())
+   * console.log('Astronomical dusk:', tw.astronomicalDusk?.toISOString())
+   * ```
    */
   twilight(obs) {
     const date = obs.date ?? /* @__PURE__ */ new Date();
@@ -599,6 +1191,38 @@ const SYNODIC_MONTH = 29.530588861;
 const Moon = {
   /**
    * Geocentric equatorial and ecliptic position of the Moon.
+   *
+   * Computes the Moon's right ascension, declination, distance, ecliptic
+   * longitude/latitude, and horizontal parallax for the given date using
+   * Meeus' lunar theory with the ELP 2000-82 series truncated to the
+   * dominant terms.
+   *
+   * @remarks
+   * The algorithm computes five fundamental arguments (L', D, M, M', F) and
+   * evaluates trigonometric series from Meeus Tables 47.A (60 terms for
+   * longitude and distance) and 47.B (30 terms for latitude). Eccentricity
+   * corrections are applied to terms involving the Sun's mean anomaly M.
+   * Three additive corrections (A1, A2, A3) from Meeus p. 338 are included.
+   * Nutation is applied to the ecliptic longitude before converting to
+   * equatorial coordinates using the true obliquity.
+   *
+   * @param date - The date and time for which to compute the Moon's position. Defaults to the current date/time.
+   * @returns The Moon's geocentric position including RA (0-360°), declination, distance in km,
+   *   ecliptic longitude (0-360°), ecliptic latitude, and horizontal parallax in degrees.
+   *
+   * @example
+   * ```ts
+   * import { Moon } from '@motioncomplex/cosmos-lib'
+   *
+   * // Moon position at the 2024 vernal equinox
+   * const pos = Moon.position(new Date('2024-03-20T03:06:00Z'))
+   * console.log(`RA: ${pos.ra.toFixed(4)}°`)
+   * console.log(`Dec: ${pos.dec.toFixed(4)}°`)
+   * console.log(`Distance: ${pos.distance_km.toFixed(0)} km`)
+   * console.log(`Ecliptic Lon: ${pos.eclipticLon.toFixed(4)}°`)
+   * console.log(`Ecliptic Lat: ${pos.eclipticLat.toFixed(4)}°`)
+   * console.log(`Parallax: ${pos.parallax.toFixed(4)}°`)
+   * ```
    */
   position(date = /* @__PURE__ */ new Date()) {
     const jd = AstroMath.toJulian(date);
@@ -666,6 +1290,33 @@ const Moon = {
   },
   /**
    * Moon phase information for a given date.
+   *
+   * Computes the lunar phase angle, illuminated fraction, age (days since
+   * new moon), and a human-readable phase name based on the difference
+   * in ecliptic longitude between the Moon and the Sun.
+   *
+   * @remarks
+   * The phase is determined from the elongation of the Moon from the Sun
+   * in ecliptic longitude. The illuminated fraction is derived using the
+   * cosine of the phase angle: `(1 - cos(phaseAngle)) / 2`. Phase names
+   * are divided into eight equal segments of 0.125 (45°) each, centered
+   * on the four principal phases.
+   *
+   * @param date - The date and time for which to compute the phase. Defaults to the current date/time.
+   * @returns An object containing the phase cycle position (0-1), illuminated fraction (0-1),
+   *   age in days (0-29.5), and the human-readable phase name.
+   *
+   * @example
+   * ```ts
+   * import { Moon } from '@motioncomplex/cosmos-lib'
+   *
+   * // Phase at vernal equinox 2024
+   * const p = Moon.phase(new Date('2024-03-20'))
+   * console.log(`Phase: ${p.name}`)                          // e.g. 'waxing-gibbous'
+   * console.log(`Illumination: ${(p.illumination * 100).toFixed(0)}%`)
+   * console.log(`Age: ${p.age.toFixed(1)} days`)
+   * console.log(`Cycle: ${(p.phase * 100).toFixed(1)}%`)     // 0% = new, 50% = full
+   * ```
    */
   phase(date = /* @__PURE__ */ new Date()) {
     const moonPos = this.position(date);
@@ -692,7 +1343,35 @@ const Moon = {
   },
   /**
    * Find the next occurrence of a specific phase after the given date.
-   * Uses iterative search with ~1-minute precision.
+   *
+   * Uses an initial estimate based on the current phase position within the
+   * synodic month, then refines iteratively using bisection to achieve
+   * approximately 1-minute precision (up to 20 refinement iterations).
+   *
+   * @remarks
+   * The algorithm first estimates the time to the target phase from the current
+   * phase fraction, then iteratively corrects the estimate by measuring the
+   * phase error and adjusting by the proportional fraction of a synodic month.
+   * Wrap-around near the 0/1 boundary (new moon) is handled explicitly.
+   * Convergence threshold is 0.0001 phase units, corresponding to roughly
+   * 4 minutes of time.
+   *
+   * @param date - Start date from which to search forward. Defaults to the current date/time.
+   * @param targetPhase - The phase to find: `'new'`, `'first-quarter'`, `'full'`, or `'last-quarter'`. Defaults to `'full'`.
+   * @returns A `Date` representing the approximate moment of the next occurrence of the target phase.
+   *
+   * @example
+   * ```ts
+   * import { Moon } from '@motioncomplex/cosmos-lib'
+   *
+   * // Find the next full moon after the 2024 vernal equinox
+   * const fullMoon = Moon.nextPhase(new Date('2024-03-20'), 'full')
+   * console.log('Next full moon:', fullMoon.toISOString()) // 2024-03-25
+   *
+   * // Find the next new moon from today
+   * const newMoon = Moon.nextPhase(new Date('2024-03-20'), 'new')
+   * console.log('Next new moon:', newMoon.toISOString()) // 2024-04-08
+   * ```
    */
   nextPhase(date = /* @__PURE__ */ new Date(), targetPhase = "full") {
     const phaseTargets = {
@@ -718,7 +1397,31 @@ const Moon = {
   },
   /**
    * Rise, transit, and set times for the Moon.
-   * Uses the Moon's standard altitude of +0.125° (accounting for parallax).
+   *
+   * Computes the times at which the Moon rises above the horizon, transits
+   * the local meridian, and sets below the horizon for the given observer
+   * location and date.
+   *
+   * @remarks
+   * Uses the Moon's standard altitude of +0.125°, which accounts for the
+   * Moon's mean horizontal parallax (approximately 0.95°) minus atmospheric
+   * refraction (34 arc-minutes) minus the Moon's mean semi-diameter (about 16
+   * arc-minutes). Rise and set times will be `null` if the Moon is circumpolar
+   * (always above the horizon) or never rises at the given location and date.
+   *
+   * @param obs - Observer location and optional date. If `obs.date` is omitted, the current date/time is used.
+   * @returns An object with `rise`, `transit`, and `set` times. `rise` and `set` may be `null` at polar latitudes.
+   *
+   * @example
+   * ```ts
+   * import { Moon } from '@motioncomplex/cosmos-lib'
+   *
+   * // Moonrise and moonset in London
+   * const rts = Moon.riseTransitSet({ lat: 51.5, lng: -0.1, date: new Date('2024-03-20') })
+   * console.log('Moonrise:', rts.rise?.toISOString())
+   * console.log('Moon transit:', rts.transit.toISOString())
+   * console.log('Moonset:', rts.set?.toISOString())
+   * ```
    */
   riseTransitSet(obs) {
     const date = obs.date ?? /* @__PURE__ */ new Date();
@@ -727,7 +1430,37 @@ const Moon = {
   },
   /**
    * Optical libration angles (simplified).
-   * Returns the apparent tilt of the Moon's face.
+   *
+   * Returns the apparent tilt of the Moon's face as seen from Earth, caused
+   * by the geometry of the Moon's orbit relative to its rotational axis.
+   * Optical libration allows observers to see slightly more than 50% of
+   * the Moon's surface over time.
+   *
+   * @remarks
+   * This is a simplified calculation of the optical libration only (physical
+   * libration is not included). The mean inclination of the lunar equator to
+   * the ecliptic is taken as I = 1.5424°. The computation uses the Moon's
+   * argument of latitude (F), the longitude of the ascending node (Om), and
+   * the current ecliptic position. Based on Meeus, "Astronomical Algorithms",
+   * Chapter 53.
+   *
+   * Libration in longitude (`l`) reveals the eastern or western limb of the
+   * Moon, while libration in latitude (`b`) reveals the northern or southern
+   * limb. Both values are in degrees, with typical ranges of approximately
+   * +/-7.9° for longitude and +/-6.9° for latitude.
+   *
+   * @param date - The date and time for which to compute the libration. Defaults to the current date/time.
+   * @returns An object with `l` (libration in longitude, degrees) and `b` (libration in latitude, degrees).
+   *
+   * @example
+   * ```ts
+   * import { Moon } from '@motioncomplex/cosmos-lib'
+   *
+   * // Libration at the 2024 vernal equinox
+   * const lib = Moon.libration(new Date('2024-03-20'))
+   * console.log(`Libration in longitude: ${lib.l.toFixed(2)}°`)
+   * console.log(`Libration in latitude: ${lib.b.toFixed(2)}°`)
+   * ```
    */
   libration(date = /* @__PURE__ */ new Date()) {
     const jd = AstroMath.toJulian(date);
@@ -752,7 +1485,23 @@ const Moon = {
 const Eclipse = {
   /**
    * Find the next solar eclipse after the given date.
-   * Returns null if none found within ~2 years.
+   *
+   * Iterates through upcoming new moons (up to 26 lunations, approximately
+   * 2 years) and checks each one for a solar eclipse condition.
+   *
+   * @param date - Start date from which to search forward. Defaults to the current date/time.
+   * @returns An {@link EclipseEvent} describing the next solar eclipse, or `null` if none is found within approximately 2 years.
+   *
+   * @example
+   * ```ts
+   * import { Eclipse } from '@motioncomplex/cosmos-lib'
+   *
+   * const next = Eclipse.nextSolar(new Date('2024-03-20'))
+   * if (next) {
+   *   console.log(`Next solar eclipse: ${next.subtype} on ${next.date.toISOString()}`)
+   *   console.log(`Magnitude: ${next.magnitude.toFixed(3)}`)
+   * }
+   * ```
    */
   nextSolar(date = /* @__PURE__ */ new Date()) {
     let search = new Date(date);
@@ -766,7 +1515,23 @@ const Eclipse = {
   },
   /**
    * Find the next lunar eclipse after the given date.
-   * Returns null if none found within ~2 years.
+   *
+   * Iterates through upcoming full moons (up to 26 lunations, approximately
+   * 2 years) and checks each one for a lunar eclipse condition.
+   *
+   * @param date - Start date from which to search forward. Defaults to the current date/time.
+   * @returns An {@link EclipseEvent} describing the next lunar eclipse, or `null` if none is found within approximately 2 years.
+   *
+   * @example
+   * ```ts
+   * import { Eclipse } from '@motioncomplex/cosmos-lib'
+   *
+   * const next = Eclipse.nextLunar(new Date('2024-03-20'))
+   * if (next) {
+   *   console.log(`Next lunar eclipse: ${next.subtype} on ${next.date.toISOString()}`)
+   *   console.log(`Magnitude: ${next.magnitude.toFixed(3)}`)
+   * }
+   * ```
    */
   nextLunar(date = /* @__PURE__ */ new Date()) {
     let search = new Date(date);
@@ -780,6 +1545,41 @@ const Eclipse = {
   },
   /**
    * Search for all eclipses in a date range.
+   *
+   * Scans the interval from `startDate` to `endDate` in steps of approximately
+   * 15 days, checking both new moons (solar) and full moons (lunar) for eclipse
+   * conditions. Results are sorted chronologically and deduplicated (eclipses
+   * found within 1 day of each other are treated as the same event).
+   *
+   * @remarks
+   * The search advances by 15-day increments to ensure both new and full moons
+   * within each lunation are tested. When `type` is specified, only that eclipse
+   * type is checked, improving performance for targeted searches. Deduplication
+   * uses a 1-day threshold to handle cases where the same eclipse is detected
+   * from adjacent search windows.
+   *
+   * @param startDate - The beginning of the search window (inclusive).
+   * @param endDate - The end of the search window (exclusive).
+   * @param type - Optional filter: `'solar'` to search only for solar eclipses, `'lunar'` for only lunar eclipses, or omit for both.
+   * @returns An array of {@link EclipseEvent} objects sorted by date, with duplicates removed.
+   *
+   * @example
+   * ```ts
+   * import { Eclipse } from '@motioncomplex/cosmos-lib'
+   *
+   * // Find all eclipses in 2024
+   * const all = Eclipse.search(new Date('2024-01-01'), new Date('2025-01-01'))
+   * console.log(`Found ${all.length} eclipses in 2024`)
+   * all.forEach(e => console.log(`${e.type} ${e.subtype} — ${e.date.toISOString()}`))
+   *
+   * // Only solar eclipses in a 5-year span
+   * const solar = Eclipse.search(
+   *   new Date('2024-01-01'),
+   *   new Date('2029-01-01'),
+   *   'solar',
+   * )
+   * solar.forEach(e => console.log(`${e.subtype} solar eclipse: ${e.date.toISOString()}`))
+   * ```
    */
   search(startDate, endDate, type) {
     const results = [];
@@ -808,7 +1608,16 @@ const Eclipse = {
   },
   /**
    * Check if a new moon produces a solar eclipse.
+   *
+   * Computes the Moon's ecliptic latitude and angular separation from the Sun
+   * at the instant of new moon. If the Moon is within 1.5° of the ecliptic plane
+   * and the angular separation is less than 1.5 times the sum of the apparent
+   * solar and lunar radii, an eclipse is predicted. The subtype (total, annular,
+   * or partial) is determined by comparing the apparent radii and the separation.
+   *
    * @internal
+   * @param newMoon - The date/time of the new moon to test.
+   * @returns An {@link EclipseEvent} if a solar eclipse occurs at this new moon, or `null` otherwise.
    */
   _checkSolarEclipse(newMoon) {
     const moonPos = Moon.position(newMoon);
@@ -843,7 +1652,22 @@ const Eclipse = {
   },
   /**
    * Check if a full moon produces a lunar eclipse.
+   *
+   * Computes the Moon's ecliptic latitude at the instant of full moon and
+   * compares it against the angular radii of Earth's umbral and penumbral
+   * shadow cones at the Moon's distance. The subtype (total, partial, or
+   * penumbral) is determined by where the Moon's latitude falls relative
+   * to the umbral and penumbral boundaries.
+   *
+   * @remarks
+   * The umbral cone angular radius is approximated as 2.6 times the Earth's
+   * angular radius at the Moon's distance, and the penumbral cone as 4.3 times.
+   * These are simplified multipliers; a full calculation would use solar parallax
+   * and Earth's atmospheric extension.
+   *
    * @internal
+   * @param fullMoon - The date/time of the full moon to test.
+   * @returns An {@link EclipseEvent} if a lunar eclipse occurs at this full moon, or `null` otherwise.
    */
   _checkLunarEclipse(fullMoon) {
     const moonPos = Moon.position(fullMoon);
@@ -3765,13 +4589,49 @@ const METEOR_SHOWERS = [
 ];
 let _nasaApiKey = "DEMO_KEY";
 const NASA = {
-  /** Set a NASA API key for higher rate limits. Get one free at https://api.nasa.gov */
+  /**
+   * Set the NASA API key used for APOD requests.
+   *
+   * The default key (`DEMO_KEY`) is heavily rate-limited (30 req/hr,
+   * 50 req/day). Register for a free key at {@link https://api.nasa.gov}
+   * to raise these limits to 1,000 req/hr.
+   *
+   * @param key - Your NASA API key.
+   *
+   * @example
+   * ```ts
+   * NASA.setApiKey('Ab12Cd34Ef56Gh78Ij90KlMnOpQrStUvWxYz0123')
+   * ```
+   */
   setApiKey(key) {
     _nasaApiKey = key;
   },
   /**
    * Search the NASA Image and Video Library.
-   * Docs: https://images.nasa.gov/docs/images.nasa.gov_api_docs.pdf
+   *
+   * Queries the public NASA images API and returns an array of
+   * {@link NASAImageResult} objects containing metadata and preview URLs.
+   *
+   * @param query - Free-text search term (e.g. `'pillars of creation'`).
+   * @param opts  - Optional filters and pagination settings.
+   *
+   * @returns An array of search results. An empty array is returned when
+   *          the query matches nothing.
+   *
+   * @throws {Error} If the NASA API responds with a non-2xx status code.
+   *
+   * @example
+   * ```ts
+   * const results = await NASA.searchImages('pillars of creation', {
+   *   yearStart: 2010,
+   *   pageSize: 5,
+   * })
+   * for (const r of results) {
+   *   console.log(r.title, r.previewUrl)
+   * }
+   * ```
+   *
+   * @see {@link https://images.nasa.gov/docs/images.nasa.gov_api_docs.pdf | NASA Image API docs}
    */
   async searchImages(query, opts = {}) {
     var _a;
@@ -3803,7 +4663,21 @@ const NASA = {
   },
   /**
    * Fetch all asset URLs for a given NASA image ID.
-   * Returns URLs sorted: original → large → medium → small → thumb.
+   *
+   * Returns the full list of available renditions (JPEG, TIFF, etc.)
+   * sorted by quality: original, large, medium, small, then thumbnail.
+   *
+   * @param nasaId - The NASA-assigned identifier (e.g. `'PIA06890'`).
+   *
+   * @returns An array of absolute URLs sorted from highest to lowest quality.
+   *
+   * @throws {Error} If the NASA asset endpoint responds with a non-2xx status.
+   *
+   * @example
+   * ```ts
+   * const urls = await NASA.getAssets('PIA06890')
+   * console.log(urls[0]) // highest quality rendition
+   * ```
    */
   async getAssets(nasaId) {
     var _a;
@@ -3822,8 +4696,27 @@ const NASA = {
     return (((_a = json.collection) == null ? void 0 : _a.items) ?? []).map((item) => item.href).sort((a, b) => rank(a) - rank(b));
   },
   /**
-   * Convenience: get the highest-quality image URL for a NASA ID.
-   * Tries orig → large → medium → small in order.
+   * Convenience helper that returns the single highest-quality image URL
+   * for a NASA asset ID.
+   *
+   * Internally calls {@link NASA.getAssets} and filters for image file
+   * extensions (JPEG, PNG, GIF, TIFF), returning the first match (which
+   * is the original-resolution rendition when available).
+   *
+   * @param nasaId - The NASA-assigned identifier (e.g. `'PIA06890'`).
+   *
+   * @returns The URL of the best available image, or `null` if no image
+   *          renditions exist for the given ID.
+   *
+   * @throws {Error} If the underlying {@link NASA.getAssets} call fails.
+   *
+   * @example
+   * ```ts
+   * const url = await NASA.getBestImageUrl('PIA06890')
+   * if (url) {
+   *   document.querySelector('img')!.src = url
+   * }
+   * ```
    */
   async getBestImageUrl(nasaId) {
     const assets = await this.getAssets(nasaId);
@@ -3831,8 +4724,29 @@ const NASA = {
     return imgAssets[0] ?? null;
   },
   /**
-   * Astronomy Picture of the Day.
-   * @param date  optional ISO date string or Date (defaults to today)
+   * Fetch the NASA Astronomy Picture of the Day (APOD).
+   *
+   * Returns a single {@link APODResult} containing the title, explanation,
+   * standard and HD image URLs, and copyright information.
+   *
+   * @param date - An ISO-8601 date string (`'2024-06-15'`) or a `Date`
+   *               object. When omitted the API returns today's picture.
+   *
+   * @returns The APOD entry for the requested date.
+   *
+   * @throws {Error} If the APOD API responds with a non-2xx status code
+   *                 (e.g. 403 for an invalid API key, 404 for a date with
+   *                 no entry).
+   *
+   * @example
+   * ```ts
+   * // Today's APOD
+   * const today = await NASA.apod()
+   * console.log(today.title, today.hdUrl)
+   *
+   * // A specific date
+   * const historic = await NASA.apod('1995-06-16')
+   * ```
    */
   async apod(date) {
     const params = new URLSearchParams({ api_key: _nasaApiKey });
@@ -3855,7 +4769,28 @@ const NASA = {
   },
   /**
    * Fetch a random selection of recent APOD entries.
-   * @param count  number of entries to fetch (default 7)
+   *
+   * Uses the `count` parameter of the APOD API to retrieve multiple
+   * randomly-selected entries at once. Thumbnails are requested for
+   * video entries.
+   *
+   * @param count - Number of random entries to return. Defaults to `7`.
+   *                The NASA API supports a maximum of `100`.
+   *
+   * @returns An array of {@link APODResult} objects.
+   *
+   * @throws {Error} If the APOD API responds with a non-2xx status code.
+   *
+   * @example
+   * ```ts
+   * const week = await NASA.recentAPOD()
+   * for (const entry of week) {
+   *   console.log(`${entry.date}: ${entry.title}`)
+   * }
+   *
+   * // Fetch 20 random entries
+   * const batch = await NASA.recentAPOD(20)
+   * ```
    */
   async recentAPOD(count = 7) {
     const params = new URLSearchParams({
@@ -3880,7 +4815,28 @@ const NASA = {
 const ESA = {
   /**
    * Search the ESA Hubble Space Telescope image archive.
-   * Docs: https://esahubble.org/api/v1/
+   *
+   * Queries the ESAHubble public REST API and returns an array of
+   * {@link ESAHubbleResult} objects with image metadata and URLs.
+   *
+   * @param query - Free-text search term (e.g. `'crab nebula'`).
+   * @param limit - Maximum number of results to return. Defaults to `10`.
+   *
+   * @returns An array of matching Hubble image results. Each result
+   *          includes both a full-resolution `imageUrl` and a
+   *          screen-sized `thumbUrl`.
+   *
+   * @throws {Error} If the ESA API responds with a non-2xx status code.
+   *
+   * @example
+   * ```ts
+   * const results = await ESA.searchHubble('crab nebula', 3)
+   * for (const r of results) {
+   *   console.log(r.title, r.thumbUrl)
+   * }
+   * ```
+   *
+   * @see {@link https://esahubble.org/api/v1/ | ESA Hubble API docs}
    */
   async searchHubble(query, limit = 10) {
     const res = await fetch(
@@ -4032,29 +4988,113 @@ const messierByNumber = new Map(
 );
 const Data = {
   // ── Unified queries ────────────────────────────────────────────────────
-  /** Get object by exact id. Returns null if not found. */
+  /**
+   * Look up a celestial object by its exact identifier.
+   *
+   * @param id - The unique object ID (e.g. `'mars'`, `'m42'`, `'sirius'`).
+   * @returns The matching {@link CelestialObject}, or `null` if not found.
+   *
+   * @example
+   * ```ts
+   * const mars = Data.get('mars')
+   * // => { id: 'mars', name: 'Mars', type: 'planet', ... }
+   *
+   * const missing = Data.get('nonexistent')
+   * // => null
+   * ```
+   */
   get(id) {
     return byId.get(id) ?? null;
   },
-  /** Get object by name or alias (case-insensitive). Returns null if not found. */
+  /**
+   * Look up a celestial object by name or any known alias (case-insensitive).
+   *
+   * @param name - The common name or alias (e.g. `'Sirius'`, `'Morning Star'`, `'NGC 1976'`).
+   * @returns The matching {@link CelestialObject}, or `null` if no match.
+   *
+   * @example
+   * ```ts
+   * const sirius = Data.getByName('Sirius')
+   * // => { id: 'sirius', name: 'Sirius', type: 'star', ... }
+   *
+   * const venus = Data.getByName('morning star')
+   * // => { id: 'venus', name: 'Venus', ... }
+   * ```
+   */
   getByName(name) {
     return byName.get(name.toLowerCase()) ?? null;
   },
-  /** Return a copy of the full unified catalog. */
+  /**
+   * Return a shallow copy of the full unified catalog.
+   *
+   * The returned array is a new instance on every call, so it is safe to
+   * sort, filter, or mutate without affecting the internal data.
+   *
+   * @returns A new array containing every {@link CelestialObject} in the catalog.
+   *
+   * @example
+   * ```ts
+   * const catalog = Data.all()
+   * console.log(catalog.length) // ~420+ objects
+   * ```
+   */
   all() {
     return [...UNIFIED];
   },
-  /** Filter by object type. */
+  /**
+   * Filter the unified catalog by object type.
+   *
+   * @param type - The {@link ObjectType} to filter on (e.g. `'planet'`, `'nebula'`, `'galaxy'`).
+   * @returns All objects matching the given type.
+   *
+   * @example
+   * ```ts
+   * const nebulae = Data.getByType('nebula')
+   * // => [{ id: 'm1', name: 'Crab Nebula', ... }, ...]
+   *
+   * const planets = Data.getByType('planet')
+   * // => [{ id: 'mercury', ... }, { id: 'venus', ... }, ...]
+   * ```
+   */
   getByType(type) {
     return UNIFIED.filter((o) => o.type === type);
   },
-  /** Filter by tag string (e.g. 'messier', 'stellar-nursery'). */
+  /**
+   * Filter the unified catalog by a tag string.
+   *
+   * @param tag - A tag to match (e.g. `'messier'`, `'solar-system'`, `'globular'`).
+   * @returns All objects whose `tags` array includes the given string.
+   *
+   * @example
+   * ```ts
+   * const messierObjects = Data.getByTag('messier')
+   * // => all 110 Messier catalog entries
+   *
+   * const solarSystem = Data.getByTag('solar-system')
+   * // => Sun, planets, and Moon
+   * ```
+   */
   getByTag(tag) {
     return UNIFIED.filter((o) => o.tags.includes(tag));
   },
   /**
    * Fuzzy search across name, aliases, description, and tags.
-   * Results are sorted by relevance score (highest first).
+   *
+   * Results are ranked by a weighted relevance score: exact ID and name
+   * matches rank highest, followed by alias matches, partial name matches,
+   * description hits, and tag hits. Results are sorted highest-score first.
+   *
+   * @param query - The search term (case-insensitive). An empty string returns `[]`.
+   * @returns Matching {@link CelestialObject CelestialObjects} sorted by relevance.
+   *
+   * @example
+   * ```ts
+   * const results = Data.search('orion')
+   * // => [Orion Nebula (M42), De Mairan's Nebula (M43), Betelgeuse, ...]
+   *
+   * const galaxies = Data.search('spiral')
+   * // => all objects with 'spiral' in name, subtype, description, or tags
+   * ```
    */
   search(query) {
     const q = query.toLowerCase().trim();
@@ -4076,8 +5116,24 @@ const Data = {
   },
   /**
    * Find all objects within a given angular radius of a sky position.
-   * Only considers objects with known RA/Dec (not solar-system bodies).
-   * Results sorted by separation (nearest first).
+   *
+   * Only considers objects with known RA/Dec coordinates (solar-system
+   * bodies with `null` RA/Dec are excluded). Results are sorted by
+   * angular separation, nearest first.
+   *
+   * @param center - The sky position to search around, in J2000 equatorial coordinates.
+   * @param radiusDeg - Search radius in degrees.
+   * @returns An array of {@link ProximityResult} objects, each containing the
+   *   matched object and its angular separation from the center.
+   *
+   * @example
+   * ```ts
+   * // Find objects within 5 degrees of the Orion Nebula
+   * const nearby = Data.nearby({ ra: 83.82, dec: -5.39 }, 5)
+   * nearby.forEach(r =>
+   *   console.log(`${r.object.name}: ${r.separation.toFixed(2)}deg`)
+   * )
+   * ```
    */
   nearby(center, radiusDeg) {
     return UNIFIED.filter(
@@ -4090,7 +5146,22 @@ const Data = {
   // ── Image helpers ─────────────────────────────────────────────────────
   /**
    * Get static Wikimedia image URLs for an object from the fallback registry.
-   * Returns an empty array if the object has no static images.
+   *
+   * Uses the curated {@link IMAGE_FALLBACKS} registry (no API call needed).
+   * Returns an empty array if the object has no static images registered.
+   *
+   * @param id - The object ID (e.g. `'m42'`, `'m31'`).
+   * @param width - Optional pixel width for Wikimedia thumbnail resizing.
+   * @returns An array of Wikimedia Commons thumbnail URLs.
+   *
+   * @example
+   * ```ts
+   * const urls = Data.imageUrls('m42', 1280)
+   * // => ['https://upload.wikimedia.org/...Orion_Nebula.../1280px-...']
+   *
+   * const empty = Data.imageUrls('mercury')
+   * // => []
+   * ```
    */
   imageUrls(id, width) {
     const images = IMAGE_FALLBACKS[id];
@@ -4098,8 +5169,21 @@ const Data = {
     return images.map((img) => Media.wikimediaUrl(img.filename, width));
   },
   /**
-   * Build a ProgressiveImageOptions config from the static fallback registry.
-   * Returns null if the object has no static images.
+   * Build a {@link ProgressiveImageOptions} config from the static fallback registry.
+   *
+   * Produces a tiny 64 px placeholder, a standard-resolution source, and a
+   * 2x HD source -- ready to feed into `Media.progressive()`.
+   * Returns `null` if the object has no static images registered.
+   *
+   * @param id - The object ID (e.g. `'m42'`, `'m51'`).
+   * @param width - Target width in pixels for the standard source. Defaults to `800`.
+   * @returns A {@link ProgressiveImageOptions} object, or `null`.
+   *
+   * @example
+   * ```ts
+   * const prog = Data.progressiveImage('m42', 1024)
+   * // => { placeholder: '...64px...', src: '...1024px...', srcHD: '...2048px...' }
+   * ```
    */
   progressiveImage(id, width = 800) {
     const images = IMAGE_FALLBACKS[id];
@@ -4112,8 +5196,21 @@ const Data = {
     };
   },
   /**
-   * Generate a srcset string from the static fallback registry.
-   * Returns null if the object has no static images.
+   * Generate an HTML `srcset` string from the static fallback registry.
+   *
+   * Produces a comma-separated list of `<url> <width>w` entries suitable
+   * for the `srcset` attribute of an `<img>` element.
+   * Returns `null` if the object has no static images registered.
+   *
+   * @param id - The object ID (e.g. `'m31'`).
+   * @param widths - Array of pixel widths to include. Defaults to `[640, 1280, 1920]`.
+   * @returns A `srcset`-formatted string, or `null`.
+   *
+   * @example
+   * ```ts
+   * const srcset = Data.imageSrcset('m31')
+   * // => '...640px-... 640w, ...1280px-... 1280w, ...1920px-... 1920w'
+   * ```
    */
   imageSrcset(id, widths = [640, 1280, 1920]) {
     const images = IMAGE_FALLBACKS[id];
@@ -4122,30 +5219,89 @@ const Data = {
     return Media.srcset(widths, (w) => Media.wikimediaUrl(img.filename, w));
   },
   /**
-   * Search NASA and/or ESA APIs for images of any object by name.
-   * Returns multi-resolution image results suitable for progressive loading,
-   * fallback chains, or Three.js textures.
+   * Search NASA and/or ESA APIs for images of any celestial object by name.
    *
-   * Works for ANY object — not limited to the static fallback registry.
+   * Returns multi-resolution {@link ResolvedImage} results suitable for
+   * progressive loading, fallback chains, or Three.js textures.
+   * Unlike the static `imageUrls` / `imageSrcset` helpers, this method
+   * works for **any** object -- it is not limited to the curated fallback registry.
+   *
+   * @param name - Object name to search (e.g. `'Orion Nebula'`, `'M42'`, `'Sirius'`).
+   * @param opts - Optional {@link ResolveImageOptions} to control source and limit.
+   * @returns A promise resolving to an array of {@link ResolvedImage} results.
+   *
+   * @example
+   * ```ts
+   * const images = await Data.resolveImages('Crab Nebula', { source: 'all', limit: 3 })
+   * images.forEach(img => console.log(img.title, img.urls[0]))
+   * ```
    */
   resolveImages,
   // ── Bright star queries ────────────────────────────────────────────────
-  /** Get all bright stars (~300 IAU named stars). */
+  /**
+   * Get all bright stars in the catalog (~200 IAU named stars).
+   *
+   * @returns The full {@link BRIGHT_STARS} array (readonly).
+   *
+   * @example
+   * ```ts
+   * const stars = Data.stars()
+   * console.log(stars[0].name) // 'Sirius'
+   * ```
+   */
   stars() {
     return BRIGHT_STARS;
   },
-  /** Get a bright star by IAU proper name (case-insensitive). */
+  /**
+   * Look up a bright star by its IAU proper name (case-insensitive).
+   *
+   * @param name - The IAU proper name (e.g. `'Sirius'`, `'Betelgeuse'`, `'Polaris'`).
+   * @returns The matching {@link BrightStar}, or `null` if not found.
+   *
+   * @example
+   * ```ts
+   * const sirius = Data.getStarByName('Sirius')
+   * // => { id: 'sirius', name: 'Sirius', con: 'CMa', mag: -1.46, ... }
+   * ```
+   */
   getStarByName(name) {
     return starByName.get(name.toLowerCase()) ?? null;
   },
-  /** Get all bright stars in a given constellation (3-letter IAU abbreviation). */
+  /**
+   * Get all bright stars belonging to a given constellation.
+   *
+   * @param con - The 3-letter IAU constellation abbreviation (case-insensitive),
+   *   e.g. `'Ori'`, `'CMa'`, `'UMa'`.
+   * @returns All {@link BrightStar BrightStars} in that constellation.
+   *
+   * @example
+   * ```ts
+   * const orionStars = Data.getStarsByConstellation('Ori')
+   * // => [Rigel, Betelgeuse, Bellatrix, Alnilam, Alnitak, Mintaka, Saiph]
+   * ```
+   */
   getStarsByConstellation(con) {
     const upper = con.toUpperCase();
     return BRIGHT_STARS.filter((s) => s.con.toUpperCase() === upper);
   },
   /**
-   * Find bright stars within a given angular radius.
-   * Results sorted by separation (nearest first).
+   * Find bright stars within a given angular radius of a sky position.
+   *
+   * Results are sorted by angular separation (nearest first).
+   *
+   * @param center - The sky position to search around, in J2000 equatorial coordinates.
+   * @param radiusDeg - Search radius in degrees.
+   * @returns An array of objects, each containing the matched {@link BrightStar}
+   *   and its angular `separation` in degrees from the center.
+   *
+   * @example
+   * ```ts
+   * // Find bright stars within 10 degrees of Sirius
+   * const nearby = Data.nearbyStars({ ra: 101.287, dec: -16.716 }, 10)
+   * nearby.forEach(r =>
+   *   console.log(`${r.star.name}: ${r.separation.toFixed(2)}deg`)
+   * )
+   * ```
    */
   nearbyStars(center, radiusDeg) {
     return BRIGHT_STARS.map((s) => ({
@@ -4154,31 +5310,101 @@ const Data = {
     })).filter((r) => r.separation <= radiusDeg).sort((a, b) => a.separation - b.separation);
   },
   // ── Constellation queries ────────────────────────────────────────────────
-  /** Get all 88 IAU constellations. */
+  /**
+   * Get all 88 IAU constellations.
+   *
+   * @returns The full {@link CONSTELLATIONS} array (readonly).
+   *
+   * @example
+   * ```ts
+   * const all = Data.constellations()
+   * console.log(all.length) // 88
+   * ```
+   */
   constellations() {
     return CONSTELLATIONS;
   },
-  /** Get a constellation by 3-letter IAU abbreviation (case-insensitive). */
+  /**
+   * Look up a constellation by its 3-letter IAU abbreviation (case-insensitive).
+   *
+   * @param abbr - The abbreviation (e.g. `'Ori'`, `'UMa'`, `'Sco'`).
+   * @returns The matching {@link Constellation}, or `null` if not found.
+   *
+   * @example
+   * ```ts
+   * const orion = Data.getConstellation('Ori')
+   * // => { abbr: 'Ori', name: 'Orion', genitive: 'Orionis', area: 594, ... }
+   * ```
+   */
   getConstellation(abbr) {
     return conByAbbr.get(abbr.toLowerCase()) ?? null;
   },
   // ── Messier catalog queries ────────────────────────────────────────────
-  /** Get all 110 Messier objects. */
+  /**
+   * Get all 110 Messier objects.
+   *
+   * @returns The full {@link MESSIER_CATALOG} array (readonly).
+   *
+   * @example
+   * ```ts
+   * const catalog = Data.messier()
+   * console.log(catalog.length) // 110
+   * ```
+   */
   messier() {
     return MESSIER_CATALOG;
   },
-  /** Get a Messier object by number (1-110). */
+  /**
+   * Look up a Messier object by its catalog number.
+   *
+   * @param number - The Messier number, from 1 to 110.
+   * @returns The matching {@link MessierObject}, or `null` if out of range.
+   *
+   * @example
+   * ```ts
+   * const m42 = Data.getMessier(42)
+   * // => { messier: 42, name: 'Orion Nebula', type: 'nebula', mag: 4.0, ... }
+   *
+   * const m1 = Data.getMessier(1)
+   * // => { messier: 1, name: 'Crab Nebula', ... }
+   * ```
+   */
   getMessier(number) {
     return messierByNumber.get(number) ?? null;
   },
   // ── Meteor shower queries ──────────────────────────────────────────────
-  /** Get all meteor showers. */
+  /**
+   * Get all meteor showers in the catalog (~23 significant annual showers).
+   *
+   * @returns The full {@link METEOR_SHOWERS} array (readonly).
+   *
+   * @example
+   * ```ts
+   * const showers = Data.showers()
+   * const perseids = showers.find(s => s.id === 'perseids')
+   * console.log(perseids?.zhr) // 100
+   * ```
+   */
   showers() {
     return METEOR_SHOWERS;
   },
   /**
    * Get meteor showers that are active on a given date.
-   * Compares the Sun's ecliptic longitude against each shower's activity window.
+   *
+   * Computes the Sun's ecliptic longitude for the date and compares it
+   * against each shower's peak solar longitude, returning those within
+   * a +/-20 degree activity window.
+   *
+   * @param date - The date to check for active showers.
+   * @returns An array of {@link MeteorShower MeteorShowers} active on the given date.
+   *
+   * @example
+   * ```ts
+   * // Check for active showers on August 12 (Perseid peak)
+   * const active = Data.getActiveShowers(new Date('2025-08-12'))
+   * console.log(active.map(s => s.name))
+   * // => ['Perseids', 'Kappa Cygnids', ...]
+   * ```
    */
   getActiveShowers(date) {
     const earth = AstroMath.planetEcliptic("earth", date);
