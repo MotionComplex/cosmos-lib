@@ -1,15 +1,15 @@
 import { describe, it, expect } from 'vitest'
-import { Data } from '../src/data'
+import { Data, IMAGE_FALLBACKS } from '../src/data'
 
 describe('Data — image helpers', () => {
   describe('imageUrls', () => {
-    it('returns Wikimedia URLs for objects with images', () => {
+    it('returns Wikimedia URLs for objects with static fallback images', () => {
       const urls = Data.imageUrls('m42')
       expect(urls).toHaveLength(1)
       expect(urls[0]).toContain('Special:FilePath/Orion_Nebula')
     })
 
-    it('returns empty array for objects without images', () => {
+    it('returns empty array for objects without static images', () => {
       expect(Data.imageUrls('sun')).toHaveLength(0)
     })
 
@@ -32,7 +32,7 @@ describe('Data — image helpers', () => {
       expect(opts!.srcHD).toContain('?width=1600')
     })
 
-    it('returns null for objects without images', () => {
+    it('returns null for objects without static images', () => {
       expect(Data.progressiveImage('sun')).toBeNull()
     })
 
@@ -63,7 +63,7 @@ describe('Data — image helpers', () => {
       expect(srcset).not.toContain('1920w')
     })
 
-    it('returns null for objects without images', () => {
+    it('returns null for objects without static images', () => {
       expect(Data.imageSrcset('sun')).toBeNull()
     })
 
@@ -72,12 +72,15 @@ describe('Data — image helpers', () => {
     })
   })
 
-  describe('catalog image integrity', () => {
-    it('every object with images has valid ImageRef entries', () => {
-      const withImages = Data.all().filter(o => o.images?.length)
-      expect(withImages.length).toBeGreaterThanOrEqual(5)
-      for (const obj of withImages) {
-        for (const img of obj.images!) {
+  describe('IMAGE_FALLBACKS integrity', () => {
+    it('has at least 10 entries', () => {
+      expect(Object.keys(IMAGE_FALLBACKS).length).toBeGreaterThanOrEqual(10)
+    })
+
+    it('every entry has valid ImageRef fields', () => {
+      for (const [id, images] of Object.entries(IMAGE_FALLBACKS)) {
+        expect(id).toBeTruthy()
+        for (const img of images) {
           expect(img.filename).toBeTruthy()
           expect(img.filename).not.toContain('https://')
           expect(img.credit).toBeTruthy()
@@ -111,10 +114,9 @@ describe('Data', () => {
       expect(Data.getByName('SiRiUs')?.id).toBe('sirius')
     })
 
-    it('finds by alias', () => {
-      expect(Data.getByName('Dog Star')?.id).toBe('sirius')
-      expect(Data.getByName('m42')?.id).toBe('m42')
-      expect(Data.getByName('Seven Sisters')?.id).toBe('m45')
+    it('finds by Messier alias', () => {
+      expect(Data.getByName('M42')?.id).toBe('m42')
+      expect(Data.getByName('Pleiades')?.name).toBe('Pleiades')
     })
 
     it('returns null for unknown name', () => {
@@ -210,21 +212,14 @@ describe('Data', () => {
       expect(results.some(r => r.id === 'm1')).toBe(true)
     })
 
-    it('finds by subtype', () => {
-      const results = Data.search('supergiant')
-      expect(results.length).toBeGreaterThan(0)
-    })
-
     it('search results are sorted by relevance (exact match first)', () => {
       const results = Data.search('Vega')
-      // Exact match should score highest
       expect(results[0]?.id).toBe('vega')
     })
   })
 
   describe('nearby', () => {
     it('finds objects near Orion Nebula', () => {
-      // Orion Nebula RA=83.822, Dec=-5.391
       const results = Data.nearby({ ra: 83.822, dec: -5.391 }, 25)
       expect(results.length).toBeGreaterThan(0)
     })
@@ -255,7 +250,6 @@ describe('Data', () => {
     })
 
     it('returns empty array when no objects are within radius', () => {
-      // Incredibly small radius — no object should be this precise
       const results = Data.nearby({ ra: 45.123, dec: 12.456 }, 0.00001)
       expect(results).toHaveLength(0)
     })

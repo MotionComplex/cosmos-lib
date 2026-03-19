@@ -38,8 +38,6 @@ export interface CelestialObject {
   spectral?: string
   binary?: boolean
   triple?: boolean
-  // Imagery
-  images?: ImageRef[]
 }
 
 export interface SearchResult {
