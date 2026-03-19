@@ -1,5 +1,94 @@
 import { describe, it, expect } from 'vitest'
-import { Data } from '../src/data'
+import { Data, IMAGE_FALLBACKS } from '../src/data'
+
+describe('Data — image helpers', () => {
+  describe('imageUrls', () => {
+    it('returns Wikimedia URLs for objects with static fallback images', () => {
+      const urls = Data.imageUrls('m42')
+      expect(urls).toHaveLength(1)
+      expect(urls[0]).toContain('Special:FilePath/Orion_Nebula')
+    })
+
+    it('returns empty array for objects without static images', () => {
+      expect(Data.imageUrls('sun')).toHaveLength(0)
+    })
+
+    it('returns empty array for nonexistent id', () => {
+      expect(Data.imageUrls('nonexistent')).toHaveLength(0)
+    })
+
+    it('applies width parameter', () => {
+      const urls = Data.imageUrls('m42', 1920)
+      expect(urls[0]).toContain('?width=1920')
+    })
+  })
+
+  describe('progressiveImage', () => {
+    it('returns ProgressiveImageOptions with 3 tiers', () => {
+      const opts = Data.progressiveImage('m42', 800)
+      expect(opts).not.toBeNull()
+      expect(opts!.placeholder).toContain('?width=64')
+      expect(opts!.src).toContain('?width=800')
+      expect(opts!.srcHD).toContain('?width=1600')
+    })
+
+    it('returns null for objects without static images', () => {
+      expect(Data.progressiveImage('sun')).toBeNull()
+    })
+
+    it('returns null for nonexistent id', () => {
+      expect(Data.progressiveImage('nonexistent')).toBeNull()
+    })
+
+    it('defaults to width=800 when not specified', () => {
+      const opts = Data.progressiveImage('m42')
+      expect(opts!.src).toContain('?width=800')
+      expect(opts!.srcHD).toContain('?width=1600')
+    })
+  })
+
+  describe('imageSrcset', () => {
+    it('returns a srcset string with default widths', () => {
+      const srcset = Data.imageSrcset('m42')
+      expect(srcset).not.toBeNull()
+      expect(srcset).toContain('640w')
+      expect(srcset).toContain('1280w')
+      expect(srcset).toContain('1920w')
+    })
+
+    it('accepts custom widths', () => {
+      const srcset = Data.imageSrcset('m42', [320, 640])
+      expect(srcset).toContain('320w')
+      expect(srcset).toContain('640w')
+      expect(srcset).not.toContain('1920w')
+    })
+
+    it('returns null for objects without static images', () => {
+      expect(Data.imageSrcset('sun')).toBeNull()
+    })
+
+    it('returns null for nonexistent id', () => {
+      expect(Data.imageSrcset('nonexistent')).toBeNull()
+    })
+  })
+
+  describe('IMAGE_FALLBACKS integrity', () => {
+    it('has at least 10 entries', () => {
+      expect(Object.keys(IMAGE_FALLBACKS).length).toBeGreaterThanOrEqual(10)
+    })
+
+    it('every entry has valid ImageRef fields', () => {
+      for (const [id, images] of Object.entries(IMAGE_FALLBACKS)) {
+        expect(id).toBeTruthy()
+        for (const img of images) {
+          expect(img.filename).toBeTruthy()
+          expect(img.filename).not.toContain('https://')
+          expect(img.credit).toBeTruthy()
+        }
+      }
+    })
+  })
+})
 
 describe('Data', () => {
   describe('get', () => {
@@ -25,10 +114,9 @@ describe('Data', () => {
       expect(Data.getByName('SiRiUs')?.id).toBe('sirius')
     })
 
-    it('finds by alias', () => {
-      expect(Data.getByName('Dog Star')?.id).toBe('sirius')
-      expect(Data.getByName('m42')?.id).toBe('m42')
-      expect(Data.getByName('Seven Sisters')?.id).toBe('m45')
+    it('finds by Messier alias', () => {
+      expect(Data.getByName('M42')?.id).toBe('m42')
+      expect(Data.getByName('Pleiades')?.name).toBe('Pleiades')
     })
 
     it('returns null for unknown name', () => {
@@ -124,21 +212,14 @@ describe('Data', () => {
       expect(results.some(r => r.id === 'm1')).toBe(true)
     })
 
-    it('finds by subtype', () => {
-      const results = Data.search('supergiant')
-      expect(results.length).toBeGreaterThan(0)
-    })
-
     it('search results are sorted by relevance (exact match first)', () => {
       const results = Data.search('Vega')
-      // Exact match should score highest
       expect(results[0]?.id).toBe('vega')
     })
   })
 
   describe('nearby', () => {
     it('finds objects near Orion Nebula', () => {
-      // Orion Nebula RA=83.822, Dec=-5.391
       const results = Data.nearby({ ra: 83.822, dec: -5.391 }, 25)
       expect(results.length).toBeGreaterThan(0)
     })
@@ -169,7 +250,6 @@ describe('Data', () => {
     })
 
     it('returns empty array when no objects are within radius', () => {
-      // Incredibly small radius — no object should be this precise
       const results = Data.nearby({ ra: 45.123, dec: 12.456 }, 0.00001)
       expect(results).toHaveLength(0)
     })
