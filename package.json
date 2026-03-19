@@ -1,6 +1,7 @@
 {
   "name": "@motioncomplex/cosmos-lib",
   "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
     "access": "restricted"
   },
   "version": "1.0.0",

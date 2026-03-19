@@ -1,0 +1,237 @@
+export type ObjectType = 'star' | 'planet' | 'nebula' | 'galaxy' | 'cluster' | 'black-hole' | 'moon';
+export type DistanceUnit = 'km' | 'AU' | 'ly' | 'pc' | 'kpc' | 'Mpc';
+export interface Distance {
+    value: number;
+    unit: DistanceUnit;
+}
+export interface CelestialObject {
+    id: string;
+    name: string;
+    aliases: string[];
+    type: ObjectType;
+    subtype?: string;
+    /** Right Ascension in degrees (J2000). Null for solar-system bodies. */
+    ra: number | null;
+    /** Declination in degrees (J2000). Null for solar-system bodies. */
+    dec: number | null;
+    magnitude: number | null;
+    distance?: Distance;
+    description: string;
+    tags: string[];
+    diameter_km?: number;
+    mass_kg?: number;
+    moons?: number;
+    surface_temp_K?: number;
+    spectral?: string;
+    binary?: boolean;
+    triple?: boolean;
+}
+export interface SearchResult {
+    object: CelestialObject;
+    score: number;
+}
+export interface ProximityResult {
+    object: CelestialObject;
+    /** Angular separation in degrees */
+    separation: number;
+}
+export interface EquatorialCoord {
+    /** Right Ascension in degrees */
+    ra: number;
+    /** Declination in degrees */
+    dec: number;
+}
+export interface HorizontalCoord {
+    /** Altitude in degrees (+ = above horizon) */
+    alt: number;
+    /** Azimuth in degrees (0 = N, 90 = E) */
+    az: number;
+}
+export interface GalacticCoord {
+    /** Galactic longitude in degrees */
+    l: number;
+    /** Galactic latitude in degrees */
+    b: number;
+}
+export interface EclipticCoord {
+    /** Ecliptic longitude in degrees */
+    lon: number;
+    /** Ecliptic latitude in degrees */
+    lat: number;
+}
+export interface ObserverParams {
+    /** Geographic latitude in degrees */
+    lat: number;
+    /** Geographic longitude in degrees (east positive) */
+    lng: number;
+    date?: Date;
+}
+export interface ProjectedPoint {
+    x: number;
+    y: number;
+    /** Whether the point is on the visible side of the projection */
+    visible: boolean;
+}
+export type PlanetName = 'mercury' | 'venus' | 'earth' | 'mars' | 'jupiter' | 'saturn' | 'uranus' | 'neptune';
+export interface PlanetPosition extends EclipticCoord {
+    /** Heliocentric distance in AU */
+    r: number;
+    /** Mean anomaly in degrees */
+    M: number;
+    /** True anomaly in degrees */
+    nu: number;
+}
+export interface NutationResult {
+    /** Nutation in longitude (degrees) */
+    dPsi: number;
+    /** Nutation in obliquity (degrees) */
+    dEpsilon: number;
+}
+export interface RiseTransitSet {
+    /** Rise time (null if circumpolar or never rises) */
+    rise: Date | null;
+    /** Transit (meridian crossing) time */
+    transit: Date;
+    /** Set time (null if circumpolar or never sets) */
+    set: Date | null;
+}
+export type MoonPhaseName = 'new' | 'waxing-crescent' | 'first-quarter' | 'waxing-gibbous' | 'full' | 'waning-gibbous' | 'last-quarter' | 'waning-crescent';
+export interface MoonPhase {
+    /** Phase angle 0..1 (0=new, 0.25=first quarter, 0.5=full, 0.75=last quarter) */
+    phase: number;
+    /** Illuminated fraction 0..1 */
+    illumination: number;
+    /** Days since last new moon */
+    age: number;
+    /** Human-readable phase name */
+    name: MoonPhaseName;
+}
+export interface MoonPosition extends EquatorialCoord {
+    /** Distance from Earth in km */
+    distance_km: number;
+    /** Ecliptic longitude in degrees */
+    eclipticLon: number;
+    /** Ecliptic latitude in degrees */
+    eclipticLat: number;
+    /** Horizontal parallax in degrees */
+    parallax: number;
+}
+export interface SunPosition extends EquatorialCoord {
+    /** Distance from Earth in AU */
+    distance_AU: number;
+    /** Ecliptic longitude in degrees */
+    eclipticLon: number;
+}
+export interface TwilightTimes {
+    astronomicalDawn: Date | null;
+    nauticalDawn: Date | null;
+    civilDawn: Date | null;
+    sunrise: Date | null;
+    solarNoon: Date;
+    sunset: Date | null;
+    civilDusk: Date | null;
+    nauticalDusk: Date | null;
+    astronomicalDusk: Date | null;
+}
+export interface NASAImageResult {
+    nasaId: string;
+    title: string;
+    description: string;
+    date: string;
+    center: string;
+    keywords: string[];
+    previewUrl: string | null;
+    href: string;
+}
+export interface APODResult {
+    title: string;
+    date: string;
+    explanation: string;
+    url: string;
+    hdUrl: string;
+    mediaType: 'image' | 'video';
+    copyright: string;
+}
+export interface ESAHubbleResult {
+    id: string;
+    title: string;
+    description: string;
+    credit: string;
+    date: string;
+    imageUrl: string | null;
+    thumbUrl: string | null;
+    tags: string[];
+}
+export interface SimbadResult {
+    id: string;
+    ra: number;
+    dec: number;
+    type: string;
+}
+export interface ImageRef {
+    /** Wikimedia Commons filename (no URL prefix) */
+    filename: string;
+    /** Attribution / credit string */
+    credit: string;
+}
+export interface ProgressiveImageOptions {
+    /** Tiny blurred base64 or low-res URL shown immediately */
+    placeholder?: string;
+    /** Medium-quality URL (shown while HD loads) */
+    src: string;
+    /** Full-resolution URL loaded last */
+    srcHD?: string;
+}
+export interface CloudinaryOptions {
+    w?: number;
+    h?: number;
+    q?: number | 'auto';
+    f?: string | 'auto';
+    crop?: string;
+}
+export type ProjectionName = 'stereographic' | 'mollweide' | 'gnomonic';
+export interface SkyMapRenderOptions {
+    projection?: ProjectionName;
+    center?: EquatorialCoord;
+    scale?: number;
+    showGrid?: boolean;
+    showLabels?: boolean;
+    showMagnitudeLimit?: number;
+    background?: string;
+    gridColor?: string;
+    labelColor?: string;
+    /** Show constellation stick-figure lines. Requires constellation data. */
+    showConstellationLines?: boolean;
+    /** Show constellation name labels at center positions. */
+    showConstellationLabels?: boolean;
+    /** Color for constellation stick-figure lines. */
+    constellationLineColor?: string;
+    /** Color for constellation name labels. */
+    constellationLabelColor?: string;
+    /** Constellation data to render. Pass CONSTELLATIONS array from data module. */
+    constellations?: Array<{
+        ra: number;
+        dec: number;
+        name: string;
+        stickFigure: number[][];
+    }>;
+}
+export interface MorphOptions {
+    duration?: number;
+    easing?: string;
+    signal?: AbortSignal;
+}
+export interface StaggerOptions {
+    delay?: number;
+    stagger?: number;
+    duration?: number;
+    from?: 'top' | 'bottom' | 'left' | 'right';
+    distance?: string;
+    signal?: AbortSignal;
+}
+export interface HeroExpandOptions {
+    duration?: number;
+    easing?: string;
+    onDone?: () => void;
+    signal?: AbortSignal;
+}
