@@ -1,9 +1,18 @@
 /**
- * Bright Star Catalog — Top ~300 named stars by apparent magnitude.
+ * Bright Star Catalog -- Top ~200 named stars by apparent magnitude.
+ *
  * Source: IAU Working Group on Star Names + Yale Bright Star Catalog.
  * Coordinates are J2000 equatorial. Proper motions in milliarcseconds/year.
+ *
+ * @module
  */
 
+/**
+ * A named bright star from the IAU catalog with astrometric data.
+ *
+ * Contains position (J2000), photometry, spectral type, and proper motion.
+ * Stars are identified by their slugified IAU proper name.
+ */
 export interface BrightStar {
   /** Unique identifier (IAU name, slugified) */
   id: string
@@ -29,8 +38,24 @@ export interface BrightStar {
   bv: number
 }
 
-// Data: IAU-named stars sorted by apparent magnitude (brightest first)
-// RA/Dec: J2000.0, pmRA: mas/yr * cos(dec), pmDec: mas/yr, mag: V-band
+/**
+ * IAU-named stars sorted by apparent visual magnitude (brightest first).
+ *
+ * RA/Dec are J2000.0 epoch in degrees. Proper motions are in mas/yr
+ * (pmRA includes the cos(dec) factor). Magnitudes are V-band.
+ *
+ * @example
+ * ```ts
+ * import { BRIGHT_STARS } from '@motioncomplex/cosmos-lib'
+ *
+ * const sirius = BRIGHT_STARS.find(s => s.name === 'Sirius')
+ * console.log(sirius?.mag)  // -1.46
+ * console.log(sirius?.spec) // 'A1V'
+ *
+ * // Get the 10 brightest stars
+ * const top10 = BRIGHT_STARS.slice(0, 10)
+ * ```
+ */
 export const BRIGHT_STARS: readonly BrightStar[] = [
   { id:'sirius',        name:'Sirius',        con:'CMa', hr:2491, ra:101.287, dec:-16.716, mag:-1.46, spec:'A1V',     pmRa:-546.01, pmDec:-1223.07, bv:-0.01 },
   { id:'canopus',       name:'Canopus',       con:'Car', hr:2326, ra:95.988,  dec:-52.696, mag:-0.74, spec:'F0Ib',    pmRa:19.99,   pmDec:23.67,    bv:0.15  },

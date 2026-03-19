@@ -1,3 +1,15 @@
+/**
+ * useObserver — Manages the observer's geographic location and time.
+ *
+ * Provides an ObserverParams object (lat, lng, date) that is required by
+ * most cosmos-lib functions that compute topocentric positions:
+ * - AstroMath.equatorialToHorizontal(eq, obs)
+ * - AstroMath.riseTransitSet(eq, obs)
+ * - Sun.twilight(obs), Moon.riseTransitSet(obs)
+ *
+ * - ObserverParams type → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/types.md#coordinates Type Reference}
+ * - How observer location affects calculations → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/guides/coordinate-systems.md#horizontal-altitudeazimuth Coordinate Systems Guide}
+ */
 import { useState, useEffect, useCallback } from 'react'
 import type { ObserverParams } from 'cosmos-lib'
 

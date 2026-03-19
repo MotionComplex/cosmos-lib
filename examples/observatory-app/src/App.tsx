@@ -1,3 +1,13 @@
+/**
+ * App — Root component providing observer context to all views.
+ *
+ * Uses the ObserverParams type from cosmos-lib to define the observer's
+ * geographic location and time. This context is consumed by every view
+ * that needs to compute topocentric positions (altitude, azimuth, rise/set).
+ *
+ * - ObserverParams type → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/types.md#coordinates Type Reference}
+ * - How ObserverParams flows through coordinate transforms → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/guides/coordinate-systems.md Coordinate Systems Guide}
+ */
 import { Routes, Route } from 'react-router-dom'
 import { Sidebar } from './components/Sidebar'
 import { Observatory } from './views/Observatory'

@@ -1,9 +1,32 @@
+/**
+ * SkyMapView — Interactive 2D sky chart with selectable projections.
+ *
+ * cosmos-lib docs used in this file:
+ * - renderSkyMap, SkyMapRenderOptions                → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/api/skymap.md Sky Map API docs}
+ * - stereographic, mollweide, gnomonic projections   → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/api/skymap.md#projections Projection docs}
+ * - AstroMath.lst (centering the map on local sky)   → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/api/math.md#sidereal-time Sidereal Time docs}
+ * - Data.all, Data.constellations                    → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/api/data.md Data API docs}
+ * - ProjectionName, SkyMapRenderOptions types        → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/types.md Type Reference}
+ */
 import { useRef, useEffect, useState, useCallback } from 'react'
 import { renderSkyMap, Data, AstroMath } from 'cosmos-lib'
 import type { ProjectionName, SkyMapRenderOptions } from 'cosmos-lib'
 import { useObserverCtx } from '../App'
 import { useNow } from '../hooks/useNow'
+import { DocsReference } from '../components/DocsReference'
+import type { DocEntry } from '../components/DocsReference'
 import styles from './SkyMapView.module.css'
+
+const DOCS_ENTRIES: DocEntry[] = [
+  { module: 'SkyMap', functions: ['renderSkyMap'], description: 'Renders the interactive star chart onto the canvas with configurable projection, grid, labels, and constellation overlays.', docsPath: 'docs/api/skymap.md' },
+  { module: 'AstroMath', functions: ['lst'], description: 'Calculates Local Sidereal Time to centre the map on the sky currently above the observer.', docsPath: 'docs/api/math.md#sidereal-time' },
+  { module: 'Data', functions: ['all', 'constellations'], description: 'Loads the full celestial object catalog and constellation stick-figure data for rendering.', docsPath: 'docs/api/data.md' },
+]
+
+const DOCS_GUIDES = [
+  { label: 'Sky Map Projections', path: 'docs/api/skymap.md#projections' },
+  { label: 'Coordinate Systems', path: 'docs/guides/coordinate-systems.md' },
+]
 
 const PROJECTIONS: { key: ProjectionName; label: string }[] = [
   { key: 'stereographic', label: 'Stereo' },
@@ -35,9 +58,14 @@ export function SkyMapView() {
     canvas.style.width = `${rect.width}px`
     canvas.style.height = `${rect.height}px`
 
+    // Centre the map on the local meridian using Local Sidereal Time
+    // docs: docs/api/math.md#astromathist
     const lst = AstroMath.lst(now, observer.lng)
+
+    // Fetch all catalogued objects for rendering — docs: docs/api/data.md#dataall
     const objects = Data.all().filter(o => o.ra != null && o.dec != null)
 
+    // Configure the sky map renderer — docs: docs/api/skymap.md#renderskymap
     const opts: SkyMapRenderOptions = {
       projection,
       center: { ra: lst, dec: observer.lat },
@@ -45,6 +73,7 @@ export function SkyMapView() {
       showGrid,
       showLabels,
       showMagnitudeLimit: magLimit,
+      // Constellation stick figures — docs: docs/api/data.md#dataconstellations
       constellations: showConstellations ? Data.constellations() : [],
       background: '#030308',
       gridColor: 'rgba(255, 255, 255, 0.04)',
@@ -118,6 +147,7 @@ export function SkyMapView() {
           </div>
         </div>
       </div>
+      <DocsReference entries={DOCS_ENTRIES} guides={DOCS_GUIDES} />
     </div>
   )
 }
