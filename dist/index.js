@@ -1,5 +1,5 @@
-import { M as Media } from "./media-DFFubqCx.js";
-const CONSTANTS = {
+import { M as G } from "./media-DVOcIMa1.js";
+const C = {
   /** One Astronomical Unit in kilometres (IAU 2012 exact definition). */
   AU_TO_KM: 1495978707e-1,
   /** One light-year in kilometres. */
@@ -28,88 +28,87 @@ const CONSTANTS = {
   DEG_TO_RAD: Math.PI / 180,
   /** Conversion factor: radians to degrees. */
   RAD_TO_DEG: 180 / Math.PI
-};
-const Units = {
+}, ue = {
   // ── Distance ───────────────────────────────────────────────────────────────
   /**
    * Convert Astronomical Units to kilometres.
    * @param au - Distance in AU.
    * @returns Distance in kilometres.
    */
-  auToKm: (au) => au * CONSTANTS.AU_TO_KM,
+  auToKm: (e) => e * C.AU_TO_KM,
   /**
    * Convert kilometres to Astronomical Units.
    * @param km - Distance in kilometres.
    * @returns Distance in AU.
    */
-  kmToAu: (km) => km / CONSTANTS.AU_TO_KM,
+  kmToAu: (e) => e / C.AU_TO_KM,
   /**
    * Convert light-years to parsecs.
    * @param ly - Distance in light-years.
    * @returns Distance in parsecs.
    */
-  lyToPc: (ly) => ly / CONSTANTS.PC_TO_LY,
+  lyToPc: (e) => e / C.PC_TO_LY,
   /**
    * Convert parsecs to light-years.
    * @param pc - Distance in parsecs.
    * @returns Distance in light-years.
    */
-  pcToLy: (pc) => pc * CONSTANTS.PC_TO_LY,
+  pcToLy: (e) => e * C.PC_TO_LY,
   /**
    * Convert parsecs to kilometres.
    * @param pc - Distance in parsecs.
    * @returns Distance in kilometres.
    */
-  pcToKm: (pc) => pc * CONSTANTS.PC_TO_KM,
+  pcToKm: (e) => e * C.PC_TO_KM,
   /**
    * Convert light-years to kilometres.
    * @param ly - Distance in light-years.
    * @returns Distance in kilometres.
    */
-  lyToKm: (ly) => ly * CONSTANTS.LY_TO_KM,
+  lyToKm: (e) => e * C.LY_TO_KM,
   /**
    * Convert kilometres to light-years.
    * @param km - Distance in kilometres.
    * @returns Distance in light-years.
    */
-  kmToLy: (km) => km / CONSTANTS.LY_TO_KM,
+  kmToLy: (e) => e / C.LY_TO_KM,
   // ── Angular ────────────────────────────────────────────────────────────────
   /**
    * Convert degrees to radians.
    * @param d - Angle in degrees.
    * @returns Angle in radians.
    */
-  degToRad: (d) => d * CONSTANTS.DEG_TO_RAD,
+  degToRad: (e) => e * C.DEG_TO_RAD,
   /**
    * Convert radians to degrees.
    * @param r - Angle in radians.
    * @returns Angle in degrees.
    */
-  radToDeg: (r) => r * CONSTANTS.RAD_TO_DEG,
+  radToDeg: (e) => e * C.RAD_TO_DEG,
   /**
    * Convert arcseconds to degrees.
    * @param a - Angle in arcseconds.
    * @returns Angle in degrees.
    */
-  arcsecToDeg: (a) => a / 3600,
+  arcsecToDeg: (e) => e / 3600,
   /**
    * Convert degrees to arcseconds.
    * @param d - Angle in degrees.
    * @returns Angle in arcseconds.
    */
-  degToArcsec: (d) => d * 3600,
+  degToArcsec: (e) => e * 3600,
   /**
    * Convert Right Ascension from hours to degrees.
    * @param h - RA in hours (0–24).
    * @returns RA in degrees (0–360).
    */
-  hrsToDeg: (h) => h * 15,
+  hrsToDeg: (e) => e * 15,
   /**
    * Convert Right Ascension from degrees to hours.
    * @param d - RA in degrees (0–360).
    * @returns RA in hours (0–24).
    */
-  degToHrs: (d) => d / 15,
+  degToHrs: (e) => e / 15,
   /**
    * Format a distance in kilometres into a human-readable string,
    * automatically choosing the most appropriate unit (km, AU, ly, or Mly).
@@ -123,13 +122,12 @@ const Units = {
    * Units.formatDistance(9_460_730_472_580 * 8.6) // '8.600 ly'
    * ```
    */
-  formatDistance(km) {
-    const au = km / CONSTANTS.AU_TO_KM;
-    if (au < 0.01) return `${km.toFixed(0)} km`;
-    if (au < 1e3) return `${au.toPrecision(4)} AU`;
-    const ly = km / CONSTANTS.LY_TO_KM;
-    if (ly < 1e6) return `${ly.toPrecision(4)} ly`;
-    return `${(ly / 1e6).toPrecision(4)} Mly`;
+  formatDistance(e) {
+    const r = e / C.AU_TO_KM;
+    if (r < 0.01) return `${e.toFixed(0)} km`;
+    if (r < 1e3) return `${r.toPrecision(4)} AU`;
+    const a = e / C.LY_TO_KM;
+    return a < 1e6 ? `${a.toPrecision(4)} ly` : `${(a / 1e6).toPrecision(4)} Mly`;
   },
   /**
    * Format decimal degrees as d°m′s″ (signed).
@@ -143,13 +141,9 @@ const Units = {
    * Units.formatAngle(83.822)   // '83°49′19.2″'
    * ```
    */
-  formatAngle(deg) {
-    const sign = deg < 0 ? "-" : "";
-    const abs = Math.abs(deg);
-    const d = Math.floor(abs);
-    const m = Math.floor((abs - d) * 60);
-    const s = ((abs - d) * 60 - m) * 60;
-    return `${sign}${d}°${m}′${s.toFixed(1)}″`;
+  formatAngle(e) {
+    const r = e < 0 ? "-" : "", a = Math.abs(e), t = Math.floor(a), i = Math.floor((a - t) * 60), s = ((a - t) * 60 - i) * 60;
+    return `${r}${t}°${i}′${s.toFixed(1)}″`;
   },
   /**
    * Format Right Ascension from decimal degrees into hours/minutes/seconds.
@@ -163,17 +157,11 @@ const Units = {
    * Units.formatRA(0)       // '0h 0m 0.0s'
    * ```
    */
-  formatRA(deg) {
-    const total = (deg % 360 + 360) % 360;
-    const h = Math.floor(total / 15);
-    const m = Math.floor((total / 15 - h) * 60);
-    const s = ((total / 15 - h) * 60 - m) * 60;
-    return `${h}h ${m}m ${s.toFixed(1)}s`;
+  formatRA(e) {
+    const r = (e % 360 + 360) % 360, a = Math.floor(r / 15), t = Math.floor((r / 15 - a) * 60), i = ((r / 15 - a) * 60 - t) * 60;
+    return `${a}h ${t}m ${i.toFixed(1)}s`;
   }
-};
-const D$3 = CONSTANTS.DEG_TO_RAD;
-const R$1 = CONSTANTS.RAD_TO_DEG;
-const AstroMath = {
+}, M = C.DEG_TO_RAD, I = C.RAD_TO_DEG, v = {
   // ── Time ──────────────────────────────────────────────────────────────────
   /**
    * Convert a JavaScript Date to a Julian Date number.
@@ -191,8 +179,8 @@ const AstroMath = {
    * // => 2451545.0
    * ```
    */
-  toJulian(date = /* @__PURE__ */ new Date()) {
-    return date.valueOf() / 864e5 + 24405875e-1;
+  toJulian(e = /* @__PURE__ */ new Date()) {
+    return e.valueOf() / 864e5 + 24405875e-1;
   },
   /**
    * Convert a Julian Date number back to a JavaScript Date.
@@ -206,8 +194,8 @@ const AstroMath = {
    * // => Date('2000-01-01T12:00:00.000Z')
    * ```
    */
-  fromJulian(jd) {
-    return new Date((jd - 24405875e-1) * 864e5);
+  fromJulian(e) {
+    return new Date((e - 24405875e-1) * 864e5);
   },
   /**
    * Compute the number of days elapsed since the J2000.0 epoch
@@ -223,8 +211,8 @@ const AstroMath = {
    * // => ~36525.0
    * ```
    */
-  j2000Days(date = /* @__PURE__ */ new Date()) {
-    return this.toJulian(date) - CONSTANTS.J2000;
+  j2000Days(e = /* @__PURE__ */ new Date()) {
+    return this.toJulian(e) - C.J2000;
   },
   /**
    * Greenwich Mean Sidereal Time (GMST) in degrees.
@@ -246,9 +234,8 @@ const AstroMath = {
    * // => 280.46061837
    * ```
    */
-  gmst(date = /* @__PURE__ */ new Date()) {
-    const d = this.j2000Days(date);
-    return ((280.46061837 + 360.98564736629 * d) % 360 + 360) % 360;
+  gmst(e = /* @__PURE__ */ new Date()) {
+    return ((280.46061837 + 360.98564736629 * this.j2000Days(e)) % 360 + 360) % 360;
   },
   /**
    * Local Sidereal Time (LST) in degrees.
@@ -266,8 +253,8 @@ const AstroMath = {
    * // => ~280.36
    * ```
    */
-  lst(date, longitudeDeg) {
-    return ((this.gmst(date) + longitudeDeg) % 360 + 360) % 360;
+  lst(e, r) {
+    return ((this.gmst(e) + r) % 360 + 360) % 360;
   },
   // ── Coordinate transforms ─────────────────────────────────────────────────
   /**
@@ -293,19 +280,10 @@ const AstroMath = {
    * // => { alt: <altitude>, az: <azimuth> }
    * ```
    */
-  equatorialToHorizontal(eq, obs) {
-    const date = obs.date ?? /* @__PURE__ */ new Date();
-    const ha = ((this.lst(date, obs.lng) - eq.ra) % 360 + 360) % 360;
-    const haR = ha * D$3;
-    const decR = eq.dec * D$3;
-    const latR = obs.lat * D$3;
-    const sinAlt = Math.sin(decR) * Math.sin(latR) + Math.cos(decR) * Math.cos(latR) * Math.cos(haR);
-    const alt = Math.asin(Math.max(-1, Math.min(1, sinAlt))) * R$1;
-    const altR = alt * D$3;
-    const cosAz = (Math.sin(decR) - Math.sin(altR) * Math.sin(latR)) / (Math.cos(altR) * Math.cos(latR));
-    let az = Math.acos(Math.max(-1, Math.min(1, cosAz))) * R$1;
-    if (Math.sin(haR) > 0) az = 360 - az;
-    return { alt, az };
+  equatorialToHorizontal(e, r) {
+    const a = r.date ?? /* @__PURE__ */ new Date(), i = ((this.lst(a, r.lng) - e.ra) % 360 + 360) % 360 * M, s = e.dec * M, n = r.lat * M, c = Math.sin(s) * Math.sin(n) + Math.cos(s) * Math.cos(n) * Math.cos(i), l = Math.asin(Math.max(-1, Math.min(1, c))) * I, d = l * M, u = (Math.sin(s) - Math.sin(d) * Math.sin(n)) / (Math.cos(d) * Math.cos(n));
+    let p = Math.acos(Math.max(-1, Math.min(1, u))) * I;
+    return Math.sin(i) > 0 && (p = 360 - p), { alt: l, az: p };
   },
   /**
    * Convert horizontal coordinates (Altitude/Azimuth) to equatorial coordinates (RA/Dec).
@@ -328,19 +306,10 @@ const AstroMath = {
    * // => { ra: <right ascension>, dec: <declination> }
    * ```
    */
-  horizontalToEquatorial(hor, obs) {
-    const date = obs.date ?? /* @__PURE__ */ new Date();
-    const altR = hor.alt * D$3;
-    const azR = hor.az * D$3;
-    const latR = obs.lat * D$3;
-    const sinDec = Math.sin(altR) * Math.sin(latR) + Math.cos(altR) * Math.cos(latR) * Math.cos(azR);
-    const dec = Math.asin(Math.max(-1, Math.min(1, sinDec))) * R$1;
-    const decR = dec * D$3;
-    const cosHA = (Math.sin(altR) - Math.sin(decR) * Math.sin(latR)) / (Math.cos(decR) * Math.cos(latR));
-    let ha = Math.acos(Math.max(-1, Math.min(1, cosHA))) * R$1;
-    if (Math.sin(azR) > 0) ha = 360 - ha;
-    const ra = ((this.lst(date, obs.lng) - ha) % 360 + 360) % 360;
-    return { ra, dec };
+  horizontalToEquatorial(e, r) {
+    const a = r.date ?? /* @__PURE__ */ new Date(), t = e.alt * M, i = e.az * M, s = r.lat * M, n = Math.sin(t) * Math.sin(s) + Math.cos(t) * Math.cos(s) * Math.cos(i), c = Math.asin(Math.max(-1, Math.min(1, n))) * I, l = c * M, d = (Math.sin(t) - Math.sin(l) * Math.sin(s)) / (Math.cos(l) * Math.cos(s));
+    let u = Math.acos(Math.max(-1, Math.min(1, d))) * I;
+    return Math.sin(i) > 0 && (u = 360 - u), { ra: ((this.lst(a, r.lng) - u) % 360 + 360) % 360, dec: c };
   },
   /**
    * Convert ecliptic coordinates to equatorial coordinates (J2000 epoch).
@@ -366,18 +335,14 @@ const AstroMath = {
    * // => { ra: ~90, dec: ~23.44 }
    * ```
    */
-  eclipticToEquatorial(ecl) {
-    const eps = CONSTANTS.ECLIPTIC_OBL * D$3;
-    const lonR = ecl.lon * D$3;
-    const latR = ecl.lat * D$3;
-    const ra = Math.atan2(
-      Math.sin(lonR) * Math.cos(eps) - Math.tan(latR) * Math.sin(eps),
-      Math.cos(lonR)
-    ) * R$1;
-    const dec = Math.asin(
-      Math.sin(latR) * Math.cos(eps) + Math.cos(latR) * Math.sin(eps) * Math.sin(lonR)
-    ) * R$1;
-    return { ra: (ra % 360 + 360) % 360, dec };
+  eclipticToEquatorial(e) {
+    const r = C.ECLIPTIC_OBL * M, a = e.lon * M, t = e.lat * M, i = Math.atan2(
+      Math.sin(a) * Math.cos(r) - Math.tan(t) * Math.sin(r),
+      Math.cos(a)
+    ) * I, s = Math.asin(
+      Math.sin(t) * Math.cos(r) + Math.cos(t) * Math.sin(r) * Math.sin(a)
+    ) * I;
+    return { ra: (i % 360 + 360) % 360, dec: s };
   },
   /**
    * Convert galactic coordinates to equatorial coordinates (J2000 epoch).
@@ -401,20 +366,12 @@ const AstroMath = {
    * // => { ra: ~266.4, dec: ~-28.9 } (near Sagittarius A*)
    * ```
    */
-  galacticToEquatorial(gal) {
-    const NGP_RA = 192.85948;
-    const NGP_DEC = 27.12825;
-    const LON_ASC = 122.93192;
-    const bR = gal.b * D$3;
-    const la = (LON_ASC - gal.l) * D$3;
-    const ndR = NGP_DEC * D$3;
-    const sinDec = Math.sin(bR) * Math.sin(ndR) + Math.cos(bR) * Math.cos(ndR) * Math.cos(la);
-    const dec = Math.asin(Math.max(-1, Math.min(1, sinDec))) * R$1;
-    const ra = Math.atan2(
-      Math.cos(bR) * Math.sin(la),
-      Math.sin(bR) * Math.cos(ndR) - Math.cos(bR) * Math.sin(ndR) * Math.cos(la)
-    ) * R$1 + NGP_RA;
-    return { ra: (ra % 360 + 360) % 360, dec };
+  galacticToEquatorial(e) {
+    const r = 192.85948, a = 27.12825, t = 122.93192, i = e.b * M, s = (t - e.l) * M, n = a * M, c = Math.sin(i) * Math.sin(n) + Math.cos(i) * Math.cos(n) * Math.cos(s), l = Math.asin(Math.max(-1, Math.min(1, c))) * I;
+    return { ra: ((Math.atan2(
+      Math.cos(i) * Math.sin(s),
+      Math.sin(i) * Math.cos(n) - Math.cos(i) * Math.sin(n) * Math.cos(s)
+    ) * I + r) % 360 + 360) % 360, dec: l };
   },
   // ── Angular separation ────────────────────────────────────────────────────
   /**
@@ -440,12 +397,9 @@ const AstroMath = {
    * // => ~27.07 degrees
    * ```
    */
-  angularSeparation(a, b) {
-    const d1 = a.dec * D$3;
-    const d2 = b.dec * D$3;
-    const dra = (b.ra - a.ra) * D$3;
-    const hav = Math.sin((d2 - d1) / 2) ** 2 + Math.cos(d1) * Math.cos(d2) * Math.sin(dra / 2) ** 2;
-    return 2 * Math.asin(Math.sqrt(Math.max(0, Math.min(1, hav)))) * R$1;
+  angularSeparation(e, r) {
+    const a = e.dec * M, t = r.dec * M, i = (r.ra - e.ra) * M, s = Math.sin((t - a) / 2) ** 2 + Math.cos(a) * Math.cos(t) * Math.sin(i / 2) ** 2;
+    return 2 * Math.asin(Math.sqrt(Math.max(0, Math.min(1, s)))) * I;
   },
   // ── Photometry ────────────────────────────────────────────────────────────
   /**
@@ -464,8 +418,8 @@ const AstroMath = {
    * // => ~-1.46 (apparent magnitude)
    * ```
    */
-  apparentMagnitude(absoluteMag, distancePc) {
-    return absoluteMag + 5 * Math.log10(distancePc / 10);
+  apparentMagnitude(e, r) {
+    return e + 5 * Math.log10(r / 10);
   },
   /**
    * Compute absolute magnitude from apparent magnitude and distance.
@@ -483,8 +437,8 @@ const AstroMath = {
    * // => ~1.42 (absolute magnitude)
    * ```
    */
-  absoluteMagnitude(apparentMag, distancePc) {
-    return apparentMag - 5 * Math.log10(distancePc / 10);
+  absoluteMagnitude(e, r) {
+    return e - 5 * Math.log10(r / 10);
   },
   /**
    * Convert stellar parallax to distance.
@@ -501,8 +455,8 @@ const AstroMath = {
    * // => ~2.637 parsecs
    * ```
    */
-  parallaxToDistance(parallaxArcsec) {
-    return 1 / parallaxArcsec;
+  parallaxToDistance(e) {
+    return 1 / e;
   },
   // ── Kepler solver ────────────────────────────────────────────────────────
   /**
@@ -533,14 +487,13 @@ const AstroMath = {
    * // => ~1.6521 radians
    * ```
    */
-  solveKepler(M, e, tol = 1e-12) {
-    let E = M + e * Math.sin(M) * (1 + e * Math.cos(M));
+  solveKepler(e, r, a = 1e-12) {
+    let t = e + r * Math.sin(e) * (1 + r * Math.cos(e));
     for (let i = 0; i < 30; i++) {
-      const dE = (E - e * Math.sin(E) - M) / (1 - e * Math.cos(E));
-      E -= dE;
-      if (Math.abs(dE) < tol) break;
+      const s = (t - r * Math.sin(t) - e) / (1 - r * Math.cos(t));
+      if (t -= s, Math.abs(s) < a) break;
     }
-    return E;
+    return t;
   },
   // ── Planetary positions ───────────────────────────────────────────────────
   /**
@@ -572,8 +525,8 @@ const AstroMath = {
    * // => { lon: ~34.4, lat: ~-1.3, r: ~5.03, ... }
    * ```
    */
-  planetEcliptic(planet, date = /* @__PURE__ */ new Date()) {
-    const ELEMENTS = {
+  planetEcliptic(e, r = /* @__PURE__ */ new Date()) {
+    const t = {
       mercury: { a: 0.38709927, da: 37e-8, e: 0.20563593, de: 1906e-8, i: 7.00497902, di: -594749e-8, L: 252.2503235, dL: 149472.67411175, w: 77.45779628, dw: 0.16047689, O: 48.33076593, dO: -0.12534081 },
       venus: { a: 0.72333566, da: 39e-7, e: 677672e-8, de: -4107e-8, i: 3.39467605, di: -7889e-7, L: 181.9790995, dL: 58517.81538729, w: 131.60246718, dw: 268329e-8, O: 76.67984255, dO: -0.27769418 },
       earth: { a: 1.00000261, da: 562e-8, e: 0.01671123, de: -4392e-8, i: -1531e-8, di: -0.01294668, L: 100.46457166, dL: 35999.37244981, w: 102.93768193, dw: 0.32327364, O: 0, dO: 0 },
@@ -582,35 +535,14 @@ const AstroMath = {
       saturn: { a: 9.53667594, da: -12506e-7, e: 0.05386179, de: -50991e-8, i: 2.48599187, di: 193609e-8, L: 49.95424423, dL: 1222.49362201, w: 92.59887831, dw: -0.41897216, O: 113.66242448, dO: -0.28867794 },
       uranus: { a: 19.18916464, da: -196176e-8, e: 0.04725744, de: -4397e-8, i: 0.77263783, di: -242939e-8, L: 313.23810451, dL: 428.48202785, w: 170.9542763, dw: 0.40805281, O: 74.01692503, dO: 0.04240589 },
       neptune: { a: 30.06992276, da: 26291e-8, e: 859048e-8, de: 5105e-8, i: 1.77004347, di: 35372e-8, L: 304.87997031, dL: 218.45945325, w: 44.96476227, dw: -0.32241464, O: 131.78422574, dO: -508664e-8 }
-    };
-    const p = ELEMENTS[planet];
-    const d = this.j2000Days(date);
-    const T = d / 36525;
-    const a = p.a + p.da * T;
-    const e = p.e + p.de * T;
-    const i = p.i + p.di * T;
-    const L = p.L + p.dL * T;
-    const w = p.w + p.dw * T;
-    const O = p.O + p.dO * T;
-    const M = ((L - w) % 360 + 360) % 360;
-    const Mrad = M * D$3;
-    const E = this.solveKepler(Mrad, e);
-    const nu = Math.atan2(
-      Math.sqrt(1 - e * e) * Math.sin(E),
-      Math.cos(E) - e
-    ) * R$1;
-    const nuNorm = (nu % 360 + 360) % 360;
-    const r = a * (1 - e * Math.cos(E));
-    const argPeri = w - O;
-    const nuPlusArg = (nuNorm + argPeri) * D$3;
-    const iRad = i * D$3;
-    const lon = Math.atan2(
-      Math.sin(nuPlusArg) * Math.cos(iRad),
-      Math.cos(nuPlusArg)
-    ) * R$1 + O;
-    const lat = Math.asin(Math.sin(nuPlusArg) * Math.sin(iRad)) * R$1;
-    const lonNorm = (lon % 360 + 360) % 360;
-    return { lon: lonNorm, lat, r, M, nu: nuNorm };
+    }[e], s = this.j2000Days(r) / 36525, n = t.a + t.da * s, c = t.e + t.de * s, l = t.i + t.di * s, d = t.L + t.dL * s, u = t.w + t.dw * s, p = t.O + t.dO * s, o = ((d - u) % 360 + 360) % 360, b = o * M, y = this.solveKepler(b, c), f = (Math.atan2(
+      Math.sqrt(1 - c * c) * Math.sin(y),
+      Math.cos(y) - c
+    ) * I % 360 + 360) % 360, k = n * (1 - c * Math.cos(y)), g = u - p, m = (f + g) * M, S = l * M, h = Math.atan2(
+      Math.sin(m) * Math.cos(S),
+      Math.cos(m)
+    ) * I + p, D = Math.asin(Math.sin(m) * Math.sin(S)) * I;
+    return { lon: (h % 360 + 360) % 360, lat: D, r: k, M: o, nu: f };
   },
   // ── Precession ──────────────────────────────────────────────────────────
   /**
@@ -640,23 +572,9 @@ const AstroMath = {
    * // => { ra: ~101.61, dec: ~-16.79 }
    * ```
    */
-  precess(eq, jdFrom, jdTo) {
-    const T = (jdFrom - 2451545) / 36525;
-    const t = (jdTo - jdFrom) / 36525;
-    const zetaA = (2306.2181 + 1.39656 * T - 139e-6 * T * T) * t + (0.30188 - 344e-6 * T) * t * t + 0.017998 * t * t * t;
-    const zA = (2306.2181 + 1.39656 * T - 139e-6 * T * T) * t + (1.09468 + 66e-6 * T) * t * t + 0.018203 * t * t * t;
-    const thetaA = (2004.3109 - 0.8533 * T - 217e-6 * T * T) * t - (0.42665 + 217e-6 * T) * t * t - 0.041833 * t * t * t;
-    const zetaR = zetaA / 3600 * D$3;
-    const zR = zA / 3600 * D$3;
-    const thetaR = thetaA / 3600 * D$3;
-    const raR = eq.ra * D$3;
-    const decR = eq.dec * D$3;
-    const A = Math.cos(decR) * Math.sin(raR + zetaR);
-    const B = Math.cos(thetaR) * Math.cos(decR) * Math.cos(raR + zetaR) - Math.sin(thetaR) * Math.sin(decR);
-    const C = Math.sin(thetaR) * Math.cos(decR) * Math.cos(raR + zetaR) + Math.cos(thetaR) * Math.sin(decR);
-    const ra = (Math.atan2(A, B) + zR) * R$1;
-    const dec = Math.asin(Math.max(-1, Math.min(1, C))) * R$1;
-    return { ra: (ra % 360 + 360) % 360, dec };
+  precess(e, r, a) {
+    const t = (r - 2451545) / 36525, i = (a - r) / 36525, s = (2306.2181 + 1.39656 * t - 139e-6 * t * t) * i + (0.30188 - 344e-6 * t) * i * i + 0.017998 * i * i * i, n = (2306.2181 + 1.39656 * t - 139e-6 * t * t) * i + (1.09468 + 66e-6 * t) * i * i + 0.018203 * i * i * i, c = (2004.3109 - 0.8533 * t - 217e-6 * t * t) * i - (0.42665 + 217e-6 * t) * i * i - 0.041833 * i * i * i, l = s / 3600 * M, d = n / 3600 * M, u = c / 3600 * M, p = e.ra * M, o = e.dec * M, b = Math.cos(o) * Math.sin(p + l), y = Math.cos(u) * Math.cos(o) * Math.cos(p + l) - Math.sin(u) * Math.sin(o), _ = Math.sin(u) * Math.cos(o) * Math.cos(p + l) + Math.cos(u) * Math.sin(o), f = (Math.atan2(b, y) + d) * I, k = Math.asin(Math.max(-1, Math.min(1, _))) * I;
+    return { ra: (f % 360 + 360) % 360, dec: k };
   },
   // ── Nutation ────────────────────────────────────────────────────────────
   /**
@@ -684,19 +602,8 @@ const AstroMath = {
    * // => { dPsi: ~-0.00385, dEpsilon: ~-0.00165 } (degrees)
    * ```
    */
-  nutation(jd) {
-    const T = (jd - 2451545) / 36525;
-    const Om = ((125.04452 - 1934.136261 * T) % 360 + 360) % 360;
-    const Ls = ((280.4665 + 36000.7698 * T) % 360 + 360) % 360;
-    const Lm = ((218.3165 + 481267.8813 * T) % 360 + 360) % 360;
-    const F = ((93.272 + 483202.0175 * T) % 360 + 360) % 360;
-    const Dp = ((297.8502 + 445267.1115 * T) % 360 + 360) % 360;
-    const OmR = Om * D$3;
-    const LsR = Ls * D$3;
-    const LmR = Lm * D$3;
-    const FR = F * D$3;
-    const DpR = Dp * D$3;
-    const terms = [
+  nutation(e) {
+    const r = (e - 2451545) / 36525, a = ((125.04452 - 1934.136261 * r) % 360 + 360) % 360, t = ((280.4665 + 36000.7698 * r) % 360 + 360) % 360, i = ((218.3165 + 481267.8813 * r) % 360 + 360) % 360, s = ((93.272 + 483202.0175 * r) % 360 + 360) % 360, n = ((297.8502 + 445267.1115 * r) % 360 + 360) % 360, c = a * M, l = t * M, d = i * M, u = s * M, p = n * M, o = [
       [0, 0, 0, 0, 1, -171996, -174.2, 92025, 8.9],
       [-2, 0, 0, 2, 2, -13187, -1.6, 5736, -3.1],
       [0, 0, 0, 2, 2, -2274, -0.2, 977, -0.5],
@@ -711,16 +618,14 @@ const AstroMath = {
       [-2, 0, 0, 2, 1, 129, 0.1, -70, 0],
       [0, 0, -1, 2, 2, 123, 0, -53, 0]
     ];
-    let dPsi = 0;
-    let dEps = 0;
-    for (const t of terms) {
-      const arg = t[0] * DpR + t[1] * LsR + t[2] * LmR + t[3] * FR + t[4] * OmR;
-      dPsi += (t[5] + t[6] * T) * Math.sin(arg);
-      dEps += (t[7] + t[8] * T) * Math.cos(arg);
+    let b = 0, y = 0;
+    for (const _ of o) {
+      const f = _[0] * p + _[1] * l + _[2] * d + _[3] * u + _[4] * c;
+      b += (_[5] + _[6] * r) * Math.sin(f), y += (_[7] + _[8] * r) * Math.cos(f);
     }
     return {
-      dPsi: dPsi / (3600 * 1e4),
-      dEpsilon: dEps / (3600 * 1e4)
+      dPsi: b / (3600 * 1e4),
+      dEpsilon: y / (3600 * 1e4)
     };
   },
   /**
@@ -742,11 +647,9 @@ const AstroMath = {
    * // => ~23.439 degrees (mean obliquity plus small nutation correction)
    * ```
    */
-  trueObliquity(jd) {
-    const T = (jd - 2451545) / 36525;
-    const meanEps = 23.439291111 - 0.013004167 * T - 1639e-10 * T * T + 5036e-10 * T * T * T;
-    const { dEpsilon } = this.nutation(jd);
-    return meanEps + dEpsilon;
+  trueObliquity(e) {
+    const r = (e - 2451545) / 36525, a = 23.439291111 - 0.013004167 * r - 1639e-10 * r * r + 5036e-10 * r * r * r, { dEpsilon: t } = this.nutation(e);
+    return a + t;
   },
   /**
    * Greenwich Apparent Sidereal Time (GAST) in degrees.
@@ -770,13 +673,9 @@ const AstroMath = {
    * // => ~280.46 degrees (GMST + small nutation correction)
    * ```
    */
-  gast(date = /* @__PURE__ */ new Date()) {
-    const jd = this.toJulian(date);
-    const gmst = this.gmst(date);
-    const { dPsi } = this.nutation(jd);
-    const eps = this.trueObliquity(jd);
-    const eqEq = dPsi * Math.cos(eps * D$3);
-    return ((gmst + eqEq) % 360 + 360) % 360;
+  gast(e = /* @__PURE__ */ new Date()) {
+    const r = this.toJulian(e), a = this.gmst(e), { dPsi: t } = this.nutation(r), i = this.trueObliquity(r), s = t * Math.cos(i * M);
+    return ((a + s) % 360 + 360) % 360;
   },
   // ── Atmospheric refraction ──────────────────────────────────────────────
   /**
@@ -809,12 +708,10 @@ const AstroMath = {
    * // => ~0.016 degrees (~58 arcseconds)
    * ```
    */
-  refraction(apparentAlt, tempC = 10, pressureMb = 1010) {
-    if (apparentAlt < -1) return 0;
-    const h = Math.max(apparentAlt, -0.5);
-    const Rarcmin = 1.02 / Math.tan((h + 10.3 / (h + 5.11)) * D$3) + 19279e-7;
-    const correction = pressureMb / 1010 * (283 / (273 + tempC));
-    return Rarcmin * correction / 60;
+  refraction(e, r = 10, a = 1010) {
+    if (e < -1) return 0;
+    const t = Math.max(e, -0.5), i = 1.02 / Math.tan((t + 10.3 / (t + 5.11)) * M) + 19279e-7, s = a / 1010 * (283 / (273 + r));
+    return i * s / 60;
   },
   // ── Proper motion ───────────────────────────────────────────────────────
   /**
@@ -847,13 +744,9 @@ const AstroMath = {
    * // => { ra: ~101.283, dec: ~-16.724 }
    * ```
    */
-  applyProperMotion(eq, pmRA, pmDec, fromEpoch, toEpoch) {
-    const dt = toEpoch - fromEpoch;
-    const dRA = pmRA / (36e5 * Math.cos(eq.dec * D$3)) * dt;
-    const dDec = pmDec / 36e5 * dt;
-    const ra = ((eq.ra + dRA) % 360 + 360) % 360;
-    const dec = Math.max(-90, Math.min(90, eq.dec + dDec));
-    return { ra, dec };
+  applyProperMotion(e, r, a, t, i) {
+    const s = i - t, n = r / (36e5 * Math.cos(e.dec * M)) * s, c = a / 36e5 * s, l = ((e.ra + n) % 360 + 360) % 360, d = Math.max(-90, Math.min(90, e.dec + c));
+    return { ra: l, dec: d };
   },
   // ── Rise / Transit / Set ────────────────────────────────────────────────
   /**
@@ -899,37 +792,43 @@ const AstroMath = {
    * // => { rise: Date(~05:30 UTC), transit: Date(~11:25 UTC), set: Date(~17:20 UTC) }
    * ```
    */
-  riseTransitSet(eq, obs, h0 = -0.5667) {
-    const date = obs.date ?? /* @__PURE__ */ new Date();
-    const midnight = new Date(Date.UTC(
-      date.getUTCFullYear(),
-      date.getUTCMonth(),
-      date.getUTCDate()
-    ));
-    const decR = eq.dec * D$3;
-    const latR = obs.lat * D$3;
-    const h0R = h0 * D$3;
-    const cosH0 = (Math.sin(h0R) - Math.sin(latR) * Math.sin(decR)) / (Math.cos(latR) * Math.cos(decR));
-    const gmst0 = this.gmst(midnight);
-    const transitFrac = ((eq.ra - obs.lng - gmst0) / 360 % 1 + 1) % 1;
-    const transit = new Date(midnight.valueOf() + transitFrac * 864e5);
-    if (cosH0 > 1) {
-      return { rise: null, transit, set: null };
-    }
-    if (cosH0 < -1) {
-      return { rise: null, transit, set: null };
-    }
-    const H0deg = Math.acos(cosH0) * R$1;
-    const H0frac = H0deg / 360;
-    const riseFrac = ((transitFrac - H0frac) % 1 + 1) % 1;
-    const setFrac = ((transitFrac + H0frac) % 1 + 1) % 1;
-    const rise = new Date(midnight.valueOf() + riseFrac * 864e5);
-    const set = new Date(midnight.valueOf() + setFrac * 864e5);
-    return { rise, transit, set };
+  riseTransitSet(e, r, a = -0.5667) {
+    const t = r.date ?? /* @__PURE__ */ new Date(), i = new Date(Date.UTC(
+      t.getUTCFullYear(),
+      t.getUTCMonth(),
+      t.getUTCDate()
+    )), s = e.dec * M, n = r.lat * M, c = a * M, l = (Math.sin(c) - Math.sin(n) * Math.sin(s)) / (Math.cos(n) * Math.cos(s)), d = this.gmst(i), u = ((e.ra - r.lng - d) / 360 % 1 + 1) % 1, p = new Date(i.valueOf() + u * 864e5);
+    if (l > 1)
+      return { rise: null, transit: p, set: null };
+    if (l < -1)
+      return { rise: null, transit: p, set: null };
+    const b = Math.acos(l) * I / 360, y = ((u - b) % 1 + 1) % 1, _ = ((u + b) % 1 + 1) % 1, f = new Date(i.valueOf() + y * 864e5), k = new Date(i.valueOf() + _ * 864e5);
+    return { rise: f, transit: p, set: k };
   }
 };
-const D$2 = CONSTANTS.DEG_TO_RAD;
-const Sun = {
+function ee(e, r = 6e4, a = 128) {
+  const t = /* @__PURE__ */ new Map();
+  return (i = /* @__PURE__ */ new Date()) => {
+    const s = Math.round(i.getTime() / r), n = t.get(s);
+    if (n !== void 0) return n;
+    const c = e(i);
+    return t.size >= a && t.delete(t.keys().next().value), t.set(s, c), c;
+  };
+}
+const j = C.DEG_TO_RAD, ge = ee((e) => {
+  const r = v.planetEcliptic("earth", e), a = ((r.lon + 180) % 360 + 360) % 360, t = -r.lat, i = v.toJulian(e), { dPsi: s } = v.nutation(i), n = a + s, c = v.trueObliquity(i) * j, l = n * j, d = t * j, u = Math.atan2(
+    Math.sin(l) * Math.cos(c) - Math.tan(d) * Math.sin(c),
+    Math.cos(l)
+  ) * (180 / Math.PI), p = Math.asin(
+    Math.sin(d) * Math.cos(c) + Math.cos(d) * Math.sin(c) * Math.sin(l)
+  ) * (180 / Math.PI);
+  return {
+    ra: (u % 360 + 360) % 360,
+    dec: p,
+    distance_AU: r.r,
+    eclipticLon: n
+  };
+}), he = {
   /**
    * Geocentric equatorial position of the Sun.
    *
@@ -957,29 +856,8 @@ const Sun = {
    * console.log(`Ecliptic Lon: ${pos.eclipticLon.toFixed(4)}°`) // ~0° at equinox
    * ```
    */
-  position(date = /* @__PURE__ */ new Date()) {
-    const earth = AstroMath.planetEcliptic("earth", date);
-    const sunLon = ((earth.lon + 180) % 360 + 360) % 360;
-    const sunLat = -earth.lat;
-    const jd = AstroMath.toJulian(date);
-    const { dPsi } = AstroMath.nutation(jd);
-    const correctedLon = sunLon + dPsi;
-    const eps = AstroMath.trueObliquity(jd) * D$2;
-    const lonR = correctedLon * D$2;
-    const latR = sunLat * D$2;
-    const ra = Math.atan2(
-      Math.sin(lonR) * Math.cos(eps) - Math.tan(latR) * Math.sin(eps),
-      Math.cos(lonR)
-    ) * (180 / Math.PI);
-    const dec = Math.asin(
-      Math.sin(latR) * Math.cos(eps) + Math.cos(latR) * Math.sin(eps) * Math.sin(lonR)
-    ) * (180 / Math.PI);
-    return {
-      ra: (ra % 360 + 360) % 360,
-      dec,
-      distance_AU: earth.r,
-      eclipticLon: correctedLon
-    };
+  position(e = /* @__PURE__ */ new Date()) {
+    return ge(e);
   },
   /**
    * Solar noon (transit) for a given observer.
@@ -1003,11 +881,9 @@ const Sun = {
    * console.log('Solar noon:', noon.toISOString()) // ~12:10 UTC
    * ```
    */
-  solarNoon(obs) {
-    const date = obs.date ?? /* @__PURE__ */ new Date();
-    const sunPos = this.position(date);
-    const rts = AstroMath.riseTransitSet(sunPos, obs, -0.8333);
-    return rts.transit;
+  solarNoon(e) {
+    const r = e.date ?? /* @__PURE__ */ new Date(), a = this.position(r);
+    return v.riseTransitSet(a, e, -0.8333).transit;
   },
   /**
    * Equation of time in minutes.
@@ -1039,14 +915,10 @@ const Sun = {
    * console.log(`EoT in November: ${eotNov.toFixed(2)} minutes`) // ~+16 min
    * ```
    */
-  equationOfTime(date = /* @__PURE__ */ new Date()) {
-    const sunPos = this.position(date);
-    const jd = AstroMath.toJulian(date);
-    const T = (jd - 2451545) / 36525;
-    const L0 = ((280.46646 + 36000.76983 * T) % 360 + 360) % 360;
-    let eot = L0 - 57183e-7 - sunPos.ra;
-    eot = ((eot + 180) % 360 + 360) % 360 - 180;
-    return eot * 4;
+  equationOfTime(e = /* @__PURE__ */ new Date()) {
+    const r = this.position(e);
+    let s = ((280.46646 + 36000.76983 * ((v.toJulian(e) - 2451545) / 36525)) % 360 + 360) % 360 - 57183e-7 - r.ra;
+    return s = ((s + 180) % 360 + 360) % 360 - 180, s * 4;
   },
   /**
    * Complete twilight times for an observer.
@@ -1081,29 +953,21 @@ const Sun = {
    * console.log('Astronomical dusk:', tw.astronomicalDusk?.toISOString())
    * ```
    */
-  twilight(obs) {
-    const date = obs.date ?? /* @__PURE__ */ new Date();
-    const sunPos = this.position(date);
-    const sunrise = AstroMath.riseTransitSet(sunPos, obs, -0.8333);
-    const civil = AstroMath.riseTransitSet(sunPos, obs, -6);
-    const nautical = AstroMath.riseTransitSet(sunPos, obs, -12);
-    const astro = AstroMath.riseTransitSet(sunPos, obs, -18);
+  twilight(e) {
+    const r = e.date ?? /* @__PURE__ */ new Date(), a = this.position(r), t = v.riseTransitSet(a, e, -0.8333), i = v.riseTransitSet(a, e, -6), s = v.riseTransitSet(a, e, -12), n = v.riseTransitSet(a, e, -18);
     return {
-      astronomicalDawn: astro.rise,
-      nauticalDawn: nautical.rise,
-      civilDawn: civil.rise,
-      sunrise: sunrise.rise,
-      solarNoon: sunrise.transit,
-      sunset: sunrise.set,
-      civilDusk: civil.set,
-      nauticalDusk: nautical.set,
-      astronomicalDusk: astro.set
+      astronomicalDawn: n.rise,
+      nauticalDawn: s.rise,
+      civilDawn: i.rise,
+      sunrise: t.rise,
+      solarNoon: t.transit,
+      sunset: t.set,
+      civilDusk: i.set,
+      nauticalDusk: s.set,
+      astronomicalDusk: n.set
     };
   }
-};
-const D$1 = CONSTANTS.DEG_TO_RAD;
-const R = CONSTANTS.RAD_TO_DEG;
-const LONG_DIST_TERMS = [
+}, A = C.DEG_TO_RAD, z = C.RAD_TO_DEG, be = [
   [0, 0, 1, 0, 6288774, -20905355],
   [2, 0, -1, 0, 1274027, -3699111],
   [2, 0, 0, 0, 658314, -2955968],
@@ -1154,8 +1018,7 @@ const LONG_DIST_TERMS = [
   [0, 0, 4, 0, 537, -1117],
   [4, -1, 0, 0, 520, -1571],
   [1, 0, -2, 0, -487, -1739]
-];
-const LAT_TERMS = [
+], ye = [
   [0, 0, 0, 1, 5128122],
   [0, 0, 1, 1, 280602],
   [0, 0, 1, -1, 277693],
@@ -1186,9 +1049,39 @@ const LAT_TERMS = [
   [0, 0, 3, 1, 1107],
   [4, 0, 0, -1, 1021],
   [4, 0, -1, 1, 833]
-];
-const SYNODIC_MONTH = 29.530588861;
-const Moon = {
+], K = 29.530588861, Me = ee((e) => {
+  const r = v.toJulian(e), a = (r - 2451545) / 36525, t = ((218.3164477 + 481267.88123421 * a - 15786e-7 * a * a + a * a * a / 538841 - a * a * a * a / 65194e3) % 360 + 360) % 360, i = ((297.8501921 + 445267.1114034 * a - 18819e-7 * a * a + a * a * a / 545868 - a * a * a * a / 113065e3) % 360 + 360) % 360, s = ((357.5291092 + 35999.0502909 * a - 1536e-7 * a * a + a * a * a / 2449e4) % 360 + 360) % 360, n = ((134.9633964 + 477198.8675055 * a + 87414e-7 * a * a + a * a * a / 69699 - a * a * a * a / 14712e3) % 360 + 360) % 360, c = ((93.272095 + 483202.0175233 * a - 36539e-7 * a * a - a * a * a / 3526e3 + a * a * a * a / 86331e4) % 360 + 360) % 360, l = 1 - 2516e-6 * a - 74e-7 * a * a, d = l * l, u = i * A, p = s * A, o = n * A, b = c * A;
+  let y = 0, _ = 0;
+  for (const R of be) {
+    const V = R[0] * u + R[1] * p + R[2] * o + R[3] * b;
+    let L = 1;
+    const F = Math.abs(R[1]);
+    F === 1 ? L = l : F === 2 && (L = d), y += R[4] * L * Math.sin(V), _ += R[5] * L * Math.cos(V);
+  }
+  let f = 0;
+  for (const R of ye) {
+    const V = R[0] * u + R[1] * p + R[2] * o + R[3] * b;
+    let L = 1;
+    const F = Math.abs(R[1]);
+    F === 1 ? L = l : F === 2 && (L = d), f += R[4] * L * Math.sin(V);
+  }
+  const k = (119.75 + 131.849 * a) * A, g = (53.09 + 479264.29 * a) * A, m = (313.45 + 481266.484 * a) * A;
+  y += 3958 * Math.sin(k) + 1962 * Math.sin((t - c) * A) + 318 * Math.sin(g), f += -2235 * Math.sin(t * A) + 382 * Math.sin(m) + 175 * Math.sin(k - b) + 175 * Math.sin(k + b) + 127 * Math.sin((t - n) * A) - 115 * Math.sin((t + n) * A);
+  const S = t + y / 1e6, h = f / 1e6, D = 385000.56 + _ / 1e3, { dPsi: w } = v.nutation(r), O = S + w, N = v.trueObliquity(r) * A, E = O * A, H = h * A, me = Math.atan2(
+    Math.sin(E) * Math.cos(N) - Math.tan(H) * Math.sin(N),
+    Math.cos(E)
+  ) * z, de = Math.asin(
+    Math.sin(H) * Math.cos(N) + Math.cos(H) * Math.sin(N) * Math.sin(E)
+  ) * z, pe = Math.asin(6378.14 / D) * z;
+  return {
+    ra: (me % 360 + 360) % 360,
+    dec: de,
+    distance_km: D,
+    eclipticLon: (O % 360 + 360) % 360,
+    eclipticLat: h,
+    parallax: pe
+  };
+}, 6e4, 64), T = {
   /**
    * Geocentric equatorial and ecliptic position of the Moon.
    *
@@ -1224,69 +1117,8 @@ const Moon = {
    * console.log(`Parallax: ${pos.parallax.toFixed(4)}°`)
    * ```
    */
-  position(date = /* @__PURE__ */ new Date()) {
-    const jd = AstroMath.toJulian(date);
-    const T = (jd - 2451545) / 36525;
-    const Lp = ((218.3164477 + 481267.88123421 * T - 15786e-7 * T * T + T * T * T / 538841 - T * T * T * T / 65194e3) % 360 + 360) % 360;
-    const Dp = ((297.8501921 + 445267.1114034 * T - 18819e-7 * T * T + T * T * T / 545868 - T * T * T * T / 113065e3) % 360 + 360) % 360;
-    const M = ((357.5291092 + 35999.0502909 * T - 1536e-7 * T * T + T * T * T / 2449e4) % 360 + 360) % 360;
-    const Mp = ((134.9633964 + 477198.8675055 * T + 87414e-7 * T * T + T * T * T / 69699 - T * T * T * T / 14712e3) % 360 + 360) % 360;
-    const F = ((93.272095 + 483202.0175233 * T - 36539e-7 * T * T - T * T * T / 3526e3 + T * T * T * T / 86331e4) % 360 + 360) % 360;
-    const E = 1 - 2516e-6 * T - 74e-7 * T * T;
-    const E2 = E * E;
-    const DpR = Dp * D$1;
-    const MR = M * D$1;
-    const MpR = Mp * D$1;
-    const FR = F * D$1;
-    let sumLon = 0;
-    let sumR = 0;
-    for (const term of LONG_DIST_TERMS) {
-      const arg = term[0] * DpR + term[1] * MR + term[2] * MpR + term[3] * FR;
-      let eFactor = 1;
-      const mAbs = Math.abs(term[1]);
-      if (mAbs === 1) eFactor = E;
-      else if (mAbs === 2) eFactor = E2;
-      sumLon += term[4] * eFactor * Math.sin(arg);
-      sumR += term[5] * eFactor * Math.cos(arg);
-    }
-    let sumLat = 0;
-    for (const term of LAT_TERMS) {
-      const arg = term[0] * DpR + term[1] * MR + term[2] * MpR + term[3] * FR;
-      let eFactor = 1;
-      const mAbs = Math.abs(term[1]);
-      if (mAbs === 1) eFactor = E;
-      else if (mAbs === 2) eFactor = E2;
-      sumLat += term[4] * eFactor * Math.sin(arg);
-    }
-    const A1 = (119.75 + 131.849 * T) * D$1;
-    const A2 = (53.09 + 479264.29 * T) * D$1;
-    const A3 = (313.45 + 481266.484 * T) * D$1;
-    sumLon += 3958 * Math.sin(A1) + 1962 * Math.sin((Lp - F) * D$1) + 318 * Math.sin(A2);
-    sumLat += -2235 * Math.sin(Lp * D$1) + 382 * Math.sin(A3) + 175 * Math.sin(A1 - FR) + 175 * Math.sin(A1 + FR) + 127 * Math.sin((Lp - Mp) * D$1) - 115 * Math.sin((Lp + Mp) * D$1);
-    const eclipticLon = Lp + sumLon / 1e6;
-    const eclipticLat = sumLat / 1e6;
-    const distance_km = 385000.56 + sumR / 1e3;
-    const { dPsi } = AstroMath.nutation(jd);
-    const correctedLon = eclipticLon + dPsi;
-    const eps = AstroMath.trueObliquity(jd) * D$1;
-    const lonR = correctedLon * D$1;
-    const latR = eclipticLat * D$1;
-    const ra = Math.atan2(
-      Math.sin(lonR) * Math.cos(eps) - Math.tan(latR) * Math.sin(eps),
-      Math.cos(lonR)
-    ) * R;
-    const dec = Math.asin(
-      Math.sin(latR) * Math.cos(eps) + Math.cos(latR) * Math.sin(eps) * Math.sin(lonR)
-    ) * R;
-    const parallax = Math.asin(6378.14 / distance_km) * R;
-    return {
-      ra: (ra % 360 + 360) % 360,
-      dec,
-      distance_km,
-      eclipticLon: (correctedLon % 360 + 360) % 360,
-      eclipticLat,
-      parallax
-    };
+  position(e = /* @__PURE__ */ new Date()) {
+    return Me(e);
   },
   /**
    * Moon phase information for a given date.
@@ -1318,28 +1150,13 @@ const Moon = {
    * console.log(`Cycle: ${(p.phase * 100).toFixed(1)}%`)     // 0% = new, 50% = full
    * ```
    */
-  phase(date = /* @__PURE__ */ new Date()) {
-    const moonPos = this.position(date);
-    const sunPos = (() => {
-      const earth = AstroMath.planetEcliptic("earth", date);
-      return ((earth.lon + 180) % 360 + 360) % 360;
-    })();
-    let phaseAngle = moonPos.eclipticLon - sunPos;
-    phaseAngle = (phaseAngle % 360 + 360) % 360;
-    const phase = phaseAngle / 360;
-    const illumination = (1 - Math.cos(phaseAngle * D$1)) / 2;
-    const age = phase * SYNODIC_MONTH;
-    let name;
-    if (phase < 0.0625) name = "new";
-    else if (phase < 0.1875) name = "waxing-crescent";
-    else if (phase < 0.3125) name = "first-quarter";
-    else if (phase < 0.4375) name = "waxing-gibbous";
-    else if (phase < 0.5625) name = "full";
-    else if (phase < 0.6875) name = "waning-gibbous";
-    else if (phase < 0.8125) name = "last-quarter";
-    else if (phase < 0.9375) name = "waning-crescent";
-    else name = "new";
-    return { phase, illumination, age, name };
+  phase(e = /* @__PURE__ */ new Date()) {
+    const r = this.position(e), a = ((v.planetEcliptic("earth", e).lon + 180) % 360 + 360) % 360;
+    let t = r.eclipticLon - a;
+    t = (t % 360 + 360) % 360;
+    const i = t / 360, s = (1 - Math.cos(t * A)) / 2, n = i * K;
+    let c;
+    return i < 0.0625 ? c = "new" : i < 0.1875 ? c = "waxing-crescent" : i < 0.3125 ? c = "first-quarter" : i < 0.4375 ? c = "waxing-gibbous" : i < 0.5625 ? c = "full" : i < 0.6875 ? c = "waning-gibbous" : i < 0.8125 ? c = "last-quarter" : i < 0.9375 ? c = "waning-crescent" : c = "new", { phase: i, illumination: s, age: n, name: c };
   },
   /**
    * Find the next occurrence of a specific phase after the given date.
@@ -1373,27 +1190,23 @@ const Moon = {
    * console.log('Next new moon:', newMoon.toISOString()) // 2024-04-08
    * ```
    */
-  nextPhase(date = /* @__PURE__ */ new Date(), targetPhase = "full") {
-    const phaseTargets = {
-      "new": 0,
+  nextPhase(e = /* @__PURE__ */ new Date(), r = "full") {
+    const t = {
+      new: 0,
       "first-quarter": 0.25,
-      "full": 0.5,
+      full: 0.5,
       "last-quarter": 0.75
-    };
-    const target = phaseTargets[targetPhase];
-    const current = this.phase(date);
-    let diff = target - current.phase;
-    if (diff <= 0) diff += 1;
-    let estimate = new Date(date.valueOf() + diff * SYNODIC_MONTH * 864e5);
-    for (let i = 0; i < 20; i++) {
-      const p = this.phase(estimate);
-      let err = target - p.phase;
-      if (err > 0.5) err -= 1;
-      if (err < -0.5) err += 1;
-      if (Math.abs(err) < 1e-4) break;
-      estimate = new Date(estimate.valueOf() + err * SYNODIC_MONTH * 864e5);
+    }[r], i = this.phase(e);
+    let s = t - i.phase;
+    s <= 0 && (s += 1);
+    let n = new Date(e.valueOf() + s * K * 864e5);
+    for (let c = 0; c < 20; c++) {
+      const l = this.phase(n);
+      let d = t - l.phase;
+      if (d > 0.5 && (d -= 1), d < -0.5 && (d += 1), Math.abs(d) < 1e-4) break;
+      n = new Date(n.valueOf() + d * K * 864e5);
     }
-    return estimate;
+    return n;
   },
   /**
    * Rise, transit, and set times for the Moon.
@@ -1423,10 +1236,9 @@ const Moon = {
    * console.log('Moonset:', rts.set?.toISOString())
    * ```
    */
-  riseTransitSet(obs) {
-    const date = obs.date ?? /* @__PURE__ */ new Date();
-    const moonPos = this.position(date);
-    return AstroMath.riseTransitSet(moonPos, obs, 0.125);
+  riseTransitSet(e) {
+    const r = e.date ?? /* @__PURE__ */ new Date(), a = this.position(r);
+    return v.riseTransitSet(a, e, 0.125);
   },
   /**
    * Optical libration angles (simplified).
@@ -1462,27 +1274,20 @@ const Moon = {
    * console.log(`Libration in latitude: ${lib.b.toFixed(2)}°`)
    * ```
    */
-  libration(date = /* @__PURE__ */ new Date()) {
-    const jd = AstroMath.toJulian(date);
-    const T = (jd - 2451545) / 36525;
-    const Om = ((125.04452 - 1934.136261 * T) % 360 + 360) % 360;
-    const moonPos = this.position(date);
-    const I = 1.5424;
-    const W = moonPos.eclipticLon - Om;
-    const l = -Math.asin(
-      Math.sin(W * D$1) * Math.cos(moonPos.eclipticLat * D$1) * Math.sin(I * D$1) - Math.sin(moonPos.eclipticLat * D$1) * Math.cos(I * D$1)
-    ) * R;
+  libration(e = /* @__PURE__ */ new Date()) {
+    const t = ((125.04452 - 1934.136261 * ((v.toJulian(e) - 2451545) / 36525)) % 360 + 360) % 360, i = this.position(e), s = 1.5424, n = i.eclipticLon - t, c = -Math.asin(
+      Math.sin(n * A) * Math.cos(i.eclipticLat * A) * Math.sin(s * A) - Math.sin(i.eclipticLat * A) * Math.cos(s * A)
+    ) * z;
     Math.atan2(
-      Math.sin(W * D$1) * Math.cos(I * D$1) + Math.tan(moonPos.eclipticLat * D$1) * Math.sin(I * D$1),
-      Math.cos(W * D$1)
-    ) * R;
-    const b = Math.asin(
-      -Math.sin(moonPos.eclipticLat * D$1) * Math.sin(I * D$1) - Math.cos(moonPos.eclipticLat * D$1) * Math.sin(I * D$1) * Math.sin(W * D$1)
-    ) * R;
-    return { l, b };
+      Math.sin(n * A) * Math.cos(s * A) + Math.tan(i.eclipticLat * A) * Math.sin(s * A),
+      Math.cos(n * A)
+    ) * z;
+    const l = Math.asin(
+      -Math.sin(i.eclipticLat * A) * Math.sin(s * A) - Math.cos(i.eclipticLat * A) * Math.sin(s * A) * Math.sin(n * A)
+    ) * z;
+    return { l: c, b: l };
   }
-};
-const Eclipse = {
+}, _e = {
   /**
    * Find the next solar eclipse after the given date.
    *
@@ -1503,13 +1308,12 @@ const Eclipse = {
    * }
    * ```
    */
-  nextSolar(date = /* @__PURE__ */ new Date()) {
-    let search = new Date(date);
-    for (let i = 0; i < 26; i++) {
-      const newMoon = Moon.nextPhase(search, "new");
-      const event = this._checkSolarEclipse(newMoon);
-      if (event) return event;
-      search = new Date(newMoon.valueOf() + 864e5);
+  nextSolar(e = /* @__PURE__ */ new Date()) {
+    let r = new Date(e);
+    for (let a = 0; a < 26; a++) {
+      const t = T.nextPhase(r, "new"), i = this._checkSolarEclipse(t);
+      if (i) return i;
+      r = new Date(t.valueOf() + 864e5);
     }
     return null;
   },
@@ -1533,13 +1337,12 @@ const Eclipse = {
    * }
    * ```
    */
-  nextLunar(date = /* @__PURE__ */ new Date()) {
-    let search = new Date(date);
-    for (let i = 0; i < 26; i++) {
-      const fullMoon = Moon.nextPhase(search, "full");
-      const event = this._checkLunarEclipse(fullMoon);
-      if (event) return event;
-      search = new Date(fullMoon.valueOf() + 864e5);
+  nextLunar(e = /* @__PURE__ */ new Date()) {
+    let r = new Date(e);
+    for (let a = 0; a < 26; a++) {
+      const t = T.nextPhase(r, "full"), i = this._checkLunarEclipse(t);
+      if (i) return i;
+      r = new Date(t.valueOf() + 864e5);
     }
     return null;
   },
@@ -1581,29 +1384,28 @@ const Eclipse = {
    * solar.forEach(e => console.log(`${e.subtype} solar eclipse: ${e.date.toISOString()}`))
    * ```
    */
-  search(startDate, endDate, type) {
-    const results = [];
-    let search = new Date(startDate);
-    const endMs = endDate.valueOf();
-    while (search.valueOf() < endMs) {
-      if (type !== "lunar") {
-        const newMoon = Moon.nextPhase(search, "new");
-        if (newMoon.valueOf() > endMs) break;
-        const solar = this._checkSolarEclipse(newMoon);
-        if (solar) results.push(solar);
+  search(e, r, a) {
+    const t = [];
+    let i = new Date(e);
+    const s = r.valueOf();
+    for (; i.valueOf() < s; ) {
+      if (a !== "lunar") {
+        const n = T.nextPhase(i, "new");
+        if (n.valueOf() > s) break;
+        const c = this._checkSolarEclipse(n);
+        c && t.push(c);
       }
-      if (type !== "solar") {
-        const fullMoon = Moon.nextPhase(search, "full");
-        if (fullMoon.valueOf() <= endMs) {
-          const lunar = this._checkLunarEclipse(fullMoon);
-          if (lunar) results.push(lunar);
+      if (a !== "solar") {
+        const n = T.nextPhase(i, "full");
+        if (n.valueOf() <= s) {
+          const c = this._checkLunarEclipse(n);
+          c && t.push(c);
         }
       }
-      search = new Date(search.valueOf() + 15 * 864e5);
+      i = new Date(i.valueOf() + 15 * 864e5);
     }
-    results.sort((a, b) => a.date.valueOf() - b.date.valueOf());
-    return results.filter(
-      (e, i) => i === 0 || Math.abs(e.date.valueOf() - results[i - 1].date.valueOf()) > 864e5
+    return t.sort((n, c) => n.date.valueOf() - c.date.valueOf()), t.filter(
+      (n, c) => c === 0 || Math.abs(n.date.valueOf() - t[c - 1].date.valueOf()) > 864e5
     );
   },
   /**
@@ -1619,36 +1421,24 @@ const Eclipse = {
    * @param newMoon - The date/time of the new moon to test.
    * @returns An {@link EclipseEvent} if a solar eclipse occurs at this new moon, or `null` otherwise.
    */
-  _checkSolarEclipse(newMoon) {
-    const moonPos = Moon.position(newMoon);
-    const earth = AstroMath.planetEcliptic("earth", newMoon);
-    const sunLon = ((earth.lon + 180) % 360 + 360) % 360;
-    const moonLat = Math.abs(moonPos.eclipticLat);
-    if (moonLat > 1.5) return null;
-    const sunDist_km = earth.r * 1495978707e-1;
-    const sunRadius_deg = Math.atan2(696e3, sunDist_km) * (180 / Math.PI);
-    const moonRadius_deg = Math.atan2(1737.4, moonPos.distance_km) * (180 / Math.PI);
-    const sep = AstroMath.angularSeparation(
-      moonPos,
-      AstroMath.eclipticToEquatorial({ lon: sunLon, lat: 0 })
-    );
-    const sumRadii = sunRadius_deg + moonRadius_deg;
-    if (sep > sumRadii * 1.5) return null;
-    let subtype;
-    let magnitude;
-    if (moonRadius_deg >= sunRadius_deg && sep < moonRadius_deg - sunRadius_deg) {
-      subtype = "total";
-      magnitude = 1;
-    } else if (moonRadius_deg < sunRadius_deg && sep < sunRadius_deg - moonRadius_deg) {
-      subtype = "annular";
-      magnitude = moonRadius_deg / sunRadius_deg;
-    } else if (sep < sumRadii) {
-      subtype = "partial";
-      magnitude = (sumRadii - sep) / (2 * sunRadius_deg);
-    } else {
+  _checkSolarEclipse(e) {
+    const r = T.position(e), a = v.planetEcliptic("earth", e), t = ((a.lon + 180) % 360 + 360) % 360;
+    if (Math.abs(r.eclipticLat) > 1.5) return null;
+    const s = a.r * 1495978707e-1, n = Math.atan2(696e3, s) * (180 / Math.PI), c = Math.atan2(1737.4, r.distance_km) * (180 / Math.PI), l = v.angularSeparation(
+      r,
+      v.eclipticToEquatorial({ lon: t, lat: 0 })
+    ), d = n + c;
+    if (l > d * 1.5) return null;
+    let u, p;
+    if (c >= n && l < c - n)
+      u = "total", p = 1;
+    else if (c < n && l < n - c)
+      u = "annular", p = c / n;
+    else if (l < d)
+      u = "partial", p = (d - l) / (2 * n);
+    else
       return null;
-    }
-    return { type: "solar", subtype, date: newMoon, magnitude };
+    return { type: "solar", subtype: u, date: e, magnitude: p };
   },
   /**
    * Check if a full moon produces a lunar eclipse.
@@ -1669,32 +1459,21 @@ const Eclipse = {
    * @param fullMoon - The date/time of the full moon to test.
    * @returns An {@link EclipseEvent} if a lunar eclipse occurs at this full moon, or `null` otherwise.
    */
-  _checkLunarEclipse(fullMoon) {
-    const moonPos = Moon.position(fullMoon);
-    const moonLat = Math.abs(moonPos.eclipticLat);
-    const earthShadow_deg = Math.atan2(6371, moonPos.distance_km) * (180 / Math.PI);
-    const umbra_deg = earthShadow_deg * 2.6;
-    const penumbra_deg = earthShadow_deg * 4.3;
-    const moonRadius_deg = Math.atan2(1737.4, moonPos.distance_km) * (180 / Math.PI);
-    if (moonLat > penumbra_deg + moonRadius_deg) return null;
-    let subtype;
-    let magnitude;
-    if (moonLat < umbra_deg - moonRadius_deg) {
-      subtype = "total";
-      magnitude = (umbra_deg - moonLat) / (2 * moonRadius_deg);
-    } else if (moonLat < umbra_deg + moonRadius_deg) {
-      subtype = "partial";
-      magnitude = (umbra_deg + moonRadius_deg - moonLat) / (2 * moonRadius_deg);
-    } else if (moonLat < penumbra_deg + moonRadius_deg) {
-      subtype = "penumbral";
-      magnitude = (penumbra_deg + moonRadius_deg - moonLat) / (2 * moonRadius_deg);
-    } else {
+  _checkLunarEclipse(e) {
+    const r = T.position(e), a = Math.abs(r.eclipticLat), t = Math.atan2(6371, r.distance_km) * (180 / Math.PI), i = t * 2.6, s = t * 4.3, n = Math.atan2(1737.4, r.distance_km) * (180 / Math.PI);
+    if (a > s + n) return null;
+    let c, l;
+    if (a < i - n)
+      c = "total", l = (i - a) / (2 * n);
+    else if (a < i + n)
+      c = "partial", l = (i + n - a) / (2 * n);
+    else if (a < s + n)
+      c = "penumbral", l = (s + n - a) / (2 * n);
+    else
       return null;
-    }
-    return { type: "lunar", subtype, date: fullMoon, magnitude: Math.min(magnitude, 1) };
+    return { type: "lunar", subtype: c, date: e, magnitude: Math.min(l, 1) };
   }
-};
-const SOLAR_SYSTEM = [
+}, Ae = [
   {
     id: "sun",
     name: "Sun",
@@ -1853,8 +1632,7 @@ const SOLAR_SYSTEM = [
     description: "Windiest planet at 2,100 km/h; found by mathematical prediction before observation.",
     tags: ["solar-system", "planet", "ice-giant"]
   }
-];
-const DEEP_SKY_EXTRAS = [
+], fe = [
   {
     id: "ngc7293",
     name: "Helix Nebula",
@@ -1920,8 +1698,7 @@ const DEEP_SKY_EXTRAS = [
     description: "First ever directly imaged black hole (EHT 2019); 6.5 billion solar masses.",
     tags: ["black-hole", "supermassive"]
   }
-];
-const BRIGHT_STARS = [
+], B = [
   { id: "sirius", name: "Sirius", con: "CMa", hr: 2491, ra: 101.287, dec: -16.716, mag: -1.46, spec: "A1V", pmRa: -546.01, pmDec: -1223.07, bv: -0.01 },
   { id: "canopus", name: "Canopus", con: "Car", hr: 2326, ra: 95.988, dec: -52.696, mag: -0.74, spec: "F0Ib", pmRa: 19.99, pmDec: 23.67, bv: 0.15 },
   { id: "arcturus", name: "Arcturus", con: "Boo", hr: 5340, ra: 213.915, dec: 19.182, mag: -0.05, spec: "K1.5III", pmRa: -1093.45, pmDec: -1999.4, bv: 1.23 },
@@ -2087,8 +1864,7 @@ const BRIGHT_STARS = [
   { id: "rotanev", name: "Rotanev", con: "Del", hr: 7882, ra: 309.387, dec: 14.595, mag: 3.63, spec: "F5III", pmRa: 118.07, pmDec: -46.85, bv: 0.44 },
   { id: "sualocin", name: "Sualocin", con: "Del", hr: 7906, ra: 309.91, dec: 15.912, mag: 3.77, spec: "B9IV", pmRa: 54.8, pmDec: 8.44, bv: -0.03 },
   { id: "proxima-centauri", name: "Proxima Centauri", con: "Cen", hr: 0, ra: 217.429, dec: -62.68, mag: 11.13, spec: "M5.5Ve", pmRa: -3775.4, pmDec: 765.54, bv: 1.9 }
-];
-const CONSTELLATIONS = [
+], ae = [
   // ────────────────────────────────────────────────────────────────
   // 1. Andromeda
   // ────────────────────────────────────────────────────────────────
@@ -4450,8 +4226,7 @@ const CONSTELLATIONS = [
       [308.55, 27.09, 295.74, 24.08]
     ]
   }
-];
-const MESSIER_CATALOG = [
+], W = [
   { messier: 1, name: "Crab Nebula", ngc: "NGC 1952", type: "nebula", subtype: "supernova remnant", constellation: "Tau", ra: 83.633, dec: 22.015, mag: 8.4, size_arcmin: 6, distance_kly: 6.5, description: "Supernova remnant from SN 1054, contains a pulsar" },
   { messier: 2, name: "M2", ngc: "NGC 7089", type: "cluster", subtype: "globular cluster", constellation: "Aqr", ra: 323.363, dec: -0.823, mag: 6.3, size_arcmin: 16, distance_kly: 37.5, description: "Rich globular cluster" },
   { messier: 3, name: "M3", ngc: "NGC 5272", type: "cluster", subtype: "globular cluster", constellation: "CVn", ra: 205.548, dec: 28.377, mag: 6.2, size_arcmin: 18, distance_kly: 33.9, description: "One of the finest globular clusters" },
@@ -4562,8 +4337,7 @@ const MESSIER_CATALOG = [
   { messier: 108, name: "M108", ngc: "NGC 3556", type: "galaxy", subtype: "barred spiral galaxy", constellation: "UMa", ra: 167.879, dec: 55.674, mag: 10, size_arcmin: 8, distance_kly: 45e3, description: "Nearly edge-on barred spiral near Owl Nebula" },
   { messier: 109, name: "M109", ngc: "NGC 3992", type: "galaxy", subtype: "barred spiral galaxy", constellation: "UMa", ra: 179.4, dec: 53.375, mag: 9.8, size_arcmin: 8, distance_kly: 83500, description: "Barred spiral galaxy near Phecda" },
   { messier: 110, name: "M110", ngc: "NGC 205", type: "galaxy", subtype: "elliptical galaxy", constellation: "And", ra: 10.092, dec: 41.685, mag: 8.5, size_arcmin: 22, distance_kly: 2690, description: "Satellite of Andromeda Galaxy" }
-];
-const METEOR_SHOWERS = [
+], Z = [
   { id: "quadrantids", name: "Quadrantids", code: "QUA", radiantRA: 230.1, radiantDec: 48.5, solarLon: 283.16, peakDate: "Jan 04", start: "Dec 28", end: "Jan 12", zhr: 110, speed: 41, parentBody: "2003 EH1" },
   { id: "lyrids", name: "Lyrids", code: "LYR", radiantRA: 271.4, radiantDec: 33.6, solarLon: 32.32, peakDate: "Apr 22", start: "Apr 14", end: "Apr 30", zhr: 18, speed: 49, parentBody: "C/1861 G1 (Thatcher)" },
   { id: "eta-aquariids", name: "Eta Aquariids", code: "ETA", radiantRA: 338, radiantDec: -1, solarLon: 45.5, peakDate: "May 06", start: "Apr 19", end: "May 28", zhr: 50, speed: 66, parentBody: "1P/Halley" },
@@ -4587,8 +4361,8 @@ const METEOR_SHOWERS = [
   { id: "comae-berenicids", name: "Comae Berenicids", code: "COM", radiantRA: 175, radiantDec: 18, solarLon: 271, peakDate: "Dec 19", start: "Dec 12", end: "Jan 02", zhr: 3, speed: 65 },
   { id: "ursids", name: "Ursids", code: "URS", radiantRA: 217, radiantDec: 76, solarLon: 270.7, peakDate: "Dec 22", start: "Dec 17", end: "Dec 26", zhr: 10, speed: 33, parentBody: "8P/Tuttle" }
 ];
-let _nasaApiKey = "DEMO_KEY";
-const NASA = {
+let $ = "DEMO_KEY";
+const J = {
   /**
    * Set the NASA API key used for APOD requests.
    *
@@ -4603,8 +4377,8 @@ const NASA = {
    * NASA.setApiKey('Ab12Cd34Ef56Gh78Ij90KlMnOpQrStUvWxYz0123')
    * ```
    */
-  setApiKey(key) {
-    _nasaApiKey = key;
+  setApiKey(e) {
+    $ = e;
   },
   /**
    * Search the NASA Image and Video Library.
@@ -4633,31 +4407,28 @@ const NASA = {
    *
    * @see {@link https://images.nasa.gov/docs/images.nasa.gov_api_docs.pdf | NASA Image API docs}
    */
-  async searchImages(query, opts = {}) {
-    var _a;
-    const { mediaType = "image", yearStart, yearEnd, pageSize = 10, page = 1 } = opts;
-    const params = new URLSearchParams({
-      q: query,
-      media_type: mediaType,
-      page: String(page),
-      page_size: String(pageSize)
+  async searchImages(e, r = {}) {
+    var u;
+    const { mediaType: a = "image", yearStart: t, yearEnd: i, pageSize: s = 10, page: n = 1 } = r, c = new URLSearchParams({
+      q: e,
+      media_type: a,
+      page: String(n),
+      page_size: String(s)
     });
-    if (yearStart) params.set("year_start", String(yearStart));
-    if (yearEnd) params.set("year_end", String(yearEnd));
-    const res = await fetch(`https://images-api.nasa.gov/search?${params.toString()}`);
-    if (!res.ok) throw new Error(`NASA Image API error: ${res.status} ${res.statusText}`);
-    const json = await res.json();
-    return (((_a = json.collection) == null ? void 0 : _a.items) ?? []).map((item) => {
-      var _a2, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n;
+    t && c.set("year_start", String(t)), i && c.set("year_end", String(i));
+    const l = await fetch(`https://images-api.nasa.gov/search?${c.toString()}`);
+    if (!l.ok) throw new Error(`NASA Image API error: ${l.status} ${l.statusText}`);
+    return (((u = (await l.json()).collection) == null ? void 0 : u.items) ?? []).map((p) => {
+      var o, b, y, _, f, k, g, m, S, h, D, w, O, N;
       return {
-        nasaId: ((_b = (_a2 = item.data) == null ? void 0 : _a2[0]) == null ? void 0 : _b.nasa_id) ?? "",
-        title: ((_d = (_c = item.data) == null ? void 0 : _c[0]) == null ? void 0 : _d.title) ?? "",
-        description: ((_f = (_e = item.data) == null ? void 0 : _e[0]) == null ? void 0 : _f.description) ?? "",
-        date: ((_h = (_g = item.data) == null ? void 0 : _g[0]) == null ? void 0 : _h.date_created) ?? "",
-        center: ((_j = (_i = item.data) == null ? void 0 : _i[0]) == null ? void 0 : _j.center) ?? "",
-        keywords: ((_l = (_k = item.data) == null ? void 0 : _k[0]) == null ? void 0 : _l.keywords) ?? [],
-        previewUrl: ((_n = (_m = item.links) == null ? void 0 : _m.find((l) => l.rel === "preview")) == null ? void 0 : _n.href) ?? null,
-        href: item.href ?? ""
+        nasaId: ((b = (o = p.data) == null ? void 0 : o[0]) == null ? void 0 : b.nasa_id) ?? "",
+        title: ((_ = (y = p.data) == null ? void 0 : y[0]) == null ? void 0 : _.title) ?? "",
+        description: ((k = (f = p.data) == null ? void 0 : f[0]) == null ? void 0 : k.description) ?? "",
+        date: ((m = (g = p.data) == null ? void 0 : g[0]) == null ? void 0 : m.date_created) ?? "",
+        center: ((h = (S = p.data) == null ? void 0 : S[0]) == null ? void 0 : h.center) ?? "",
+        keywords: ((w = (D = p.data) == null ? void 0 : D[0]) == null ? void 0 : w.keywords) ?? [],
+        previewUrl: ((N = (O = p.links) == null ? void 0 : O.find((E) => E.rel === "preview")) == null ? void 0 : N.href) ?? null,
+        href: p.href ?? ""
       };
     });
   },
@@ -4679,21 +4450,14 @@ const NASA = {
    * console.log(urls[0]) // highest quality rendition
    * ```
    */
-  async getAssets(nasaId) {
-    var _a;
-    const res = await fetch(
-      `https://images-api.nasa.gov/asset/${encodeURIComponent(nasaId)}`
+  async getAssets(e) {
+    var i;
+    const r = await fetch(
+      `https://images-api.nasa.gov/asset/${encodeURIComponent(e)}`
     );
-    if (!res.ok) throw new Error(`NASA asset fetch error: ${res.status}`);
-    const json = await res.json();
-    const rank = (url) => {
-      if (url.includes("~orig")) return 0;
-      if (url.includes("~large")) return 1;
-      if (url.includes("~medium")) return 2;
-      if (url.includes("~small")) return 3;
-      return 4;
-    };
-    return (((_a = json.collection) == null ? void 0 : _a.items) ?? []).map((item) => item.href).sort((a, b) => rank(a) - rank(b));
+    if (!r.ok) throw new Error(`NASA asset fetch error: ${r.status}`);
+    const a = await r.json(), t = (s) => s.includes("~orig") ? 0 : s.includes("~large") ? 1 : s.includes("~medium") ? 2 : s.includes("~small") ? 3 : 4;
+    return (((i = a.collection) == null ? void 0 : i.items) ?? []).map((s) => s.href).sort((s, n) => t(s) - t(n));
   },
   /**
    * Convenience helper that returns the single highest-quality image URL
@@ -4718,10 +4482,8 @@ const NASA = {
    * }
    * ```
    */
-  async getBestImageUrl(nasaId) {
-    const assets = await this.getAssets(nasaId);
-    const imgAssets = assets.filter((u) => /\.(jpe?g|png|gif|tiff?)$/i.test(u));
-    return imgAssets[0] ?? null;
+  async getBestImageUrl(e) {
+    return (await this.getAssets(e)).filter((t) => /\.(jpe?g|png|gif|tiff?)$/i.test(t))[0] ?? null;
   },
   /**
    * Fetch the NASA Astronomy Picture of the Day (APOD).
@@ -4748,23 +4510,23 @@ const NASA = {
    * const historic = await NASA.apod('1995-06-16')
    * ```
    */
-  async apod(date) {
-    const params = new URLSearchParams({ api_key: _nasaApiKey });
-    if (date) {
-      const d = date instanceof Date ? date : new Date(date);
-      params.set("date", d.toISOString().slice(0, 10));
+  async apod(e) {
+    const r = new URLSearchParams({ api_key: $ });
+    if (e) {
+      const i = e instanceof Date ? e : new Date(e);
+      r.set("date", i.toISOString().slice(0, 10));
     }
-    const res = await fetch(`https://api.nasa.gov/planetary/apod?${params.toString()}`);
-    if (!res.ok) throw new Error(`APOD error: ${res.status} ${res.statusText}`);
-    const json = await res.json();
+    const a = await fetch(`https://api.nasa.gov/planetary/apod?${r.toString()}`);
+    if (!a.ok) throw new Error(`APOD error: ${a.status} ${a.statusText}`);
+    const t = await a.json();
     return {
-      title: json.title,
-      date: json.date,
-      explanation: json.explanation,
-      url: json.url,
-      hdUrl: json.hdurl ?? json.url,
-      mediaType: json.media_type === "video" ? "video" : "image",
-      copyright: json.copyright ?? "NASA"
+      title: t.title,
+      date: t.date,
+      explanation: t.explanation,
+      url: t.url,
+      hdUrl: t.hdurl ?? t.url,
+      mediaType: t.media_type === "video" ? "video" : "image",
+      copyright: t.copyright ?? "NASA"
     };
   },
   /**
@@ -4792,27 +4554,24 @@ const NASA = {
    * const batch = await NASA.recentAPOD(20)
    * ```
    */
-  async recentAPOD(count = 7) {
-    const params = new URLSearchParams({
-      api_key: _nasaApiKey,
-      count: String(count),
+  async recentAPOD(e = 7) {
+    const r = new URLSearchParams({
+      api_key: $,
+      count: String(e),
       thumbs: "true"
-    });
-    const res = await fetch(`https://api.nasa.gov/planetary/apod?${params.toString()}`);
-    if (!res.ok) throw new Error(`APOD error: ${res.status} ${res.statusText}`);
-    const json = await res.json();
-    return json.map((item) => ({
-      title: item.title,
-      date: item.date,
-      explanation: item.explanation,
-      url: item.url,
-      hdUrl: item.hdurl ?? item.url,
-      mediaType: item.media_type === "video" ? "video" : "image",
-      copyright: item.copyright ?? "NASA"
+    }), a = await fetch(`https://api.nasa.gov/planetary/apod?${r.toString()}`);
+    if (!a.ok) throw new Error(`APOD error: ${a.status} ${a.statusText}`);
+    return (await a.json()).map((i) => ({
+      title: i.title,
+      date: i.date,
+      explanation: i.explanation,
+      url: i.url,
+      hdUrl: i.hdurl ?? i.url,
+      mediaType: i.media_type === "video" ? "video" : "image",
+      copyright: i.copyright ?? "NASA"
     }));
   }
-};
-const ESA = {
+}, te = {
   /**
    * Search the ESA Hubble Space Telescope image archive.
    *
@@ -4838,31 +4597,30 @@ const ESA = {
    *
    * @see {@link https://esahubble.org/api/v1/ | ESA Hubble API docs}
    */
-  async searchHubble(query, limit = 10) {
-    const res = await fetch(
-      `https://esahubble.org/api/v1/images/?search=${encodeURIComponent(query)}&limit=${limit}`
+  async searchHubble(e, r = 10) {
+    const a = await fetch(
+      `https://esahubble.org/api/v1/images/?search=${encodeURIComponent(e)}&limit=${r}`
     );
-    if (!res.ok) throw new Error(`ESA Hubble API error: ${res.status}`);
-    const json = await res.json();
-    return (json.results ?? []).map((item) => {
-      var _a, _b;
-      const fileUrl = ((_b = (_a = item.image_files) == null ? void 0 : _a[0]) == null ? void 0 : _b.file_url) ?? null;
+    if (!a.ok) throw new Error(`ESA Hubble API error: ${a.status}`);
+    return ((await a.json()).results ?? []).map((i) => {
+      var n, c;
+      const s = ((c = (n = i.image_files) == null ? void 0 : n[0]) == null ? void 0 : c.file_url) ?? null;
       return {
-        id: item.id ?? "",
-        title: item.title ?? "",
-        description: item.description ?? "",
-        credit: item.credit ?? "",
-        date: item.release_date ?? "",
-        imageUrl: fileUrl,
-        thumbUrl: (fileUrl == null ? void 0 : fileUrl.replace("original", "screen")) ?? null,
-        tags: item.subject_category ?? []
+        id: i.id ?? "",
+        title: i.title ?? "",
+        description: i.description ?? "",
+        credit: i.credit ?? "",
+        date: i.release_date ?? "",
+        imageUrl: s,
+        thumbUrl: (s == null ? void 0 : s.replace("original", "screen")) ?? null,
+        tags: i.subject_category ?? []
       };
     });
   }
 };
-async function resolveSimbad(objectName) {
-  var _a;
-  const body = new URLSearchParams({
+async function ke(e) {
+  var s;
+  const r = new URLSearchParams({
     REQUEST: "doQuery",
     LANG: "ADQL",
     FORMAT: "json",
@@ -4870,21 +4628,18 @@ async function resolveSimbad(objectName) {
       "SELECT TOP 1 main_id, ra, dec, otype",
       "FROM basic",
       "JOIN ident ON ident.oidref = basic.oid",
-      `WHERE id = '${objectName.replace(/'/g, "''")}'`
+      `WHERE id = '${e.replace(/'/g, "''")}'`
     ].join(" ")
-  });
-  const res = await fetch("https://simbad.cds.unistra.fr/simbad/sim-tap/sync", {
+  }), a = await fetch("https://simbad.cds.unistra.fr/simbad/sim-tap/sync", {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: body.toString()
+    body: r.toString()
   });
-  if (!res.ok) throw new Error(`Simbad error: ${res.status}`);
-  const json = await res.json();
-  const row = (_a = json.data) == null ? void 0 : _a[0];
-  if (!row) return null;
-  return { id: row[0], ra: row[1], dec: row[2], type: row[3] };
+  if (!a.ok) throw new Error(`Simbad error: ${a.status}`);
+  const i = (s = (await a.json()).data) == null ? void 0 : s[0];
+  return i ? { id: i[0], ra: i[1], dec: i[2], type: i[3] } : null;
 }
-const IMAGE_FALLBACKS = {
+const q = {
   m1: [{ filename: "Crab_Nebula.jpg", credit: "NASA · ESA · J. Hester & A. Loll (ASU)" }],
   m8: [{ filename: "Lagoon_Nebula_from_ESO.jpg", credit: "ESO/INAF-VST/OmegaCAM" }],
   m16: [{ filename: "Pillars_of_creation_2014_HST_WFC3-UVIS_full-res_denoised.jpg", credit: "NASA · ESA · Hubble Heritage Team" }],
@@ -4900,93 +4655,90 @@ const IMAGE_FALLBACKS = {
   m101: [{ filename: "M101_hires_STScI-PRC2006-10a.jpg", credit: "NASA · ESA · Hubble Heritage Team" }],
   m104: [{ filename: "M104_ngc4594_sombrero_galaxy_hi-res.jpg", credit: "NASA · ESA · Hubble Heritage Team" }]
 };
-async function resolveImages(name, opts = {}) {
-  const { source = "nasa", limit = 5 } = opts;
-  const results = [];
-  if (source === "nasa" || source === "all") {
-    const nasaResults = await NASA.searchImages(name, { pageSize: limit });
-    for (const result of nasaResults) {
-      if (!result.nasaId) continue;
-      const assets = await NASA.getAssets(result.nasaId);
-      const imageUrls = assets.filter((u) => /\.(jpe?g|png|tiff?)$/i.test(u));
-      if (imageUrls.length > 0) {
-        results.push({
-          urls: imageUrls,
-          previewUrl: result.previewUrl,
-          title: result.title,
-          credit: result.center ? `NASA/${result.center}` : "NASA",
-          source: "nasa"
-        });
-      }
+async function Se(e, r = {}) {
+  const { source: a = "nasa", limit: t = 5 } = r, i = [];
+  if (a === "nasa" || a === "all") {
+    const s = await J.searchImages(e, { pageSize: t });
+    for (const n of s) {
+      if (!n.nasaId) continue;
+      const l = (await J.getAssets(n.nasaId)).filter((d) => /\.(jpe?g|png|tiff?)$/i.test(d));
+      l.length > 0 && i.push({
+        urls: l,
+        previewUrl: n.previewUrl,
+        title: n.title,
+        credit: n.center ? `NASA/${n.center}` : "NASA",
+        source: "nasa"
+      });
     }
   }
-  if (source === "esa" || source === "all") {
-    const esaResults = await ESA.searchHubble(name, limit);
-    for (const result of esaResults) {
-      const urls = [result.imageUrl, result.thumbUrl].filter((u) => u !== null);
-      if (urls.length > 0) {
-        results.push({
-          urls,
-          previewUrl: result.thumbUrl,
-          title: result.title,
-          credit: result.credit || "ESA/Hubble",
-          source: "esa"
-        });
-      }
+  if (a === "esa" || a === "all") {
+    const s = await te.searchHubble(e, t);
+    for (const n of s) {
+      const c = [n.imageUrl, n.thumbUrl].filter((l) => l !== null);
+      c.length > 0 && i.push({
+        urls: c,
+        previewUrl: n.thumbUrl,
+        title: n.title,
+        credit: n.credit || "ESA/Hubble",
+        source: "esa"
+      });
     }
   }
-  return results.slice(0, limit);
+  return i.slice(0, t);
 }
-function starToCelestial(s) {
+function ve(e) {
   return {
-    id: s.id,
-    name: s.name,
+    id: e.id,
+    name: e.name,
     aliases: [],
     type: "star",
-    ra: s.ra,
-    dec: s.dec,
-    magnitude: s.mag,
-    spectral: s.spec,
+    ra: e.ra,
+    dec: e.dec,
+    magnitude: e.mag,
+    spectral: e.spec,
     description: "",
     tags: ["star"]
   };
 }
-function messierToCelestial(m) {
+function Ce(e) {
   return {
-    id: `m${m.messier}`,
-    name: m.name,
-    aliases: [`M${m.messier}`, ...m.ngc ? [m.ngc] : []],
-    type: m.type,
-    subtype: m.subtype,
-    ra: m.ra,
-    dec: m.dec,
-    magnitude: m.mag,
-    description: m.description,
-    tags: ["messier", m.type]
+    id: `m${e.messier}`,
+    name: e.name,
+    aliases: [`M${e.messier}`, ...e.ngc ? [e.ngc] : []],
+    type: e.type,
+    subtype: e.subtype,
+    ra: e.ra,
+    dec: e.dec,
+    magnitude: e.mag,
+    description: e.description,
+    tags: ["messier", e.type]
   };
 }
-const UNIFIED = [
-  ...SOLAR_SYSTEM,
-  ...BRIGHT_STARS.map(starToCelestial),
-  ...MESSIER_CATALOG.map(messierToCelestial),
-  ...DEEP_SKY_EXTRAS
-];
-const byId = new Map(UNIFIED.map((o) => [o.id, o]));
-const byName = new Map(
-  UNIFIED.flatMap(
-    (o) => [o.name, ...o.aliases].map((a) => [a.toLowerCase(), o])
+const P = [
+  ...Ae,
+  ...B.map(ve),
+  ...W.map(Ce),
+  ...fe
+], De = new Map(P.map((e) => [e.id, e])), Ie = new Map(
+  P.flatMap(
+    (e) => [e.name, ...e.aliases].map((r) => [r.toLowerCase(), e])
   )
-);
-const starByName = new Map(
-  BRIGHT_STARS.map((s) => [s.name.toLowerCase(), s])
-);
-const conByAbbr = new Map(
-  CONSTELLATIONS.map((c) => [c.abbr.toLowerCase(), c])
-);
-const messierByNumber = new Map(
-  MESSIER_CATALOG.map((m) => [m.messier, m])
-);
-const Data = {
+), Re = new Map(
+  B.map((e) => [e.name.toLowerCase(), e])
+), we = new Map(
+  ae.map((e) => [e.abbr.toLowerCase(), e])
+), xe = new Map(
+  W.map((e) => [e.messier, e])
+), Le = P.map((e) => {
+  var r;
+  return {
+    object: e,
+    nameLower: e.name.toLowerCase(),
+    aliasesLower: e.aliases.map((a) => a.toLowerCase()),
+    descriptionLower: e.description.toLowerCase(),
+    subtypeLower: (r = e.subtype) == null ? void 0 : r.toLowerCase()
+  };
+}), Ne = {
   // ── Unified queries ────────────────────────────────────────────────────
   /**
    * Look up a celestial object by its exact identifier.
@@ -5003,8 +4755,8 @@ const Data = {
    * // => null
    * ```
    */
-  get(id) {
-    return byId.get(id) ?? null;
+  get(e) {
+    return De.get(e) ?? null;
   },
   /**
    * Look up a celestial object by name or any known alias (case-insensitive).
@@ -5021,8 +4773,8 @@ const Data = {
    * // => { id: 'venus', name: 'Venus', ... }
    * ```
    */
-  getByName(name) {
-    return byName.get(name.toLowerCase()) ?? null;
+  getByName(e) {
+    return Ie.get(e.toLowerCase()) ?? null;
   },
   /**
    * Return a shallow copy of the full unified catalog.
@@ -5039,7 +4791,7 @@ const Data = {
    * ```
    */
   all() {
-    return [...UNIFIED];
+    return [...P];
   },
   /**
    * Filter the unified catalog by object type.
@@ -5056,8 +4808,8 @@ const Data = {
    * // => [{ id: 'mercury', ... }, { id: 'venus', ... }, ...]
    * ```
    */
-  getByType(type) {
-    return UNIFIED.filter((o) => o.type === type);
+  getByType(e) {
+    return P.filter((r) => r.type === e);
   },
   /**
    * Filter the unified catalog by a tag string.
@@ -5074,8 +4826,8 @@ const Data = {
    * // => Sun, planets, and Moon
    * ```
    */
-  getByTag(tag) {
-    return UNIFIED.filter((o) => o.tags.includes(tag));
+  getByTag(e) {
+    return P.filter((r) => r.tags.includes(e));
   },
   /**
    * Fuzzy search across name, aliases, description, and tags.
@@ -5096,23 +4848,13 @@ const Data = {
    * // => all objects with 'spiral' in name, subtype, description, or tags
    * ```
    */
-  search(query) {
-    const q = query.toLowerCase().trim();
-    if (!q) return [];
-    return UNIFIED.map((o) => {
-      var _a;
-      let score = 0;
-      if (o.id === q) score += 100;
-      if (o.name.toLowerCase() === q) score += 90;
-      if (o.name.toLowerCase().startsWith(q)) score += 50;
-      if (o.aliases.some((a) => a.toLowerCase() === q)) score += 80;
-      if (o.aliases.some((a) => a.toLowerCase().includes(q))) score += 20;
-      if (o.name.toLowerCase().includes(q)) score += 15;
-      if (o.description.toLowerCase().includes(q)) score += 5;
-      if (o.tags.some((t) => t.includes(q))) score += 8;
-      if ((_a = o.subtype) == null ? void 0 : _a.toLowerCase().includes(q)) score += 10;
-      return { object: o, score };
-    }).filter((r) => r.score > 0).sort((a, b) => b.score - a.score).map((r) => r.object);
+  search(e) {
+    const r = e.toLowerCase().trim();
+    return r ? Le.map((a) => {
+      var i;
+      let t = 0;
+      return a.object.id === r && (t += 100), a.nameLower === r && (t += 90), a.nameLower.startsWith(r) && (t += 50), a.aliasesLower.some((s) => s === r) && (t += 80), a.aliasesLower.some((s) => s.includes(r)) && (t += 20), a.nameLower.includes(r) && (t += 15), a.descriptionLower.includes(r) && (t += 5), a.object.tags.some((s) => s.includes(r)) && (t += 8), (i = a.subtypeLower) != null && i.includes(r) && (t += 10), { object: a.object, score: t };
+    }).filter((a) => a.score > 0).sort((a, t) => t.score - a.score).map((a) => a.object) : [];
   },
   /**
    * Find all objects within a given angular radius of a sky position.
@@ -5135,13 +4877,13 @@ const Data = {
    * )
    * ```
    */
-  nearby(center, radiusDeg) {
-    return UNIFIED.filter(
-      (o) => o.ra !== null && o.dec !== null
-    ).map((o) => ({
-      object: o,
-      separation: AstroMath.angularSeparation(center, { ra: o.ra, dec: o.dec })
-    })).filter((r) => r.separation <= radiusDeg).sort((a, b) => a.separation - b.separation);
+  nearby(e, r) {
+    return P.filter(
+      (a) => a.ra !== null && a.dec !== null
+    ).map((a) => ({
+      object: a,
+      separation: v.angularSeparation(e, { ra: a.ra, dec: a.dec })
+    })).filter((a) => a.separation <= r).sort((a, t) => a.separation - t.separation);
   },
   // ── Image helpers ─────────────────────────────────────────────────────
   /**
@@ -5163,10 +4905,9 @@ const Data = {
    * // => []
    * ```
    */
-  imageUrls(id, width) {
-    const images = IMAGE_FALLBACKS[id];
-    if (!(images == null ? void 0 : images.length)) return [];
-    return images.map((img) => Media.wikimediaUrl(img.filename, width));
+  imageUrls(e, r) {
+    const a = q[e];
+    return a != null && a.length ? a.map((t) => G.wikimediaUrl(t.filename, r)) : [];
   },
   /**
    * Build a {@link ProgressiveImageOptions} config from the static fallback registry.
@@ -5185,15 +4926,13 @@ const Data = {
    * // => { placeholder: '...64px...', src: '...1024px...', srcHD: '...2048px...' }
    * ```
    */
-  progressiveImage(id, width = 800) {
-    const images = IMAGE_FALLBACKS[id];
-    const img = images == null ? void 0 : images[0];
-    if (!img) return null;
-    return {
-      placeholder: Media.wikimediaUrl(img.filename, 64),
-      src: Media.wikimediaUrl(img.filename, width),
-      srcHD: Media.wikimediaUrl(img.filename, width * 2)
-    };
+  progressiveImage(e, r = 800) {
+    const a = q[e], t = a == null ? void 0 : a[0];
+    return t ? {
+      placeholder: G.wikimediaUrl(t.filename, 64),
+      src: G.wikimediaUrl(t.filename, r),
+      srcHD: G.wikimediaUrl(t.filename, r * 2)
+    } : null;
   },
   /**
    * Generate an HTML `srcset` string from the static fallback registry.
@@ -5212,11 +4951,9 @@ const Data = {
    * // => '...640px-... 640w, ...1280px-... 1280w, ...1920px-... 1920w'
    * ```
    */
-  imageSrcset(id, widths = [640, 1280, 1920]) {
-    const images = IMAGE_FALLBACKS[id];
-    const img = images == null ? void 0 : images[0];
-    if (!img) return null;
-    return Media.srcset(widths, (w) => Media.wikimediaUrl(img.filename, w));
+  imageSrcset(e, r = [640, 1280, 1920]) {
+    const a = q[e], t = a == null ? void 0 : a[0];
+    return t ? G.srcset(r, (i) => G.wikimediaUrl(t.filename, i)) : null;
   },
   /**
    * Search NASA and/or ESA APIs for images of any celestial object by name.
@@ -5236,7 +4973,7 @@ const Data = {
    * images.forEach(img => console.log(img.title, img.urls[0]))
    * ```
    */
-  resolveImages,
+  resolveImages: Se,
   // ── Bright star queries ────────────────────────────────────────────────
   /**
    * Get all bright stars in the catalog (~200 IAU named stars).
@@ -5250,7 +4987,7 @@ const Data = {
    * ```
    */
   stars() {
-    return BRIGHT_STARS;
+    return B;
   },
   /**
    * Look up a bright star by its IAU proper name (case-insensitive).
@@ -5264,8 +5001,8 @@ const Data = {
    * // => { id: 'sirius', name: 'Sirius', con: 'CMa', mag: -1.46, ... }
    * ```
    */
-  getStarByName(name) {
-    return starByName.get(name.toLowerCase()) ?? null;
+  getStarByName(e) {
+    return Re.get(e.toLowerCase()) ?? null;
   },
   /**
    * Get all bright stars belonging to a given constellation.
@@ -5280,9 +5017,9 @@ const Data = {
    * // => [Rigel, Betelgeuse, Bellatrix, Alnilam, Alnitak, Mintaka, Saiph]
    * ```
    */
-  getStarsByConstellation(con) {
-    const upper = con.toUpperCase();
-    return BRIGHT_STARS.filter((s) => s.con.toUpperCase() === upper);
+  getStarsByConstellation(e) {
+    const r = e.toUpperCase();
+    return B.filter((a) => a.con.toUpperCase() === r);
   },
   /**
    * Find bright stars within a given angular radius of a sky position.
@@ -5303,11 +5040,11 @@ const Data = {
    * )
    * ```
    */
-  nearbyStars(center, radiusDeg) {
-    return BRIGHT_STARS.map((s) => ({
-      star: s,
-      separation: AstroMath.angularSeparation(center, { ra: s.ra, dec: s.dec })
-    })).filter((r) => r.separation <= radiusDeg).sort((a, b) => a.separation - b.separation);
+  nearbyStars(e, r) {
+    return B.map((a) => ({
+      star: a,
+      separation: v.angularSeparation(e, { ra: a.ra, dec: a.dec })
+    })).filter((a) => a.separation <= r).sort((a, t) => a.separation - t.separation);
   },
   // ── Constellation queries ────────────────────────────────────────────────
   /**
@@ -5322,7 +5059,7 @@ const Data = {
    * ```
    */
   constellations() {
-    return CONSTELLATIONS;
+    return ae;
   },
   /**
    * Look up a constellation by its 3-letter IAU abbreviation (case-insensitive).
@@ -5336,8 +5073,8 @@ const Data = {
    * // => { abbr: 'Ori', name: 'Orion', genitive: 'Orionis', area: 594, ... }
    * ```
    */
-  getConstellation(abbr) {
-    return conByAbbr.get(abbr.toLowerCase()) ?? null;
+  getConstellation(e) {
+    return we.get(e.toLowerCase()) ?? null;
   },
   // ── Messier catalog queries ────────────────────────────────────────────
   /**
@@ -5352,7 +5089,7 @@ const Data = {
    * ```
    */
   messier() {
-    return MESSIER_CATALOG;
+    return W;
   },
   /**
    * Look up a Messier object by its catalog number.
@@ -5369,8 +5106,8 @@ const Data = {
    * // => { messier: 1, name: 'Crab Nebula', ... }
    * ```
    */
-  getMessier(number) {
-    return messierByNumber.get(number) ?? null;
+  getMessier(e) {
+    return xe.get(e) ?? null;
   },
   // ── Meteor shower queries ──────────────────────────────────────────────
   /**
@@ -5386,7 +5123,7 @@ const Data = {
    * ```
    */
   showers() {
-    return METEOR_SHOWERS;
+    return Z;
   },
   /**
    * Get meteor showers that are active on a given date.
@@ -5406,16 +5143,11 @@ const Data = {
    * // => ['Perseids', 'Kappa Cygnids', ...]
    * ```
    */
-  getActiveShowers(date) {
-    const earth = AstroMath.planetEcliptic("earth", date);
-    const sunLon = ((earth.lon + 180) % 360 + 360) % 360;
-    return METEOR_SHOWERS.filter((s) => {
-      const diff = Math.abs(((sunLon - s.solarLon + 180) % 360 + 360) % 360 - 180);
-      return diff < 20;
-    });
+  getActiveShowers(e) {
+    const a = ((v.planetEcliptic("earth", e).lon + 180) % 360 + 360) % 360;
+    return Z.filter((t) => Math.abs(((a - t.solarLon + 180) % 360 + 360) % 360 - 180) < 20);
   }
-};
-const PLANET_TEXTURES = {
+}, Pe = {
   sun: {
     id: "sun",
     name: "Sun Surface",
@@ -5571,8 +5303,7 @@ const PLANET_TEXTURES = {
     width: 2048,
     height: 1024
   }
-};
-const STAR_TEXTURES = {
+}, ze = {
   milky_way: {
     id: "milky_way",
     name: "Milky Way Panorama",
@@ -5595,54 +5326,41 @@ const STAR_TEXTURES = {
     width: 8192,
     height: 4096
   }
-};
-const D = CONSTANTS.DEG_TO_RAD;
-function stereographic(coord, center, scale = 500) {
-  const ra1 = center.ra * D, dec1 = center.dec * D;
-  const ra2 = coord.ra * D, dec2 = coord.dec * D;
-  const dra = ra2 - ra1;
-  const cosC = Math.sin(dec1) * Math.sin(dec2) + Math.cos(dec1) * Math.cos(dec2) * Math.cos(dra);
-  const k = 2 / (1 + cosC);
+}, x = C.DEG_TO_RAD;
+function Y(e, r, a = 500) {
+  const t = r.ra * x, i = r.dec * x, s = e.ra * x, n = e.dec * x, c = s - t, l = Math.sin(i) * Math.sin(n) + Math.cos(i) * Math.cos(n) * Math.cos(c), d = 2 / (1 + l);
   return {
-    x: k * Math.cos(dec2) * Math.sin(dra) * scale,
-    y: k * (Math.cos(dec1) * Math.sin(dec2) - Math.sin(dec1) * Math.cos(dec2) * Math.cos(dra)) * scale,
-    visible: cosC > -0.95
+    x: d * Math.cos(n) * Math.sin(c) * a,
+    y: d * (Math.cos(i) * Math.sin(n) - Math.sin(i) * Math.cos(n) * Math.cos(c)) * a,
+    visible: l > -0.95
   };
 }
-function mollweide(coord, canvas) {
-  const { width: W, height: H } = canvas;
-  const lambda = (coord.ra - 180) * D;
-  const phi = coord.dec * D;
-  let theta = phi;
-  for (let i = 0; i < 10; i++) {
-    const denom = 4 * Math.cos(theta) ** 2 + 2;
-    if (Math.abs(denom) < 1e-9) break;
-    theta -= (2 * theta + Math.sin(2 * theta) - Math.PI * Math.sin(phi)) / denom;
+function X(e, r) {
+  const { width: a, height: t } = r, i = (e.ra - 180) * x, s = e.dec * x;
+  let n = s;
+  for (let d = 0; d < 10; d++) {
+    const u = 4 * Math.cos(n) ** 2 + 2;
+    if (Math.abs(u) < 1e-9) break;
+    n -= (2 * n + Math.sin(2 * n) - Math.PI * Math.sin(s)) / u;
   }
-  const x = W / 2 + W / (2 * Math.PI) * (2 * Math.SQRT2 / Math.PI) * lambda * Math.cos(theta);
-  const y = H / 2 - H / 2 * Math.SQRT2 * Math.sin(theta);
-  return { x, y, visible: true };
+  const c = a / 2 + a / (2 * Math.PI) * (2 * Math.SQRT2 / Math.PI) * i * Math.cos(n), l = t / 2 - t / 2 * Math.SQRT2 * Math.sin(n);
+  return { x: c, y: l, visible: !0 };
 }
-function gnomonic(coord, center, scale = 400) {
-  const ra1 = center.ra * D, dec1 = center.dec * D;
-  const ra2 = coord.ra * D, dec2 = coord.dec * D;
-  const dra = ra2 - ra1;
-  const cosD = Math.sin(dec1) * Math.sin(dec2) + Math.cos(dec1) * Math.cos(dec2) * Math.cos(dra);
-  if (cosD <= 0) return { x: 0, y: 0, visible: false };
-  return {
-    x: scale * Math.cos(dec2) * Math.sin(dra) / cosD,
-    y: scale * (Math.cos(dec1) * Math.sin(dec2) - Math.sin(dec1) * Math.cos(dec2) * Math.cos(dra)) / cosD,
-    visible: cosD > 0
+function Q(e, r, a = 400) {
+  const t = r.ra * x, i = r.dec * x, s = e.ra * x, n = e.dec * x, c = s - t, l = Math.sin(i) * Math.sin(n) + Math.cos(i) * Math.cos(n) * Math.cos(c);
+  return l <= 0 ? { x: 0, y: 0, visible: !1 } : {
+    x: a * Math.cos(n) * Math.sin(c) / l,
+    y: a * (Math.cos(i) * Math.sin(n) - Math.sin(i) * Math.cos(n) * Math.cos(c)) / l,
+    visible: l > 0
   };
 }
-function spectralColor(obj) {
-  var _a;
-  if (obj.type === "nebula") return "#ff7744";
-  if (obj.type === "galaxy") return "#ffddaa";
-  if (obj.type === "cluster") return "#aaccff";
-  if (obj.type === "black-hole") return "#ff4400";
-  const sp = (_a = obj.spectral) == null ? void 0 : _a[0];
-  const MAP = {
+function Ge(e) {
+  var t;
+  if (e.type === "nebula") return "#ff7744";
+  if (e.type === "galaxy") return "#ffddaa";
+  if (e.type === "cluster") return "#aaccff";
+  if (e.type === "black-hole") return "#ff4400";
+  const r = (t = e.spectral) == null ? void 0 : t[0], a = {
     O: "#9bb0ff",
     B: "#aabfff",
     A: "#cad7ff",
@@ -5651,431 +5369,286 @@ function spectralColor(obj) {
     K: "#ffd2a1",
     M: "#ffcc6f"
   };
-  return sp && sp in MAP ? MAP[sp] ?? "#ffffff" : "#ffffff";
+  return r && r in a ? a[r] ?? "#ffffff" : "#ffffff";
 }
-function renderSkyMap(canvas, objects, opts = {}) {
+function re(e, r, a = {}) {
   const {
-    projection = "stereographic",
-    center = { ra: 0, dec: 0 },
-    scale = 300,
-    showGrid = true,
-    showLabels = true,
-    showMagnitudeLimit = 8,
-    background = "#000008",
-    gridColor = "rgba(255,255,255,0.12)",
-    labelColor = "rgba(255,255,255,0.7)"
-  } = opts;
-  const ctx = canvas.getContext("2d");
-  if (!ctx) throw new Error("Canvas 2D context not available");
-  const W = canvas.width;
-  const H = canvas.height;
-  const cx = W / 2;
-  const cy = H / 2;
-  const project = (coord) => {
-    if (projection === "mollweide") {
-      return mollweide(coord, { width: W, height: H });
-    }
-    const pt = projection === "gnomonic" ? gnomonic(coord, center, scale) : stereographic(coord, center, scale);
-    return { x: cx + pt.x, y: cy - pt.y, visible: pt.visible };
+    projection: t = "stereographic",
+    center: i = { ra: 0, dec: 0 },
+    scale: s = 300,
+    showGrid: n = !0,
+    showLabels: c = !0,
+    showMagnitudeLimit: l = 8,
+    background: d = "#000008",
+    gridColor: u = "rgba(255,255,255,0.12)",
+    labelColor: p = "rgba(255,255,255,0.7)"
+  } = a, o = e.getContext("2d");
+  if (!o) throw new Error("Canvas 2D context not available");
+  const b = e.width, y = e.height, _ = b / 2, f = y / 2, k = (g) => {
+    if (t === "mollweide")
+      return X(g, { width: b, height: y });
+    const m = t === "gnomonic" ? Q(g, i, s) : Y(g, i, s);
+    return { x: _ + m.x, y: f - m.y, visible: m.visible };
   };
-  ctx.fillStyle = background;
-  ctx.fillRect(0, 0, W, H);
-  if (showGrid) {
-    ctx.strokeStyle = gridColor;
-    ctx.lineWidth = 0.5;
-    for (let dec = -90; dec <= 90; dec += 30) {
-      ctx.beginPath();
-      let started = false;
-      for (let ra = 0; ra <= 360; ra += 4) {
-        const p = project({ ra, dec });
-        if (!p.visible || p.x < -W || p.x > 2 * W) {
-          started = false;
+  if (o.fillStyle = d, o.fillRect(0, 0, b, y), n) {
+    o.strokeStyle = u, o.lineWidth = 0.5;
+    for (let g = -90; g <= 90; g += 30) {
+      o.beginPath();
+      let m = !1;
+      for (let S = 0; S <= 360; S += 4) {
+        const h = k({ ra: S, dec: g });
+        if (!h.visible || h.x < -b || h.x > 2 * b) {
+          m = !1;
           continue;
         }
-        if (!started) {
-          ctx.moveTo(p.x, p.y);
-          started = true;
-        } else ctx.lineTo(p.x, p.y);
+        m ? o.lineTo(h.x, h.y) : (o.moveTo(h.x, h.y), m = !0);
       }
-      ctx.stroke();
+      o.stroke();
     }
-    for (let ra = 0; ra < 360; ra += 30) {
-      ctx.beginPath();
-      let started = false;
-      for (let dec = -90; dec <= 90; dec += 4) {
-        const p = project({ ra, dec });
-        if (!p.visible || p.y < -H || p.y > 2 * H) {
-          started = false;
+    for (let g = 0; g < 360; g += 30) {
+      o.beginPath();
+      let m = !1;
+      for (let S = -90; S <= 90; S += 4) {
+        const h = k({ ra: g, dec: S });
+        if (!h.visible || h.y < -y || h.y > 2 * y) {
+          m = !1;
           continue;
         }
-        if (!started) {
-          ctx.moveTo(p.x, p.y);
-          started = true;
-        } else ctx.lineTo(p.x, p.y);
+        m ? o.lineTo(h.x, h.y) : (o.moveTo(h.x, h.y), m = !0);
       }
-      ctx.stroke();
+      o.stroke();
     }
   }
-  if (opts.showConstellationLines && opts.constellations) {
-    ctx.strokeStyle = opts.constellationLineColor ?? "rgba(100,149,237,0.35)";
-    ctx.lineWidth = 0.8;
-    for (const con of opts.constellations) {
-      for (const seg of con.stickFigure) {
-        const p1 = project({ ra: seg[0], dec: seg[1] });
-        const p2 = project({ ra: seg[2], dec: seg[3] });
-        if (!p1.visible || !p2.visible) continue;
-        if (p1.x < -50 || p1.x > W + 50 || p2.x < -50 || p2.x > W + 50) continue;
-        ctx.beginPath();
-        ctx.moveTo(p1.x, p1.y);
-        ctx.lineTo(p2.x, p2.y);
-        ctx.stroke();
+  if (a.showConstellationLines && a.constellations) {
+    o.strokeStyle = a.constellationLineColor ?? "rgba(100,149,237,0.35)", o.lineWidth = 0.8;
+    for (const g of a.constellations)
+      for (const m of g.stickFigure) {
+        const S = k({ ra: m[0], dec: m[1] }), h = k({ ra: m[2], dec: m[3] });
+        !S.visible || !h.visible || S.x < -50 || S.x > b + 50 || h.x < -50 || h.x > b + 50 || (o.beginPath(), o.moveTo(S.x, S.y), o.lineTo(h.x, h.y), o.stroke());
       }
-    }
   }
-  if (opts.showConstellationLabels && opts.constellations) {
-    ctx.fillStyle = opts.constellationLabelColor ?? "rgba(100,149,237,0.5)";
-    ctx.font = "11px sans-serif";
-    ctx.textAlign = "center";
-    for (const con of opts.constellations) {
-      const p = project({ ra: con.ra, dec: con.dec });
-      if (!p.visible) continue;
-      if (p.x < 0 || p.x > W || p.y < 0 || p.y > H) continue;
-      ctx.fillText(con.name, p.x, p.y);
+  if (a.showConstellationLabels && a.constellations) {
+    o.fillStyle = a.constellationLabelColor ?? "rgba(100,149,237,0.5)", o.font = "11px sans-serif", o.textAlign = "center";
+    for (const g of a.constellations) {
+      const m = k({ ra: g.ra, dec: g.dec });
+      m.visible && (m.x < 0 || m.x > b || m.y < 0 || m.y > y || o.fillText(g.name, m.x, m.y));
     }
-    ctx.textAlign = "left";
+    o.textAlign = "left";
   }
-  for (const obj of objects) {
-    if (obj.ra === null || obj.dec === null) continue;
-    if (obj.magnitude !== null && obj.magnitude > showMagnitudeLimit) continue;
-    const p = project({ ra: obj.ra, dec: obj.dec });
-    if (!p.visible) continue;
-    if (p.x < -50 || p.x > W + 50 || p.y < -50 || p.y > H + 50) continue;
-    const mag = obj.magnitude ?? 5;
-    const size = Math.max(1.5, Math.min(10, (6 - mag) * 0.9 + 1.5));
-    const color = spectralColor(obj);
-    ctx.save();
-    if (obj.type === "galaxy") {
-      ctx.strokeStyle = color;
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.ellipse(p.x, p.y, size * 2.5, size * 1.2, 0.4, 0, Math.PI * 2);
-      ctx.stroke();
-    } else if (obj.type === "nebula") {
-      ctx.fillStyle = color + "33";
-      ctx.strokeStyle = color;
-      ctx.lineWidth = 0.8;
-      ctx.beginPath();
-      ctx.rect(p.x - size, p.y - size, size * 2, size * 2);
-      ctx.fill();
-      ctx.stroke();
-    } else if (obj.type === "cluster") {
-      ctx.strokeStyle = color;
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, size * 1.8, 0, Math.PI * 2);
-      ctx.stroke();
-      if (obj.subtype === "globular") {
-        ctx.beginPath();
-        ctx.moveTo(p.x - size * 1.8, p.y);
-        ctx.lineTo(p.x + size * 1.8, p.y);
-        ctx.moveTo(p.x, p.y - size * 1.8);
-        ctx.lineTo(p.x, p.y + size * 1.8);
-        ctx.stroke();
-      }
-    } else {
-      const grd = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, size * 2.5);
-      grd.addColorStop(0, color);
-      grd.addColorStop(0.3, color + "cc");
-      grd.addColorStop(1, color + "00");
-      ctx.fillStyle = grd;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, size * 2.5, 0, Math.PI * 2);
-      ctx.fill();
+  for (const g of r) {
+    if (g.ra === null || g.dec === null || g.magnitude !== null && g.magnitude > l) continue;
+    const m = k({ ra: g.ra, dec: g.dec });
+    if (!m.visible || m.x < -50 || m.x > b + 50 || m.y < -50 || m.y > y + 50) continue;
+    const S = g.magnitude ?? 5, h = Math.max(1.5, Math.min(10, (6 - S) * 0.9 + 1.5)), D = Ge(g);
+    if (o.save(), g.type === "galaxy")
+      o.strokeStyle = D, o.lineWidth = 1, o.beginPath(), o.ellipse(m.x, m.y, h * 2.5, h * 1.2, 0.4, 0, Math.PI * 2), o.stroke();
+    else if (g.type === "nebula")
+      o.fillStyle = D + "33", o.strokeStyle = D, o.lineWidth = 0.8, o.beginPath(), o.rect(m.x - h, m.y - h, h * 2, h * 2), o.fill(), o.stroke();
+    else if (g.type === "cluster")
+      o.strokeStyle = D, o.lineWidth = 1, o.beginPath(), o.arc(m.x, m.y, h * 1.8, 0, Math.PI * 2), o.stroke(), g.subtype === "globular" && (o.beginPath(), o.moveTo(m.x - h * 1.8, m.y), o.lineTo(m.x + h * 1.8, m.y), o.moveTo(m.x, m.y - h * 1.8), o.lineTo(m.x, m.y + h * 1.8), o.stroke());
+    else {
+      const w = o.createRadialGradient(m.x, m.y, 0, m.x, m.y, h * 2.5);
+      w.addColorStop(0, D), w.addColorStop(0.3, D + "cc"), w.addColorStop(1, D + "00"), o.fillStyle = w, o.beginPath(), o.arc(m.x, m.y, h * 2.5, 0, Math.PI * 2), o.fill();
     }
-    if (showLabels && mag < 3.5) {
-      ctx.fillStyle = labelColor;
-      ctx.font = `${Math.max(10, 13 - mag)}px sans-serif`;
-      ctx.fillText(obj.name, p.x + size + 4, p.y - size);
-    }
-    ctx.restore();
+    c && S < 3.5 && (o.fillStyle = p, o.font = `${Math.max(10, 13 - S)}px sans-serif`, o.fillText(g.name, m.x + h + 4, m.y - h)), o.restore();
   }
 }
-const SkyMap = { stereographic, mollweide, gnomonic, render: renderSkyMap };
-async function morph(updateFn, opts = {}) {
-  const { duration = 400, easing = "ease-in-out", signal } = opts;
-  if (signal == null ? void 0 : signal.aborted) return;
+const Oe = { stereographic: Y, mollweide: X, gnomonic: Q, render: re };
+async function ie(e, r = {}) {
+  const { duration: a = 400, easing: t = "ease-in-out", signal: i } = r;
+  if (i != null && i.aborted) return;
   if (!("startViewTransition" in document)) {
-    await updateFn();
+    await e();
     return;
   }
-  document.documentElement.style.setProperty("--cosmos-vt-duration", `${duration}ms`);
-  document.documentElement.style.setProperty("--cosmos-vt-easing", easing);
-  const vt = document.startViewTransition(updateFn);
-  await vt.finished;
+  document.documentElement.style.setProperty("--cosmos-vt-duration", `${a}ms`), document.documentElement.style.setProperty("--cosmos-vt-easing", t), await document.startViewTransition(e).finished;
 }
-function staggerIn(container, opts = {}) {
+function ne(e, r = {}) {
   const {
-    delay = 0,
-    stagger = 60,
-    duration = 500,
-    from = "bottom",
-    distance = "20px",
-    signal
-  } = opts;
-  if (signal == null ? void 0 : signal.aborted) return Promise.resolve();
-  const AXIS = {
-    top: `translateY(-${distance})`,
-    bottom: `translateY(${distance})`,
-    left: `translateX(-${distance})`,
-    right: `translateX(${distance})`
-  };
-  const initial = AXIS[from];
-  const children = [...container.children];
-  children.forEach((el) => {
-    el.style.opacity = "0";
-    el.style.transform = initial;
-    el.style.transition = "none";
-  });
-  if (children.length === 0) return Promise.resolve();
-  return new Promise((resolve) => {
-    const start = performance.now() + delay;
-    const onAbort = () => {
-      children.forEach((el) => {
-        el.style.opacity = "1";
-        el.style.transform = "none";
-        el.style.transition = "";
-      });
-      resolve();
+    delay: a = 0,
+    stagger: t = 60,
+    duration: i = 500,
+    from: s = "bottom",
+    distance: n = "20px",
+    signal: c
+  } = r;
+  if (c != null && c.aborted) return Promise.resolve();
+  const d = {
+    top: `translateY(-${n})`,
+    bottom: `translateY(${n})`,
+    left: `translateX(-${n})`,
+    right: `translateX(${n})`
+  }[s], u = [...e.children];
+  return u.forEach((p) => {
+    p.style.opacity = "0", p.style.transform = d, p.style.transition = "none";
+  }), u.length === 0 ? Promise.resolve() : new Promise((p) => {
+    const o = performance.now() + a, b = () => {
+      u.forEach((_) => {
+        _.style.opacity = "1", _.style.transform = "none", _.style.transition = "";
+      }), p();
     };
-    signal == null ? void 0 : signal.addEventListener("abort", onAbort, { once: true });
-    const tick = (now) => {
-      if (signal == null ? void 0 : signal.aborted) return;
-      let allDone = true;
-      for (let i = 0; i < children.length; i++) {
-        const childStart = start + i * stagger;
-        if (now >= childStart) {
-          const el = children[i];
-          if (el.style.opacity === "0") {
-            el.style.transition = `opacity ${duration}ms ease, transform ${duration}ms cubic-bezier(0.2,0,0,1)`;
-            el.style.opacity = "1";
-            el.style.transform = "none";
-          }
-          if (now < childStart + duration) allDone = false;
-        } else {
-          allDone = false;
-        }
+    c == null || c.addEventListener("abort", b, { once: !0 });
+    const y = (_) => {
+      if (c != null && c.aborted) return;
+      let f = !0;
+      for (let k = 0; k < u.length; k++) {
+        const g = o + k * t;
+        if (_ >= g) {
+          const m = u[k];
+          m.style.opacity === "0" && (m.style.transition = `opacity ${i}ms ease, transform ${i}ms cubic-bezier(0.2,0,0,1)`, m.style.opacity = "1", m.style.transform = "none"), _ < g + i && (f = !1);
+        } else
+          f = !1;
       }
-      if (allDone) {
-        signal == null ? void 0 : signal.removeEventListener("abort", onAbort);
-        resolve();
-      } else {
-        requestAnimationFrame(tick);
-      }
+      f ? (c == null || c.removeEventListener("abort", b), p()) : requestAnimationFrame(y);
     };
-    requestAnimationFrame(() => requestAnimationFrame(tick));
+    requestAnimationFrame(() => requestAnimationFrame(y));
   });
 }
-function staggerOut(container, opts = {}) {
+function se(e, r = {}) {
   const {
-    stagger = 40,
-    duration = 300,
-    from = "bottom",
-    distance = "12px",
-    signal
-  } = opts;
-  if (signal == null ? void 0 : signal.aborted) return Promise.resolve();
-  const AXIS = {
-    top: `translateY(-${distance})`,
-    bottom: `translateY(${distance})`,
-    left: `translateX(-${distance})`,
-    right: `translateX(${distance})`
-  };
-  const target = AXIS[from];
-  const children = [...container.children].reverse();
-  if (children.length === 0) return Promise.resolve();
-  return new Promise((resolve) => {
-    const start = performance.now();
-    const onAbort = () => {
-      children.forEach((el) => {
-        el.style.opacity = "0";
-        el.style.transform = target;
-        el.style.transition = "";
-      });
-      resolve();
+    stagger: a = 40,
+    duration: t = 300,
+    from: i = "bottom",
+    distance: s = "12px",
+    signal: n
+  } = r;
+  if (n != null && n.aborted) return Promise.resolve();
+  const l = {
+    top: `translateY(-${s})`,
+    bottom: `translateY(${s})`,
+    left: `translateX(-${s})`,
+    right: `translateX(${s})`
+  }[i], d = [...e.children].reverse();
+  return d.length === 0 ? Promise.resolve() : new Promise((u) => {
+    const p = performance.now(), o = () => {
+      d.forEach((y) => {
+        y.style.opacity = "0", y.style.transform = l, y.style.transition = "";
+      }), u();
     };
-    signal == null ? void 0 : signal.addEventListener("abort", onAbort, { once: true });
-    const tick = (now) => {
-      if (signal == null ? void 0 : signal.aborted) return;
-      let allDone = true;
-      for (let i = 0; i < children.length; i++) {
-        const childStart = start + i * stagger;
-        if (now >= childStart) {
-          const el = children[i];
-          if (el.style.opacity !== "0") {
-            el.style.transition = `opacity ${duration}ms ease, transform ${duration}ms ease`;
-            el.style.opacity = "0";
-            el.style.transform = target;
-          }
-          if (now < childStart + duration) allDone = false;
-        } else {
-          allDone = false;
-        }
+    n == null || n.addEventListener("abort", o, { once: !0 });
+    const b = (y) => {
+      if (n != null && n.aborted) return;
+      let _ = !0;
+      for (let f = 0; f < d.length; f++) {
+        const k = p + f * a;
+        if (y >= k) {
+          const g = d[f];
+          g.style.opacity !== "0" && (g.style.transition = `opacity ${t}ms ease, transform ${t}ms ease`, g.style.opacity = "0", g.style.transform = l), y < k + t && (_ = !1);
+        } else
+          _ = !1;
       }
-      if (allDone) {
-        signal == null ? void 0 : signal.removeEventListener("abort", onAbort);
-        resolve();
-      } else {
-        requestAnimationFrame(tick);
-      }
+      _ ? (n == null || n.removeEventListener("abort", o), u()) : requestAnimationFrame(b);
     };
-    requestAnimationFrame(tick);
+    requestAnimationFrame(b);
   });
 }
-function fade(el, direction, duration = 300) {
-  return new Promise((resolve) => {
-    el.style.transition = `opacity ${duration}ms ease`;
-    el.style.opacity = direction === "in" ? "1" : "0";
-    el.style.pointerEvents = direction === "in" ? "auto" : "none";
-    const done = () => {
-      el.removeEventListener("transitionend", done);
-      resolve();
+function U(e, r, a = 300) {
+  return new Promise((t) => {
+    e.style.transition = `opacity ${a}ms ease`, e.style.opacity = r === "in" ? "1" : "0", e.style.pointerEvents = r === "in" ? "auto" : "none";
+    const i = () => {
+      e.removeEventListener("transitionend", i), t();
     };
-    el.addEventListener("transitionend", done, { once: true });
-    setTimeout(resolve, duration + 50);
+    e.addEventListener("transitionend", i, { once: !0 }), setTimeout(t, a + 50);
   });
 }
-async function crossfade(from, to, duration = 400) {
-  to.style.opacity = "0";
-  to.style.pointerEvents = "none";
-  to.style.display = "";
-  await Promise.all([
-    fade(from, "out", duration),
-    fade(to, "in", duration)
-  ]);
-  from.style.display = "none";
+async function ce(e, r, a = 400) {
+  r.style.opacity = "0", r.style.pointerEvents = "none", r.style.display = "", await Promise.all([
+    U(e, "out", a),
+    U(r, "in", a)
+  ]), e.style.display = "none";
 }
-function heroExpand(element, opts = {}) {
-  const { duration = 500, easing = "cubic-bezier(0.4,0,0.2,1)", onDone, signal } = opts;
-  if (signal == null ? void 0 : signal.aborted) return;
-  const first = element.getBoundingClientRect();
-  const scaleX = window.innerWidth / first.width;
-  const scaleY = window.innerHeight / first.height;
-  const tx = window.innerWidth / 2 - (first.left + first.width / 2);
-  const ty = window.innerHeight / 2 - (first.top + first.height / 2);
-  element.style.transformOrigin = "center center";
-  element.style.transition = "none";
-  element.style.transform = "translate(0,0) scale(1,1)";
-  requestAnimationFrame(() => {
-    if (signal == null ? void 0 : signal.aborted) return;
-    requestAnimationFrame(() => {
-      if (signal == null ? void 0 : signal.aborted) return;
-      element.style.transition = `transform ${duration}ms ${easing}`;
-      element.style.transform = `translate(${tx}px, ${ty}px) scale(${scaleX}, ${scaleY})`;
-      const cleanup = () => {
-        element.removeEventListener("transitionend", cleanup);
-        element.style.transform = "";
-        element.style.transition = "";
-        onDone == null ? void 0 : onDone();
+function oe(e, r = {}) {
+  const { duration: a = 500, easing: t = "cubic-bezier(0.4,0,0.2,1)", onDone: i, signal: s } = r;
+  if (s != null && s.aborted) return;
+  const n = e.getBoundingClientRect(), c = window.innerWidth / n.width, l = window.innerHeight / n.height, d = window.innerWidth / 2 - (n.left + n.width / 2), u = window.innerHeight / 2 - (n.top + n.height / 2);
+  e.style.transformOrigin = "center center", e.style.transition = "none", e.style.transform = "translate(0,0) scale(1,1)", requestAnimationFrame(() => {
+    s != null && s.aborted || requestAnimationFrame(() => {
+      if (s != null && s.aborted) return;
+      e.style.transition = `transform ${a}ms ${t}`, e.style.transform = `translate(${d}px, ${u}px) scale(${c}, ${l})`;
+      const p = () => {
+        e.removeEventListener("transitionend", p), e.style.transform = "", e.style.transition = "", i == null || i();
       };
-      element.addEventListener("transitionend", cleanup, { once: true });
-      setTimeout(cleanup, duration + 100);
+      e.addEventListener("transitionend", p, { once: !0 }), setTimeout(p, a + 100);
     });
   });
 }
-function heroCollapse(targetElement, opts = {}, overlayEl) {
-  const { duration = 400, easing = "cubic-bezier(0.4,0,0.2,1)", onDone, signal } = opts;
-  if (signal == null ? void 0 : signal.aborted) return;
-  const final = targetElement.getBoundingClientRect();
-  const scaleX = final.width / window.innerWidth;
-  const scaleY = final.height / window.innerHeight;
-  const tx = final.left + final.width / 2 - window.innerWidth / 2;
-  const ty = final.top + final.height / 2 - window.innerHeight / 2;
-  const isOwned = !overlayEl;
-  const overlay = overlayEl ?? document.createElement("div");
-  if (isOwned) {
-    Object.assign(overlay.style, {
-      position: "fixed",
-      inset: "0",
-      pointerEvents: "none",
-      zIndex: "9999",
-      transformOrigin: "center center"
-    });
-    document.body.appendChild(overlay);
-  }
-  overlay.style.transition = `transform ${duration}ms ${easing}, opacity ${duration * 0.6}ms ease ${duration * 0.4}ms`;
-  const cleanup = () => {
-    overlay.removeEventListener("transitionend", cleanup);
-    if (isOwned) overlay.remove();
-    onDone == null ? void 0 : onDone();
+function le(e, r = {}, a) {
+  const { duration: t = 400, easing: i = "cubic-bezier(0.4,0,0.2,1)", onDone: s, signal: n } = r;
+  if (n != null && n.aborted) return;
+  const c = e.getBoundingClientRect(), l = c.width / window.innerWidth, d = c.height / window.innerHeight, u = c.left + c.width / 2 - window.innerWidth / 2, p = c.top + c.height / 2 - window.innerHeight / 2, o = !a, b = a ?? document.createElement("div");
+  o && (Object.assign(b.style, {
+    position: "fixed",
+    inset: "0",
+    pointerEvents: "none",
+    zIndex: "9999",
+    transformOrigin: "center center"
+  }), document.body.appendChild(b)), b.style.transition = `transform ${t}ms ${i}, opacity ${t * 0.6}ms ease ${t * 0.4}ms`;
+  const y = () => {
+    b.removeEventListener("transitionend", y), o && b.remove(), s == null || s();
   };
   requestAnimationFrame(() => {
-    if (signal == null ? void 0 : signal.aborted) {
-      cleanup();
+    if (n != null && n.aborted) {
+      y();
       return;
     }
-    overlay.style.transform = `translate(${tx}px, ${ty}px) scale(${scaleX}, ${scaleY})`;
-    overlay.style.opacity = "0";
-    overlay.addEventListener("transitionend", cleanup, { once: true });
-    setTimeout(cleanup, duration + 100);
+    b.style.transform = `translate(${u}px, ${p}px) scale(${l}, ${d})`, b.style.opacity = "0", b.addEventListener("transitionend", y, { once: !0 }), setTimeout(y, t + 100);
   });
 }
-const Transitions = {
-  morph,
-  staggerIn,
-  staggerOut,
-  fade,
-  crossfade,
-  heroExpand,
-  heroCollapse
-};
-const Cosmos = {
-  CONSTANTS,
-  Units,
-  Math: AstroMath,
-  Sun,
-  Moon,
-  Eclipse,
-  Data,
-  Media,
-  API: { NASA, ESA, resolveSimbad },
-  SkyMap: { render: renderSkyMap, stereographic, mollweide, gnomonic },
-  Transitions: { morph, staggerIn, staggerOut, fade, crossfade, heroExpand, heroCollapse }
+const Ee = {
+  morph: ie,
+  staggerIn: ne,
+  staggerOut: se,
+  fade: U,
+  crossfade: ce,
+  heroExpand: oe,
+  heroCollapse: le
+}, Fe = {
+  CONSTANTS: C,
+  Units: ue,
+  Math: v,
+  Sun: he,
+  Moon: T,
+  Eclipse: _e,
+  Data: Ne,
+  Media: G,
+  API: { NASA: J, ESA: te, resolveSimbad: ke },
+  SkyMap: { render: re, stereographic: Y, mollweide: X, gnomonic: Q },
+  Transitions: { morph: ie, staggerIn: ne, staggerOut: se, fade: U, crossfade: ce, heroExpand: oe, heroCollapse: le }
 };
 export {
-  AstroMath,
-  BRIGHT_STARS,
-  CONSTANTS,
-  CONSTELLATIONS,
-  DEEP_SKY_EXTRAS,
-  Data,
-  ESA,
-  Eclipse,
-  IMAGE_FALLBACKS,
-  MESSIER_CATALOG,
-  METEOR_SHOWERS,
-  Media,
-  Moon,
-  NASA,
-  PLANET_TEXTURES,
-  SOLAR_SYSTEM,
-  STAR_TEXTURES,
-  SkyMap,
-  Sun,
-  Transitions,
-  Units,
-  crossfade,
-  Cosmos as default,
-  fade,
-  gnomonic,
-  heroCollapse,
-  heroExpand,
-  mollweide,
-  morph,
-  renderSkyMap,
-  resolveImages,
-  resolveSimbad,
-  staggerIn,
-  staggerOut,
-  stereographic
+  v as AstroMath,
+  B as BRIGHT_STARS,
+  C as CONSTANTS,
+  ae as CONSTELLATIONS,
+  fe as DEEP_SKY_EXTRAS,
+  Ne as Data,
+  te as ESA,
+  _e as Eclipse,
+  q as IMAGE_FALLBACKS,
+  W as MESSIER_CATALOG,
+  Z as METEOR_SHOWERS,
+  G as Media,
+  T as Moon,
+  J as NASA,
+  Pe as PLANET_TEXTURES,
+  Ae as SOLAR_SYSTEM,
+  ze as STAR_TEXTURES,
+  Oe as SkyMap,
+  he as Sun,
+  Ee as Transitions,
+  ue as Units,
+  ce as crossfade,
+  Fe as default,
+  U as fade,
+  Q as gnomonic,
+  le as heroCollapse,
+  oe as heroExpand,
+  X as mollweide,
+  ie as morph,
+  re as renderSkyMap,
+  Se as resolveImages,
+  ke as resolveSimbad,
+  ne as staggerIn,
+  se as staggerOut,
+  Y as stereographic
 };
-//# sourceMappingURL=index.js.map

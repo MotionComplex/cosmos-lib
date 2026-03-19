@@ -1,28 +1,4 @@
 import type { ObserverParams, SunPosition, TwilightTimes } from './types.js';
-/**
- * Solar position and twilight calculations.
- *
- * Derives the geocentric Sun position from the Earth ephemeris by inverting
- * heliocentric Earth coordinates (heliocentric Earth longitude + 180°, negated latitude).
- * Nutation corrections are applied to produce apparent coordinates.
- *
- * @remarks
- * All methods use the VSOP87-derived Earth ephemeris from {@link AstroMath.planetEcliptic}
- * and apply IAU nutation corrections. Accuracy degrades for dates far from J2000.0.
- *
- * @example
- * ```ts
- * import { Sun } from '@motioncomplex/cosmos-lib'
- *
- * // Get the Sun's current position
- * const pos = Sun.position()
- * console.log(`RA: ${pos.ra.toFixed(4)}°, Dec: ${pos.dec.toFixed(4)}°`)
- *
- * // Get twilight times for London
- * const tw = Sun.twilight({ lat: 51.5, lng: -0.1, date: new Date('2024-03-20') })
- * console.log('Sunrise:', tw.sunrise?.toISOString())
- * ```
- */
 export declare const Sun: {
     /**
      * Geocentric equatorial position of the Sun.

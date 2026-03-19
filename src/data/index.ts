@@ -108,6 +108,23 @@ const messierByNumber = new Map<number, MessierObject>(
   MESSIER_CATALOG.map(m => [m.messier, m])
 )
 
+// Pre-computed lowercase fields for search performance
+interface SearchEntry {
+  object: CelestialObject
+  nameLower: string
+  aliasesLower: string[]
+  descriptionLower: string
+  subtypeLower: string | undefined
+}
+
+const SEARCH_INDEX: SearchEntry[] = UNIFIED.map(o => ({
+  object: o,
+  nameLower: o.name.toLowerCase(),
+  aliasesLower: o.aliases.map(a => a.toLowerCase()),
+  descriptionLower: o.description.toLowerCase(),
+  subtypeLower: o.subtype?.toLowerCase(),
+}))
+
 /**
  * Unified data-access facade for all built-in astronomical catalogs.
  *
@@ -245,19 +262,19 @@ export const Data = {
     const q = query.toLowerCase().trim()
     if (!q) return []
 
-    return UNIFIED
-      .map(o => {
+    return SEARCH_INDEX
+      .map(entry => {
         let score = 0
-        if (o.id === q)                            score += 100
-        if (o.name.toLowerCase() === q)            score += 90
-        if (o.name.toLowerCase().startsWith(q))    score += 50
-        if (o.aliases.some(a => a.toLowerCase() === q))      score += 80
-        if (o.aliases.some(a => a.toLowerCase().includes(q))) score += 20
-        if (o.name.toLowerCase().includes(q))      score += 15
-        if (o.description.toLowerCase().includes(q)) score += 5
-        if (o.tags.some(t => t.includes(q)))       score += 8
-        if (o.subtype?.toLowerCase().includes(q))  score += 10
-        return { object: o, score }
+        if (entry.object.id === q)                              score += 100
+        if (entry.nameLower === q)                              score += 90
+        if (entry.nameLower.startsWith(q))                      score += 50
+        if (entry.aliasesLower.some(a => a === q))              score += 80
+        if (entry.aliasesLower.some(a => a.includes(q)))        score += 20
+        if (entry.nameLower.includes(q))                        score += 15
+        if (entry.descriptionLower.includes(q))                 score += 5
+        if (entry.object.tags.some(t => t.includes(q)))         score += 8
+        if (entry.subtypeLower?.includes(q))                    score += 10
+        return { object: entry.object, score }
       })
       .filter(r => r.score > 0)
       .sort((a, b) => b.score - a.score)

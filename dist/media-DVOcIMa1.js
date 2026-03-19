@@ -1,5 +1,4 @@
-"use strict";
-const Media = {
+const d = {
   /**
    * Try a list of image URLs in order and resolve with the first one
    * that loads successfully.
@@ -24,20 +23,18 @@ const Media = {
    * ])
    * ```
    */
-  chainLoad(urls) {
-    return new Promise((resolve, reject) => {
-      const attempt = (remaining) => {
-        const [head, ...tail] = remaining;
-        if (head === void 0) {
-          reject(new Error("All image URLs failed to load."));
+  chainLoad(t) {
+    return new Promise((a, e) => {
+      const o = (i) => {
+        const [r, ...s] = i;
+        if (r === void 0) {
+          e(new Error("All image URLs failed to load."));
           return;
         }
-        const img = new Image();
-        img.onload = () => resolve(head);
-        img.onerror = () => attempt(tail);
-        img.src = head;
+        const n = new Image();
+        n.onload = () => a(r), n.onerror = () => o(s), n.src = r;
       };
-      attempt([...urls]);
+      o([...t]);
     });
   },
   /**
@@ -68,30 +65,20 @@ const Media = {
    * })
    * ```
    */
-  async progressive(target, opts) {
-    const { placeholder, src, srcHD } = opts;
-    const set = (url, blur) => {
-      if (target instanceof HTMLImageElement) {
-        target.src = url;
-      } else {
-        target.style.backgroundImage = `url('${url}')`;
-      }
-      target.style.filter = blur ? "blur(10px) saturate(0.6)" : "";
-      target.style.transition = "filter 0.5s ease";
+  async progressive(t, a) {
+    const { placeholder: e, src: o, srcHD: i } = a, r = (s, n) => {
+      t instanceof HTMLImageElement ? t.src = s : t.style.backgroundImage = `url('${s}')`, t.style.filter = n ? "blur(10px) saturate(0.6)" : "", t.style.transition = "filter 0.5s ease";
     };
-    if (placeholder) set(placeholder, true);
+    e && r(e, !0);
     try {
-      await this._loadImage(src);
-      set(src, false);
+      await this._loadImage(o), r(o, !1);
     } catch {
     }
-    if (srcHD) {
+    if (i)
       try {
-        await this._loadImage(srcHD);
-        set(srcHD, false);
+        await this._loadImage(i), r(i, !1);
       } catch {
       }
-    }
   },
   /**
    * Preload a list of images in the background using concurrent fetches.
@@ -115,9 +102,8 @@ const Media = {
    * console.log(`${loaded.length} of 3 images cached`)
    * ```
    */
-  async preload(urls) {
-    const results = await Promise.allSettled(urls.map((u) => this._loadImage(u)));
-    return results.filter((r) => r.status === "fulfilled").map((r) => r.value);
+  async preload(t) {
+    return (await Promise.allSettled(t.map((e) => this._loadImage(e)))).filter((e) => e.status === "fulfilled").map((e) => e.value);
   },
   /**
    * Build a Wikimedia Commons URL for a given filename.
@@ -145,9 +131,9 @@ const Media = {
    * // => 'https://commons.wikimedia.org/wiki/Special:FilePath/Crab_Nebula.jpg?width=800'
    * ```
    */
-  wikimediaUrl(filename, width) {
-    const base = `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(filename)}`;
-    return width ? `${base}?width=${width}` : base;
+  wikimediaUrl(t, a) {
+    const e = `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(t)}`;
+    return a ? `${e}?width=${a}` : e;
   },
   /**
    * Build a Cloudinary URL with on-the-fly resizing and format optimisation.
@@ -175,16 +161,15 @@ const Media = {
    * // => 'https://res.cloudinary.com/my-astro-cloud/image/upload/c_fill,f_webp,q_80,w_1280,h_720/nebulae/m42-mosaic'
    * ```
    */
-  cloudinaryUrl(cloudName, publicId, opts = {}) {
-    const { w, h, q = "auto", f = "auto", crop = "fill" } = opts;
-    const transforms = [
-      `c_${crop}`,
-      `f_${f}`,
-      `q_${q}`,
-      w ? `w_${w}` : null,
-      h ? `h_${h}` : null
-    ].filter((t) => t !== null).join(",");
-    return `https://res.cloudinary.com/${cloudName}/image/upload/${transforms}/${publicId}`;
+  cloudinaryUrl(t, a, e = {}) {
+    const { w: o, h: i, q: r = "auto", f: s = "auto", crop: n = "fill" } = e, l = [
+      `c_${n}`,
+      `f_${s}`,
+      `q_${r}`,
+      o ? `w_${o}` : null,
+      i ? `h_${i}` : null
+    ].filter((c) => c !== null).join(",");
+    return `https://res.cloudinary.com/${t}/image/upload/${l}/${a}`;
   },
   /**
    * Generate an HTML `srcset` attribute value for responsive images.
@@ -210,8 +195,8 @@ const Media = {
    * // <img srcset={set} sizes="100vw" />
    * ```
    */
-  srcset(widths, transformer) {
-    return widths.map((w) => `${transformer(w)} ${w}w`).join(", ");
+  srcset(t, a) {
+    return t.map((e) => `${a(e)} ${e}w`).join(", ");
   },
   /**
    * Return the optimal image dimensions (in physical pixels) for a given
@@ -237,12 +222,11 @@ const Media = {
    * })
    * ```
    */
-  optimalSize(element) {
-    const rect = element.getBoundingClientRect();
-    const dpr = window.devicePixelRatio || 1;
+  optimalSize(t) {
+    const a = t.getBoundingClientRect(), e = window.devicePixelRatio || 1;
     return {
-      width: Math.round(rect.width * dpr),
-      height: Math.round(rect.height * dpr)
+      width: Math.round(a.width * e),
+      height: Math.round(a.height * e)
     };
   },
   // ── Private ────────────────────────────────────────────────────────────────
@@ -256,14 +240,13 @@ const Media = {
    * @param url - The image URL to load.
    * @returns Resolves with the URL on successful load; rejects on error.
    */
-  _loadImage(url) {
-    return new Promise((resolve, reject) => {
-      const img = new Image();
-      img.onload = () => resolve(url);
-      img.onerror = () => reject(new Error(`Failed to load image: ${url}`));
-      img.src = url;
+  _loadImage(t) {
+    return new Promise((a, e) => {
+      const o = new Image();
+      o.onload = () => a(t), o.onerror = () => e(new Error(`Failed to load image: ${t}`)), o.src = t;
     });
   }
 };
-exports.Media = Media;
-//# sourceMappingURL=media-07v7YIni.cjs.map
+export {
+  d as M
+};

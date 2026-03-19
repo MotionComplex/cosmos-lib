@@ -1,3 +1,4 @@
+import { memoByTime } from './cache.js'
 import { CONSTANTS } from './constants.js'
 import { AstroMath } from './math.js'
 import type { ObserverParams, SunPosition, TwilightTimes } from './types.js'
@@ -28,6 +29,38 @@ const D = CONSTANTS.DEG_TO_RAD
  * console.log('Sunrise:', tw.sunrise?.toISOString())
  * ```
  */
+
+const _positionCached = memoByTime((date: Date): SunPosition => {
+  const earth = AstroMath.planetEcliptic('earth', date)
+  const sunLon = ((earth.lon + 180) % 360 + 360) % 360
+  const sunLat = -earth.lat
+
+  const jd = AstroMath.toJulian(date)
+  const { dPsi } = AstroMath.nutation(jd)
+  const correctedLon = sunLon + dPsi
+
+  const eps = AstroMath.trueObliquity(jd) * D
+  const lonR = correctedLon * D
+  const latR = sunLat * D
+
+  const ra = Math.atan2(
+    Math.sin(lonR) * Math.cos(eps) - Math.tan(latR) * Math.sin(eps),
+    Math.cos(lonR),
+  ) * (180 / Math.PI)
+
+  const dec = Math.asin(
+    Math.sin(latR) * Math.cos(eps) +
+    Math.cos(latR) * Math.sin(eps) * Math.sin(lonR),
+  ) * (180 / Math.PI)
+
+  return {
+    ra: ((ra % 360) + 360) % 360,
+    dec,
+    distance_AU: earth.r,
+    eclipticLon: correctedLon,
+  }
+})
+
 export const Sun = {
   /**
    * Geocentric equatorial position of the Sun.
@@ -57,37 +90,7 @@ export const Sun = {
    * ```
    */
   position(date: Date = new Date()): SunPosition {
-    // Earth heliocentric ecliptic → geocentric Sun (add 180°)
-    const earth = AstroMath.planetEcliptic('earth', date)
-    const sunLon = ((earth.lon + 180) % 360 + 360) % 360
-    const sunLat = -earth.lat
-
-    // Apply nutation correction to longitude
-    const jd = AstroMath.toJulian(date)
-    const { dPsi } = AstroMath.nutation(jd)
-    const correctedLon = sunLon + dPsi
-
-    // Convert to equatorial using true obliquity
-    const eps = AstroMath.trueObliquity(jd) * D
-    const lonR = correctedLon * D
-    const latR = sunLat * D
-
-    const ra = Math.atan2(
-      Math.sin(lonR) * Math.cos(eps) - Math.tan(latR) * Math.sin(eps),
-      Math.cos(lonR),
-    ) * (180 / Math.PI)
-
-    const dec = Math.asin(
-      Math.sin(latR) * Math.cos(eps) +
-      Math.cos(latR) * Math.sin(eps) * Math.sin(lonR),
-    ) * (180 / Math.PI)
-
-    return {
-      ra: ((ra % 360) + 360) % 360,
-      dec,
-      distance_AU: earth.r,
-      eclipticLon: correctedLon,
-    }
+    return _positionCached(date)
   },
 
   /**

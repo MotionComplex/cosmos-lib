@@ -1,3 +1,4 @@
+import { memoByTime } from './cache.js'
 import { CONSTANTS } from './constants.js'
 import { AstroMath } from './math.js'
 import type { MoonPhase, MoonPhaseName, MoonPosition, ObserverParams, RiseTransitSet } from './types.js'
@@ -132,6 +133,99 @@ const SYNODIC_MONTH = 29.530588861
  * console.log('Next full moon:', fullMoon.toISOString())
  * ```
  */
+
+const _moonPositionCached = memoByTime((date: Date): MoonPosition => {
+  const jd = AstroMath.toJulian(date)
+  const T = (jd - 2_451_545.0) / 36525
+
+  // Fundamental arguments (degrees) — Meeus Ch. 47
+  const Lp = ((218.3164477 + 481267.88123421 * T -
+               0.0015786 * T * T + T * T * T / 538841 -
+               T * T * T * T / 65194000) % 360 + 360) % 360
+  const Dp = ((297.8501921 + 445267.1114034 * T -
+               0.0018819 * T * T + T * T * T / 545868 -
+               T * T * T * T / 113065000) % 360 + 360) % 360
+  const M  = ((357.5291092 + 35999.0502909 * T -
+               0.0001536 * T * T + T * T * T / 24490000) % 360 + 360) % 360
+  const Mp = ((134.9633964 + 477198.8675055 * T +
+               0.0087414 * T * T + T * T * T / 69699 -
+               T * T * T * T / 14712000) % 360 + 360) % 360
+  const F  = ((93.2720950 + 483202.0175233 * T -
+               0.0036539 * T * T - T * T * T / 3526000 +
+               T * T * T * T / 863310000) % 360 + 360) % 360
+
+  const E  = 1 - 0.002516 * T - 0.0000074 * T * T
+  const E2 = E * E
+
+  const DpR = Dp * D
+  const MR  = M * D
+  const MpR = Mp * D
+  const FR  = F * D
+
+  let sumLon = 0
+  let sumR   = 0
+  for (const term of LONG_DIST_TERMS) {
+    const arg = term[0]! * DpR + term[1]! * MR + term[2]! * MpR + term[3]! * FR
+    let eFactor = 1
+    const mAbs = Math.abs(term[1]!)
+    if (mAbs === 1) eFactor = E
+    else if (mAbs === 2) eFactor = E2
+    sumLon += term[4]! * eFactor * Math.sin(arg)
+    sumR   += term[5]! * eFactor * Math.cos(arg)
+  }
+
+  let sumLat = 0
+  for (const term of LAT_TERMS) {
+    const arg = term[0]! * DpR + term[1]! * MR + term[2]! * MpR + term[3]! * FR
+    let eFactor = 1
+    const mAbs = Math.abs(term[1]!)
+    if (mAbs === 1) eFactor = E
+    else if (mAbs === 2) eFactor = E2
+    sumLat += term[4]! * eFactor * Math.sin(arg)
+  }
+
+  const A1 = (119.75 + 131.849 * T) * D
+  const A2 = (53.09 + 479264.290 * T) * D
+  const A3 = (313.45 + 481266.484 * T) * D
+
+  sumLon += 3958 * Math.sin(A1) + 1962 * Math.sin((Lp - F) * D) + 318 * Math.sin(A2)
+  sumLat += -2235 * Math.sin(Lp * D) + 382 * Math.sin(A3) +
+            175 * Math.sin((A1 - FR)) + 175 * Math.sin((A1 + FR)) +
+            127 * Math.sin((Lp - Mp) * D) - 115 * Math.sin((Lp + Mp) * D)
+
+  const eclipticLon = Lp + sumLon / 1_000_000
+  const eclipticLat = sumLat / 1_000_000
+  const distance_km = 385000.56 + sumR / 1000
+
+  const { dPsi } = AstroMath.nutation(jd)
+  const correctedLon = eclipticLon + dPsi
+
+  const eps = AstroMath.trueObliquity(jd) * D
+  const lonR = correctedLon * D
+  const latR = eclipticLat * D
+
+  const ra = Math.atan2(
+    Math.sin(lonR) * Math.cos(eps) - Math.tan(latR) * Math.sin(eps),
+    Math.cos(lonR),
+  ) * R
+
+  const dec = Math.asin(
+    Math.sin(latR) * Math.cos(eps) +
+    Math.cos(latR) * Math.sin(eps) * Math.sin(lonR),
+  ) * R
+
+  const parallax = Math.asin(6378.14 / distance_km) * R
+
+  return {
+    ra: ((ra % 360) + 360) % 360,
+    dec,
+    distance_km,
+    eclipticLon: ((correctedLon % 360) + 360) % 360,
+    eclipticLat,
+    parallax,
+  }
+}, 60_000, 64)
+
 export const Moon = {
   /**
    * Geocentric equatorial and ecliptic position of the Moon.
@@ -169,103 +263,7 @@ export const Moon = {
    * ```
    */
   position(date: Date = new Date()): MoonPosition {
-    const jd = AstroMath.toJulian(date)
-    const T = (jd - 2_451_545.0) / 36525
-
-    // Fundamental arguments (degrees) — Meeus Ch. 47
-    const Lp = ((218.3164477 + 481267.88123421 * T -
-                 0.0015786 * T * T + T * T * T / 538841 -
-                 T * T * T * T / 65194000) % 360 + 360) % 360 // Moon mean longitude
-    const Dp = ((297.8501921 + 445267.1114034 * T -
-                 0.0018819 * T * T + T * T * T / 545868 -
-                 T * T * T * T / 113065000) % 360 + 360) % 360 // Mean elongation
-    const M  = ((357.5291092 + 35999.0502909 * T -
-                 0.0001536 * T * T + T * T * T / 24490000) % 360 + 360) % 360 // Sun mean anomaly
-    const Mp = ((134.9633964 + 477198.8675055 * T +
-                 0.0087414 * T * T + T * T * T / 69699 -
-                 T * T * T * T / 14712000) % 360 + 360) % 360 // Moon mean anomaly
-    const F  = ((93.2720950 + 483202.0175233 * T -
-                 0.0036539 * T * T - T * T * T / 3526000 +
-                 T * T * T * T / 863310000) % 360 + 360) % 360 // Moon argument of latitude
-
-    // Eccentricity correction for terms involving M
-    const E  = 1 - 0.002516 * T - 0.0000074 * T * T
-    const E2 = E * E
-
-    const DpR = Dp * D
-    const MR  = M * D
-    const MpR = Mp * D
-    const FR  = F * D
-
-    // Sum longitude and distance series
-    let sumLon = 0
-    let sumR   = 0
-    for (const term of LONG_DIST_TERMS) {
-      const arg = term[0]! * DpR + term[1]! * MR + term[2]! * MpR + term[3]! * FR
-      let eFactor = 1
-      const mAbs = Math.abs(term[1]!)
-      if (mAbs === 1) eFactor = E
-      else if (mAbs === 2) eFactor = E2
-      sumLon += term[4]! * eFactor * Math.sin(arg)
-      sumR   += term[5]! * eFactor * Math.cos(arg)
-    }
-
-    // Sum latitude series
-    let sumLat = 0
-    for (const term of LAT_TERMS) {
-      const arg = term[0]! * DpR + term[1]! * MR + term[2]! * MpR + term[3]! * FR
-      let eFactor = 1
-      const mAbs = Math.abs(term[1]!)
-      if (mAbs === 1) eFactor = E
-      else if (mAbs === 2) eFactor = E2
-      sumLat += term[4]! * eFactor * Math.sin(arg)
-    }
-
-    // Additive corrections (A1, A2, A3 — Meeus p. 338)
-    const A1 = (119.75 + 131.849 * T) * D
-    const A2 = (53.09 + 479264.290 * T) * D
-    const A3 = (313.45 + 481266.484 * T) * D
-
-    sumLon += 3958 * Math.sin(A1) + 1962 * Math.sin((Lp - F) * D) + 318 * Math.sin(A2)
-    sumLat += -2235 * Math.sin(Lp * D) + 382 * Math.sin(A3) +
-              175 * Math.sin((A1 - FR)) + 175 * Math.sin((A1 + FR)) +
-              127 * Math.sin((Lp - Mp) * D) - 115 * Math.sin((Lp + Mp) * D)
-
-    // Final ecliptic coordinates
-    const eclipticLon = Lp + sumLon / 1_000_000
-    const eclipticLat = sumLat / 1_000_000
-    const distance_km = 385000.56 + sumR / 1000
-
-    // Nutation correction
-    const { dPsi } = AstroMath.nutation(jd)
-    const correctedLon = eclipticLon + dPsi
-
-    // Convert to equatorial
-    const eps = AstroMath.trueObliquity(jd) * D
-    const lonR = correctedLon * D
-    const latR = eclipticLat * D
-
-    const ra = Math.atan2(
-      Math.sin(lonR) * Math.cos(eps) - Math.tan(latR) * Math.sin(eps),
-      Math.cos(lonR),
-    ) * R
-
-    const dec = Math.asin(
-      Math.sin(latR) * Math.cos(eps) +
-      Math.cos(latR) * Math.sin(eps) * Math.sin(lonR),
-    ) * R
-
-    // Horizontal parallax
-    const parallax = Math.asin(6378.14 / distance_km) * R
-
-    return {
-      ra: ((ra % 360) + 360) % 360,
-      dec,
-      distance_km,
-      eclipticLon: ((correctedLon % 360) + 360) % 360,
-      eclipticLat,
-      parallax,
-    }
+    return _moonPositionCached(date)
   },
 
   /**

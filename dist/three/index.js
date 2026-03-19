@@ -1,5 +1,5 @@
-import { M as Media } from "../media-DFFubqCx.js";
-const SHADERS = {
+import { M as S } from "../media-DVOcIMa1.js";
+const x = {
   atmosphereVert: (
     /* glsl */
     `
@@ -28,225 +28,163 @@ const SHADERS = {
   `
   )
 };
-function createPlanet(opts, THREE) {
-  var _a, _b;
-  const group = new THREE.Group();
-  const loader = new THREE.TextureLoader();
-  const toDispose = [];
-  (_a = loader.setCrossOrigin) == null ? void 0 : _a.call(loader, "anonymous");
-  let mat;
-  if (opts.isBlackHole) {
-    mat = new THREE.MeshBasicMaterial({ color: 0 });
-  } else {
-    const stdMat = new THREE.MeshStandardMaterial({
-      color: opts.color ?? 16777215,
+function C(r, e) {
+  var h, u;
+  const t = new e.Group(), i = new e.TextureLoader(), a = [];
+  (h = i.setCrossOrigin) == null || h.call(i, "anonymous");
+  let s;
+  if (r.isBlackHole)
+    s = new e.MeshBasicMaterial({ color: 0 });
+  else {
+    const o = new e.MeshStandardMaterial({
+      color: r.color ?? 16777215,
       roughness: 0.8,
       metalness: 0.1
     });
-    if ((_b = opts.textureUrls) == null ? void 0 : _b.length) {
-      Media.chainLoad(opts.textureUrls).then((url) => {
-        const t = loader.load(url);
-        t.colorSpace = THREE.SRGBColorSpace;
-        stdMat.map = t;
-        stdMat.needsUpdate = true;
-        toDispose.push(t);
+    if ((u = r.textureUrls) != null && u.length)
+      S.chainLoad(r.textureUrls).then((n) => {
+        const d = i.load(n);
+        d.colorSpace = e.SRGBColorSpace, o.map = d, o.needsUpdate = !0, a.push(d);
       }).catch(() => {
       });
-    } else if (opts.textureUrl) {
-      const t = loader.load(opts.textureUrl);
-      t.colorSpace = THREE.SRGBColorSpace;
-      stdMat.map = t;
-      toDispose.push(t);
+    else if (r.textureUrl) {
+      const n = i.load(r.textureUrl);
+      n.colorSpace = e.SRGBColorSpace, o.map = n, a.push(n);
     }
-    if (opts.bumpUrl) {
-      const b = loader.load(opts.bumpUrl);
-      stdMat.bumpMap = b;
-      stdMat.bumpScale = 0.025;
-      toDispose.push(b);
+    if (r.bumpUrl) {
+      const n = i.load(r.bumpUrl);
+      o.bumpMap = n, o.bumpScale = 0.025, a.push(n);
     }
-    if (opts.emissive !== void 0) {
-      stdMat.emissive = new THREE.Color(opts.emissive);
-      stdMat.emissiveIntensity = opts.emissiveIntensity ?? 1;
-    }
-    mat = stdMat;
+    r.emissive !== void 0 && (o.emissive = new e.Color(r.emissive), o.emissiveIntensity = r.emissiveIntensity ?? 1), s = o;
   }
-  toDispose.push(mat);
-  const geo = new THREE.SphereGeometry(opts.radius, 64, 64);
-  const mesh = new THREE.Mesh(geo, mat);
-  group.add(mesh);
-  toDispose.push(geo);
-  if (opts.atmosphere && !opts.isBlackHole) {
-    const atmMesh = createAtmosphere(
-      opts.radius,
-      opts.atmosphere.color,
-      THREE,
-      opts.atmosphere.intensity ?? 1.2
+  a.push(s);
+  const c = new e.SphereGeometry(r.radius, 64, 64), l = new e.Mesh(c, s);
+  if (t.add(l), a.push(c), r.atmosphere && !r.isBlackHole) {
+    const o = A(
+      r.radius,
+      r.atmosphere.color,
+      e,
+      r.atmosphere.intensity ?? 1.2
     );
-    group.add(atmMesh);
-    (atmMesh.userData._toDispose ?? []).forEach((d) => toDispose.push(d));
+    t.add(o), (o.userData._toDispose ?? []).forEach((n) => a.push(n));
   }
-  if (opts.rings) {
-    const { inner, outer, color, opacity, tilt = 0 } = opts.rings;
-    const rGeo = new THREE.RingGeometry(opts.radius * inner, opts.radius * outer, 128);
-    const pos = rGeo.attributes["position"];
-    const uv = rGeo.attributes["uv"];
-    const v3 = new THREE.Vector3();
-    for (let i = 0; i < pos.count; i++) {
-      v3.fromBufferAttribute(pos, i);
-      const r = v3.length();
-      const u = (r - opts.radius * inner) / (opts.radius * (outer - inner));
-      uv.setXY(i, u, 0.5);
+  if (r.rings) {
+    const { inner: o, outer: n, color: d, opacity: m, tilt: p = 0 } = r.rings, f = new e.RingGeometry(r.radius * o, r.radius * n, 128), w = f.attributes.position, g = f.attributes.uv, M = new e.Vector3();
+    for (let v = 0; v < w.count; v++) {
+      M.fromBufferAttribute(w, v);
+      const b = (M.length() - r.radius * o) / (r.radius * (n - o));
+      g.setXY(v, b, 0.5);
     }
-    uv.needsUpdate = true;
-    rGeo.rotateX(-Math.PI / 2);
-    const rMat = new THREE.MeshStandardMaterial({
-      color,
-      transparent: true,
-      opacity,
-      side: THREE.DoubleSide
-    });
-    const rMesh = new THREE.Mesh(rGeo, rMat);
-    rMesh.rotation.x = tilt;
-    group.add(rMesh);
-    toDispose.push(rGeo, rMat);
+    g.needsUpdate = !0, f.rotateX(-Math.PI / 2);
+    const _ = new e.MeshStandardMaterial({
+      color: d,
+      transparent: !0,
+      opacity: m,
+      side: e.DoubleSide
+    }), y = new e.Mesh(f, _);
+    y.rotation.x = p, t.add(y), a.push(f, _);
   }
   return {
-    group,
-    mesh,
-    dispose: () => toDispose.forEach((o) => o.dispose())
+    group: t,
+    mesh: l,
+    dispose: () => a.forEach((o) => o.dispose())
   };
 }
-function createNebula(opts, THREE) {
-  var _a;
-  const group = new THREE.Group();
-  const loader = new THREE.TextureLoader();
-  (_a = loader.setCrossOrigin) == null ? void 0 : _a.call(loader, "anonymous");
-  const mat = new THREE.SpriteMaterial({
-    transparent: true,
-    blending: THREE.AdditiveBlending,
-    opacity: opts.opacity ?? 0.85,
-    depthWrite: false,
+function G(r, e) {
+  var u;
+  const t = new e.Group(), i = new e.TextureLoader();
+  (u = i.setCrossOrigin) == null || u.call(i, "anonymous");
+  const a = new e.SpriteMaterial({
+    transparent: !0,
+    blending: e.AdditiveBlending,
+    opacity: r.opacity ?? 0.85,
+    depthWrite: !1,
     color: 16777215
   });
-  Media.chainLoad(opts.textureUrls).then((url) => {
-    loader.load(url, (texture) => {
-      texture.colorSpace = THREE.SRGBColorSpace;
-      mat.map = texture;
-      mat.needsUpdate = true;
+  S.chainLoad(r.textureUrls).then((o) => {
+    i.load(o, (n) => {
+      n.colorSpace = e.SRGBColorSpace, a.map = n, a.needsUpdate = !0;
     });
   }).catch(() => {
   });
-  const sprite = new THREE.Sprite(mat);
-  sprite.scale.set(opts.radius * (opts.aspect ?? 1), opts.radius, 1);
-  sprite.renderOrder = 100;
-  group.add(sprite);
-  const hitGeo = new THREE.SphereGeometry(opts.radius * 0.5, 16, 16);
-  const hitMat = new THREE.MeshBasicMaterial({ visible: false });
-  const hitMesh = new THREE.Mesh(hitGeo, hitMat);
-  group.add(hitMesh);
-  return {
-    group,
-    sprite,
-    hitMesh,
+  const s = new e.Sprite(a);
+  s.scale.set(r.radius * (r.aspect ?? 1), r.radius, 1), s.renderOrder = 100, t.add(s);
+  const c = new e.SphereGeometry(r.radius * 0.5, 16, 16), l = new e.MeshBasicMaterial({ visible: !1 }), h = new e.Mesh(c, l);
+  return t.add(h), {
+    group: t,
+    sprite: s,
+    hitMesh: h,
     dispose: () => {
-      var _a2;
-      (_a2 = mat.map) == null ? void 0 : _a2.dispose();
-      mat.dispose();
-      hitGeo.dispose();
-      hitMat.dispose();
+      var o;
+      (o = a.map) == null || o.dispose(), a.dispose(), c.dispose(), l.dispose();
     }
   };
 }
-function createAtmosphere(radius, colorHex, THREE, intensity = 1.2) {
-  const geo = new THREE.SphereGeometry(radius * 1.06, 64, 64);
-  const mat = new THREE.ShaderMaterial({
+function A(r, e, t, i = 1.2) {
+  const a = new t.SphereGeometry(r * 1.06, 64, 64), s = new t.ShaderMaterial({
     uniforms: {
-      uAtmColor: { value: new THREE.Color(colorHex) },
-      uIntensity: { value: intensity }
+      uAtmColor: { value: new t.Color(e) },
+      uIntensity: { value: i }
     },
-    vertexShader: SHADERS.atmosphereVert,
-    fragmentShader: SHADERS.atmosphereFrag,
-    side: THREE.BackSide,
-    blending: THREE.AdditiveBlending,
-    transparent: true,
-    depthWrite: false
-  });
-  const mesh = new THREE.Mesh(geo, mat);
-  mesh.userData["_toDispose"] = [geo, mat];
-  return mesh;
+    vertexShader: x.atmosphereVert,
+    fragmentShader: x.atmosphereFrag,
+    side: t.BackSide,
+    blending: t.AdditiveBlending,
+    transparent: !0,
+    depthWrite: !1
+  }), c = new t.Mesh(a, s);
+  return c.userData._toDispose = [a, s], c;
 }
-function createStarField(opts = {}, THREE) {
+function U(r = {}, e) {
   const {
-    count = 4e4,
-    minRadius = 3e4,
-    maxRadius = 15e4,
-    sizeMin = 1.5,
-    sizeMax = 4,
-    opacity = 0.7
-  } = opts;
-  const pos = new Float32Array(count * 3);
-  const col = new Float32Array(count * 3);
-  for (let i = 0; i < count; i++) {
-    const r = minRadius + Math.random() * (maxRadius - minRadius);
-    const th = 2 * Math.PI * Math.random();
-    const ph = Math.acos(2 * Math.random() - 1);
-    pos[i * 3] = r * Math.sin(ph) * Math.cos(th);
-    pos[i * 3 + 1] = r * Math.sin(ph) * Math.sin(th);
-    pos[i * 3 + 2] = r * Math.cos(ph);
-    const raw = Math.random();
-    const c = new THREE.Color(raw > 0.7 ? 11193599 : raw > 0.5 ? 16768426 : 16777215);
-    const b = 0.5 + Math.random() * 0.5;
-    col[i * 3] = c.r * b;
-    col[i * 3 + 1] = c.g * b;
-    col[i * 3 + 2] = c.b * b;
+    count: t = 4e4,
+    minRadius: i = 3e4,
+    maxRadius: a = 15e4,
+    sizeMin: s = 1.5,
+    sizeMax: c = 4,
+    opacity: l = 0.7
+  } = r, h = new Float32Array(t * 3), u = new Float32Array(t * 3);
+  for (let m = 0; m < t; m++) {
+    const p = i + Math.random() * (a - i), f = 2 * Math.PI * Math.random(), w = Math.acos(2 * Math.random() - 1);
+    h[m * 3] = p * Math.sin(w) * Math.cos(f), h[m * 3 + 1] = p * Math.sin(w) * Math.sin(f), h[m * 3 + 2] = p * Math.cos(w);
+    const g = Math.random(), M = new e.Color(g > 0.7 ? 11193599 : g > 0.5 ? 16768426 : 16777215), _ = 0.5 + Math.random() * 0.5;
+    u[m * 3] = M.r * _, u[m * 3 + 1] = M.g * _, u[m * 3 + 2] = M.b * _;
   }
-  const geo = new THREE.BufferGeometry();
-  geo.setAttribute("position", new THREE.BufferAttribute(pos, 3));
-  geo.setAttribute("color", new THREE.BufferAttribute(col, 3));
-  const mat = new THREE.PointsMaterial({
-    size: (sizeMin + sizeMax) / 2,
-    vertexColors: true,
-    transparent: true,
-    opacity,
-    sizeAttenuation: true
-  });
-  const points = new THREE.Points(geo, mat);
-  points.userData["dispose"] = () => {
-    geo.dispose();
-    mat.dispose();
-  };
-  return points;
+  const o = new e.BufferGeometry();
+  o.setAttribute("position", new e.BufferAttribute(h, 3)), o.setAttribute("color", new e.BufferAttribute(u, 3));
+  const n = new e.PointsMaterial({
+    size: (s + c) / 2,
+    vertexColors: !0,
+    transparent: !0,
+    opacity: l,
+    sizeAttenuation: !0
+  }), d = new e.Points(o, n);
+  return d.userData.dispose = () => {
+    o.dispose(), n.dispose();
+  }, d;
 }
-function createOrbit(distance, opts = {}, THREE) {
-  const { color = 16777215, opacity = 0.1, segments = 128 } = opts;
-  const pts = [];
-  for (let i = 0; i <= segments; i++) {
-    const a = i / segments * Math.PI * 2;
-    pts.push(Math.cos(a) * distance, 0, Math.sin(a) * distance);
+function V(r, e = {}, t) {
+  const { color: i = 16777215, opacity: a = 0.1, segments: s = 128 } = e, c = [];
+  for (let o = 0; o <= s; o++) {
+    const n = o / s * Math.PI * 2;
+    c.push(Math.cos(n) * r, 0, Math.sin(n) * r);
   }
-  const geo = new THREE.BufferGeometry();
-  geo.setAttribute("position", new THREE.Float32BufferAttribute(pts, 3));
-  const mat = new THREE.LineBasicMaterial({ color, transparent: true, opacity });
-  const line = new THREE.Line(geo, mat);
-  line.userData["dispose"] = () => {
-    geo.dispose();
-    mat.dispose();
-  };
-  return line;
+  const l = new t.BufferGeometry();
+  l.setAttribute("position", new t.Float32BufferAttribute(c, 3));
+  const h = new t.LineBasicMaterial({ color: i, transparent: !0, opacity: a }), u = new t.Line(l, h);
+  return u.userData.dispose = () => {
+    l.dispose(), h.dispose();
+  }, u;
 }
-class LODTextureManager {
+class L {
   /**
    * @param THREE - The Three.js module, passed at runtime to avoid a hard
    *                dependency on `three` in the library bundle.
    * @param opts  - Optional error and timeout configuration.
    */
-  constructor(THREE, opts = {}) {
-    var _a, _b;
-    this._entries = [];
-    this._THREE = THREE;
-    this._loader = new THREE.TextureLoader();
-    (_b = (_a = this._loader).setCrossOrigin) == null ? void 0 : _b.call(_a, "anonymous");
-    this._opts = opts;
+  constructor(e, t = {}) {
+    var i, a;
+    this._entries = [], this._THREE = e, this._loader = new e.TextureLoader(), (a = (i = this._loader).setCrossOrigin) == null || a.call(i, "anonymous"), this._opts = t;
   }
   /**
    * Register a mesh for LOD texture management.
@@ -262,21 +200,18 @@ class LODTextureManager {
    * @param lodDistance - Camera distance threshold (in scene units) at which the
    *                      high-res texture is loaded and applied.
    */
-  register(mesh, lowResUrl, highResUrl, lodDistance) {
-    const THREE = this._THREE;
-    const t = this._loader.load(lowResUrl);
-    t.colorSpace = THREE.SRGBColorSpace;
-    const mat = mesh.material;
-    mat.map = t;
-    mat.needsUpdate = true;
-    this._entries.push({
-      mesh,
-      lodDistance,
-      lowUrl: lowResUrl,
-      highUrl: highResUrl,
+  register(e, t, i, a) {
+    const s = this._THREE, c = this._loader.load(t);
+    c.colorSpace = s.SRGBColorSpace;
+    const l = e.material;
+    l.map = c, l.needsUpdate = !0, this._entries.push({
+      mesh: e,
+      lodDistance: a,
+      lowUrl: t,
+      highUrl: i,
       currentLOD: "low",
-      loading: false,
-      lowTex: t,
+      loading: !1,
+      lowTex: c,
       highTex: null
     });
   }
@@ -290,14 +225,12 @@ class LODTextureManager {
    * @param mesh - The mesh previously passed to {@link register}. If the mesh
    *               was never registered, this is a no-op.
    */
-  unregister(mesh) {
-    var _a, _b;
-    const idx = this._entries.findIndex((e) => e.mesh === mesh);
-    if (idx === -1) return;
-    const entry = this._entries[idx];
-    (_a = entry.lowTex) == null ? void 0 : _a.dispose();
-    (_b = entry.highTex) == null ? void 0 : _b.dispose();
-    this._entries.splice(idx, 1);
+  unregister(e) {
+    var a, s;
+    const t = this._entries.findIndex((c) => c.mesh === e);
+    if (t === -1) return;
+    const i = this._entries[t];
+    (a = i.lowTex) == null || a.dispose(), (s = i.highTex) == null || s.dispose(), this._entries.splice(t, 1);
   }
   /**
    * Evaluate all registered meshes and swap textures as needed.
@@ -310,59 +243,40 @@ class LODTextureManager {
    *
    * @param camera - The active Three.js camera used for distance checks.
    */
-  update(camera) {
-    var _a;
-    const THREE = this._THREE;
-    const cameraPos = camera.position;
-    for (const entry of this._entries) {
-      const worldPos = new THREE.Vector3();
-      entry.mesh.getWorldPosition(worldPos);
-      const dist = cameraPos.distanceTo(worldPos);
-      if (dist < entry.lodDistance && entry.currentLOD === "low" && !entry.loading) {
-        entry.loading = true;
-        let timedOut = false;
-        let timeoutId = null;
-        if (this._opts.timeout && this._opts.timeout > 0) {
-          timeoutId = setTimeout(() => {
-            var _a2, _b;
-            timedOut = true;
-            entry.loading = false;
-            (_b = (_a2 = this._opts).onError) == null ? void 0 : _b.call(_a2, entry.mesh, new Error(`Texture load timed out after ${this._opts.timeout}ms`));
-          }, this._opts.timeout);
-        }
-        this._loader.load(
-          entry.highUrl,
-          (texture) => {
-            if (timedOut) {
-              texture.dispose();
+  update(e) {
+    var a;
+    const t = this._THREE, i = e.position;
+    for (const s of this._entries) {
+      const c = new t.Vector3();
+      s.mesh.getWorldPosition(c);
+      const l = i.distanceTo(c);
+      if (l < s.lodDistance && s.currentLOD === "low" && !s.loading) {
+        s.loading = !0;
+        let h = !1, u = null;
+        this._opts.timeout && this._opts.timeout > 0 && (u = setTimeout(() => {
+          var o, n;
+          h = !0, s.loading = !1, (n = (o = this._opts).onError) == null || n.call(o, s.mesh, new Error(`Texture load timed out after ${this._opts.timeout}ms`));
+        }, this._opts.timeout)), this._loader.load(
+          s.highUrl,
+          (o) => {
+            if (h) {
+              o.dispose();
               return;
             }
-            if (timeoutId) clearTimeout(timeoutId);
-            texture.colorSpace = THREE.SRGBColorSpace;
-            entry.highTex = texture;
-            const mat = entry.mesh.material;
-            mat.map = texture;
-            mat.needsUpdate = true;
-            entry.currentLOD = "high";
-            entry.loading = false;
+            u && clearTimeout(u), o.colorSpace = t.SRGBColorSpace, s.highTex = o;
+            const n = s.mesh.material;
+            n.map = o, n.needsUpdate = !0, s.currentLOD = "high", s.loading = !1;
           },
           void 0,
-          (error) => {
-            var _a2, _b;
-            if (timedOut) return;
-            if (timeoutId) clearTimeout(timeoutId);
-            entry.loading = false;
-            (_b = (_a2 = this._opts).onError) == null ? void 0 : _b.call(_a2, entry.mesh, error);
+          (o) => {
+            var n, d;
+            h || (u && clearTimeout(u), s.loading = !1, (d = (n = this._opts).onError) == null || d.call(n, s.mesh, o));
           }
         );
       }
-      if (dist > entry.lodDistance * 1.6 && entry.currentLOD === "high") {
-        const mat = entry.mesh.material;
-        mat.map = entry.lowTex;
-        mat.needsUpdate = true;
-        (_a = entry.highTex) == null ? void 0 : _a.dispose();
-        entry.highTex = null;
-        entry.currentLOD = "low";
+      if (l > s.lodDistance * 1.6 && s.currentLOD === "high") {
+        const h = s.mesh.material;
+        h.map = s.lowTex, h.needsUpdate = !0, (a = s.highTex) == null || a.dispose(), s.highTex = null, s.currentLOD = "low";
       }
     }
   }
@@ -374,15 +288,13 @@ class LODTextureManager {
    * until new meshes are registered.
    */
   dispose() {
-    var _a, _b;
-    for (const entry of this._entries) {
-      (_a = entry.lowTex) == null ? void 0 : _a.dispose();
-      (_b = entry.highTex) == null ? void 0 : _b.dispose();
-    }
+    var e, t;
+    for (const i of this._entries)
+      (e = i.lowTex) == null || e.dispose(), (t = i.highTex) == null || t.dispose();
     this._entries = [];
   }
 }
-class CameraFlight {
+class O {
   /**
    * @param camera   - The Three.js camera to animate.
    * @param controls - An `OrbitControls`-compatible object whose `target` is
@@ -390,12 +302,8 @@ class CameraFlight {
    * @param THREE    - The Three.js module, passed at runtime to avoid a hard
    *                   dependency on `three` in the library bundle.
    */
-  constructor(camera, controls, THREE) {
-    this._active = false;
-    this._orbitHandles = /* @__PURE__ */ new Set();
-    this._camera = camera;
-    this._controls = controls;
-    this._THREE = THREE;
+  constructor(e, t, i) {
+    this._active = !1, this._orbitHandles = /* @__PURE__ */ new Set(), this._camera = e, this._controls = t, this._THREE = i;
   }
   /**
    * Fly the camera to a world-space position while smoothly re-targeting the
@@ -410,31 +318,15 @@ class CameraFlight {
    * @param opts       - Animation options (duration, easing curve, completion callback).
    * @returns `void` -- listen for completion via `opts.onDone`.
    */
-  flyTo(toPosition, toTarget, opts = {}) {
-    const { duration = 2e3, easing = "inOut", onDone } = opts;
-    const THREE = this._THREE;
-    const fromPos = this._camera.position.clone();
-    const fromTarget = this._controls.target.clone();
-    const endPos = new THREE.Vector3(toPosition.x, toPosition.y, toPosition.z);
-    const endTarget = new THREE.Vector3(toTarget.x, toTarget.y, toTarget.z);
-    const ease = this._makeEase(easing);
-    const start = performance.now();
-    this._active = true;
-    const tick = (now) => {
+  flyTo(e, t, i = {}) {
+    const { duration: a = 2e3, easing: s = "inOut", onDone: c } = i, l = this._THREE, h = this._camera.position.clone(), u = this._controls.target.clone(), o = new l.Vector3(e.x, e.y, e.z), n = new l.Vector3(t.x, t.y, t.z), d = this._makeEase(s), m = performance.now();
+    this._active = !0;
+    const p = (f) => {
       if (!this._active) return;
-      const t = Math.min((now - start) / duration, 1);
-      const et = ease(t);
-      this._camera.position.lerpVectors(fromPos, endPos, et);
-      this._controls.target.lerpVectors(fromTarget, endTarget, et);
-      this._controls.update();
-      if (t < 1) {
-        requestAnimationFrame(tick);
-      } else {
-        this._active = false;
-        onDone == null ? void 0 : onDone();
-      }
+      const w = Math.min((f - m) / a, 1), g = d(w);
+      this._camera.position.lerpVectors(h, o, g), this._controls.target.lerpVectors(u, n, g), this._controls.update(), w < 1 ? requestAnimationFrame(p) : (this._active = !1, c == null || c());
     };
-    requestAnimationFrame(tick);
+    requestAnimationFrame(p);
   }
   /**
    * Continuously orbit the camera around a world-space point.
@@ -447,36 +339,25 @@ class CameraFlight {
    * @param opts   - Orbit configuration (radius, angular speed, elevation).
    * @returns A `{ stop }` handle. Call `handle.stop()` to halt the orbit.
    */
-  orbitAround(center, opts = {}) {
-    const { radius = 200, speed = 5e-4, elevation = 0.2 } = opts;
-    const THREE = this._THREE;
-    const c = new THREE.Vector3(center.x, center.y, center.z);
-    let angle = 0;
-    let running = true;
-    let lastTime = performance.now();
-    const handle = {
+  orbitAround(e, t = {}) {
+    const { radius: i = 200, speed: a = 5e-4, elevation: s = 0.2 } = t, c = this._THREE, l = new c.Vector3(e.x, e.y, e.z);
+    let h = 0, u = !0, o = performance.now();
+    const n = {
       stop: () => {
-        running = false;
-        this._orbitHandles.delete(handle);
+        u = !1, this._orbitHandles.delete(n);
       }
     };
-    this._orbitHandles.add(handle);
-    const tick = (now) => {
-      if (!running) return;
-      const dt = (now - lastTime) / 1e3;
-      lastTime = now;
-      angle += speed * dt * 60;
-      this._camera.position.set(
-        c.x + Math.cos(angle) * radius,
-        c.y + elevation * radius,
-        c.z + Math.sin(angle) * radius
-      );
-      this._camera.lookAt(c);
-      this._controls.target.copy(c);
-      requestAnimationFrame(tick);
+    this._orbitHandles.add(n);
+    const d = (m) => {
+      if (!u) return;
+      const p = (m - o) / 1e3;
+      o = m, h += a * p * 60, this._camera.position.set(
+        l.x + Math.cos(h) * i,
+        l.y + s * i,
+        l.z + Math.sin(h) * i
+      ), this._camera.lookAt(l), this._controls.target.copy(l), requestAnimationFrame(d);
     };
-    requestAnimationFrame(tick);
-    return handle;
+    return requestAnimationFrame(d), n;
   }
   /**
    * Cancel any in-progress {@link flyTo} animation.
@@ -485,7 +366,7 @@ class CameraFlight {
    * {@link dispose} to stop everything.
    */
   cancel() {
-    this._active = false;
+    this._active = !1;
   }
   /**
    * Stop all active orbits and cancel any in-progress flight.
@@ -496,12 +377,12 @@ class CameraFlight {
    */
   dispose() {
     this.cancel();
-    for (const h of this._orbitHandles) h.stop();
+    for (const e of this._orbitHandles) e.stop();
     this._orbitHandles.clear();
   }
   // ── Private ───────────────────────────────────────────────────────────────
-  _makeEase(type) {
-    switch (type) {
+  _makeEase(e) {
+    switch (e) {
       case "in":
         return (t) => t * t * t;
       case "out":
@@ -512,13 +393,12 @@ class CameraFlight {
   }
 }
 export {
-  CameraFlight,
-  LODTextureManager,
-  SHADERS,
-  createAtmosphere,
-  createNebula,
-  createOrbit,
-  createPlanet,
-  createStarField
+  O as CameraFlight,
+  L as LODTextureManager,
+  x as SHADERS,
+  A as createAtmosphere,
+  G as createNebula,
+  V as createOrbit,
+  C as createPlanet,
+  U as createStarField
 };
-//# sourceMappingURL=index.js.map

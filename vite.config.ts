@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import { resolve } from 'path'
 import dts from 'vite-plugin-dts'
+import { visualizer } from 'rollup-plugin-visualizer'
 
 export default defineConfig({
   plugins: [
@@ -8,6 +9,12 @@ export default defineConfig({
       include: ['src'],
       outDir: 'dist',
       insertTypesEntry: true,
+    }),
+    visualizer({
+      filename: 'dist/bundle-analysis.html',
+      gzipSize: true,
+      brotliSize: true,
+      template: 'treemap',
     }),
   ],
   build: {
@@ -26,7 +33,7 @@ export default defineConfig({
         globals: { three: 'THREE' },
       },
     },
-    sourcemap: true,
-    minify: false,
+    sourcemap: 'hidden',
+    minify: 'esbuild',
   },
 })

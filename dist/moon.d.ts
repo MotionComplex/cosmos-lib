@@ -1,36 +1,4 @@
 import type { MoonPhase, MoonPosition, ObserverParams, RiseTransitSet } from './types.js';
-/**
- * Lunar position and phase calculations.
- *
- * Provides geocentric Moon position, phase information, rise/transit/set times,
- * next-phase searching, and optical libration. All positional calculations are
- * based on Jean Meeus, "Astronomical Algorithms" (2nd ed.), Chapters 47 and 49,
- * using the top 60 longitude/distance terms and top 30 latitude terms from
- * Meeus Tables 47.A and 47.B, plus the three additive corrections A1, A2, A3.
- *
- * @remarks
- * Accuracy: approximately 0.07° in ecliptic longitude and 0.04° in ecliptic latitude
- * for dates within a few centuries of J2000.0 (2000-01-01 12:00 TT). Nutation
- * corrections are applied to produce apparent coordinates. The synodic month
- * constant used is 29.530588861 days.
- *
- * @example
- * ```ts
- * import { Moon } from '@motioncomplex/cosmos-lib'
- *
- * // Current Moon position
- * const pos = Moon.position()
- * console.log(`RA: ${pos.ra.toFixed(4)}°, Dec: ${pos.dec.toFixed(4)}°`)
- *
- * // Current phase
- * const phase = Moon.phase()
- * console.log(`${phase.name}, ${(phase.illumination * 100).toFixed(0)}% illuminated`)
- *
- * // Next full moon
- * const fullMoon = Moon.nextPhase(new Date('2024-03-20'), 'full')
- * console.log('Next full moon:', fullMoon.toISOString())
- * ```
- */
 export declare const Moon: {
     /**
      * Geocentric equatorial and ecliptic position of the Moon.
