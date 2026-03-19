@@ -1,0 +1,253 @@
+import { CONSTANTS } from './constants.js'
+import type {
+  EquatorialCoord,
+  ProjectedPoint,
+  SkyMapRenderOptions,
+} from './types.js'
+import type { CelestialObject } from './types.js'
+
+const D = CONSTANTS.DEG_TO_RAD
+
+// ── Projections ───────────────────────────────────────────────────────────────
+
+/**
+ * Stereographic projection centred on `center`.
+ * Good for detailed star charts around a specific point.
+ * Returns offsets in pixels relative to the canvas center.
+ */
+export function stereographic(
+  coord: EquatorialCoord,
+  center: EquatorialCoord,
+  scale = 500,
+): ProjectedPoint {
+  const ra1 = center.ra * D, dec1 = center.dec * D
+  const ra2  = coord.ra  * D, dec2  = coord.dec  * D
+  const dra  = ra2 - ra1
+
+  const cosC = Math.sin(dec1) * Math.sin(dec2) +
+               Math.cos(dec1) * Math.cos(dec2) * Math.cos(dra)
+  const k    = 2 / (1 + cosC)
+
+  return {
+    x:       k * Math.cos(dec2) * Math.sin(dra) * scale,
+    y:       k * (Math.cos(dec1) * Math.sin(dec2) -
+                  Math.sin(dec1) * Math.cos(dec2) * Math.cos(dra)) * scale,
+    visible: cosC > -0.95,
+  }
+}
+
+/**
+ * Mollweide (equal-area) projection.
+ * Suited to all-sky maps.
+ * Returns absolute pixel coordinates for a canvas of the given dimensions.
+ */
+export function mollweide(
+  coord: EquatorialCoord,
+  canvas: { width: number; height: number },
+): ProjectedPoint {
+  const { width: W, height: H } = canvas
+
+  const lambda = (coord.ra - 180) * D
+  const phi    = coord.dec * D
+
+  // Newton-Raphson to solve 2θ + sin(2θ) = π·sin(φ)
+  let theta = phi
+  for (let i = 0; i < 10; i++) {
+    const denom = 4 * Math.cos(theta) ** 2 + 2
+    if (Math.abs(denom) < 1e-9) break
+    theta -= (2 * theta + Math.sin(2 * theta) - Math.PI * Math.sin(phi)) / denom
+  }
+
+  const x = W / 2 + (W / (2 * Math.PI)) * (2 * Math.SQRT2 / Math.PI) * lambda * Math.cos(theta)
+  const y = H / 2 - (H / 2) * Math.SQRT2 * Math.sin(theta)
+
+  return { x, y, visible: true }
+}
+
+/**
+ * Gnomonic (tangent-plane) projection.
+ * Minimal distortion near the center; used for telescope FOV charts.
+ * Returns offsets in pixels relative to the canvas center.
+ */
+export function gnomonic(
+  coord: EquatorialCoord,
+  center: EquatorialCoord,
+  scale = 400,
+): ProjectedPoint {
+  const ra1 = center.ra * D, dec1 = center.dec * D
+  const ra2  = coord.ra  * D, dec2  = coord.dec  * D
+  const dra  = ra2 - ra1
+
+  const cosD = Math.sin(dec1) * Math.sin(dec2) +
+               Math.cos(dec1) * Math.cos(dec2) * Math.cos(dra)
+  if (cosD <= 0) return { x: 0, y: 0, visible: false }
+
+  return {
+    x:       scale * Math.cos(dec2) * Math.sin(dra) / cosD,
+    y:       scale * (Math.cos(dec1) * Math.sin(dec2) -
+                      Math.sin(dec1) * Math.cos(dec2) * Math.cos(dra)) / cosD,
+    visible: cosD > 0,
+  }
+}
+
+// ── Canvas renderer ───────────────────────────────────────────────────────────
+
+/** Spectral class → CSS colour */
+function spectralColor(obj: CelestialObject): string {
+  if (obj.type === 'nebula')      return '#ff7744'
+  if (obj.type === 'galaxy')      return '#ffddaa'
+  if (obj.type === 'cluster')     return '#aaccff'
+  if (obj.type === 'black-hole')  return '#ff4400'
+
+  const sp = obj.spectral?.[0]
+  const MAP: Record<string, string> = {
+    O: '#9bb0ff', B: '#aabfff', A: '#cad7ff',
+    F: '#f8f7ff', G: '#fff4e8', K: '#ffd2a1', M: '#ffcc6f',
+  }
+  return (sp && sp in MAP) ? MAP[sp] ?? '#ffffff' : '#ffffff'
+}
+
+/**
+ * Render a sky chart onto a canvas element.
+ *
+ * @param canvas   target HTMLCanvasElement
+ * @param objects  array of CelestialObject (from Data.all() or Data.search())
+ * @param opts     render options
+ */
+export function renderSkyMap(
+  canvas: HTMLCanvasElement,
+  objects: CelestialObject[],
+  opts: SkyMapRenderOptions = {},
+): void {
+  const {
+    projection           = 'stereographic',
+    center               = { ra: 0, dec: 0 },
+    scale                = 300,
+    showGrid             = true,
+    showLabels           = true,
+    showMagnitudeLimit   = 8,
+    background           = '#000008',
+    gridColor            = 'rgba(255,255,255,0.12)',
+    labelColor           = 'rgba(255,255,255,0.7)',
+  } = opts
+
+  const ctx = canvas.getContext('2d')
+  if (!ctx) throw new Error('Canvas 2D context not available')
+
+  const W = canvas.width
+  const H = canvas.height
+  const cx = W / 2
+  const cy = H / 2
+
+  // Unified project function — normalises all projections to absolute canvas coords
+  const project = (coord: EquatorialCoord): ProjectedPoint => {
+    if (projection === 'mollweide') {
+      return mollweide(coord, { width: W, height: H })
+    }
+    const pt = projection === 'gnomonic'
+      ? gnomonic(coord, center, scale)
+      : stereographic(coord, center, scale)
+    return { x: cx + pt.x, y: cy - pt.y, visible: pt.visible }
+  }
+
+  // Background
+  ctx.fillStyle = background
+  ctx.fillRect(0, 0, W, H)
+
+  // RA/Dec grid
+  if (showGrid) {
+    ctx.strokeStyle = gridColor
+    ctx.lineWidth   = 0.5
+
+    // Declination circles every 30°
+    for (let dec = -90; dec <= 90; dec += 30) {
+      ctx.beginPath()
+      let started = false
+      for (let ra = 0; ra <= 360; ra += 4) {
+        const p = project({ ra, dec })
+        if (!p.visible || p.x < -W || p.x > 2 * W) { started = false; continue }
+        if (!started) { ctx.moveTo(p.x, p.y); started = true }
+        else ctx.lineTo(p.x, p.y)
+      }
+      ctx.stroke()
+    }
+
+    // RA meridians every 30°
+    for (let ra = 0; ra < 360; ra += 30) {
+      ctx.beginPath()
+      let started = false
+      for (let dec = -90; dec <= 90; dec += 4) {
+        const p = project({ ra, dec })
+        if (!p.visible || p.y < -H || p.y > 2 * H) { started = false; continue }
+        if (!started) { ctx.moveTo(p.x, p.y); started = true }
+        else ctx.lineTo(p.x, p.y)
+      }
+      ctx.stroke()
+    }
+  }
+
+  // Objects
+  for (const obj of objects) {
+    if (obj.ra === null || obj.dec === null) continue
+    if (obj.magnitude !== null && obj.magnitude > showMagnitudeLimit) continue
+
+    const p = project({ ra: obj.ra, dec: obj.dec })
+    if (!p.visible) continue
+    if (p.x < -50 || p.x > W + 50 || p.y < -50 || p.y > H + 50) continue
+
+    const mag  = obj.magnitude ?? 5
+    const size = Math.max(1.5, Math.min(10, (6 - mag) * 0.9 + 1.5))
+    const color = spectralColor(obj)
+
+    ctx.save()
+
+    if (obj.type === 'galaxy') {
+      ctx.strokeStyle = color
+      ctx.lineWidth   = 1
+      ctx.beginPath()
+      ctx.ellipse(p.x, p.y, size * 2.5, size * 1.2, 0.4, 0, Math.PI * 2)
+      ctx.stroke()
+    } else if (obj.type === 'nebula') {
+      ctx.fillStyle   = color + '33'
+      ctx.strokeStyle = color
+      ctx.lineWidth   = 0.8
+      ctx.beginPath()
+      ctx.rect(p.x - size, p.y - size, size * 2, size * 2)
+      ctx.fill()
+      ctx.stroke()
+    } else if (obj.type === 'cluster') {
+      ctx.strokeStyle = color
+      ctx.lineWidth   = 1
+      ctx.beginPath()
+      ctx.arc(p.x, p.y, size * 1.8, 0, Math.PI * 2)
+      ctx.stroke()
+      if (obj.subtype === 'globular') {
+        ctx.beginPath()
+        ctx.moveTo(p.x - size * 1.8, p.y); ctx.lineTo(p.x + size * 1.8, p.y)
+        ctx.moveTo(p.x, p.y - size * 1.8); ctx.lineTo(p.x, p.y + size * 1.8)
+        ctx.stroke()
+      }
+    } else {
+      // Star glow
+      const grd = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, size * 2.5)
+      grd.addColorStop(0,   color)
+      grd.addColorStop(0.3, color + 'cc')
+      grd.addColorStop(1,   color + '00')
+      ctx.fillStyle = grd
+      ctx.beginPath()
+      ctx.arc(p.x, p.y, size * 2.5, 0, Math.PI * 2)
+      ctx.fill()
+    }
+
+    if (showLabels && mag < 3.5) {
+      ctx.fillStyle = labelColor
+      ctx.font      = `${Math.max(10, 13 - mag)}px sans-serif`
+      ctx.fillText(obj.name, p.x + size + 4, p.y - size)
+    }
+
+    ctx.restore()
+  }
+}
+
+/** @deprecated Use named exports instead. Kept for backwards compatibility. */
+export const SkyMap = { stereographic, mollweide, gnomonic, render: renderSkyMap }
