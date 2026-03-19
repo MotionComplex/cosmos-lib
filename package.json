@@ -8,6 +8,10 @@
   "description": "Reusable astronomical utilities: data, math, media, sky maps, NASA APIs, and UI transitions.",
   "author": "",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MotionComplex/cosmos-lib.git"
+  },
   "type": "module",
   "files": [
     "dist",
