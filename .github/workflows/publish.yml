@@ -45,7 +45,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: rebuild tokens + bump version [skip ci]"
-          file_pattern: "build/css/base.css build/css/theme-void.css build/css/theme-nebula.css build/css/theme-crimson.css build/css/theme-aurora.css build/ts/tokens.ts package.json package-lock.json"
+          file_pattern: "package.json package-lock.json"
 
       - name: Publish to GitHub Packages
         env:
