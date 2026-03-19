@@ -34,11 +34,14 @@ export { PLANET_TEXTURES, STAR_TEXTURES } from './data/textures.js';
 export type { TextureInfo } from './data/textures.js';
 export { Media } from './media.js';
 export { NASA, ESA, resolveSimbad } from './api.js';
-export { renderSkyMap, stereographic, mollweide, gnomonic, SkyMap } from './skymap.js';
+export { renderSkyMap, stereographic, mollweide, gnomonic, spectralColor, SkyMap } from './skymap.js';
+export { InteractiveSkyMap, createInteractiveSkyMap } from './skymap-interactive.js';
+export { canvasToEquatorial } from './skymap-hittest.js';
 export { morph, staggerIn, staggerOut, fade, crossfade, heroExpand, heroCollapse, Transitions, } from './transitions.js';
-export type { ObjectType, DistanceUnit, Distance, CelestialObject, SearchResult, ProximityResult, EquatorialCoord, HorizontalCoord, GalacticCoord, EclipticCoord, ObserverParams, ProjectedPoint, PlanetName, PlanetPosition, NutationResult, RiseTransitSet, MoonPhaseName, MoonPhase, MoonPosition, SunPosition, TwilightTimes, NASAImageResult, APODResult, ESAHubbleResult, SimbadResult, ImageRef, ProgressiveImageOptions, CloudinaryOptions, ProjectionName, SkyMapRenderOptions, MorphOptions, StaggerOptions, HeroExpandOptions, } from './types.js';
+export type { ObjectType, DistanceUnit, Distance, CelestialObject, SearchResult, ProximityResult, EquatorialCoord, HorizontalCoord, GalacticCoord, EclipticCoord, ObserverParams, ProjectedPoint, PlanetName, PlanetPosition, NutationResult, RiseTransitSet, MoonPhaseName, MoonPhase, MoonPosition, SunPosition, TwilightTimes, NASAImageResult, APODResult, ESAHubbleResult, SimbadResult, ImageRef, ProgressiveImageOptions, CloudinaryOptions, ProjectionName, SkyMapRenderOptions, ProjectedObject, SkyMapViewState, SkyMapEventMap, FOVOverlayOptions, HUDOptions, InteractiveSkyMapOptions, MorphOptions, StaggerOptions, HeroExpandOptions, } from './types.js';
 import { resolveSimbad } from './api.js';
 import { renderSkyMap, stereographic, mollweide, gnomonic } from './skymap.js';
+import { InteractiveSkyMap, createInteractiveSkyMap } from './skymap-interactive.js';
 import { morph, staggerIn, staggerOut, fade, crossfade, heroExpand, heroCollapse } from './transitions.js';
 /**
  * Convenience namespace object that mirrors the original `cosmos.js` API.
@@ -199,6 +202,8 @@ declare const Cosmos: {
         readonly stereographic: typeof stereographic;
         readonly mollweide: typeof mollweide;
         readonly gnomonic: typeof gnomonic;
+        readonly Interactive: typeof InteractiveSkyMap;
+        readonly create: typeof createInteractiveSkyMap;
     };
     readonly Transitions: {
         readonly morph: typeof morph;

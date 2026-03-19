@@ -555,6 +555,159 @@ export interface SkyMapRenderOptions {
   constellations?: Array<{ ra: number; dec: number; name: string; stickFigure: number[][] }>
 }
 
+// ─── Interactive SkyMap types ─────────────────────────────────────────────────
+
+/**
+ * A projected celestial object cached for hit-testing during interaction.
+ *
+ * Built internally by {@link InteractiveSkyMap} each render frame; not
+ * normally constructed by consumers.
+ */
+export interface ProjectedObject {
+  /** The source catalog object. */
+  object: CelestialObject
+  /** Projected x pixel coordinate on the canvas. */
+  x: number
+  /** Projected y pixel coordinate on the canvas. */
+  y: number
+  /** Visual radius in pixels (used for hit-detection threshold). */
+  radius: number
+}
+
+/**
+ * Mutable view state tracked by {@link InteractiveSkyMap}.
+ */
+export interface SkyMapViewState {
+  /** Current centre of the view in equatorial coordinates. */
+  center: EquatorialCoord
+  /** Current zoom scale factor. */
+  scale: number
+  /** Active projection type. */
+  projection: ProjectionName
+}
+
+/**
+ * Event map for {@link InteractiveSkyMap}.
+ *
+ * Use with the `on()` / `off()` methods to subscribe to interaction events.
+ *
+ * @example
+ * ```ts
+ * skymap.on('select', ({ object }) => console.log(object.name))
+ * skymap.on('viewchange', ({ center, scale }) => updateURL(center, scale))
+ * ```
+ */
+export interface SkyMapEventMap {
+  /** Fired when a celestial object is clicked / tapped. */
+  select: { object: CelestialObject; point: ProjectedPoint; event: PointerEvent }
+  /** Fired when the hovered object changes (or becomes `null`). */
+  hover: { object: CelestialObject | null; point: ProjectedPoint | null; event: PointerEvent }
+  /** Fired when the view centre or scale changes (pan, zoom, or programmatic). */
+  viewchange: { center: EquatorialCoord; scale: number; projection: ProjectionName }
+}
+
+/**
+ * Configuration for a field-of-view indicator overlay drawn on the sky map.
+ *
+ * @example
+ * ```ts
+ * const fov: FOVOverlayOptions = { radiusDeg: 5, label: '10×50 binos' }
+ * ```
+ */
+export interface FOVOverlayOptions {
+  /** FOV radius in degrees. */
+  radiusDeg: number
+  /** Centre of the FOV circle. Defaults to the current map centre. */
+  center?: EquatorialCoord
+  /** CSS stroke colour. @defaultValue `'rgba(255,255,100,0.6)'` */
+  color?: string
+  /** Stroke width in pixels. @defaultValue `1.5` */
+  lineWidth?: number
+  /** Optional label text (e.g. `'Telescope'`). */
+  label?: string
+}
+
+/**
+ * Heads-up display (HUD) overlay configuration.
+ *
+ * Requires {@link InteractiveSkyMapOptions.observer} for horizon and zenith
+ * features.
+ */
+export interface HUDOptions {
+  /** Show N/S/E/W cardinal labels at the map edges. @defaultValue `false` */
+  cardinalDirections?: boolean
+  /** Draw the observer's horizon line. @defaultValue `false` */
+  horizonLine?: boolean
+  /** Mark the zenith point. @defaultValue `false` */
+  zenithMarker?: boolean
+  /** Observer parameters for horizon / zenith calculations. */
+  observer?: ObserverParams
+  /** CSS colour for HUD elements. @defaultValue `'rgba(255,255,255,0.5)'` */
+  color?: string
+}
+
+/**
+ * Full configuration for {@link InteractiveSkyMap}.
+ *
+ * Extends {@link SkyMapRenderOptions} with interaction, overlay, and
+ * real-time tracking options.
+ *
+ * @example
+ * ```ts
+ * createInteractiveSkyMap(canvas, Data.all(), {
+ *   projection: 'stereographic',
+ *   center: { ra: 83.8, dec: -5.4 },
+ *   scale: 400,
+ *   panEnabled: true,
+ *   zoomEnabled: true,
+ *   hud: { cardinalDirections: true },
+ *   fov: { radiusDeg: 5, label: 'Telescope' },
+ * })
+ * ```
+ */
+export interface InteractiveSkyMapOptions extends SkyMapRenderOptions {
+  /** Enable pan by mouse drag / touch drag. @defaultValue `true` */
+  panEnabled?: boolean
+  /** Enable zoom by scroll wheel / pinch. @defaultValue `true` */
+  zoomEnabled?: boolean
+  /** Enable click-to-select. @defaultValue `true` */
+  selectEnabled?: boolean
+  /** Enable hover detection. @defaultValue `true` */
+  hoverEnabled?: boolean
+  /** Minimum scale (zoom-out limit). @defaultValue `50` */
+  minScale?: number
+  /** Maximum scale (zoom-in limit). @defaultValue `5000` */
+  maxScale?: number
+  /** Hit-test radius in pixels. @defaultValue `15` */
+  hitRadius?: number
+  /** FOV indicator overlay(s). */
+  fov?: FOVOverlayOptions | FOVOverlayOptions[]
+  /** HUD configuration. */
+  hud?: HUDOptions
+  /** Enable real-time sidereal tracking. @defaultValue `false` */
+  realTime?: boolean
+  /** Real-time render interval in ms. @defaultValue `1000` */
+  realTimeInterval?: number
+  /** Observer parameters (required for real-time mode and HUD horizon/zenith). */
+  observer?: ObserverParams
+  /** Highlight style for hovered objects. */
+  hoverHighlight?: {
+    /** Highlight ring colour. @defaultValue `'rgba(255,255,255,0.6)'` */
+    color?: string
+    /** Highlight ring radius in pixels. @defaultValue `20` */
+    radius?: number
+    /** Show the object name on hover. @defaultValue `true` */
+    showLabel?: boolean
+  }
+  /** Highlight style for the selected object. */
+  selectHighlight?: {
+    /** Highlight ring colour. @defaultValue `'rgba(100,200,255,0.8)'` */
+    color?: string
+    /** Highlight ring radius in pixels. @defaultValue `24` */
+    radius?: number
+  }
+}
+
 // ─── Transition types ─────────────────────────────────────────────────────────
 
 /**

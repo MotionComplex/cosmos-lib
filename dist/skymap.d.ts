@@ -83,6 +83,15 @@ export declare function mollweide(coord: EquatorialCoord, canvas: {
  */
 export declare function gnomonic(coord: EquatorialCoord, center: EquatorialCoord, scale?: number): ProjectedPoint;
 /**
+ * Map a {@link CelestialObject} to a CSS colour string based on its spectral
+ * class (for stars) or object type (nebula, galaxy, cluster, black hole).
+ *
+ * @internal Not part of the public API -- used by {@link renderSkyMap}.
+ * @param obj - The celestial object to colour.
+ * @returns A CSS hex colour string (e.g. `'#9bb0ff'` for an O-type star).
+ */
+export declare function spectralColor(obj: CelestialObject): string;
+/**
  * Render an interactive sky chart onto a `<canvas>` element.
  *
  * Draws a coordinate grid (RA/Dec), constellation stick-figure lines and

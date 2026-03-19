@@ -161,7 +161,7 @@ export function gnomonic(
  * @param obj - The celestial object to colour.
  * @returns A CSS hex colour string (e.g. `'#9bb0ff'` for an O-type star).
  */
-function spectralColor(obj: CelestialObject): string {
+export function spectralColor(obj: CelestialObject): string {
   if (obj.type === 'nebula')      return '#ff7744'
   if (obj.type === 'galaxy')      return '#ffddaa'
   if (obj.type === 'cluster')     return '#aaccff'

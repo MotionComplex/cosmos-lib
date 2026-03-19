@@ -36,7 +36,9 @@ export { PLANET_TEXTURES, STAR_TEXTURES }      from './data/textures.js'
 export type { TextureInfo }                    from './data/textures.js'
 export { Media }                               from './media.js'
 export { NASA, ESA, resolveSimbad }            from './api.js'
-export { renderSkyMap, stereographic, mollweide, gnomonic, SkyMap } from './skymap.js'
+export { renderSkyMap, stereographic, mollweide, gnomonic, spectralColor, SkyMap } from './skymap.js'
+export { InteractiveSkyMap, createInteractiveSkyMap } from './skymap-interactive.js'
+export { canvasToEquatorial } from './skymap-hittest.js'
 export {
   morph,
   staggerIn,
@@ -80,6 +82,12 @@ export type {
   CloudinaryOptions,
   ProjectionName,
   SkyMapRenderOptions,
+  ProjectedObject,
+  SkyMapViewState,
+  SkyMapEventMap,
+  FOVOverlayOptions,
+  HUDOptions,
+  InteractiveSkyMapOptions,
   MorphOptions,
   StaggerOptions,
   HeroExpandOptions,
@@ -96,6 +104,7 @@ import { Data }                                from './data/index.js'
 import { Media }                               from './media.js'
 import { NASA, ESA, resolveSimbad }            from './api.js'
 import { renderSkyMap, stereographic, mollweide, gnomonic } from './skymap.js'
+import { InteractiveSkyMap, createInteractiveSkyMap } from './skymap-interactive.js'
 import { morph, staggerIn, staggerOut, fade, crossfade, heroExpand, heroCollapse } from './transitions.js'
 
 /**
@@ -127,7 +136,7 @@ const Cosmos = {
   Data,
   Media,
   API:         { NASA, ESA, resolveSimbad },
-  SkyMap:      { render: renderSkyMap, stereographic, mollweide, gnomonic },
+  SkyMap:      { render: renderSkyMap, stereographic, mollweide, gnomonic, Interactive: InteractiveSkyMap, create: createInteractiveSkyMap },
   Transitions: { morph, staggerIn, staggerOut, fade, crossfade, heroExpand, heroCollapse },
 } as const
 
