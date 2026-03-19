@@ -10,7 +10,6 @@ export function MoonPhaseIcon({ phase, size = 64 }: MoonPhaseIconProps) {
   const cy = size / 2
 
   // Calculate the terminator curve
-  let d: string
   const illuminatedFromRight = phase < 0.5
 
   // Normalize phase to 0-0.5 range for the curve calculation
@@ -20,24 +19,30 @@ export function MoonPhaseIcon({ phase, size = 64 }: MoonPhaseIconProps) {
 
   const terminatorX = sweepFactor * r
 
-  if (illuminatedFromRight) {
-    // Waxing: illuminated side is on the right
-    d = `M ${cx} ${cy - r}
-         A ${r} ${r} 0 0 1 ${cx} ${cy + r}
-         A ${Math.abs(terminatorX)} ${r} 0 0 ${sweepFactor >= 0 ? 1 : 0} ${cx} ${cy - r} Z`
-  } else {
-    // Waning: illuminated side is on the left
-    d = `M ${cx} ${cy - r}
-         A ${r} ${r} 0 0 0 ${cx} ${cy + r}
-         A ${Math.abs(terminatorX)} ${r} 0 0 ${sweepFactor >= 0 ? 0 : 1} ${cx} ${cy - r} Z`
+  // At new moon (phase~0) or full moon (phase~0.5), the arc degenerates
+  const isNewMoon = t < 0.01
+  const isFullMoon = t > 0.49
+
+  let d: string = ''
+  if (!isNewMoon && !isFullMoon) {
+    if (illuminatedFromRight) {
+      d = `M ${cx} ${cy - r}
+           A ${r} ${r} 0 0 1 ${cx} ${cy + r}
+           A ${Math.abs(terminatorX)} ${r} 0 0 ${sweepFactor >= 0 ? 1 : 0} ${cx} ${cy - r} Z`
+    } else {
+      d = `M ${cx} ${cy - r}
+           A ${r} ${r} 0 0 0 ${cx} ${cy + r}
+           A ${Math.abs(terminatorX)} ${r} 0 0 ${sweepFactor >= 0 ? 0 : 1} ${cx} ${cy - r} Z`
+    }
   }
 
   return (
-    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} role="img" aria-label={`Moon phase: ${Math.round(t * 200)}% illuminated`}>
       {/* Dark side */}
       <circle cx={cx} cy={cy} r={r} fill="#1a1a2e" stroke="rgba(255,255,255,0.1)" strokeWidth={1} />
       {/* Illuminated side */}
-      <path d={d} fill="#e8e4d4" opacity={0.95} />
+      {isFullMoon && <circle cx={cx} cy={cy} r={r} fill="#e8e4d4" opacity={0.95} />}
+      {!isNewMoon && !isFullMoon && <path d={d} fill="#e8e4d4" opacity={0.95} />}
       {/* Subtle surface texture */}
       <circle cx={cx - r * 0.3} cy={cy - r * 0.2} r={r * 0.12} fill="rgba(0,0,0,0.08)" />
       <circle cx={cx + r * 0.2} cy={cy + r * 0.3} r={r * 0.08} fill="rgba(0,0,0,0.06)" />

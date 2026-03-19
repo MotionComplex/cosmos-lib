@@ -35,6 +35,12 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { error: Error | 
           <h2 style={{ marginBottom: 16, color: '#f66' }}>Runtime Error</h2>
           <p>{this.state.error.message}</p>
           <pre style={{ marginTop: 12, opacity: 0.6, fontSize: 11 }}>{this.state.error.stack}</pre>
+          <button
+            onClick={() => this.setState({ error: null })}
+            style={{ marginTop: 16, padding: '8px 16px', background: '#333', color: '#eee', border: '1px solid #555', borderRadius: 6, cursor: 'pointer', fontSize: 13 }}
+          >
+            Retry
+          </button>
         </div>
       )
     }

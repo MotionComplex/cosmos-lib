@@ -115,7 +115,10 @@ export function Catalog() {
           <div
             key={obj.id}
             className={styles.card}
+            role="button"
+            tabIndex={0}
             onClick={() => navigate(`/object/${obj.id}`)}
+            onKeyDown={e => e.key === 'Enter' && navigate(`/object/${obj.id}`)}
           >
             <div className={styles.cardTop}>
               <span className={styles.cardType}>{obj.type}</span>

@@ -4,12 +4,8 @@ import { Sun, Moon, AstroMath, Data, Eclipse } from 'cosmos-lib'
 import { useObserverCtx } from '../App'
 import { useNow } from '../hooks/useNow'
 import { MoonPhaseIcon } from '../components/MoonPhaseIcon'
+import { formatTime } from '../utils/formatTime'
 import styles from './Observatory.module.css'
-
-function formatTime(d: Date | null | undefined) {
-  if (!d) return '--:--'
-  return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-}
 
 function formatDeg(deg: number) {
   return `${deg.toFixed(1)}°`
@@ -50,10 +46,11 @@ export function Observatory() {
       .filter(o => o.ra != null && o.dec != null && o.magnitude != null)
       .sort((a, b) => (a.magnitude ?? 99) - (b.magnitude ?? 99))
       .slice(0, 60)
-      .filter(o => {
+      .map(o => {
         const hz = AstroMath.equatorialToHorizontal({ ra: o.ra!, dec: o.dec! }, obs)
-        return hz.alt > 10
+        return { obj: o, hz }
       })
+      .filter(o => o.hz.alt > 10)
       .slice(0, 6)
 
     return {
@@ -82,7 +79,7 @@ export function Observatory() {
           </p>
         </div>
         <div className={styles.heroRight}>
-          <div className={styles.moonHero} onClick={() => navigate('/moon')}>
+          <div className={styles.moonHero} role="button" tabIndex={0} onClick={() => navigate('/moon')} onKeyDown={e => e.key === 'Enter' && navigate('/moon')}>
             <MoonPhaseIcon phase={data.moonPhase.phase} size={80} />
             <div className={styles.moonLabel}>
               <span className={styles.phaseName}>{data.moonPhase.name.replace(/-/g, ' ')}</span>
@@ -150,7 +147,7 @@ export function Observatory() {
           </div>
         </div>
 
-        <div className={styles.bodyCard} onClick={() => navigate('/moon')} style={{ cursor: 'pointer' }}>
+        <div className={styles.bodyCard} role="button" tabIndex={0} onClick={() => navigate('/moon')} onKeyDown={e => e.key === 'Enter' && navigate('/moon')} style={{ cursor: 'pointer' }}>
           <div className={styles.bodyHeader}>
             <div className={styles.bodyIcon} style={{ background: 'linear-gradient(135deg, #94a3b8, #64748b)' }}>☽</div>
             <div>
@@ -192,16 +189,14 @@ export function Observatory() {
         <section className={styles.section}>
           <h2 className={styles.sectionTitle}>Visible Now</h2>
           <div className={`${styles.objectGrid} stagger-grid`}>
-            {data.brightObjects.map(obj => {
-              const hz = AstroMath.equatorialToHorizontal(
-                { ra: obj.ra!, dec: obj.dec! },
-                { ...observer, date: now }
-              )
-              return (
+            {data.brightObjects.map(({ obj, hz }) => (
                 <div
                   key={obj.id}
                   className={styles.objectCard}
+                  role="button"
+                  tabIndex={0}
                   onClick={() => navigate(`/object/${obj.id}`)}
+                  onKeyDown={e => e.key === 'Enter' && navigate(`/object/${obj.id}`)}
                 >
                   <div className={styles.objectTop}>
                     <span className={styles.objectType}>{obj.type}</span>
@@ -214,8 +209,7 @@ export function Observatory() {
                     Alt {hz.alt.toFixed(1)}° · Az {hz.az.toFixed(1)}°
                   </p>
                 </div>
-              )
-            })}
+            ))}
           </div>
         </section>
       )}
@@ -246,7 +240,7 @@ export function Observatory() {
       {/* Next eclipse */}
       {data.nextEclipse && (
         <section className={styles.section}>
-          <div className={styles.eclipseCard} onClick={() => navigate('/eclipses')}>
+          <div className={styles.eclipseCard} role="button" tabIndex={0} onClick={() => navigate('/eclipses')} onKeyDown={e => e.key === 'Enter' && navigate('/eclipses')}>
             <div className={styles.eclipseIcon}>◐</div>
             <div>
               <h3 className={styles.eclipseTitle}>

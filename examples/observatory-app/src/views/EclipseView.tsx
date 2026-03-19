@@ -25,7 +25,7 @@ export function EclipseView() {
         ) : (
           eclipses.map((ecl, i) => {
             const isSolar = ecl.type === 'solar'
-            const daysUntil = Math.ceil((ecl.date.getTime() - Date.now()) / 86400000)
+            const daysUntil = Math.max(0, Math.ceil((ecl.date.getTime() - Date.now()) / 86400000))
 
             return (
               <div key={i} className={styles.eclipseCard}>
@@ -50,7 +50,7 @@ export function EclipseView() {
                       })}
                     </span>
                     <span className={styles.eclipseCountdown}>
-                      {daysUntil} days
+                      {daysUntil === 0 ? 'Today' : `${daysUntil} days`}
                     </span>
                   </div>
 

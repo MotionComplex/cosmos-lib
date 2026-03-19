@@ -88,7 +88,7 @@ export function SkyMapView() {
       </div>
 
       <div className={styles.mapContainer}>
-        <canvas ref={canvasRef} className={styles.canvas} />
+        <canvas ref={canvasRef} className={styles.canvas} aria-label="Interactive sky map showing celestial objects and constellations" />
 
         <div className={styles.overlayControls}>
           <label className={styles.toggle}>
@@ -104,9 +104,10 @@ export function SkyMapView() {
             <span>Constellations</span>
           </label>
           <div className={styles.magSlider}>
-            <span className={styles.magLabel}>Mag ≤ {magLimit.toFixed(1)}</span>
+            <span className={styles.magLabel} id="mag-label">Mag ≤ {magLimit.toFixed(1)}</span>
             <input
               type="range"
+              aria-labelledby="mag-label"
               min={1}
               max={8}
               step={0.5}

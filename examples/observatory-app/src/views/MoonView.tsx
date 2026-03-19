@@ -3,12 +3,8 @@ import { Moon, AstroMath, Units } from 'cosmos-lib'
 import { useObserverCtx } from '../App'
 import { useNow } from '../hooks/useNow'
 import { MoonPhaseIcon } from '../components/MoonPhaseIcon'
+import { formatTime } from '../utils/formatTime'
 import styles from './MoonView.module.css'
-
-function formatTime(d: Date | null | undefined) {
-  if (!d) return '--:--'
-  return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-}
 
 function formatDate(d: Date) {
   return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })

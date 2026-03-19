@@ -7,7 +7,6 @@ export default defineConfig({
   resolve: {
     alias: {
       'cosmos-lib': path.resolve(__dirname, '../../src'),
-      'cosmos-lib/three': path.resolve(__dirname, '../../src/three'),
       '@': path.resolve(__dirname, 'src'),
     },
   },

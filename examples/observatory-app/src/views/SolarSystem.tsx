@@ -106,7 +106,7 @@ export function SolarSystem() {
             const planetR = p.name === 'jupiter' || p.name === 'saturn' ? 1 :
                            p.name === 'uranus' || p.name === 'neptune' ? 0.65 : 0.5
             return (
-              <g key={p.name} style={{ cursor: 'pointer' }} onClick={() => navigate(`/object/${p.name}`)}>
+              <g key={p.name} role="button" tabIndex={0} style={{ cursor: 'pointer' }} onClick={() => navigate(`/object/${p.name}`)} onKeyDown={e => e.key === 'Enter' && navigate(`/object/${p.name}`)}>
                 <circle cx={px} cy={py} r={planetR + 1.5} fill="transparent" />
                 <circle cx={px} cy={py} r={planetR} fill={p.color} />
                 <circle cx={px} cy={py} r={planetR + 0.8} fill={p.color} opacity={0.12} />
@@ -133,7 +133,10 @@ export function SolarSystem() {
           <div
             key={p.name}
             className={styles.planetCard}
+            role="button"
+            tabIndex={0}
             onClick={() => navigate(`/object/${p.name}`)}
+            onKeyDown={e => e.key === 'Enter' && navigate(`/object/${p.name}`)}
           >
             <div className={styles.planetHeader}>
               <div

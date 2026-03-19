@@ -4,14 +4,10 @@ import { Data, AstroMath, Units, Sun, Moon, CONSTANTS } from 'cosmos-lib'
 import type { PlanetName } from 'cosmos-lib'
 import { useObserverCtx } from '../App'
 import { useNow } from '../hooks/useNow'
+import { formatTime } from '../utils/formatTime'
 import styles from './ObjectDetail.module.css'
 
 const PLANET_NAMES = ['mercury', 'venus', 'earth', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune']
-
-function formatTime(d: Date | null | undefined) {
-  if (!d) return '--:--'
-  return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-}
 
 export function ObjectDetail() {
   const { id } = useParams<{ id: string }>()
@@ -264,7 +260,10 @@ export function ObjectDetail() {
               <div
                 key={n.object.id}
                 className={styles.nearbyCard}
+                role="button"
+                tabIndex={0}
                 onClick={() => navigate(`/object/${n.object.id}`)}
+                onKeyDown={e => e.key === 'Enter' && navigate(`/object/${n.object.id}`)}
               >
                 <span className={styles.nearbyType}>{n.object.type}</span>
                 <span className={styles.nearbyName}>{n.object.name}</span>
