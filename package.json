@@ -1,5 +1,8 @@
 {
-  "name": "cosmos-lib",
+  "name": "@motioncomplex/cosmos-lib",
+  "publishConfig": {
+    "access": "restricted"
+  },
   "version": "1.0.0",
   "description": "Reusable astronomical utilities: data, math, media, sky maps, NASA APIs, and UI transitions.",
   "author": "",
@@ -35,6 +38,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.11.0",
+    "@types/three": "^0.183.1",
     "@vitest/coverage-v8": "^1.2.0",
     "happy-dom": "^13.3.0",
     "three": "^0.160.0",
