@@ -51,6 +51,7 @@ export type {
   APODResult,
   ESAHubbleResult,
   SimbadResult,
+  ImageRef,
   ProgressiveImageOptions,
   CloudinaryOptions,
   ProjectionName,

@@ -1,6 +1,92 @@
 import { describe, it, expect } from 'vitest'
 import { Data } from '../src/data'
 
+describe('Data — image helpers', () => {
+  describe('imageUrls', () => {
+    it('returns Wikimedia URLs for objects with images', () => {
+      const urls = Data.imageUrls('m42')
+      expect(urls).toHaveLength(1)
+      expect(urls[0]).toContain('Special:FilePath/Orion_Nebula')
+    })
+
+    it('returns empty array for objects without images', () => {
+      expect(Data.imageUrls('sun')).toHaveLength(0)
+    })
+
+    it('returns empty array for nonexistent id', () => {
+      expect(Data.imageUrls('nonexistent')).toHaveLength(0)
+    })
+
+    it('applies width parameter', () => {
+      const urls = Data.imageUrls('m42', 1920)
+      expect(urls[0]).toContain('?width=1920')
+    })
+  })
+
+  describe('progressiveImage', () => {
+    it('returns ProgressiveImageOptions with 3 tiers', () => {
+      const opts = Data.progressiveImage('m42', 800)
+      expect(opts).not.toBeNull()
+      expect(opts!.placeholder).toContain('?width=64')
+      expect(opts!.src).toContain('?width=800')
+      expect(opts!.srcHD).toContain('?width=1600')
+    })
+
+    it('returns null for objects without images', () => {
+      expect(Data.progressiveImage('sun')).toBeNull()
+    })
+
+    it('returns null for nonexistent id', () => {
+      expect(Data.progressiveImage('nonexistent')).toBeNull()
+    })
+
+    it('defaults to width=800 when not specified', () => {
+      const opts = Data.progressiveImage('m42')
+      expect(opts!.src).toContain('?width=800')
+      expect(opts!.srcHD).toContain('?width=1600')
+    })
+  })
+
+  describe('imageSrcset', () => {
+    it('returns a srcset string with default widths', () => {
+      const srcset = Data.imageSrcset('m42')
+      expect(srcset).not.toBeNull()
+      expect(srcset).toContain('640w')
+      expect(srcset).toContain('1280w')
+      expect(srcset).toContain('1920w')
+    })
+
+    it('accepts custom widths', () => {
+      const srcset = Data.imageSrcset('m42', [320, 640])
+      expect(srcset).toContain('320w')
+      expect(srcset).toContain('640w')
+      expect(srcset).not.toContain('1920w')
+    })
+
+    it('returns null for objects without images', () => {
+      expect(Data.imageSrcset('sun')).toBeNull()
+    })
+
+    it('returns null for nonexistent id', () => {
+      expect(Data.imageSrcset('nonexistent')).toBeNull()
+    })
+  })
+
+  describe('catalog image integrity', () => {
+    it('every object with images has valid ImageRef entries', () => {
+      const withImages = Data.all().filter(o => o.images?.length)
+      expect(withImages.length).toBeGreaterThanOrEqual(5)
+      for (const obj of withImages) {
+        for (const img of obj.images!) {
+          expect(img.filename).toBeTruthy()
+          expect(img.filename).not.toContain('https://')
+          expect(img.credit).toBeTruthy()
+        }
+      }
+    })
+  })
+})
+
 describe('Data', () => {
   describe('get', () => {
     it('retrieves an object by exact id', () => {

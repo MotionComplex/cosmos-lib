@@ -4,7 +4,8 @@ import { CONSTELLATIONS } from './constellations.js'
 import { MESSIER_CATALOG } from './messier.js'
 import { METEOR_SHOWERS } from './showers.js'
 import { AstroMath } from '../math.js'
-import type { CelestialObject, ObjectType, ProximityResult, EquatorialCoord } from '../types.js'
+import { Media } from '../media.js'
+import type { CelestialObject, ObjectType, ProximityResult, EquatorialCoord, ProgressiveImageOptions } from '../types.js'
 import type { BrightStar } from './stars.js'
 import type { Constellation } from './constellations.js'
 import type { MessierObject } from './messier.js'
@@ -119,6 +120,46 @@ export const Data = {
       }))
       .filter(r => r.separation <= radiusDeg)
       .sort((a, b) => a.separation - b.separation)
+  },
+
+  // ── Image helpers ─────────────────────────────────────────────────────
+
+  /**
+   * Get Wikimedia image URLs for a catalog object at a given width.
+   * Returns an empty array if the object has no images.
+   */
+  imageUrls(id: string, width?: number): string[] {
+    const obj = byId.get(id)
+    if (!obj?.images) return []
+    return obj.images.map(img => Media.wikimediaUrl(img.filename, width))
+  },
+
+  /**
+   * Build a ProgressiveImageOptions config for an object's first image.
+   * Returns null if the object has no images.
+   *
+   * Uses 3 tiers: 64px placeholder, `width`px medium, `width * 2`px HD.
+   */
+  progressiveImage(id: string, width = 800): ProgressiveImageOptions | null {
+    const obj = byId.get(id)
+    const img = obj?.images?.[0]
+    if (!img) return null
+    return {
+      placeholder: Media.wikimediaUrl(img.filename, 64),
+      src:         Media.wikimediaUrl(img.filename, width),
+      srcHD:       Media.wikimediaUrl(img.filename, width * 2),
+    }
+  },
+
+  /**
+   * Generate a srcset string for an object's first image.
+   * Returns null if the object has no images.
+   */
+  imageSrcset(id: string, widths: number[] = [640, 1280, 1920]): string | null {
+    const obj = byId.get(id)
+    const img = obj?.images?.[0]
+    if (!img) return null
+    return Media.srcset(widths, w => Media.wikimediaUrl(img.filename, w))
   },
 
   // ── Bright star queries ────────────────────────────────────────────────

@@ -150,6 +150,74 @@ describe('Media', () => {
     })
   })
 
+  describe('progressive', () => {
+    it('sets placeholder with blur, then upgrades to src', async () => {
+      mockImageSuccess()
+      const el = document.createElement('img') as HTMLImageElement
+      await Media.progressive(el, {
+        placeholder: 'https://example.com/tiny.jpg',
+        src: 'https://example.com/medium.jpg',
+      })
+      expect(el.src).toContain('medium.jpg')
+      expect(el.style.filter).toBe('')
+    })
+
+    it('applies background-image for non-img elements', async () => {
+      mockImageSuccess()
+      const div = document.createElement('div')
+      await Media.progressive(div, {
+        src: 'https://example.com/medium.jpg',
+      })
+      expect(div.style.backgroundImage).toContain('medium.jpg')
+    })
+
+    it('upgrades to srcHD when provided', async () => {
+      mockImageSuccess()
+      const el = document.createElement('img') as HTMLImageElement
+      await Media.progressive(el, {
+        src: 'https://example.com/medium.jpg',
+        srcHD: 'https://example.com/hd.jpg',
+      })
+      expect(el.src).toContain('hd.jpg')
+    })
+
+    it('keeps placeholder when src fails', async () => {
+      mockImageFailure()
+      const el = document.createElement('img') as HTMLImageElement
+      el.src = 'data:image/gif;base64,placeholder'
+      await Media.progressive(el, {
+        placeholder: 'data:image/gif;base64,placeholder',
+        src: 'https://example.com/fail.jpg',
+      })
+      // src should still be the placeholder since medium failed
+      expect(el.src).toContain('placeholder')
+    })
+  })
+
+  describe('optimalSize', () => {
+    it('returns dimensions scaled by devicePixelRatio', () => {
+      vi.stubGlobal('devicePixelRatio', 2)
+      const el = document.createElement('div')
+      vi.spyOn(el, 'getBoundingClientRect').mockReturnValue({
+        width: 400, height: 300, x: 0, y: 0, top: 0, right: 400, bottom: 300, left: 0, toJSON: () => ({}),
+      })
+      const size = Media.optimalSize(el)
+      expect(size.width).toBe(800)
+      expect(size.height).toBe(600)
+    })
+
+    it('defaults to dpr=1 when devicePixelRatio is falsy', () => {
+      vi.stubGlobal('devicePixelRatio', 0)
+      const el = document.createElement('div')
+      vi.spyOn(el, 'getBoundingClientRect').mockReturnValue({
+        width: 400, height: 300, x: 0, y: 0, top: 0, right: 400, bottom: 300, left: 0, toJSON: () => ({}),
+      })
+      const size = Media.optimalSize(el)
+      expect(size.width).toBe(400)
+      expect(size.height).toBe(300)
+    })
+  })
+
   describe('srcset', () => {
     it('generates a valid srcset string', () => {
       const result = Media.srcset([640, 1280, 1920], w => `https://cdn.example.com/img.jpg?w=${w}`)

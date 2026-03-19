@@ -1,4 +1,5 @@
 import type * as THREE from 'three'
+import { Media } from '../media.js'
 import { SHADERS } from './shaders.js'
 import type {
   PlanetOptions, PlanetResult,
@@ -26,7 +27,15 @@ export function createPlanet(opts: PlanetOptions, THREE: typeof import('three'))
       roughness: 0.8,
       metalness: 0.1,
     })
-    if (opts.textureUrl) {
+    if (opts.textureUrls?.length) {
+      Media.chainLoad(opts.textureUrls).then(url => {
+        const t = loader.load(url)
+        t.colorSpace = THREE.SRGBColorSpace
+        stdMat.map = t
+        stdMat.needsUpdate = true
+        toDispose.push(t)
+      }).catch(() => { /* all URLs failed — stays untextured */ })
+    } else if (opts.textureUrl) {
       const t = loader.load(opts.textureUrl)
       t.colorSpace = THREE.SRGBColorSpace
       stdMat.map = t
@@ -113,21 +122,13 @@ export function createNebula(opts: NebulaOptions, THREE: typeof import('three'))
     color:       0xffffff,
   })
 
-  const tryLoad = (urls: string[]): void => {
-    const [head, ...tail] = urls
-    if (!head) return
-    loader.load(
-      head,
-      texture => {
-        texture.colorSpace = THREE.SRGBColorSpace
-        mat.map = texture
-        mat.needsUpdate = true
-      },
-      undefined,
-      () => tryLoad(tail),
-    )
-  }
-  tryLoad(opts.textureUrls)
+  Media.chainLoad(opts.textureUrls).then(url => {
+    loader.load(url, (texture: THREE.Texture) => {
+      texture.colorSpace = THREE.SRGBColorSpace
+      mat.map = texture
+      mat.needsUpdate = true
+    })
+  }).catch(() => { /* all URLs failed — sprite stays untextured */ })
 
   const sprite = new THREE.Sprite(mat)
   sprite.scale.set(opts.radius * (opts.aspect ?? 1), opts.radius, 1)

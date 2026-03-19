@@ -3,6 +3,8 @@ import type * as THREE from 'three'
 export interface PlanetOptions {
   radius: number
   textureUrl?: string
+  /** Fallback chain of texture URLs — takes priority over textureUrl if provided. */
+  textureUrls?: string[]
   bumpUrl?: string
   color?: number
   emissive?: number

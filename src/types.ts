@@ -39,8 +39,7 @@ export interface CelestialObject {
   binary?: boolean
   triple?: boolean
   // Imagery
-  imgs?: string[]
-  credit?: string
+  images?: ImageRef[]
 }
 
 export interface SearchResult {
@@ -234,6 +233,15 @@ export interface SimbadResult {
   ra: number
   dec: number
   type: string
+}
+
+// ─── Image reference ─────────────────────────────────────────────────────────
+
+export interface ImageRef {
+  /** Wikimedia Commons filename (no URL prefix) */
+  filename: string
+  /** Attribution / credit string */
+  credit: string
 }
 
 // ─── Media types ──────────────────────────────────────────────────────────────
