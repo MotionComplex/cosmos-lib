@@ -111,9 +111,9 @@ export function Catalog() {
 
       {/* Results */}
       <div className={`${styles.grid} stagger-grid`}>
-        {results.slice(0, 60).map(({ obj, alt }) => (
+        {results.slice(0, 60).map(({ obj, alt }, i) => (
           <div
-            key={obj.id}
+            key={`${obj.id}-${i}`}
             className={styles.card}
             role="button"
             tabIndex={0}

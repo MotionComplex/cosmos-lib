@@ -189,9 +189,9 @@ export function Observatory() {
         <section className={styles.section}>
           <h2 className={styles.sectionTitle}>Visible Now</h2>
           <div className={`${styles.objectGrid} stagger-grid`}>
-            {data.brightObjects.map(({ obj, hz }) => (
+            {data.brightObjects.map(({ obj, hz }, i) => (
                 <div
-                  key={obj.id}
+                  key={`${obj.id}-${i}`}
                   className={styles.objectCard}
                   role="button"
                   tabIndex={0}
