@@ -17,8 +17,8 @@
  */
 import { useMemo, useState, useRef, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Data, AstroMath, Units, Sun, Moon, CONSTANTS } from "cosmos-lib";
-import type { PlanetName, ObjectImageResult } from "cosmos-lib";
+import { Data, AstroMath, Units, Sun, Moon, CONSTANTS, Planner } from "cosmos-lib";
+import type { PlanetName, ObjectImageResult, VisibilityCurvePoint, MoonInterference as MoonInterferenceType } from "cosmos-lib";
 import { useObserverCtx } from "../App";
 import { useNow } from "../hooks/useNow";
 import { formatTime } from "../utils/formatTime";
@@ -73,6 +73,13 @@ const DOCS_ENTRIES: DocEntry[] = [
     description:
       "Formats Right Ascension and distances into human-readable strings for the coordinate and property tables.",
     docsPath: "docs/api/constants-and-units.md#formatting",
+  },
+  {
+    module: "Planner",
+    functions: ["visibilityCurve", "moonInterference"],
+    description:
+      "Computes the altitude-vs-time visibility curve for the object over the night, and moon interference scoring.",
+    docsPath: "docs/api/planner.md",
   },
 ];
 
@@ -182,6 +189,12 @@ export function ObjectDetail() {
             .slice(0, 8)
         : [];
 
+    // Visibility curve (altitude over the night) — docs: docs/api/planner.md#plannervisibilitycurve
+    const visCurve = Planner.visibilityCurve(obj.id, obs, 40);
+
+    // Moon interference — docs: docs/api/planner.md#plannermooninterference
+    const moonInterference = Planner.moonInterference(obj.id, obs);
+
     return {
       obj,
       ra,
@@ -193,6 +206,8 @@ export function ObjectDetail() {
       isPlanet,
       isSun,
       isMoon,
+      visCurve,
+      moonInterference,
     };
   }, [id, observer, now]);
 
@@ -246,7 +261,7 @@ export function ObjectDetail() {
     );
   }
 
-  const { obj, ra, dec, hz, rts, extraInfo, nearby } = data;
+  const { obj, ra, dec, hz, rts, extraInfo, nearby, visCurve, moonInterference } = data;
   const hasImage = heroImage !== null;
 
   return (
@@ -421,6 +436,72 @@ export function ObjectDetail() {
           </div>
         )}
       </div>
+
+      {/* Visibility curve — altitude over the night (ASCII sparkline) */}
+      {visCurve && visCurve.some(p => p.alt > 0) && (
+        <div className={styles.section}>
+          <h3 className={styles.sectionTitle}>Visibility Tonight</h3>
+          <div className={styles.dataCard}>
+            <div className={styles.dataRows}>
+              <div className={styles.dataRow}>
+                <span>Curve</span>
+                <span className={styles.dataValue} style={{ fontFamily: 'monospace', letterSpacing: '1px' }}>
+                  {visCurve.map(p => {
+                    if (p.alt <= 0) return '\u2581'
+                    if (p.alt < 15) return '\u2582'
+                    if (p.alt < 30) return '\u2583'
+                    if (p.alt < 45) return '\u2585'
+                    if (p.alt < 60) return '\u2586'
+                    return '\u2588'
+                  }).join('')}
+                </span>
+              </div>
+              <div className={styles.dataRow}>
+                <span>Time span</span>
+                <span className={styles.dataValue}>
+                  {visCurve[0]!.date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  {' – '}
+                  {visCurve[visCurve.length - 1]!.date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                </span>
+              </div>
+              <div className={styles.dataRow}>
+                <span>Peak altitude</span>
+                <span className={styles.dataValue}>
+                  {Math.max(...visCurve.map(p => p.alt)).toFixed(1)}°
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Moon interference */}
+      {moonInterference && (
+        <div className={styles.section}>
+          <h3 className={styles.sectionTitle}>Moon Interference</h3>
+          <div className={styles.dataCard}>
+            <div className={styles.dataRows}>
+              <div className={styles.dataRow}>
+                <span>Separation</span>
+                <span className={styles.dataValue}>{moonInterference.separation.toFixed(1)}°</span>
+              </div>
+              <div className={styles.dataRow}>
+                <span>Moon illumination</span>
+                <span className={styles.dataValue}>{(moonInterference.illumination * 100).toFixed(0)}%</span>
+              </div>
+              <div className={styles.dataRow}>
+                <span>Interference score</span>
+                <span className={styles.dataValue} style={{
+                  color: moonInterference.score < 0.2 ? '#34d399' : moonInterference.score < 0.5 ? '#fbbf24' : '#f87171'
+                }}>
+                  {moonInterference.score < 0.2 ? 'Low' : moonInterference.score < 0.5 ? 'Moderate' : 'High'}
+                  {' '}({(moonInterference.score * 100).toFixed(0)}%)
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Nearby objects */}
       {nearby.length > 0 && (

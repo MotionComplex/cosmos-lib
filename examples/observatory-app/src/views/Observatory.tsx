@@ -13,7 +13,7 @@
  */
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Sun, Moon, AstroMath, Data, Eclipse } from 'cosmos-lib'
+import { Sun, Moon, AstroMath, Data, Eclipse, Planner } from 'cosmos-lib'
 import { useObserverCtx } from '../App'
 import { useNow } from '../hooks/useNow'
 import { MoonPhaseIcon } from '../components/MoonPhaseIcon'
@@ -28,6 +28,7 @@ const DOCS_ENTRIES: DocEntry[] = [
   { module: 'AstroMath', functions: ['equatorialToHorizontal', 'toJulian', 'j2000Days', 'lst'], description: 'Converts RA/Dec to altitude/azimuth for the observer, computes Julian Date and J2000 days for the time cards, and Local Sidereal Time.', docsPath: 'docs/api/math.md' },
   { module: 'Eclipse', functions: ['nextSolar', 'nextLunar'], description: 'Finds the next upcoming solar or lunar eclipse to display in the eclipse preview card.', docsPath: 'docs/api/sun-moon-eclipse.md#eclipse' },
   { module: 'Data', functions: ['getActiveShowers', 'all'], description: 'Retrieves currently active meteor showers and the full object catalog to find bright objects visible above the horizon.', docsPath: 'docs/api/data.md' },
+  { module: 'Planner', functions: ['whatsUp'], description: 'Returns the brightest objects currently above the horizon, sorted by altitude, with moon interference scoring.', docsPath: 'docs/api/planner.md' },
 ]
 
 const DOCS_GUIDES = [
@@ -82,23 +83,14 @@ export function Observatory() {
     // Active meteor showers — docs: docs/api/data.md#datagetactiveshowers
     const activeShowers = Data.getActiveShowers(now)
 
-    // What's visible tonight — uses Data.all() + equatorialToHorizontal
-    // docs: docs/api/data.md#dataall, docs/api/math.md#coordinate-transforms
-    const brightObjects = Data.all()
-      .filter(o => o.ra != null && o.dec != null && o.magnitude != null)
-      .sort((a, b) => (a.magnitude ?? 99) - (b.magnitude ?? 99))
-      .slice(0, 60)
-      .map(o => {
-        const hz = AstroMath.equatorialToHorizontal({ ra: o.ra!, dec: o.dec! }, obs)
-        return { obj: o, hz }
-      })
-      .filter(o => o.hz.alt > 10)
-      .slice(0, 6)
+    // What's visible tonight — uses Planner.whatsUp
+    // docs: docs/api/planner.md#plannerwhatsup
+    const whatsUp = Planner.whatsUp(obs, { minAltitude: 10, magnitudeLimit: 4, limit: 6 })
 
     return {
       sunPos, sunHoriz, twilight, moonPos, moonHoriz, moonPhase, moonRTS,
       jd, j2k, lst, siderealTime, eot, nextEclipse, activeShowers,
-      brightObjects, isDark: sunHoriz.alt < -6,
+      whatsUp, isDark: sunHoriz.alt < -6,
     }
   }, [observer, now])
 
@@ -226,29 +218,32 @@ export function Observatory() {
         </div>
       </section>
 
-      {/* Tonight's highlights */}
-      {data.brightObjects.length > 0 && (
+      {/* Tonight's highlights — powered by Planner.whatsUp */}
+      {data.whatsUp.length > 0 && (
         <section className={styles.section}>
           <h2 className={styles.sectionTitle}>Visible Now</h2>
           <div className={`${styles.objectGrid} stagger-grid`}>
-            {data.brightObjects.map(({ obj, hz }, i) => (
+            {data.whatsUp.map((v, i) => (
                 <div
-                  key={`${obj.id}-${i}`}
+                  key={`${v.object.id}-${i}`}
                   className={styles.objectCard}
                   role="button"
                   tabIndex={0}
-                  onClick={() => navigate(`/object/${obj.id}`)}
-                  onKeyDown={e => e.key === 'Enter' && navigate(`/object/${obj.id}`)}
+                  onClick={() => navigate(`/object/${v.object.id}`)}
+                  onKeyDown={e => e.key === 'Enter' && navigate(`/object/${v.object.id}`)}
                 >
                   <div className={styles.objectTop}>
-                    <span className={styles.objectType}>{obj.type}</span>
-                    {obj.magnitude != null && (
-                      <span className={styles.objectMag}>mag {obj.magnitude.toFixed(1)}</span>
+                    <span className={styles.objectType}>{v.object.type}</span>
+                    {v.object.magnitude != null && (
+                      <span className={styles.objectMag}>mag {v.object.magnitude.toFixed(1)}</span>
                     )}
                   </div>
-                  <h3 className={styles.objectName}>{obj.name}</h3>
+                  <h3 className={styles.objectName}>{v.object.name}</h3>
                   <p className={styles.objectPos}>
-                    Alt {hz.alt.toFixed(1)}° · Az {hz.az.toFixed(1)}°
+                    Alt {v.alt.toFixed(1)}° · Az {v.az.toFixed(1)}°
+                    {v.moonInterference > 0.3 && (
+                      <span title={`Moon ${v.moonSeparation?.toFixed(0)}° away`}> · ☽ {(v.moonInterference * 100).toFixed(0)}%</span>
+                    )}
                   </p>
                 </div>
             ))}

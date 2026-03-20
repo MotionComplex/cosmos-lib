@@ -6,7 +6,7 @@ import {
   StyleSheet,
   Dimensions,
 } from 'react-native';
-import { Sun, Moon, Data, AstroMath } from '@motioncomplex/cosmos-lib';
+import { Sun, Moon, Data, AstroMath, Planner } from '@motioncomplex/cosmos-lib';
 import { GlassCard } from '../src/components/GlassCard';
 import { SectionHeader } from '../src/components/SectionHeader';
 import { StarField } from '../src/components/StarField';
@@ -43,19 +43,8 @@ export default function TonightScreen() {
     const moonPhase = Moon.phase(now);
     const moonPos = Moon.position(now);
 
-    // Bright objects visible tonight (altitude > 0)
-    const brightStars = Data.getByType('star')
-      .filter((s) => s.magnitude != null && s.magnitude < 2 && s.ra != null && s.dec != null)
-      .map((s) => {
-        const hz = AstroMath.equatorialToHorizontal(
-          { ra: s.ra!, dec: s.dec! },
-          observer,
-        );
-        return { ...s, alt: hz.alt, az: hz.az };
-      })
-      .filter((s) => s.alt > 0)
-      .sort((a, b) => a.magnitude! - b.magnitude!)
-      .slice(0, 8);
+    // Bright objects visible tonight — powered by Planner.whatsUp
+    const whatsUp = Planner.whatsUp(observer, { minAltitude: 5, magnitudeLimit: 2, limit: 8 });
 
     // Planets
     const planets = Data.getByType('planet')
@@ -73,10 +62,10 @@ export default function TonightScreen() {
       .filter((p) => p.alt > -10)
       .sort((a, b) => b.alt - a.alt);
 
-    return { sunPos, twilight, moonPhase, moonPos, brightStars, planets, now };
+    return { sunPos, twilight, moonPhase, moonPos, whatsUp, planets, now };
   }, []);
 
-  const { twilight, moonPhase, brightStars, planets, now } = data;
+  const { twilight, moonPhase, whatsUp, planets, now } = data;
 
   return (
     <View style={styles.container}>
@@ -156,23 +145,26 @@ export default function TonightScreen() {
           </>
         )}
 
-        {/* Bright Stars */}
-        {brightStars.length > 0 && (
+        {/* Bright Objects Up Now — powered by Planner.whatsUp */}
+        {whatsUp.length > 0 && (
           <>
             <SectionHeader
-              title="Bright Stars Up Now"
+              title="Bright Objects Up Now"
               subtitle="Magnitude < 2, above horizon"
             />
             <GlassCard>
-              {brightStars.map((s) => (
-                <View key={s.id} style={styles.starRow}>
+              {whatsUp.map((v) => (
+                <View key={v.object.id} style={styles.starRow}>
                   <View style={styles.starDot} />
-                  <Text style={styles.starName}>{s.name}</Text>
+                  <Text style={styles.starName}>{v.object.name}</Text>
+                  {v.moonInterference > 0.3 && (
+                    <Badge label={`☽ ${(v.moonInterference * 100).toFixed(0)}%`} color={v.moonInterference > 0.5 ? colors.rose : colors.gold} />
+                  )}
                   <Text style={styles.starMag}>
-                    {s.magnitude!.toFixed(1)}m
+                    {v.object.magnitude?.toFixed(1) ?? '—'}m
                   </Text>
                   <Text style={styles.starAlt}>
-                    {s.alt.toFixed(0)}° alt
+                    {v.alt.toFixed(0)}° alt
                   </Text>
                 </View>
               ))}

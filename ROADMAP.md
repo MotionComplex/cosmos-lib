@@ -40,11 +40,11 @@ The killer utility: "What can I see tonight?"
 - [x] Moon interference scoring (angular separation + illumination)
 - [x] Airmass calculation for photometry-aware planning
 - [x] Filter by object type, constellation, catalog
-- [ ] **Docs & examples:**
-  - [ ] TypeDoc comments on `Planner` module, all methods, option interfaces, and result types
-  - [ ] Usage guide with code samples (`whatsUp` basics, filtering, `bestWindow`, `visibilityCurve` plotting, moon interference, airmass)
-  - [ ] `observatory-app`: add "What's Up" panel to `Observatory` dashboard (replace manual bright-star loop with `Planner.whatsUp`); add visibility curve chart to `ObjectDetail`
-  - [ ] `react-native-app`: refactor Tonight screen to use `Planner.whatsUp` for the visible objects list; show moon interference badges on object cards
+- [x] **Docs & examples:**
+  - [x] TypeDoc comments on `Planner` module, all methods, option interfaces, and result types
+  - [x] Usage guide with code samples (`whatsUp` basics, filtering, `bestWindow`, `visibilityCurve` plotting, moon interference, airmass)
+  - [x] `observatory-app`: "Visible Now" panel uses `Planner.whatsUp` with moon interference indicators; `ObjectDetail` shows visibility curve sparkline + moon interference card
+  - [x] `react-native-app`: Tonight screen uses `Planner.whatsUp`; moon interference badges on object rows
 
 ---
 
@@ -228,4 +228,4 @@ These are valuable but lower priority than the P1–P8 items above.
 
 ---
 
-_Last updated: 2026-03-21_
+_Last updated: 2026-03-22_
