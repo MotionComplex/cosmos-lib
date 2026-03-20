@@ -1,0 +1,25 @@
+{
+  "expo": {
+    "name": "Cosmos Mobile",
+    "slug": "cosmos-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "scheme": "cosmos-mobile",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "backgroundColor": "#0a0a1a"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.motioncomplex.cosmos"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#0a0a1a"
+      },
+      "package": "com.motioncomplex.cosmos"
+    },
+    "plugins": ["expo-router"]
+  }
+}
