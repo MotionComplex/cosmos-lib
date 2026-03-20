@@ -16,8 +16,8 @@
  */
 import { useRef, useEffect, useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { InteractiveSkyMap, Data, AstroMath } from 'cosmos-lib'
-import type { ProjectionName, CelestialObject, InteractiveSkyMapOptions } from 'cosmos-lib'
+import { InteractiveSkyMap, Data, AstroMath, AstroClock } from 'cosmos-lib'
+import type { ProjectionName, CelestialObject, InteractiveSkyMapOptions, AstroEventType } from 'cosmos-lib'
 import { useObserverCtx } from '../App'
 import { useNow } from '../hooks/useNow'
 import { DocsReference } from '../components/DocsReference'
@@ -28,6 +28,7 @@ const DOCS_ENTRIES: DocEntry[] = [
   { module: 'SkyMap', functions: ['InteractiveSkyMap', 'createInteractiveSkyMap'], description: 'Interactive sky map with pan, zoom, click-to-identify, hover, FOV overlay, HUD, and real-time tracking.', docsPath: 'docs/api/skymap.md' },
   { module: 'AstroMath', functions: ['lst'], description: 'Calculates Local Sidereal Time to centre the map on the sky currently above the observer.', docsPath: 'docs/api/math.md#sidereal-time' },
   { module: 'Data', functions: ['all', 'constellations'], description: 'Loads the full celestial object catalog and constellation stick-figure data for rendering.', docsPath: 'docs/api/data.md' },
+  { module: 'AstroClock', functions: ['play', 'pause', 'setSpeed', 'snapTo'], description: 'Simulation clock that drives the sky map time. Supports speed control, forward/reverse, and snap-to-event.', docsPath: 'docs/api/clock.md' },
 ]
 
 const DOCS_GUIDES = [
@@ -64,6 +65,48 @@ export function SkyMapView() {
   const [fovPreset, setFovPreset] = useState(0)
   const [selectedObject, setSelectedObject] = useState<CelestialObject | null>(null)
 
+  // ── AstroClock — drives the sky map time ───────────────────────────────
+  const clockRef = useRef<AstroClock | null>(null)
+  const [clockPlaying, setClockPlaying] = useState(false)
+  const [clockSpeed, setClockSpeed] = useState(1)
+  const [simDate, setSimDate] = useState(now)
+
+  useEffect(() => {
+    const clock = new AstroClock({ startDate: now, speed: clockSpeed })
+    clockRef.current = clock
+
+    clock.on('tick', ({ date }) => setSimDate(date))
+    clock.on('play', () => setClockPlaying(true))
+    clock.on('pause', () => setClockPlaying(false))
+    clock.on('datechange', ({ date }) => setSimDate(date))
+
+    return () => { clock.dispose(); clockRef.current = null }
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handlePlayPause = useCallback(() => {
+    const clock = clockRef.current
+    if (!clock) return
+    if (clock.playing) clock.pause()
+    else clock.play()
+  }, [])
+
+  const handleSpeedChange = useCallback((speed: number) => {
+    clockRef.current?.setSpeed(speed)
+    setClockSpeed(speed)
+  }, [])
+
+  const handleSnapTo = useCallback((eventType: AstroEventType) => {
+    clockRef.current?.snapTo(eventType, { lat: observer.lat, lng: observer.lng })
+  }, [observer.lat, observer.lng])
+
+  const handleResetTime = useCallback(() => {
+    clockRef.current?.setDate(new Date())
+    clockRef.current?.pause()
+  }, [])
+
+  // Use simDate instead of now when clock is playing; otherwise use wall clock
+  const effectiveDate = clockPlaying ? simDate : now
+
   // Initialise the InteractiveSkyMap once the canvas mounts
   useEffect(() => {
     const canvas = canvasRef.current
@@ -80,7 +123,7 @@ export function SkyMapView() {
     canvas.style.width = `${rect.width}px`
     canvas.style.height = `${rect.height}px`
 
-    const lst = AstroMath.lst(now, observer.lng)
+    const lst = AstroMath.lst(effectiveDate, observer.lng)
     const objects = Data.all().filter(o => o.ra != null && o.dec != null)
     const constellations = showConstellations ? Data.constellations() as unknown as InteractiveSkyMapOptions['constellations'] : []
 
@@ -107,12 +150,12 @@ export function SkyMapView() {
       hitRadius: 18,
       minScale: 30,
       maxScale: 3000,
-      observer: { lat: observer.lat, lng: observer.lng, date: now },
+      observer: { lat: observer.lat, lng: observer.lng, date: effectiveDate },
       hud: showHUD ? {
         cardinalDirections: true,
         horizonLine: true,
         zenithMarker: true,
-        observer: { lat: observer.lat, lng: observer.lng, date: now },
+        observer: { lat: observer.lat, lng: observer.lng, date: effectiveDate },
         color: 'rgba(255, 255, 255, 0.35)',
       } : undefined,
       fov: fovPreset > 0 ? { radiusDeg: fovPreset, color: 'rgba(255, 255, 100, 0.5)', label: FOV_PRESETS.find(p => p.value === fovPreset)?.label } : undefined,
@@ -152,7 +195,7 @@ export function SkyMapView() {
       skymapRef.current = null
     }
   // Re-create when these core settings change
-  }, [observer.lat, observer.lng, now, projection, magLimit, showGrid, showLabels, showConstellations, showHUD, fovPreset])
+  }, [observer.lat, observer.lng, effectiveDate, projection, magLimit, showGrid, showLabels, showConstellations, showHUD, fovPreset])
 
   const handleViewObject = useCallback(() => {
     if (selectedObject) {
@@ -180,6 +223,34 @@ export function SkyMapView() {
             ))}
           </div>
         </div>
+      </div>
+
+      {/* Time transport — powered by AstroClock */}
+      <div className={styles.controls} style={{ display: 'flex', gap: '8px', alignItems: 'center', padding: '0 16px 8px', flexWrap: 'wrap' }}>
+        <button className={styles.projBtn} onClick={handlePlayPause} title={clockPlaying ? 'Pause' : 'Play'}>
+          {clockPlaying ? '⏸' : '▶'}
+        </button>
+        {[1, 60, 600, 3600].map(s => (
+          <button
+            key={s}
+            className={`${styles.projBtn} ${clockSpeed === s ? styles.projActive : ''}`}
+            onClick={() => handleSpeedChange(s)}
+            title={`${s}× speed`}
+          >
+            {s === 1 ? '1×' : s === 60 ? '1m/s' : s === 600 ? '10m/s' : '1h/s'}
+          </button>
+        ))}
+        <button className={styles.projBtn} onClick={() => handleSpeedChange(-60)} title="Reverse 1min/sec" style={clockSpeed < 0 ? { borderColor: 'var(--c-accent)' } : undefined}>
+          ⏪
+        </button>
+        <button className={styles.projBtn} onClick={() => handleSnapTo('sunset')} title="Snap to sunset">🌅</button>
+        <button className={styles.projBtn} onClick={() => handleSnapTo('sunrise')} title="Snap to sunrise">🌄</button>
+        <button className={styles.projBtn} onClick={handleResetTime} title="Reset to now">⟲ Now</button>
+        <span style={{ color: 'var(--c-text-secondary)', fontSize: '12px', fontFamily: 'var(--font-mono)' }}>
+          {simDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+          {' '}
+          {simDate.toLocaleDateString([], { month: 'short', day: 'numeric' })}
+        </span>
       </div>
 
       <div className={styles.mapContainer}>

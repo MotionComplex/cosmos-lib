@@ -1,10 +1,11 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
 import {
   View,
   Text,
   ScrollView,
   StyleSheet,
   Dimensions,
+  Pressable,
 } from 'react-native';
 import { Sun, Moon, Data, AstroMath, Planner } from '@motioncomplex/cosmos-lib';
 import { GlassCard } from '../src/components/GlassCard';
@@ -33,8 +34,11 @@ function formatTime(date: Date | null | undefined): string {
 }
 
 export default function TonightScreen() {
+  // Time offset in hours from now (for time-travel slider)
+  const [hourOffset, setHourOffset] = useState(0);
+
   const data = useMemo(() => {
-    const now = new Date();
+    const now = new Date(Date.now() + hourOffset * 3_600_000);
     // Default observer: London
     const observer = { lat: 51.5, lng: -0.12, date: now };
 
@@ -63,7 +67,7 @@ export default function TonightScreen() {
       .sort((a, b) => b.alt - a.alt);
 
     return { sunPos, twilight, moonPhase, moonPos, whatsUp, planets, now };
-  }, []);
+  }, [hourOffset]);
 
   const { twilight, moonPhase, whatsUp, planets, now } = data;
 
@@ -87,6 +91,35 @@ export default function TonightScreen() {
           </Text>
           <Text style={styles.heroLocation}>London, UK</Text>
         </View>
+
+        {/* Time Travel — scrub forward/backward through the night */}
+        <GlassCard accent={colors.accent + '33'}>
+          <Text style={styles.timeSliderLabel}>
+            Time Travel: {hourOffset === 0 ? 'Now' : `${hourOffset > 0 ? '+' : ''}${hourOffset}h`}
+          </Text>
+          <Text style={styles.timeSliderDate}>
+            {now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            {' · '}
+            {now.toLocaleDateString([], { month: 'short', day: 'numeric' })}
+          </Text>
+          <View style={styles.timeButtons}>
+            <Pressable style={styles.timeBtn} onPress={() => setHourOffset(h => h - 3)}>
+              <Text style={styles.timeBtnText}>-3h</Text>
+            </Pressable>
+            <Pressable style={styles.timeBtn} onPress={() => setHourOffset(h => h - 1)}>
+              <Text style={styles.timeBtnText}>-1h</Text>
+            </Pressable>
+            <Pressable style={[styles.timeBtn, hourOffset === 0 && styles.timeBtnActive]} onPress={() => setHourOffset(0)}>
+              <Text style={[styles.timeBtnText, hourOffset === 0 && { color: colors.text }]}>Now</Text>
+            </Pressable>
+            <Pressable style={styles.timeBtn} onPress={() => setHourOffset(h => h + 1)}>
+              <Text style={styles.timeBtnText}>+1h</Text>
+            </Pressable>
+            <Pressable style={styles.timeBtn} onPress={() => setHourOffset(h => h + 3)}>
+              <Text style={styles.timeBtnText}>+3h</Text>
+            </Pressable>
+          </View>
+        </GlassCard>
 
         {/* Moon Phase Card */}
         <GlassCard accent={colors.gold + '44'}>
@@ -223,6 +256,43 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
     fontSize: fonts.size.sm,
     marginTop: 2,
+  },
+
+  // Time travel
+  timeSliderLabel: {
+    color: colors.accent,
+    fontSize: fonts.size.sm,
+    fontWeight: fonts.weight.semibold,
+    textTransform: 'uppercase',
+    letterSpacing: 0.8,
+    marginBottom: 2,
+  },
+  timeSliderDate: {
+    color: colors.text,
+    fontSize: fonts.size.xl,
+    fontWeight: fonts.weight.bold,
+    marginBottom: spacing.sm,
+  },
+  timeButtons: {
+    flexDirection: 'row',
+    gap: spacing.sm,
+  },
+  timeBtn: {
+    flex: 1,
+    paddingVertical: spacing.sm,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    borderColor: colors.border,
+    alignItems: 'center',
+  },
+  timeBtnActive: {
+    borderColor: colors.accent,
+    backgroundColor: colors.accent + '22',
+  },
+  timeBtnText: {
+    color: colors.textSecondary,
+    fontSize: fonts.size.sm,
+    fontWeight: fonts.weight.semibold,
   },
 
   // Moon

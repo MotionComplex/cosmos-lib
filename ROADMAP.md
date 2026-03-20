@@ -50,23 +50,23 @@ The killer utility: "What can I see tonight?"
 
 ## P3 — Simulation Clock
 
-**Status:** Not started
-**Entry point:** New `src/clock.ts` module
+**Status:** Complete
+**Entry point:** `src/clock.ts`
 
 Decouple observation time from wall-clock time.
 
-- [ ] `AstroClock` class with configurable speed multiplier
-- [ ] `play()`, `pause()`, `setDate()`, `setSpeed()` controls
-- [ ] `onTick(callback)` with configurable interval
-- [ ] Forward and reverse playback
-- [ ] Snap-to-event (jump to next rise/set/transit)
-- [ ] Integration with sky map (drive rendering automatically)
-- [ ] Frame-accurate timing via `requestAnimationFrame`
-- [ ] **Docs & examples:**
-  - [ ] TypeDoc comments on `AstroClock` class, all methods, events, and options
-  - [ ] Usage guide with code samples (basic playback, speed control, snap-to-event, sky map integration)
-  - [ ] `observatory-app`: add play/pause/speed transport controls to `SkyMapView`, drive `ObserverContext` date from clock
-  - [ ] `react-native-app`: add time-travel slider/stepper to Tonight screen to scrub forward/backward through the night
+- [x] `AstroClock` class with configurable speed multiplier
+- [x] `play()`, `pause()`, `setDate()`, `setSpeed()` controls
+- [x] `onTick(callback)` with configurable interval
+- [x] Forward and reverse playback
+- [x] Snap-to-event (jump to next rise/set/transit)
+- [x] Integration with sky map (drive rendering automatically)
+- [x] Frame-accurate timing via `requestAnimationFrame`
+- [x] **Docs & examples:**
+  - [x] TypeDoc comments on `AstroClock` class, all methods, events, and options
+  - [x] Usage guide with code samples (basic playback, speed control, snap-to-event, sky map integration)
+  - [x] `observatory-app`: play/pause/speed transport controls in `SkyMapView` with snap-to-sunrise/sunset, reverse mode, and sim date display
+  - [x] `react-native-app`: time-travel stepper on Tonight screen (-3h/-1h/Now/+1h/+3h) that recomputes all sky data for the offset time
 
 ---
 
