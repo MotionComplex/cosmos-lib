@@ -7,11 +7,13 @@ import type { CutoutOptions } from './cutouts.js'
 // ── Catalog lookup (injected from index.ts to avoid circular imports) ────────
 
 interface CatalogInfo {
+  id: string
   ra: number | null
   dec: number | null
   size_arcmin?: number | undefined
   type: string
   name: string
+  aliases: string[]
 }
 
 type CatalogLookupFn = (id: string) => CatalogInfo | null
@@ -239,6 +241,38 @@ export function prefetchImages(ids: string[]): void {
   }
 }
 
+// ── Search term builder ──────────────────────────────────────────────────────
+
+/** Catalog designation patterns (M42, NGC 6405, IC 1805, etc.) */
+const CATALOG_RE = /^(m|ngc|ic|sh2|arp|abell)\s*\d/i
+
+/**
+ * Build a prioritised list of search terms for NASA/ESA image APIs.
+ *
+ * Catalog designations (M6, NGC 6405) are strongly preferred over common
+ * names ("Butterfly Cluster") because the latter often return
+ * non-astronomical results.
+ */
+function _buildSearchTerms(id: string, name: string): string[] {
+  const terms: string[] = []
+  const info = _catalogLookup?.(id)
+
+  // 1. Catalog designations from aliases (e.g. "NGC 6405", "M6")
+  if (info?.aliases) {
+    for (const alias of info.aliases) {
+      if (CATALOG_RE.test(alias)) terms.push(alias)
+    }
+  }
+
+  // 2. The object ID itself if it looks like a catalog designation
+  if (CATALOG_RE.test(id)) terms.push(id.toUpperCase())
+
+  // 3. Common name qualified with the object type to disambiguate
+  terms.push(`${name} ${info?.type ?? 'astronomy'}`)
+
+  return terms
+}
+
 // ── Unified image pipeline ──────────────────────────────────────────────────
 
 /**
@@ -249,11 +283,11 @@ export function prefetchImages(ids: string[]): void {
  * 1. **In-memory cache** — instant (0ms) for previously resolved images.
  * 2. **Curated Wikimedia static registry** — hand-picked iconic images
  *    served via Wikimedia's thumbnail API with responsive `srcset`.
- * 3. **Pan-STARRS DR2 cutout** — coordinate-based color composite (g/r/i),
- *    guaranteed to show the correct object. Uses precomputed file list
- *    for single-request performance.
- * 4. **DSS cutout** — coordinate-based full-sky grayscale fallback.
- * 5. **NASA / ESA text search** — last resort for objects without coordinates.
+ *    No network validation — URLs are trusted for zero-latency resolution.
+ * 3. **NASA / ESA text search** — high-quality press release imagery.
+ * 4. **Pan-STARRS DR2 cutout** *(opt-in, `skipCutouts: false`)* —
+ *    coordinate-based color composite. Accurate but raw survey data.
+ * 5. **DSS cutout** *(opt-in)* — full-sky grayscale fallback.
  *
  * After resolving, the pipeline automatically prefetches images for nearby
  * objects in the background, so spatial browsing feels instant.
@@ -286,9 +320,9 @@ export async function getObjectImage(
   const {
     width = 1200,
     srcsetWidths = [640, 1024, 1600],
-    source = 'nasa',
+    source = 'all',
     cutoutTimeout = 15000,
-    skipCutouts = false,
+    skipCutouts = true,
     prefetch,
   } = opts
 
@@ -302,23 +336,18 @@ export async function getObjectImage(
   let result: ObjectImageResult | null = null
 
   // ── 2. Curated Wikimedia static registry ────────────────────────────
+  // These are hand-picked filenames — trust them without a HEAD check.
+  // The Special:FilePath redirect is reliable; if it ever 404s the
+  // browser's <img> onerror will handle it gracefully.
   const staticImages = IMAGE_FALLBACKS[id]
   if (staticImages?.length) {
     const img = staticImages[0]!
-    const testUrl = Media.wikimediaUrl(img.filename, width)
-    try {
-      const res = await fetch(testUrl, { method: 'HEAD', redirect: 'follow' })
-      if (res.ok) {
-        result = {
-          src: testUrl,
-          srcset: Media.srcset(srcsetWidths, w => Media.wikimediaUrl(img.filename, w)),
-          placeholder: Media.wikimediaUrl(img.filename, 64),
-          credit: img.credit,
-          source: 'static',
-        }
-      }
-    } catch {
-      // Wikimedia unreachable — fall through
+    result = {
+      src: Media.wikimediaUrl(img.filename, width),
+      srcset: Media.srcset(srcsetWidths, w => Media.wikimediaUrl(img.filename, w)),
+      placeholder: Media.wikimediaUrl(img.filename, 64),
+      credit: img.credit,
+      source: 'static',
     }
   }
 
@@ -356,22 +385,34 @@ export async function getObjectImage(
     }
   }
 
-  // ── 5. NASA / ESA text search (last resort) ─────────────────────────
+  // ── 5. API image search (last resort) ───────────────────────────────
+  // Use catalog designations (M6, NGC 6405) rather than common names
+  // ("Butterfly Cluster") to avoid non-astronomical results.
+  // Try ESA/Hubble first (astronomy-only archive), then NASA (general).
   if (!result) {
-    try {
-      const resolved = await resolveImages(name, { source, limit: 1 })
-      if (resolved.length > 0) {
-        const best = resolved[0]!
-        result = {
-          src: best.previewUrl ?? best.urls[0]!,
-          srcset: null,
-          placeholder: null,
-          credit: best.credit,
-          source: best.source,
+    const searchTerms = _buildSearchTerms(id, name)
+    // ESA first — purely astronomical imagery, no labs/facilities noise
+    const sources: Array<'esa' | 'nasa'> = source === 'nasa' ? ['nasa'] : source === 'esa' ? ['esa'] : ['esa', 'nasa']
+    for (const src of sources) {
+      if (result) break
+      for (const term of searchTerms) {
+        try {
+          const resolved = await resolveImages(term, { source: src, limit: 1 })
+          if (resolved.length > 0) {
+            const best = resolved[0]!
+            result = {
+              src: best.previewUrl ?? best.urls[0]!,
+              srcset: null,
+              placeholder: null,
+              credit: best.credit,
+              source: best.source,
+            }
+            break
+          }
+        } catch {
+          // Network failure — try next term
         }
       }
-    } catch {
-      // Network failure — fall through to null
     }
   }
 

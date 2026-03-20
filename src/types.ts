@@ -536,11 +536,11 @@ export interface GetImageOptions {
   width?: number
   /** Widths for the responsive `srcset`. @defaultValue `[640, 1024, 1600]` */
   srcsetWidths?: number[]
-  /** Which API sources to search if no static image exists. @defaultValue `'nasa'` */
+  /** Which API sources to search if no static image exists. @defaultValue `'all'` */
   source?: 'nasa' | 'esa' | 'all'
   /** Timeout in ms for coordinate-based cutout requests. @defaultValue `15000` */
   cutoutTimeout?: number
-  /** Skip coordinate-based cutout sources (Pan-STARRS, DSS) entirely. @defaultValue `false` */
+  /** Skip coordinate-based cutout sources (Pan-STARRS, DSS) entirely. @defaultValue `true` */
   skipCutouts?: boolean
   /**
    * Auto-prefetch nearby objects after resolving. Set `false` to disable.

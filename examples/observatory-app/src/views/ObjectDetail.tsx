@@ -227,6 +227,12 @@ export function ObjectDetail() {
     return () => { cancelled = true; };
   }, [data, heroImageState.loading]);
 
+  // Prefetch images for nearby objects so navigating to them feels instant
+  const nearbyIds = useMemo(() => data?.nearby.map(n => n.object.id) ?? [], [data?.nearby]);
+  useEffect(() => {
+    if (nearbyIds.length > 0) Data.prefetchImages(nearbyIds);
+  }, [nearbyIds]);
+
   if (!data) {
     return (
       <div className={styles.page}>

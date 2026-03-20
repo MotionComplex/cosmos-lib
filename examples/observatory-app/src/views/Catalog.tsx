@@ -12,7 +12,7 @@
  * For more on how catalog data is structured:
  * → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/guides/catalog-data.md Catalog Data Guide}
  */
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useMemo, useCallback, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Data, AstroMath, Units } from 'cosmos-lib'
 import type { ObjectType, CelestialObject } from 'cosmos-lib'
@@ -87,6 +87,13 @@ export function Catalog() {
 
     return enriched
   }, [query, typeFilter, sortBy, observer, now])
+
+  // Prefetch images for visible objects so Data.getImage() resolves instantly
+  // when the user navigates into a detail view.
+  const visibleIds = useMemo(() => results.slice(0, 60).map(r => r.obj.id), [results])
+  useEffect(() => {
+    if (visibleIds.length > 0) Data.prefetchImages(visibleIds)
+  }, [visibleIds])
 
   const handleSearch = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value)

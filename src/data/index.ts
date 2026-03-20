@@ -100,7 +100,7 @@ const byName = new Map<string, CelestialObject>(
 _setCatalogLookup((id: string) => {
   const obj = byId.get(id)
   if (!obj) return null
-  return { ra: obj.ra, dec: obj.dec, size_arcmin: obj.size_arcmin, type: obj.type, name: obj.name }
+  return { id: obj.id, ra: obj.ra, dec: obj.dec, size_arcmin: obj.size_arcmin, type: obj.type, name: obj.name, aliases: obj.aliases }
 })
 _setNearbyFn((center: EquatorialCoord, radiusDeg: number) =>
   UNIFIED
