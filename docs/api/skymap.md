@@ -217,6 +217,230 @@ renderSkyMap(canvas, Data.all(), {
 
 ---
 
+## Interactive Sky Map
+
+`InteractiveSkyMap` wraps a `<canvas>` element with pan, zoom, click-to-identify, hover detection, FOV overlays, a configurable HUD, and optional real-time sidereal tracking. It uses `renderSkyMap` for the base layer and adds interactive overlays on top.
+
+```ts
+import { InteractiveSkyMap, createInteractiveSkyMap, Data } from '@motioncomplex/cosmos-lib'
+```
+
+### Creating an instance
+
+Use the class constructor or the `createInteractiveSkyMap` factory:
+
+```ts
+const skymap = createInteractiveSkyMap(canvas, Data.all(), {
+  projection: 'stereographic',
+  center: { ra: 83.8, dec: -5.4 },
+  scale: 400,
+  panEnabled: true,
+  zoomEnabled: true,
+  observer: { lat: 47.05, lng: 8.31 },
+})
+```
+
+### `InteractiveSkyMapOptions`
+
+Extends `SkyMapRenderOptions` with the following interactive options:
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `panEnabled` | `boolean` | `true` | Enable pan by mouse drag / touch drag |
+| `zoomEnabled` | `boolean` | `true` | Enable zoom by scroll wheel / pinch |
+| `selectEnabled` | `boolean` | `true` | Enable click-to-select |
+| `hoverEnabled` | `boolean` | `true` | Enable hover detection |
+| `minScale` | `number` | `50` | Minimum scale (zoom-out limit) |
+| `maxScale` | `number` | `5000` | Maximum scale (zoom-in limit) |
+| `hitRadius` | `number` | `15` | Hit-test radius in pixels |
+| `fov` | `FOVOverlayOptions \| FOVOverlayOptions[]` | -- | FOV indicator overlay(s) |
+| `hud` | `HUDOptions` | -- | HUD configuration |
+| `realTime` | `boolean` | `false` | Enable real-time sidereal tracking |
+| `realTimeInterval` | `number` | `1000` | Real-time render interval in ms |
+| `observer` | `ObserverParams` | -- | Observer params (required for real-time and HUD) |
+| `hoverHighlight` | `{ color?, radius?, showLabel? }` | see below | Hover highlight style |
+| `selectHighlight` | `{ color?, radius? }` | see below | Selection highlight style |
+
+### Event system
+
+Subscribe to interaction events with `on()` / `off()`:
+
+```ts
+// Click to identify
+skymap.on('select', ({ object, point, event }) => {
+  console.log('Selected:', object.name)
+  showInfoPanel(object)
+})
+
+// Hover detection
+skymap.on('hover', ({ object, point }) => {
+  canvas.style.cursor = object ? 'pointer' : 'default'
+})
+
+// View changes (pan, zoom, programmatic)
+skymap.on('viewchange', ({ center, scale, projection }) => {
+  updateURL(center, scale)
+})
+```
+
+#### Event types
+
+| Event | Payload | Fires when |
+|-------|---------|------------|
+| `select` | `{ object, point, event }` | A celestial object is clicked/tapped |
+| `hover` | `{ object \| null, point \| null, event }` | The hovered object changes |
+| `viewchange` | `{ center, scale, projection }` | The view centre or scale changes |
+
+### Pan & zoom
+
+Pan and zoom are enabled by default. Touch pinch-to-zoom is supported for mobile.
+
+```ts
+// Programmatic view control
+skymap.setView({ center: { ra: 180, dec: 45 }, scale: 500 })
+
+// Animated pan with easing
+skymap.panTo({ ra: 83.8, dec: -5.4 }, { scale: 600, durationMs: 1000 })
+```
+
+Zoom can be constrained with `minScale` / `maxScale`. The scroll wheel zooms by 10% per step.
+
+### Hit testing
+
+Click-to-identify returns the `CelestialObject` at the tap location. The hit radius is configurable (default 15px). The closest object within the radius wins.
+
+```ts
+// Programmatic hit-test
+const obj = skymap.objectAt(canvasX, canvasY)
+
+// Programmatic selection
+skymap.select('m42')     // select by object ID
+skymap.select(null)      // clear selection
+
+// Read current selection
+console.log(skymap.selectedObject?.name)
+console.log(skymap.hoveredObject?.name)
+```
+
+### FOV overlay
+
+Draw one or more field-of-view circles to visualise what a telescope or binoculars see:
+
+```ts
+// Single FOV
+skymap.setFOV({ radiusDeg: 5, label: '10×50 Binos', color: 'rgba(255,255,100,0.6)' })
+
+// Multiple overlays
+skymap.setFOV([
+  { radiusDeg: 1.0, label: 'SCT', color: 'rgba(100,200,255,0.6)' },
+  { radiusDeg: 6.5, label: 'Binos', color: 'rgba(255,255,100,0.4)' },
+])
+
+// Clear
+skymap.setFOV(null)
+```
+
+#### `FOVOverlayOptions`
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `radiusDeg` | `number` | -- | FOV radius in degrees |
+| `center` | `EquatorialCoord` | current map centre | Centre of the FOV circle |
+| `color` | `string` | `'rgba(255,255,100,0.6)'` | CSS stroke colour |
+| `lineWidth` | `number` | `1.5` | Stroke width in pixels |
+| `label` | `string` | -- | Optional label text (e.g. `'Telescope'`) |
+
+### HUD (Heads-Up Display)
+
+The HUD overlays cardinal directions, the observer's horizon line, and a zenith marker. Requires `observer` params.
+
+```ts
+const skymap = createInteractiveSkyMap(canvas, Data.all(), {
+  observer: { lat: 47.05, lng: 8.31 },
+  hud: {
+    cardinalDirections: true,
+    horizonLine: true,
+    zenithMarker: true,
+    color: 'rgba(255,255,255,0.4)',
+  },
+})
+```
+
+#### `HUDOptions`
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `cardinalDirections` | `boolean` | `false` | Show N/S/E/W labels at map edges |
+| `horizonLine` | `boolean` | `false` | Draw the observer's horizon line |
+| `zenithMarker` | `boolean` | `false` | Mark the zenith point with a crosshair |
+| `observer` | `ObserverParams` | -- | Observer params for horizon/zenith |
+| `color` | `string` | `'rgba(255,255,255,0.5)'` | HUD element CSS colour |
+
+### Real-time tracking
+
+When enabled, the view centre automatically follows the local sidereal time so the sky drifts naturally:
+
+```ts
+// Via options (starts automatically)
+const skymap = createInteractiveSkyMap(canvas, Data.all(), {
+  realTime: true,
+  realTimeInterval: 1000, // update every second
+  observer: { lat: 47.05, lng: 8.31 },
+})
+
+// Or start/stop manually
+skymap.startRealTime({ lat: 47.05, lng: 8.31 })
+skymap.stopRealTime()
+```
+
+### Other methods
+
+| Method | Description |
+|--------|-------------|
+| `getView()` | Get the current `SkyMapViewState` (centre, scale, projection) |
+| `setView(partial)` | Set centre, scale, and/or projection |
+| `panTo(center, opts?)` | Animated pan with easing (default 800ms) |
+| `setObjects(objects)` | Replace the objects array and re-render |
+| `setOptions(opts)` | Merge new options and re-render |
+| `render()` | Force an immediate synchronous re-render |
+| `dispose()` | Remove all listeners, cancel timers, release resources |
+
+### Lifecycle
+
+Always call `dispose()` when the canvas is removed from the DOM to avoid memory leaks:
+
+```ts
+// In a React component
+useEffect(() => {
+  const skymap = createInteractiveSkyMap(canvas, objects, opts)
+  skymap.on('select', handleSelect)
+  return () => skymap.dispose()
+}, [])
+```
+
+---
+
+## Inverse projections (`canvasToEquatorial`)
+
+Convert a canvas pixel position back to equatorial coordinates:
+
+```ts
+import { canvasToEquatorial } from '@motioncomplex/cosmos-lib'
+
+const eq = canvasToEquatorial(mouseX, mouseY, canvas.width, canvas.height, 'stereographic', center, scale)
+if (eq) console.log(`RA: ${eq.ra.toFixed(2)}°, Dec: ${eq.dec.toFixed(2)}°`)
+```
+
+Three inverse projections are available individually:
+
+| Function | Input | Returns |
+|----------|-------|---------|
+| `stereographicInverse(px, py, center, scale)` | Pixel offsets from centre | `EquatorialCoord \| null` |
+| `gnomonicInverse(px, py, center, scale)` | Pixel offsets from centre | `EquatorialCoord \| null` |
+| `mollweideInverse(canvasX, canvasY, width, height)` | Absolute canvas coords | `EquatorialCoord \| null` |
+
+---
+
 ## Legacy Namespace
 
 The `SkyMap` object re-exports all functions for backwards compatibility. Prefer the named exports.

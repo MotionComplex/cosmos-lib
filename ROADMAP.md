@@ -18,11 +18,11 @@ Transform the current render-only `renderSkyMap` into a fully interactive experi
 - [x] Real-time mode — auto-update as sidereal time advances
 - [x] Configurable HUD (cardinal directions, horizon line, zenith marker)
 - [x] Event emitter for interactions (`onSelect`, `onHover`, `onViewChange`)
-- [ ] **Docs & examples:**
-  - [ ] TypeDoc comments on all public API (classes, methods, options, events)
-  - [ ] Usage guide with code samples (pan/zoom, hit-testing, event listeners, HUD, FOV overlays)
-  - [ ] `observatory-app`: already integrated (`SkyMapView.tsx`) — verify docs link in `DocsReference`
-  - [ ] `react-native-app`: N/A (canvas-based renderer, no RN equivalent)
+- [x] **Docs & examples:**
+  - [x] TypeDoc comments on all public API (classes, methods, options, events)
+  - [x] Usage guide with code samples (pan/zoom, hit-testing, event listeners, HUD, FOV overlays)
+  - [x] `observatory-app`: already integrated (`SkyMapView.tsx`) — docs link verified in `DocsReference`
+  - [x] `react-native-app`: N/A (canvas-based renderer, no RN equivalent)
 
 ---
 
