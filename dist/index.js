@@ -1,5 +1,5 @@
-import { M as P } from "./media-DVOcIMa1.js";
-const C = {
+import { M as R } from "./media-DVOcIMa1.js";
+const S = {
   /** One Astronomical Unit in kilometres (IAU 2012 exact definition). */
   AU_TO_KM: 1495978707e-1,
   /** One light-year in kilometres. */
@@ -28,87 +28,87 @@ const C = {
   DEG_TO_RAD: Math.PI / 180,
   /** Conversion factor: radians to degrees. */
   RAD_TO_DEG: 180 / Math.PI
-}, Me = {
+}, Is = {
   // ── Distance ───────────────────────────────────────────────────────────────
   /**
    * Convert Astronomical Units to kilometres.
    * @param au - Distance in AU.
    * @returns Distance in kilometres.
    */
-  auToKm: (t) => t * C.AU_TO_KM,
+  auToKm: (n) => n * S.AU_TO_KM,
   /**
    * Convert kilometres to Astronomical Units.
    * @param km - Distance in kilometres.
    * @returns Distance in AU.
    */
-  kmToAu: (t) => t / C.AU_TO_KM,
+  kmToAu: (n) => n / S.AU_TO_KM,
   /**
    * Convert light-years to parsecs.
    * @param ly - Distance in light-years.
    * @returns Distance in parsecs.
    */
-  lyToPc: (t) => t / C.PC_TO_LY,
+  lyToPc: (n) => n / S.PC_TO_LY,
   /**
    * Convert parsecs to light-years.
    * @param pc - Distance in parsecs.
    * @returns Distance in light-years.
    */
-  pcToLy: (t) => t * C.PC_TO_LY,
+  pcToLy: (n) => n * S.PC_TO_LY,
   /**
    * Convert parsecs to kilometres.
    * @param pc - Distance in parsecs.
    * @returns Distance in kilometres.
    */
-  pcToKm: (t) => t * C.PC_TO_KM,
+  pcToKm: (n) => n * S.PC_TO_KM,
   /**
    * Convert light-years to kilometres.
    * @param ly - Distance in light-years.
    * @returns Distance in kilometres.
    */
-  lyToKm: (t) => t * C.LY_TO_KM,
+  lyToKm: (n) => n * S.LY_TO_KM,
   /**
    * Convert kilometres to light-years.
    * @param km - Distance in kilometres.
    * @returns Distance in light-years.
    */
-  kmToLy: (t) => t / C.LY_TO_KM,
+  kmToLy: (n) => n / S.LY_TO_KM,
   // ── Angular ────────────────────────────────────────────────────────────────
   /**
    * Convert degrees to radians.
    * @param d - Angle in degrees.
    * @returns Angle in radians.
    */
-  degToRad: (t) => t * C.DEG_TO_RAD,
+  degToRad: (n) => n * S.DEG_TO_RAD,
   /**
    * Convert radians to degrees.
    * @param r - Angle in radians.
    * @returns Angle in degrees.
    */
-  radToDeg: (t) => t * C.RAD_TO_DEG,
+  radToDeg: (n) => n * S.RAD_TO_DEG,
   /**
    * Convert arcseconds to degrees.
    * @param a - Angle in arcseconds.
    * @returns Angle in degrees.
    */
-  arcsecToDeg: (t) => t / 3600,
+  arcsecToDeg: (n) => n / 3600,
   /**
    * Convert degrees to arcseconds.
    * @param d - Angle in degrees.
    * @returns Angle in arcseconds.
    */
-  degToArcsec: (t) => t * 3600,
+  degToArcsec: (n) => n * 3600,
   /**
    * Convert Right Ascension from hours to degrees.
    * @param h - RA in hours (0–24).
    * @returns RA in degrees (0–360).
    */
-  hrsToDeg: (t) => t * 15,
+  hrsToDeg: (n) => n * 15,
   /**
    * Convert Right Ascension from degrees to hours.
    * @param d - RA in degrees (0–360).
    * @returns RA in hours (0–24).
    */
-  degToHrs: (t) => t / 15,
+  degToHrs: (n) => n / 15,
   /**
    * Format a distance in kilometres into a human-readable string,
    * automatically choosing the most appropriate unit (km, AU, ly, or Mly).
@@ -122,12 +122,12 @@ const C = {
    * Units.formatDistance(9_460_730_472_580 * 8.6) // '8.600 ly'
    * ```
    */
-  formatDistance(t) {
-    const e = t / C.AU_TO_KM;
-    if (e < 0.01) return `${t.toFixed(0)} km`;
-    if (e < 1e3) return `${e.toPrecision(4)} AU`;
-    const a = t / C.LY_TO_KM;
-    return a < 1e6 ? `${a.toPrecision(4)} ly` : `${(a / 1e6).toPrecision(4)} Mly`;
+  formatDistance(n) {
+    const s = n / S.AU_TO_KM;
+    if (s < 0.01) return `${n.toFixed(0)} km`;
+    if (s < 1e3) return `${s.toPrecision(4)} AU`;
+    const e = n / S.LY_TO_KM;
+    return e < 1e6 ? `${e.toPrecision(4)} ly` : `${(e / 1e6).toPrecision(4)} Mly`;
   },
   /**
    * Format decimal degrees as d°m′s″ (signed).
@@ -141,9 +141,9 @@ const C = {
    * Units.formatAngle(83.822)   // '83°49′19.2″'
    * ```
    */
-  formatAngle(t) {
-    const e = t < 0 ? "-" : "", a = Math.abs(t), i = Math.floor(a), s = Math.floor((a - i) * 60), n = ((a - i) * 60 - s) * 60;
-    return `${e}${i}°${s}′${n.toFixed(1)}″`;
+  formatAngle(n) {
+    const s = n < 0 ? "-" : "", e = Math.abs(n), i = Math.floor(e), t = Math.floor((e - i) * 60), r = ((e - i) * 60 - t) * 60;
+    return `${s}${i}°${t}′${r.toFixed(1)}″`;
   },
   /**
    * Format Right Ascension from decimal degrees into hours/minutes/seconds.
@@ -157,11 +157,11 @@ const C = {
    * Units.formatRA(0)       // '0h 0m 0.0s'
    * ```
    */
-  formatRA(t) {
-    const e = (t % 360 + 360) % 360, a = Math.floor(e / 15), i = Math.floor((e / 15 - a) * 60), s = ((e / 15 - a) * 60 - i) * 60;
-    return `${a}h ${i}m ${s.toFixed(1)}s`;
+  formatRA(n) {
+    const s = (n % 360 + 360) % 360, e = Math.floor(s / 15), i = Math.floor((s / 15 - e) * 60), t = ((s / 15 - e) * 60 - i) * 60;
+    return `${e}h ${i}m ${t.toFixed(1)}s`;
   }
-}, M = C.DEG_TO_RAD, I = C.RAD_TO_DEG, k = {
+}, _ = S.DEG_TO_RAD, D = S.RAD_TO_DEG, M = {
   // ── Time ──────────────────────────────────────────────────────────────────
   /**
    * Convert a JavaScript Date to a Julian Date number.
@@ -179,8 +179,8 @@ const C = {
    * // => 2451545.0
    * ```
    */
-  toJulian(t = /* @__PURE__ */ new Date()) {
-    return t.valueOf() / 864e5 + 24405875e-1;
+  toJulian(n = /* @__PURE__ */ new Date()) {
+    return n.valueOf() / 864e5 + 24405875e-1;
   },
   /**
    * Convert a Julian Date number back to a JavaScript Date.
@@ -194,8 +194,8 @@ const C = {
    * // => Date('2000-01-01T12:00:00.000Z')
    * ```
    */
-  fromJulian(t) {
-    return new Date((t - 24405875e-1) * 864e5);
+  fromJulian(n) {
+    return new Date((n - 24405875e-1) * 864e5);
   },
   /**
    * Compute the number of days elapsed since the J2000.0 epoch
@@ -211,8 +211,8 @@ const C = {
    * // => ~36525.0
    * ```
    */
-  j2000Days(t = /* @__PURE__ */ new Date()) {
-    return this.toJulian(t) - C.J2000;
+  j2000Days(n = /* @__PURE__ */ new Date()) {
+    return this.toJulian(n) - S.J2000;
   },
   /**
    * Greenwich Mean Sidereal Time (GMST) in degrees.
@@ -234,8 +234,8 @@ const C = {
    * // => 280.46061837
    * ```
    */
-  gmst(t = /* @__PURE__ */ new Date()) {
-    return ((280.46061837 + 360.98564736629 * this.j2000Days(t)) % 360 + 360) % 360;
+  gmst(n = /* @__PURE__ */ new Date()) {
+    return ((280.46061837 + 360.98564736629 * this.j2000Days(n)) % 360 + 360) % 360;
   },
   /**
    * Local Sidereal Time (LST) in degrees.
@@ -253,8 +253,8 @@ const C = {
    * // => ~280.36
    * ```
    */
-  lst(t, e) {
-    return ((this.gmst(t) + e) % 360 + 360) % 360;
+  lst(n, s) {
+    return ((this.gmst(n) + s) % 360 + 360) % 360;
   },
   // ── Coordinate transforms ─────────────────────────────────────────────────
   /**
@@ -280,10 +280,10 @@ const C = {
    * // => { alt: <altitude>, az: <azimuth> }
    * ```
    */
-  equatorialToHorizontal(t, e) {
-    const a = e.date ?? /* @__PURE__ */ new Date(), s = ((this.lst(a, e.lng) - t.ra) % 360 + 360) % 360 * M, n = t.dec * M, r = e.lat * M, c = Math.sin(n) * Math.sin(r) + Math.cos(n) * Math.cos(r) * Math.cos(s), l = Math.asin(Math.max(-1, Math.min(1, c))) * I, o = l * M, d = (Math.sin(n) - Math.sin(o) * Math.sin(r)) / (Math.cos(o) * Math.cos(r));
-    let p = Math.acos(Math.max(-1, Math.min(1, d))) * I;
-    return Math.sin(s) > 0 && (p = 360 - p), { alt: l, az: p };
+  equatorialToHorizontal(n, s) {
+    const e = s.date ?? /* @__PURE__ */ new Date(), t = ((this.lst(e, s.lng) - n.ra) % 360 + 360) % 360 * _, r = n.dec * _, l = s.lat * _, c = Math.sin(r) * Math.sin(l) + Math.cos(r) * Math.cos(l) * Math.cos(t), o = Math.asin(Math.max(-1, Math.min(1, c))) * D, g = o * _, v = (Math.sin(r) - Math.sin(g) * Math.sin(l)) / (Math.cos(g) * Math.cos(l));
+    let k = Math.acos(Math.max(-1, Math.min(1, v))) * D;
+    return Math.sin(t) > 0 && (k = 360 - k), { alt: o, az: k };
   },
   /**
    * Convert horizontal coordinates (Altitude/Azimuth) to equatorial coordinates (RA/Dec).
@@ -306,10 +306,10 @@ const C = {
    * // => { ra: <right ascension>, dec: <declination> }
    * ```
    */
-  horizontalToEquatorial(t, e) {
-    const a = e.date ?? /* @__PURE__ */ new Date(), i = t.alt * M, s = t.az * M, n = e.lat * M, r = Math.sin(i) * Math.sin(n) + Math.cos(i) * Math.cos(n) * Math.cos(s), c = Math.asin(Math.max(-1, Math.min(1, r))) * I, l = c * M, o = (Math.sin(i) - Math.sin(l) * Math.sin(n)) / (Math.cos(l) * Math.cos(n));
-    let d = Math.acos(Math.max(-1, Math.min(1, o))) * I;
-    return Math.sin(s) > 0 && (d = 360 - d), { ra: ((this.lst(a, e.lng) - d) % 360 + 360) % 360, dec: c };
+  horizontalToEquatorial(n, s) {
+    const e = s.date ?? /* @__PURE__ */ new Date(), i = n.alt * _, t = n.az * _, r = s.lat * _, l = Math.sin(i) * Math.sin(r) + Math.cos(i) * Math.cos(r) * Math.cos(t), c = Math.asin(Math.max(-1, Math.min(1, l))) * D, o = c * _, g = (Math.sin(i) - Math.sin(o) * Math.sin(r)) / (Math.cos(o) * Math.cos(r));
+    let v = Math.acos(Math.max(-1, Math.min(1, g))) * D;
+    return Math.sin(t) > 0 && (v = 360 - v), { ra: ((this.lst(e, s.lng) - v) % 360 + 360) % 360, dec: c };
   },
   /**
    * Convert ecliptic coordinates to equatorial coordinates (J2000 epoch).
@@ -335,14 +335,14 @@ const C = {
    * // => { ra: ~90, dec: ~23.44 }
    * ```
    */
-  eclipticToEquatorial(t) {
-    const e = C.ECLIPTIC_OBL * M, a = t.lon * M, i = t.lat * M, s = Math.atan2(
-      Math.sin(a) * Math.cos(e) - Math.tan(i) * Math.sin(e),
-      Math.cos(a)
-    ) * I, n = Math.asin(
-      Math.sin(i) * Math.cos(e) + Math.cos(i) * Math.sin(e) * Math.sin(a)
-    ) * I;
-    return { ra: (s % 360 + 360) % 360, dec: n };
+  eclipticToEquatorial(n) {
+    const s = S.ECLIPTIC_OBL * _, e = n.lon * _, i = n.lat * _, t = Math.atan2(
+      Math.sin(e) * Math.cos(s) - Math.tan(i) * Math.sin(s),
+      Math.cos(e)
+    ) * D, r = Math.asin(
+      Math.sin(i) * Math.cos(s) + Math.cos(i) * Math.sin(s) * Math.sin(e)
+    ) * D;
+    return { ra: (t % 360 + 360) % 360, dec: r };
   },
   /**
    * Convert galactic coordinates to equatorial coordinates (J2000 epoch).
@@ -366,12 +366,12 @@ const C = {
    * // => { ra: ~266.4, dec: ~-28.9 } (near Sagittarius A*)
    * ```
    */
-  galacticToEquatorial(t) {
-    const e = 192.85948, a = 27.12825, i = 122.93192, s = t.b * M, n = (i - t.l) * M, r = a * M, c = Math.sin(s) * Math.sin(r) + Math.cos(s) * Math.cos(r) * Math.cos(n), l = Math.asin(Math.max(-1, Math.min(1, c))) * I;
+  galacticToEquatorial(n) {
+    const s = 192.85948, e = 27.12825, i = 122.93192, t = n.b * _, r = (i - n.l) * _, l = e * _, c = Math.sin(t) * Math.sin(l) + Math.cos(t) * Math.cos(l) * Math.cos(r), o = Math.asin(Math.max(-1, Math.min(1, c))) * D;
     return { ra: ((Math.atan2(
-      Math.cos(s) * Math.sin(n),
-      Math.sin(s) * Math.cos(r) - Math.cos(s) * Math.sin(r) * Math.cos(n)
-    ) * I + e) % 360 + 360) % 360, dec: l };
+      Math.cos(t) * Math.sin(r),
+      Math.sin(t) * Math.cos(l) - Math.cos(t) * Math.sin(l) * Math.cos(r)
+    ) * D + s) % 360 + 360) % 360, dec: o };
   },
   // ── Angular separation ────────────────────────────────────────────────────
   /**
@@ -397,9 +397,9 @@ const C = {
    * // => ~27.07 degrees
    * ```
    */
-  angularSeparation(t, e) {
-    const a = t.dec * M, i = e.dec * M, s = (e.ra - t.ra) * M, n = Math.sin((i - a) / 2) ** 2 + Math.cos(a) * Math.cos(i) * Math.sin(s / 2) ** 2;
-    return 2 * Math.asin(Math.sqrt(Math.max(0, Math.min(1, n)))) * I;
+  angularSeparation(n, s) {
+    const e = n.dec * _, i = s.dec * _, t = (s.ra - n.ra) * _, r = Math.sin((i - e) / 2) ** 2 + Math.cos(e) * Math.cos(i) * Math.sin(t / 2) ** 2;
+    return 2 * Math.asin(Math.sqrt(Math.max(0, Math.min(1, r)))) * D;
   },
   // ── Photometry ────────────────────────────────────────────────────────────
   /**
@@ -418,8 +418,8 @@ const C = {
    * // => ~-1.46 (apparent magnitude)
    * ```
    */
-  apparentMagnitude(t, e) {
-    return t + 5 * Math.log10(e / 10);
+  apparentMagnitude(n, s) {
+    return n + 5 * Math.log10(s / 10);
   },
   /**
    * Compute absolute magnitude from apparent magnitude and distance.
@@ -437,8 +437,8 @@ const C = {
    * // => ~1.42 (absolute magnitude)
    * ```
    */
-  absoluteMagnitude(t, e) {
-    return t - 5 * Math.log10(e / 10);
+  absoluteMagnitude(n, s) {
+    return n - 5 * Math.log10(s / 10);
   },
   /**
    * Convert stellar parallax to distance.
@@ -455,8 +455,8 @@ const C = {
    * // => ~2.637 parsecs
    * ```
    */
-  parallaxToDistance(t) {
-    return 1 / t;
+  parallaxToDistance(n) {
+    return 1 / n;
   },
   // ── Kepler solver ────────────────────────────────────────────────────────
   /**
@@ -487,11 +487,11 @@ const C = {
    * // => ~1.6521 radians
    * ```
    */
-  solveKepler(t, e, a = 1e-12) {
-    let i = t + e * Math.sin(t) * (1 + e * Math.cos(t));
-    for (let s = 0; s < 30; s++) {
-      const n = (i - e * Math.sin(i) - t) / (1 - e * Math.cos(i));
-      if (i -= n, Math.abs(n) < a) break;
+  solveKepler(n, s, e = 1e-12) {
+    let i = n + s * Math.sin(n) * (1 + s * Math.cos(n));
+    for (let t = 0; t < 30; t++) {
+      const r = (i - s * Math.sin(i) - n) / (1 - s * Math.cos(i));
+      if (i -= r, Math.abs(r) < e) break;
     }
     return i;
   },
@@ -525,7 +525,7 @@ const C = {
    * // => { lon: ~34.4, lat: ~-1.3, r: ~5.03, ... }
    * ```
    */
-  planetEcliptic(t, e = /* @__PURE__ */ new Date()) {
+  planetEcliptic(n, s = /* @__PURE__ */ new Date()) {
     const i = {
       mercury: { a: 0.38709927, da: 37e-8, e: 0.20563593, de: 1906e-8, i: 7.00497902, di: -594749e-8, L: 252.2503235, dL: 149472.67411175, w: 77.45779628, dw: 0.16047689, O: 48.33076593, dO: -0.12534081 },
       venus: { a: 0.72333566, da: 39e-7, e: 677672e-8, de: -4107e-8, i: 3.39467605, di: -7889e-7, L: 181.9790995, dL: 58517.81538729, w: 131.60246718, dw: 268329e-8, O: 76.67984255, dO: -0.27769418 },
@@ -535,14 +535,14 @@ const C = {
       saturn: { a: 9.53667594, da: -12506e-7, e: 0.05386179, de: -50991e-8, i: 2.48599187, di: 193609e-8, L: 49.95424423, dL: 1222.49362201, w: 92.59887831, dw: -0.41897216, O: 113.66242448, dO: -0.28867794 },
       uranus: { a: 19.18916464, da: -196176e-8, e: 0.04725744, de: -4397e-8, i: 0.77263783, di: -242939e-8, L: 313.23810451, dL: 428.48202785, w: 170.9542763, dw: 0.40805281, O: 74.01692503, dO: 0.04240589 },
       neptune: { a: 30.06992276, da: 26291e-8, e: 859048e-8, de: 5105e-8, i: 1.77004347, di: 35372e-8, L: 304.87997031, dL: 218.45945325, w: 44.96476227, dw: -0.32241464, O: 131.78422574, dO: -508664e-8 }
-    }[t], n = this.j2000Days(e) / 36525, r = i.a + i.da * n, c = i.e + i.de * n, l = i.i + i.di * n, o = i.L + i.dL * n, d = i.w + i.dw * n, p = i.O + i.dO * n, m = ((o - d) % 360 + 360) % 360, u = m * M, g = this.solveKepler(u, c), f = (Math.atan2(
-      Math.sqrt(1 - c * c) * Math.sin(g),
-      Math.cos(g) - c
-    ) * I % 360 + 360) % 360, v = r * (1 - c * Math.cos(g)), b = d - p, h = (f + b) * M, S = l * M, y = Math.atan2(
-      Math.sin(h) * Math.cos(S),
-      Math.cos(h)
-    ) * I + p, D = Math.asin(Math.sin(h) * Math.sin(S)) * I;
-    return { lon: (y % 360 + 360) % 360, lat: D, r: v, M: m, nu: f };
+    }[n], r = this.j2000Days(s) / 36525, l = i.a + i.da * r, c = i.e + i.de * r, o = i.i + i.di * r, g = i.L + i.dL * r, v = i.w + i.dw * r, k = i.O + i.dO * r, a = ((g - v) % 360 + 360) % 360, y = a * _, u = this.solveKepler(y, c), f = (Math.atan2(
+      Math.sqrt(1 - c * c) * Math.sin(u),
+      Math.cos(u) - c
+    ) * D % 360 + 360) % 360, b = l * (1 - c * Math.cos(u)), p = v - k, m = (f + p) * _, A = o * _, h = Math.atan2(
+      Math.sin(m) * Math.cos(A),
+      Math.cos(m)
+    ) * D + k, C = Math.asin(Math.sin(m) * Math.sin(A)) * D;
+    return { lon: (h % 360 + 360) % 360, lat: C, r: b, M: a, nu: f };
   },
   // ── Precession ──────────────────────────────────────────────────────────
   /**
@@ -572,9 +572,9 @@ const C = {
    * // => { ra: ~101.61, dec: ~-16.79 }
    * ```
    */
-  precess(t, e, a) {
-    const i = (e - 2451545) / 36525, s = (a - e) / 36525, n = (2306.2181 + 1.39656 * i - 139e-6 * i * i) * s + (0.30188 - 344e-6 * i) * s * s + 0.017998 * s * s * s, r = (2306.2181 + 1.39656 * i - 139e-6 * i * i) * s + (1.09468 + 66e-6 * i) * s * s + 0.018203 * s * s * s, c = (2004.3109 - 0.8533 * i - 217e-6 * i * i) * s - (0.42665 + 217e-6 * i) * s * s - 0.041833 * s * s * s, l = n / 3600 * M, o = r / 3600 * M, d = c / 3600 * M, p = t.ra * M, m = t.dec * M, u = Math.cos(m) * Math.sin(p + l), g = Math.cos(d) * Math.cos(m) * Math.cos(p + l) - Math.sin(d) * Math.sin(m), _ = Math.sin(d) * Math.cos(m) * Math.cos(p + l) + Math.cos(d) * Math.sin(m), f = (Math.atan2(u, g) + o) * I, v = Math.asin(Math.max(-1, Math.min(1, _))) * I;
-    return { ra: (f % 360 + 360) % 360, dec: v };
+  precess(n, s, e) {
+    const i = (s - 2451545) / 36525, t = (e - s) / 36525, r = (2306.2181 + 1.39656 * i - 139e-6 * i * i) * t + (0.30188 - 344e-6 * i) * t * t + 0.017998 * t * t * t, l = (2306.2181 + 1.39656 * i - 139e-6 * i * i) * t + (1.09468 + 66e-6 * i) * t * t + 0.018203 * t * t * t, c = (2004.3109 - 0.8533 * i - 217e-6 * i * i) * t - (0.42665 + 217e-6 * i) * t * t - 0.041833 * t * t * t, o = r / 3600 * _, g = l / 3600 * _, v = c / 3600 * _, k = n.ra * _, a = n.dec * _, y = Math.cos(a) * Math.sin(k + o), u = Math.cos(v) * Math.cos(a) * Math.cos(k + o) - Math.sin(v) * Math.sin(a), d = Math.sin(v) * Math.cos(a) * Math.cos(k + o) + Math.cos(v) * Math.sin(a), f = (Math.atan2(y, u) + g) * D, b = Math.asin(Math.max(-1, Math.min(1, d))) * D;
+    return { ra: (f % 360 + 360) % 360, dec: b };
   },
   // ── Nutation ────────────────────────────────────────────────────────────
   /**
@@ -602,8 +602,8 @@ const C = {
    * // => { dPsi: ~-0.00385, dEpsilon: ~-0.00165 } (degrees)
    * ```
    */
-  nutation(t) {
-    const e = (t - 2451545) / 36525, a = ((125.04452 - 1934.136261 * e) % 360 + 360) % 360, i = ((280.4665 + 36000.7698 * e) % 360 + 360) % 360, s = ((218.3165 + 481267.8813 * e) % 360 + 360) % 360, n = ((93.272 + 483202.0175 * e) % 360 + 360) % 360, r = ((297.8502 + 445267.1115 * e) % 360 + 360) % 360, c = a * M, l = i * M, o = s * M, d = n * M, p = r * M, m = [
+  nutation(n) {
+    const s = (n - 2451545) / 36525, e = ((125.04452 - 1934.136261 * s) % 360 + 360) % 360, i = ((280.4665 + 36000.7698 * s) % 360 + 360) % 360, t = ((218.3165 + 481267.8813 * s) % 360 + 360) % 360, r = ((93.272 + 483202.0175 * s) % 360 + 360) % 360, l = ((297.8502 + 445267.1115 * s) % 360 + 360) % 360, c = e * _, o = i * _, g = t * _, v = r * _, k = l * _, a = [
       [0, 0, 0, 0, 1, -171996, -174.2, 92025, 8.9],
       [-2, 0, 0, 2, 2, -13187, -1.6, 5736, -3.1],
       [0, 0, 0, 2, 2, -2274, -0.2, 977, -0.5],
@@ -618,14 +618,14 @@ const C = {
       [-2, 0, 0, 2, 1, 129, 0.1, -70, 0],
       [0, 0, -1, 2, 2, 123, 0, -53, 0]
     ];
-    let u = 0, g = 0;
-    for (const _ of m) {
-      const f = _[0] * p + _[1] * l + _[2] * o + _[3] * d + _[4] * c;
-      u += (_[5] + _[6] * e) * Math.sin(f), g += (_[7] + _[8] * e) * Math.cos(f);
+    let y = 0, u = 0;
+    for (const d of a) {
+      const f = d[0] * k + d[1] * o + d[2] * g + d[3] * v + d[4] * c;
+      y += (d[5] + d[6] * s) * Math.sin(f), u += (d[7] + d[8] * s) * Math.cos(f);
     }
     return {
-      dPsi: u / (3600 * 1e4),
-      dEpsilon: g / (3600 * 1e4)
+      dPsi: y / (3600 * 1e4),
+      dEpsilon: u / (3600 * 1e4)
     };
   },
   /**
@@ -647,9 +647,9 @@ const C = {
    * // => ~23.439 degrees (mean obliquity plus small nutation correction)
    * ```
    */
-  trueObliquity(t) {
-    const e = (t - 2451545) / 36525, a = 23.439291111 - 0.013004167 * e - 1639e-10 * e * e + 5036e-10 * e * e * e, { dEpsilon: i } = this.nutation(t);
-    return a + i;
+  trueObliquity(n) {
+    const s = (n - 2451545) / 36525, e = 23.439291111 - 0.013004167 * s - 1639e-10 * s * s + 5036e-10 * s * s * s, { dEpsilon: i } = this.nutation(n);
+    return e + i;
   },
   /**
    * Greenwich Apparent Sidereal Time (GAST) in degrees.
@@ -673,9 +673,9 @@ const C = {
    * // => ~280.46 degrees (GMST + small nutation correction)
    * ```
    */
-  gast(t = /* @__PURE__ */ new Date()) {
-    const e = this.toJulian(t), a = this.gmst(t), { dPsi: i } = this.nutation(e), s = this.trueObliquity(e), n = i * Math.cos(s * M);
-    return ((a + n) % 360 + 360) % 360;
+  gast(n = /* @__PURE__ */ new Date()) {
+    const s = this.toJulian(n), e = this.gmst(n), { dPsi: i } = this.nutation(s), t = this.trueObliquity(s), r = i * Math.cos(t * _);
+    return ((e + r) % 360 + 360) % 360;
   },
   // ── Atmospheric refraction ──────────────────────────────────────────────
   /**
@@ -708,10 +708,10 @@ const C = {
    * // => ~0.016 degrees (~58 arcseconds)
    * ```
    */
-  refraction(t, e = 10, a = 1010) {
-    if (t < -1) return 0;
-    const i = Math.max(t, -0.5), s = 1.02 / Math.tan((i + 10.3 / (i + 5.11)) * M) + 19279e-7, n = a / 1010 * (283 / (273 + e));
-    return s * n / 60;
+  refraction(n, s = 10, e = 1010) {
+    if (n < -1) return 0;
+    const i = Math.max(n, -0.5), t = 1.02 / Math.tan((i + 10.3 / (i + 5.11)) * _) + 19279e-7, r = e / 1010 * (283 / (273 + s));
+    return t * r / 60;
   },
   // ── Proper motion ───────────────────────────────────────────────────────
   /**
@@ -744,9 +744,9 @@ const C = {
    * // => { ra: ~101.283, dec: ~-16.724 }
    * ```
    */
-  applyProperMotion(t, e, a, i, s) {
-    const n = s - i, r = e / (36e5 * Math.cos(t.dec * M)) * n, c = a / 36e5 * n, l = ((t.ra + r) % 360 + 360) % 360, o = Math.max(-90, Math.min(90, t.dec + c));
-    return { ra: l, dec: o };
+  applyProperMotion(n, s, e, i, t) {
+    const r = t - i, l = s / (36e5 * Math.cos(n.dec * _)) * r, c = e / 36e5 * r, o = ((n.ra + l) % 360 + 360) % 360, g = Math.max(-90, Math.min(90, n.dec + c));
+    return { ra: o, dec: g };
   },
   // ── Rise / Transit / Set ────────────────────────────────────────────────
   /**
@@ -792,43 +792,43 @@ const C = {
    * // => { rise: Date(~05:30 UTC), transit: Date(~11:25 UTC), set: Date(~17:20 UTC) }
    * ```
    */
-  riseTransitSet(t, e, a = -0.5667) {
-    const i = e.date ?? /* @__PURE__ */ new Date(), s = new Date(Date.UTC(
+  riseTransitSet(n, s, e = -0.5667) {
+    const i = s.date ?? /* @__PURE__ */ new Date(), t = new Date(Date.UTC(
       i.getUTCFullYear(),
       i.getUTCMonth(),
       i.getUTCDate()
-    )), n = t.dec * M, r = e.lat * M, c = a * M, l = (Math.sin(c) - Math.sin(r) * Math.sin(n)) / (Math.cos(r) * Math.cos(n)), o = this.gmst(s), d = ((t.ra - e.lng - o) / 360 % 1 + 1) % 1, p = new Date(s.valueOf() + d * 864e5);
-    if (l > 1)
-      return { rise: null, transit: p, set: null };
-    if (l < -1)
-      return { rise: null, transit: p, set: null };
-    const u = Math.acos(l) * I / 360, g = ((d - u) % 1 + 1) % 1, _ = ((d + u) % 1 + 1) % 1, f = new Date(s.valueOf() + g * 864e5), v = new Date(s.valueOf() + _ * 864e5);
-    return { rise: f, transit: p, set: v };
+    )), r = n.dec * _, l = s.lat * _, c = e * _, o = (Math.sin(c) - Math.sin(l) * Math.sin(r)) / (Math.cos(l) * Math.cos(r)), g = this.gmst(t), v = ((n.ra - s.lng - g) / 360 % 1 + 1) % 1, k = new Date(t.valueOf() + v * 864e5);
+    if (o > 1)
+      return { rise: null, transit: k, set: null };
+    if (o < -1)
+      return { rise: null, transit: k, set: null };
+    const y = Math.acos(o) * D / 360, u = ((v - y) % 1 + 1) % 1, d = ((v + y) % 1 + 1) % 1, f = new Date(t.valueOf() + u * 864e5), b = new Date(t.valueOf() + d * 864e5);
+    return { rise: f, transit: k, set: b };
   }
 };
-function ce(t, e = 6e4, a = 128) {
+function ys(n, s = 6e4, e = 128) {
   const i = /* @__PURE__ */ new Map();
-  return (s = /* @__PURE__ */ new Date()) => {
-    const n = Math.round(s.getTime() / e), r = i.get(n);
-    if (r !== void 0) return r;
-    const c = t(s);
-    return i.size >= a && i.delete(i.keys().next().value), i.set(n, c), c;
+  return (t = /* @__PURE__ */ new Date()) => {
+    const r = Math.round(t.getTime() / s), l = i.get(r);
+    if (l !== void 0) return l;
+    const c = n(t);
+    return i.size >= e && i.delete(i.keys().next().value), i.set(r, c), c;
   };
 }
-const J = C.DEG_TO_RAD, ve = ce((t) => {
-  const e = k.planetEcliptic("earth", t), a = ((e.lon + 180) % 360 + 360) % 360, i = -e.lat, s = k.toJulian(t), { dPsi: n } = k.nutation(s), r = a + n, c = k.trueObliquity(s) * J, l = r * J, o = i * J, d = Math.atan2(
-    Math.sin(l) * Math.cos(c) - Math.tan(o) * Math.sin(c),
-    Math.cos(l)
-  ) * (180 / Math.PI), p = Math.asin(
-    Math.sin(o) * Math.cos(c) + Math.cos(o) * Math.sin(c) * Math.sin(l)
+const Z = S.DEG_TO_RAD, ws = ys((n) => {
+  const s = M.planetEcliptic("earth", n), e = ((s.lon + 180) % 360 + 360) % 360, i = -s.lat, t = M.toJulian(n), { dPsi: r } = M.nutation(t), l = e + r, c = M.trueObliquity(t) * Z, o = l * Z, g = i * Z, v = Math.atan2(
+    Math.sin(o) * Math.cos(c) - Math.tan(g) * Math.sin(c),
+    Math.cos(o)
+  ) * (180 / Math.PI), k = Math.asin(
+    Math.sin(g) * Math.cos(c) + Math.cos(g) * Math.sin(c) * Math.sin(o)
   ) * (180 / Math.PI);
   return {
-    ra: (d % 360 + 360) % 360,
-    dec: p,
-    distance_AU: e.r,
-    eclipticLon: r
+    ra: (v % 360 + 360) % 360,
+    dec: k,
+    distance_AU: s.r,
+    eclipticLon: l
   };
-}), Ae = {
+}), Rs = {
   /**
    * Geocentric equatorial position of the Sun.
    *
@@ -856,8 +856,8 @@ const J = C.DEG_TO_RAD, ve = ce((t) => {
    * console.log(`Ecliptic Lon: ${pos.eclipticLon.toFixed(4)}°`) // ~0° at equinox
    * ```
    */
-  position(t = /* @__PURE__ */ new Date()) {
-    return ve(t);
+  position(n = /* @__PURE__ */ new Date()) {
+    return ws(n);
   },
   /**
    * Solar noon (transit) for a given observer.
@@ -881,9 +881,9 @@ const J = C.DEG_TO_RAD, ve = ce((t) => {
    * console.log('Solar noon:', noon.toISOString()) // ~12:10 UTC
    * ```
    */
-  solarNoon(t) {
-    const e = t.date ?? /* @__PURE__ */ new Date(), a = this.position(e);
-    return k.riseTransitSet(a, t, -0.8333).transit;
+  solarNoon(n) {
+    const s = n.date ?? /* @__PURE__ */ new Date(), e = this.position(s);
+    return M.riseTransitSet(e, n, -0.8333).transit;
   },
   /**
    * Equation of time in minutes.
@@ -915,10 +915,10 @@ const J = C.DEG_TO_RAD, ve = ce((t) => {
    * console.log(`EoT in November: ${eotNov.toFixed(2)} minutes`) // ~+16 min
    * ```
    */
-  equationOfTime(t = /* @__PURE__ */ new Date()) {
-    const e = this.position(t);
-    let n = ((280.46646 + 36000.76983 * ((k.toJulian(t) - 2451545) / 36525)) % 360 + 360) % 360 - 57183e-7 - e.ra;
-    return n = ((n + 180) % 360 + 360) % 360 - 180, n * 4;
+  equationOfTime(n = /* @__PURE__ */ new Date()) {
+    const s = this.position(n);
+    let r = ((280.46646 + 36000.76983 * ((M.toJulian(n) - 2451545) / 36525)) % 360 + 360) % 360 - 57183e-7 - s.ra;
+    return r = ((r + 180) % 360 + 360) % 360 - 180, r * 4;
   },
   /**
    * Complete twilight times for an observer.
@@ -953,21 +953,21 @@ const J = C.DEG_TO_RAD, ve = ce((t) => {
    * console.log('Astronomical dusk:', tw.astronomicalDusk?.toISOString())
    * ```
    */
-  twilight(t) {
-    const e = t.date ?? /* @__PURE__ */ new Date(), a = this.position(e), i = k.riseTransitSet(a, t, -0.8333), s = k.riseTransitSet(a, t, -6), n = k.riseTransitSet(a, t, -12), r = k.riseTransitSet(a, t, -18);
+  twilight(n) {
+    const s = n.date ?? /* @__PURE__ */ new Date(), e = this.position(s), i = M.riseTransitSet(e, n, -0.8333), t = M.riseTransitSet(e, n, -6), r = M.riseTransitSet(e, n, -12), l = M.riseTransitSet(e, n, -18);
     return {
-      astronomicalDawn: r.rise,
-      nauticalDawn: n.rise,
-      civilDawn: s.rise,
+      astronomicalDawn: l.rise,
+      nauticalDawn: r.rise,
+      civilDawn: t.rise,
       sunrise: i.rise,
       solarNoon: i.transit,
       sunset: i.set,
-      civilDusk: s.set,
-      nauticalDusk: n.set,
-      astronomicalDusk: r.set
+      civilDusk: t.set,
+      nauticalDusk: r.set,
+      astronomicalDusk: l.set
     };
   }
-}, A = C.DEG_TO_RAD, E = C.RAD_TO_DEG, ke = [
+}, z = S.DEG_TO_RAD, O = S.RAD_TO_DEG, xs = [
   [0, 0, 1, 0, 6288774, -20905355],
   [2, 0, -1, 0, 1274027, -3699111],
   [2, 0, 0, 0, 658314, -2955968],
@@ -1018,7 +1018,7 @@ const J = C.DEG_TO_RAD, ve = ce((t) => {
   [0, 0, 4, 0, 537, -1117],
   [4, -1, 0, 0, 520, -1571],
   [1, 0, -2, 0, -487, -1739]
-], Se = [
+], Ts = [
   [0, 0, 0, 1, 5128122],
   [0, 0, 1, 1, 280602],
   [0, 0, 1, -1, 277693],
@@ -1049,39 +1049,39 @@ const J = C.DEG_TO_RAD, ve = ce((t) => {
   [0, 0, 3, 1, 1107],
   [4, 0, 0, -1, 1021],
   [4, 0, -1, 1, 833]
-], X = 29.530588861, Ce = ce((t) => {
-  const e = k.toJulian(t), a = (e - 2451545) / 36525, i = ((218.3164477 + 481267.88123421 * a - 15786e-7 * a * a + a * a * a / 538841 - a * a * a * a / 65194e3) % 360 + 360) % 360, s = ((297.8501921 + 445267.1114034 * a - 18819e-7 * a * a + a * a * a / 545868 - a * a * a * a / 113065e3) % 360 + 360) % 360, n = ((357.5291092 + 35999.0502909 * a - 1536e-7 * a * a + a * a * a / 2449e4) % 360 + 360) % 360, r = ((134.9633964 + 477198.8675055 * a + 87414e-7 * a * a + a * a * a / 69699 - a * a * a * a / 14712e3) % 360 + 360) % 360, c = ((93.272095 + 483202.0175233 * a - 36539e-7 * a * a - a * a * a / 3526e3 + a * a * a * a / 86331e4) % 360 + 360) % 360, l = 1 - 2516e-6 * a - 74e-7 * a * a, o = l * l, d = s * A, p = n * A, m = r * A, u = c * A;
-  let g = 0, _ = 0;
-  for (const w of ke) {
-    const U = w[0] * d + w[1] * p + w[2] * m + w[3] * u;
-    let T = 1;
-    const j = Math.abs(w[1]);
-    j === 1 ? T = l : j === 2 && (T = o), g += w[4] * T * Math.sin(U), _ += w[5] * T * Math.cos(U);
+], ss = 29.530588861, Ls = ys((n) => {
+  const s = M.toJulian(n), e = (s - 2451545) / 36525, i = ((218.3164477 + 481267.88123421 * e - 15786e-7 * e * e + e * e * e / 538841 - e * e * e * e / 65194e3) % 360 + 360) % 360, t = ((297.8501921 + 445267.1114034 * e - 18819e-7 * e * e + e * e * e / 545868 - e * e * e * e / 113065e3) % 360 + 360) % 360, r = ((357.5291092 + 35999.0502909 * e - 1536e-7 * e * e + e * e * e / 2449e4) % 360 + 360) % 360, l = ((134.9633964 + 477198.8675055 * e + 87414e-7 * e * e + e * e * e / 69699 - e * e * e * e / 14712e3) % 360 + 360) % 360, c = ((93.272095 + 483202.0175233 * e - 36539e-7 * e * e - e * e * e / 3526e3 + e * e * e * e / 86331e4) % 360 + 360) % 360, o = 1 - 2516e-6 * e - 74e-7 * e * e, g = o * o, v = t * z, k = r * z, a = l * z, y = c * z;
+  let u = 0, d = 0;
+  for (const I of xs) {
+    const $ = I[0] * v + I[1] * k + I[2] * a + I[3] * y;
+    let N = 1;
+    const B = Math.abs(I[1]);
+    B === 1 ? N = o : B === 2 && (N = g), u += I[4] * N * Math.sin($), d += I[5] * N * Math.cos($);
   }
   let f = 0;
-  for (const w of Se) {
-    const U = w[0] * d + w[1] * p + w[2] * m + w[3] * u;
-    let T = 1;
-    const j = Math.abs(w[1]);
-    j === 1 ? T = l : j === 2 && (T = o), f += w[4] * T * Math.sin(U);
+  for (const I of Ts) {
+    const $ = I[0] * v + I[1] * k + I[2] * a + I[3] * y;
+    let N = 1;
+    const B = Math.abs(I[1]);
+    B === 1 ? N = o : B === 2 && (N = g), f += I[4] * N * Math.sin($);
   }
-  const v = (119.75 + 131.849 * a) * A, b = (53.09 + 479264.29 * a) * A, h = (313.45 + 481266.484 * a) * A;
-  g += 3958 * Math.sin(v) + 1962 * Math.sin((i - c) * A) + 318 * Math.sin(b), f += -2235 * Math.sin(i * A) + 382 * Math.sin(h) + 175 * Math.sin(v - u) + 175 * Math.sin(v + u) + 127 * Math.sin((i - r) * A) - 115 * Math.sin((i + r) * A);
-  const S = i + g / 1e6, y = f / 1e6, D = 385000.56 + _ / 1e3, { dPsi: x } = k.nutation(e), F = S + x, N = k.trueObliquity(e) * A, V = F * A, Y = y * A, ye = Math.atan2(
-    Math.sin(V) * Math.cos(N) - Math.tan(Y) * Math.sin(N),
+  const b = (119.75 + 131.849 * e) * z, p = (53.09 + 479264.29 * e) * z, m = (313.45 + 481266.484 * e) * z;
+  u += 3958 * Math.sin(b) + 1962 * Math.sin((i - c) * z) + 318 * Math.sin(p), f += -2235 * Math.sin(i * z) + 382 * Math.sin(m) + 175 * Math.sin(b - y) + 175 * Math.sin(b + y) + 127 * Math.sin((i - l) * z) - 115 * Math.sin((i + l) * z);
+  const A = i + u / 1e6, h = f / 1e6, C = 385000.56 + d / 1e3, { dPsi: x } = M.nutation(s), j = A + x, G = M.trueObliquity(s) * z, V = j * z, Q = h * z, Ss = Math.atan2(
+    Math.sin(V) * Math.cos(G) - Math.tan(Q) * Math.sin(G),
     Math.cos(V)
-  ) * E, _e = Math.asin(
-    Math.sin(Y) * Math.cos(N) + Math.cos(Y) * Math.sin(N) * Math.sin(V)
-  ) * E, fe = Math.asin(6378.14 / D) * E;
+  ) * O, Cs = Math.asin(
+    Math.sin(Q) * Math.cos(G) + Math.cos(Q) * Math.sin(G) * Math.sin(V)
+  ) * O, Ds = Math.asin(6378.14 / C) * O;
   return {
-    ra: (ye % 360 + 360) % 360,
-    dec: _e,
-    distance_km: D,
-    eclipticLon: (F % 360 + 360) % 360,
-    eclipticLat: y,
-    parallax: fe
+    ra: (Ss % 360 + 360) % 360,
+    dec: Cs,
+    distance_km: C,
+    eclipticLon: (j % 360 + 360) % 360,
+    eclipticLat: h,
+    parallax: Ds
   };
-}, 6e4, 64), G = {
+}, 6e4, 64), E = {
   /**
    * Geocentric equatorial and ecliptic position of the Moon.
    *
@@ -1117,8 +1117,8 @@ const J = C.DEG_TO_RAD, ve = ce((t) => {
    * console.log(`Parallax: ${pos.parallax.toFixed(4)}°`)
    * ```
    */
-  position(t = /* @__PURE__ */ new Date()) {
-    return Ce(t);
+  position(n = /* @__PURE__ */ new Date()) {
+    return Ls(n);
   },
   /**
    * Moon phase information for a given date.
@@ -1150,13 +1150,13 @@ const J = C.DEG_TO_RAD, ve = ce((t) => {
    * console.log(`Cycle: ${(p.phase * 100).toFixed(1)}%`)     // 0% = new, 50% = full
    * ```
    */
-  phase(t = /* @__PURE__ */ new Date()) {
-    const e = this.position(t), a = ((k.planetEcliptic("earth", t).lon + 180) % 360 + 360) % 360;
-    let i = e.eclipticLon - a;
+  phase(n = /* @__PURE__ */ new Date()) {
+    const s = this.position(n), e = ((M.planetEcliptic("earth", n).lon + 180) % 360 + 360) % 360;
+    let i = s.eclipticLon - e;
     i = (i % 360 + 360) % 360;
-    const s = i / 360, n = (1 - Math.cos(i * A)) / 2, r = s * X;
+    const t = i / 360, r = (1 - Math.cos(i * z)) / 2, l = t * ss;
     let c;
-    return s < 0.0625 ? c = "new" : s < 0.1875 ? c = "waxing-crescent" : s < 0.3125 ? c = "first-quarter" : s < 0.4375 ? c = "waxing-gibbous" : s < 0.5625 ? c = "full" : s < 0.6875 ? c = "waning-gibbous" : s < 0.8125 ? c = "last-quarter" : s < 0.9375 ? c = "waning-crescent" : c = "new", { phase: s, illumination: n, age: r, name: c };
+    return t < 0.0625 ? c = "new" : t < 0.1875 ? c = "waxing-crescent" : t < 0.3125 ? c = "first-quarter" : t < 0.4375 ? c = "waxing-gibbous" : t < 0.5625 ? c = "full" : t < 0.6875 ? c = "waning-gibbous" : t < 0.8125 ? c = "last-quarter" : t < 0.9375 ? c = "waning-crescent" : c = "new", { phase: t, illumination: r, age: l, name: c };
   },
   /**
    * Find the next occurrence of a specific phase after the given date.
@@ -1190,23 +1190,23 @@ const J = C.DEG_TO_RAD, ve = ce((t) => {
    * console.log('Next new moon:', newMoon.toISOString()) // 2024-04-08
    * ```
    */
-  nextPhase(t = /* @__PURE__ */ new Date(), e = "full") {
+  nextPhase(n = /* @__PURE__ */ new Date(), s = "full") {
     const i = {
       new: 0,
       "first-quarter": 0.25,
       full: 0.5,
       "last-quarter": 0.75
-    }[e], s = this.phase(t);
-    let n = i - s.phase;
-    n <= 0 && (n += 1);
-    let r = new Date(t.valueOf() + n * X * 864e5);
+    }[s], t = this.phase(n);
+    let r = i - t.phase;
+    r <= 0 && (r += 1);
+    let l = new Date(n.valueOf() + r * ss * 864e5);
     for (let c = 0; c < 20; c++) {
-      const l = this.phase(r);
-      let o = i - l.phase;
-      if (o > 0.5 && (o -= 1), o < -0.5 && (o += 1), Math.abs(o) < 1e-4) break;
-      r = new Date(r.valueOf() + o * X * 864e5);
+      const o = this.phase(l);
+      let g = i - o.phase;
+      if (g > 0.5 && (g -= 1), g < -0.5 && (g += 1), Math.abs(g) < 1e-4) break;
+      l = new Date(l.valueOf() + g * ss * 864e5);
     }
-    return r;
+    return l;
   },
   /**
    * Rise, transit, and set times for the Moon.
@@ -1236,9 +1236,9 @@ const J = C.DEG_TO_RAD, ve = ce((t) => {
    * console.log('Moonset:', rts.set?.toISOString())
    * ```
    */
-  riseTransitSet(t) {
-    const e = t.date ?? /* @__PURE__ */ new Date(), a = this.position(e);
-    return k.riseTransitSet(a, t, 0.125);
+  riseTransitSet(n) {
+    const s = n.date ?? /* @__PURE__ */ new Date(), e = this.position(s);
+    return M.riseTransitSet(e, n, 0.125);
   },
   /**
    * Optical libration angles (simplified).
@@ -1274,20 +1274,20 @@ const J = C.DEG_TO_RAD, ve = ce((t) => {
    * console.log(`Libration in latitude: ${lib.b.toFixed(2)}°`)
    * ```
    */
-  libration(t = /* @__PURE__ */ new Date()) {
-    const i = ((125.04452 - 1934.136261 * ((k.toJulian(t) - 2451545) / 36525)) % 360 + 360) % 360, s = this.position(t), n = 1.5424, r = s.eclipticLon - i, c = -Math.asin(
-      Math.sin(r * A) * Math.cos(s.eclipticLat * A) * Math.sin(n * A) - Math.sin(s.eclipticLat * A) * Math.cos(n * A)
-    ) * E;
+  libration(n = /* @__PURE__ */ new Date()) {
+    const i = ((125.04452 - 1934.136261 * ((M.toJulian(n) - 2451545) / 36525)) % 360 + 360) % 360, t = this.position(n), r = 1.5424, l = t.eclipticLon - i, c = -Math.asin(
+      Math.sin(l * z) * Math.cos(t.eclipticLat * z) * Math.sin(r * z) - Math.sin(t.eclipticLat * z) * Math.cos(r * z)
+    ) * O;
     Math.atan2(
-      Math.sin(r * A) * Math.cos(n * A) + Math.tan(s.eclipticLat * A) * Math.sin(n * A),
-      Math.cos(r * A)
-    ) * E;
-    const l = Math.asin(
-      -Math.sin(s.eclipticLat * A) * Math.sin(n * A) - Math.cos(s.eclipticLat * A) * Math.sin(n * A) * Math.sin(r * A)
-    ) * E;
-    return { l: c, b: l };
+      Math.sin(l * z) * Math.cos(r * z) + Math.tan(t.eclipticLat * z) * Math.sin(r * z),
+      Math.cos(l * z)
+    ) * O;
+    const o = Math.asin(
+      -Math.sin(t.eclipticLat * z) * Math.sin(r * z) - Math.cos(t.eclipticLat * z) * Math.sin(r * z) * Math.sin(l * z)
+    ) * O;
+    return { l: c, b: o };
   }
-}, De = {
+}, Ns = {
   /**
    * Find the next solar eclipse after the given date.
    *
@@ -1308,12 +1308,12 @@ const J = C.DEG_TO_RAD, ve = ce((t) => {
    * }
    * ```
    */
-  nextSolar(t = /* @__PURE__ */ new Date()) {
-    let e = new Date(t);
-    for (let a = 0; a < 26; a++) {
-      const i = G.nextPhase(e, "new"), s = this._checkSolarEclipse(i);
-      if (s) return s;
-      e = new Date(i.valueOf() + 864e5);
+  nextSolar(n = /* @__PURE__ */ new Date()) {
+    let s = new Date(n);
+    for (let e = 0; e < 26; e++) {
+      const i = E.nextPhase(s, "new"), t = this._checkSolarEclipse(i);
+      if (t) return t;
+      s = new Date(i.valueOf() + 864e5);
     }
     return null;
   },
@@ -1337,12 +1337,12 @@ const J = C.DEG_TO_RAD, ve = ce((t) => {
    * }
    * ```
    */
-  nextLunar(t = /* @__PURE__ */ new Date()) {
-    let e = new Date(t);
-    for (let a = 0; a < 26; a++) {
-      const i = G.nextPhase(e, "full"), s = this._checkLunarEclipse(i);
-      if (s) return s;
-      e = new Date(i.valueOf() + 864e5);
+  nextLunar(n = /* @__PURE__ */ new Date()) {
+    let s = new Date(n);
+    for (let e = 0; e < 26; e++) {
+      const i = E.nextPhase(s, "full"), t = this._checkLunarEclipse(i);
+      if (t) return t;
+      s = new Date(i.valueOf() + 864e5);
     }
     return null;
   },
@@ -1384,28 +1384,28 @@ const J = C.DEG_TO_RAD, ve = ce((t) => {
    * solar.forEach(e => console.log(`${e.subtype} solar eclipse: ${e.date.toISOString()}`))
    * ```
    */
-  search(t, e, a) {
+  search(n, s, e) {
     const i = [];
-    let s = new Date(t);
-    const n = e.valueOf();
-    for (; s.valueOf() < n; ) {
-      if (a !== "lunar") {
-        const r = G.nextPhase(s, "new");
-        if (r.valueOf() > n) break;
-        const c = this._checkSolarEclipse(r);
+    let t = new Date(n);
+    const r = s.valueOf();
+    for (; t.valueOf() < r; ) {
+      if (e !== "lunar") {
+        const l = E.nextPhase(t, "new");
+        if (l.valueOf() > r) break;
+        const c = this._checkSolarEclipse(l);
         c && i.push(c);
       }
-      if (a !== "solar") {
-        const r = G.nextPhase(s, "full");
-        if (r.valueOf() <= n) {
-          const c = this._checkLunarEclipse(r);
+      if (e !== "solar") {
+        const l = E.nextPhase(t, "full");
+        if (l.valueOf() <= r) {
+          const c = this._checkLunarEclipse(l);
           c && i.push(c);
         }
       }
-      s = new Date(s.valueOf() + 15 * 864e5);
+      t = new Date(t.valueOf() + 15 * 864e5);
     }
-    return i.sort((r, c) => r.date.valueOf() - c.date.valueOf()), i.filter(
-      (r, c) => c === 0 || Math.abs(r.date.valueOf() - i[c - 1].date.valueOf()) > 864e5
+    return i.sort((l, c) => l.date.valueOf() - c.date.valueOf()), i.filter(
+      (l, c) => c === 0 || Math.abs(l.date.valueOf() - i[c - 1].date.valueOf()) > 864e5
     );
   },
   /**
@@ -1421,24 +1421,24 @@ const J = C.DEG_TO_RAD, ve = ce((t) => {
    * @param newMoon - The date/time of the new moon to test.
    * @returns An {@link EclipseEvent} if a solar eclipse occurs at this new moon, or `null` otherwise.
    */
-  _checkSolarEclipse(t) {
-    const e = G.position(t), a = k.planetEcliptic("earth", t), i = ((a.lon + 180) % 360 + 360) % 360;
-    if (Math.abs(e.eclipticLat) > 1.5) return null;
-    const n = a.r * 1495978707e-1, r = Math.atan2(696e3, n) * (180 / Math.PI), c = Math.atan2(1737.4, e.distance_km) * (180 / Math.PI), l = k.angularSeparation(
-      e,
-      k.eclipticToEquatorial({ lon: i, lat: 0 })
-    ), o = r + c;
-    if (l > o * 1.5) return null;
-    let d, p;
-    if (c >= r && l < c - r)
-      d = "total", p = 1;
-    else if (c < r && l < r - c)
-      d = "annular", p = c / r;
-    else if (l < o)
-      d = "partial", p = (o - l) / (2 * r);
+  _checkSolarEclipse(n) {
+    const s = E.position(n), e = M.planetEcliptic("earth", n), i = ((e.lon + 180) % 360 + 360) % 360;
+    if (Math.abs(s.eclipticLat) > 1.5) return null;
+    const r = e.r * 1495978707e-1, l = Math.atan2(696e3, r) * (180 / Math.PI), c = Math.atan2(1737.4, s.distance_km) * (180 / Math.PI), o = M.angularSeparation(
+      s,
+      M.eclipticToEquatorial({ lon: i, lat: 0 })
+    ), g = l + c;
+    if (o > g * 1.5) return null;
+    let v, k;
+    if (c >= l && o < c - l)
+      v = "total", k = 1;
+    else if (c < l && o < l - c)
+      v = "annular", k = c / l;
+    else if (o < g)
+      v = "partial", k = (g - o) / (2 * l);
     else
       return null;
-    return { type: "solar", subtype: d, date: t, magnitude: p };
+    return { type: "solar", subtype: v, date: n, magnitude: k };
   },
   /**
    * Check if a full moon produces a lunar eclipse.
@@ -1459,21 +1459,21 @@ const J = C.DEG_TO_RAD, ve = ce((t) => {
    * @param fullMoon - The date/time of the full moon to test.
    * @returns An {@link EclipseEvent} if a lunar eclipse occurs at this full moon, or `null` otherwise.
    */
-  _checkLunarEclipse(t) {
-    const e = G.position(t), a = Math.abs(e.eclipticLat), i = Math.atan2(6371, e.distance_km) * (180 / Math.PI), s = i * 2.6, n = i * 4.3, r = Math.atan2(1737.4, e.distance_km) * (180 / Math.PI);
-    if (a > n + r) return null;
-    let c, l;
-    if (a < s - r)
-      c = "total", l = (s - a) / (2 * r);
-    else if (a < s + r)
-      c = "partial", l = (s + r - a) / (2 * r);
-    else if (a < n + r)
-      c = "penumbral", l = (n + r - a) / (2 * r);
+  _checkLunarEclipse(n) {
+    const s = E.position(n), e = Math.abs(s.eclipticLat), i = Math.atan2(6371, s.distance_km) * (180 / Math.PI), t = i * 2.6, r = i * 4.3, l = Math.atan2(1737.4, s.distance_km) * (180 / Math.PI);
+    if (e > r + l) return null;
+    let c, o;
+    if (e < t - l)
+      c = "total", o = (t - e) / (2 * l);
+    else if (e < t + l)
+      c = "partial", o = (t + l - e) / (2 * l);
+    else if (e < r + l)
+      c = "penumbral", o = (r + l - e) / (2 * l);
     else
       return null;
-    return { type: "lunar", subtype: c, date: t, magnitude: Math.min(l, 1) };
+    return { type: "lunar", subtype: c, date: n, magnitude: Math.min(o, 1) };
   }
-}, Ie = [
+}, Ps = [
   {
     id: "sun",
     name: "Sun",
@@ -1632,7 +1632,7 @@ const J = C.DEG_TO_RAD, ve = ce((t) => {
     description: "Windiest planet at 2,100 km/h; found by mathematical prediction before observation.",
     tags: ["solar-system", "planet", "ice-giant"]
   }
-], we = [
+], Gs = [
   {
     id: "ngc7293",
     name: "Helix Nebula",
@@ -1642,6 +1642,7 @@ const J = C.DEG_TO_RAD, ve = ce((t) => {
     ra: 337.411,
     dec: -20.839,
     magnitude: 7.6,
+    size_arcmin: 25,
     distance: { value: 215, unit: "pc" },
     description: "Largest planetary nebula on sky by angular diameter; often called the 'Eye of God'.",
     tags: ["nebula", "planetary"]
@@ -1668,6 +1669,7 @@ const J = C.DEG_TO_RAD, ve = ce((t) => {
     ra: 201.697,
     dec: -47.48,
     magnitude: 3.9,
+    size_arcmin: 36,
     distance: { value: 5.2, unit: "kpc" },
     description: "Largest globular cluster in the Milky Way; may be a stripped galaxy core.",
     tags: ["cluster", "globular"]
@@ -1681,6 +1683,7 @@ const J = C.DEG_TO_RAD, ve = ce((t) => {
     ra: 266.417,
     dec: -29.008,
     magnitude: null,
+    size_arcmin: 0.5,
     distance: { value: 8.178, unit: "kpc" },
     description: "Supermassive black hole at Milky Way center; first imaged by EHT in 2022.",
     tags: ["black-hole", "supermassive", "galactic-center"]
@@ -1694,11 +1697,12 @@ const J = C.DEG_TO_RAD, ve = ce((t) => {
     ra: 187.706,
     dec: 12.391,
     magnitude: null,
+    size_arcmin: 1.5,
     distance: { value: 16.4, unit: "Mpc" },
     description: "First ever directly imaged black hole (EHT 2019); 6.5 billion solar masses.",
     tags: ["black-hole", "supermassive"]
   }
-], B = [
+], U = [
   { id: "sirius", name: "Sirius", con: "CMa", hr: 2491, ra: 101.287, dec: -16.716, mag: -1.46, spec: "A1V", pmRa: -546.01, pmDec: -1223.07, bv: -0.01 },
   { id: "canopus", name: "Canopus", con: "Car", hr: 2326, ra: 95.988, dec: -52.696, mag: -0.74, spec: "F0Ib", pmRa: 19.99, pmDec: 23.67, bv: 0.15 },
   { id: "arcturus", name: "Arcturus", con: "Boo", hr: 5340, ra: 213.915, dec: 19.182, mag: -0.05, spec: "K1.5III", pmRa: -1093.45, pmDec: -1999.4, bv: 1.23 },
@@ -1864,7 +1868,7 @@ const J = C.DEG_TO_RAD, ve = ce((t) => {
   { id: "rotanev", name: "Rotanev", con: "Del", hr: 7882, ra: 309.387, dec: 14.595, mag: 3.63, spec: "F5III", pmRa: 118.07, pmDec: -46.85, bv: 0.44 },
   { id: "sualocin", name: "Sualocin", con: "Del", hr: 7906, ra: 309.91, dec: 15.912, mag: 3.77, spec: "B9IV", pmRa: 54.8, pmDec: 8.44, bv: -0.03 },
   { id: "proxima-centauri", name: "Proxima Centauri", con: "Cen", hr: 0, ra: 217.429, dec: -62.68, mag: 11.13, spec: "M5.5Ve", pmRa: -3775.4, pmDec: 765.54, bv: 1.9 }
-], oe = [
+], us = [
   // ────────────────────────────────────────────────────────────────
   // 1. Andromeda
   // ────────────────────────────────────────────────────────────────
@@ -4226,7 +4230,7 @@ const J = C.DEG_TO_RAD, ve = ce((t) => {
       [308.55, 27.09, 295.74, 24.08]
     ]
   }
-], ie = [
+], cs = [
   { messier: 1, name: "Crab Nebula", ngc: "NGC 1952", type: "nebula", subtype: "supernova remnant", constellation: "Tau", ra: 83.633, dec: 22.015, mag: 8.4, size_arcmin: 6, distance_kly: 6.5, description: "Supernova remnant from SN 1054, contains a pulsar" },
   { messier: 2, name: "M2", ngc: "NGC 7089", type: "cluster", subtype: "globular cluster", constellation: "Aqr", ra: 323.363, dec: -0.823, mag: 6.3, size_arcmin: 16, distance_kly: 37.5, description: "Rich globular cluster" },
   { messier: 3, name: "M3", ngc: "NGC 5272", type: "cluster", subtype: "globular cluster", constellation: "CVn", ra: 205.548, dec: 28.377, mag: 6.2, size_arcmin: 18, distance_kly: 33.9, description: "One of the finest globular clusters" },
@@ -4337,7 +4341,7 @@ const J = C.DEG_TO_RAD, ve = ce((t) => {
   { messier: 108, name: "M108", ngc: "NGC 3556", type: "galaxy", subtype: "barred spiral galaxy", constellation: "UMa", ra: 167.879, dec: 55.674, mag: 10, size_arcmin: 8, distance_kly: 45e3, description: "Nearly edge-on barred spiral near Owl Nebula" },
   { messier: 109, name: "M109", ngc: "NGC 3992", type: "galaxy", subtype: "barred spiral galaxy", constellation: "UMa", ra: 179.4, dec: 53.375, mag: 9.8, size_arcmin: 8, distance_kly: 83500, description: "Barred spiral galaxy near Phecda" },
   { messier: 110, name: "M110", ngc: "NGC 205", type: "galaxy", subtype: "elliptical galaxy", constellation: "And", ra: 10.092, dec: 41.685, mag: 8.5, size_arcmin: 22, distance_kly: 2690, description: "Satellite of Andromeda Galaxy" }
-], re = [
+], gs = [
   { id: "quadrantids", name: "Quadrantids", code: "QUA", radiantRA: 230.1, radiantDec: 48.5, solarLon: 283.16, peakDate: "Jan 04", start: "Dec 28", end: "Jan 12", zhr: 110, speed: 41, parentBody: "2003 EH1" },
   { id: "lyrids", name: "Lyrids", code: "LYR", radiantRA: 271.4, radiantDec: 33.6, solarLon: 32.32, peakDate: "Apr 22", start: "Apr 14", end: "Apr 30", zhr: 18, speed: 49, parentBody: "C/1861 G1 (Thatcher)" },
   { id: "eta-aquariids", name: "Eta Aquariids", code: "ETA", radiantRA: 338, radiantDec: -1, solarLon: 45.5, peakDate: "May 06", start: "Apr 19", end: "May 28", zhr: 50, speed: 66, parentBody: "1P/Halley" },
@@ -4361,8 +4365,8 @@ const J = C.DEG_TO_RAD, ve = ce((t) => {
   { id: "comae-berenicids", name: "Comae Berenicids", code: "COM", radiantRA: 175, radiantDec: 18, solarLon: 271, peakDate: "Dec 19", start: "Dec 12", end: "Jan 02", zhr: 3, speed: 65 },
   { id: "ursids", name: "Ursids", code: "URS", radiantRA: 217, radiantDec: 76, solarLon: 270.7, peakDate: "Dec 22", start: "Dec 17", end: "Dec 26", zhr: 10, speed: 33, parentBody: "8P/Tuttle" }
 ];
-let Q = "DEMO_KEY";
-const te = {
+let es = "DEMO_KEY";
+const ts = {
   /**
    * Set the NASA API key used for APOD requests.
    *
@@ -4377,8 +4381,8 @@ const te = {
    * NASA.setApiKey('Ab12Cd34Ef56Gh78Ij90KlMnOpQrStUvWxYz0123')
    * ```
    */
-  setApiKey(t) {
-    Q = t;
+  setApiKey(n) {
+    es = n;
   },
   /**
    * Search the NASA Image and Video Library.
@@ -4407,28 +4411,28 @@ const te = {
    *
    * @see {@link https://images.nasa.gov/docs/images.nasa.gov_api_docs.pdf | NASA Image API docs}
    */
-  async searchImages(t, e = {}) {
-    var d;
-    const { mediaType: a = "image", yearStart: i, yearEnd: s, pageSize: n = 10, page: r = 1 } = e, c = new URLSearchParams({
-      q: t,
-      media_type: a,
-      page: String(r),
-      page_size: String(n)
+  async searchImages(n, s = {}) {
+    var v;
+    const { mediaType: e = "image", yearStart: i, yearEnd: t, pageSize: r = 10, page: l = 1 } = s, c = new URLSearchParams({
+      q: n,
+      media_type: e,
+      page: String(l),
+      page_size: String(r)
     });
-    i && c.set("year_start", String(i)), s && c.set("year_end", String(s));
-    const l = await fetch(`https://images-api.nasa.gov/search?${c.toString()}`);
-    if (!l.ok) throw new Error(`NASA Image API error: ${l.status} ${l.statusText}`);
-    return (((d = (await l.json()).collection) == null ? void 0 : d.items) ?? []).map((p) => {
-      var m, u, g, _, f, v, b, h, S, y, D, x, F, N;
+    i && c.set("year_start", String(i)), t && c.set("year_end", String(t));
+    const o = await fetch(`https://images-api.nasa.gov/search?${c.toString()}`);
+    if (!o.ok) throw new Error(`NASA Image API error: ${o.status} ${o.statusText}`);
+    return (((v = (await o.json()).collection) == null ? void 0 : v.items) ?? []).map((k) => {
+      var a, y, u, d, f, b, p, m, A, h, C, x, j, G;
       return {
-        nasaId: ((u = (m = p.data) == null ? void 0 : m[0]) == null ? void 0 : u.nasa_id) ?? "",
-        title: ((_ = (g = p.data) == null ? void 0 : g[0]) == null ? void 0 : _.title) ?? "",
-        description: ((v = (f = p.data) == null ? void 0 : f[0]) == null ? void 0 : v.description) ?? "",
-        date: ((h = (b = p.data) == null ? void 0 : b[0]) == null ? void 0 : h.date_created) ?? "",
-        center: ((y = (S = p.data) == null ? void 0 : S[0]) == null ? void 0 : y.center) ?? "",
-        keywords: ((x = (D = p.data) == null ? void 0 : D[0]) == null ? void 0 : x.keywords) ?? [],
-        previewUrl: ((N = (F = p.links) == null ? void 0 : F.find((V) => V.rel === "preview")) == null ? void 0 : N.href) ?? null,
-        href: p.href ?? ""
+        nasaId: ((y = (a = k.data) == null ? void 0 : a[0]) == null ? void 0 : y.nasa_id) ?? "",
+        title: ((d = (u = k.data) == null ? void 0 : u[0]) == null ? void 0 : d.title) ?? "",
+        description: ((b = (f = k.data) == null ? void 0 : f[0]) == null ? void 0 : b.description) ?? "",
+        date: ((m = (p = k.data) == null ? void 0 : p[0]) == null ? void 0 : m.date_created) ?? "",
+        center: ((h = (A = k.data) == null ? void 0 : A[0]) == null ? void 0 : h.center) ?? "",
+        keywords: ((x = (C = k.data) == null ? void 0 : C[0]) == null ? void 0 : x.keywords) ?? [],
+        previewUrl: ((G = (j = k.links) == null ? void 0 : j.find((V) => V.rel === "preview")) == null ? void 0 : G.href) ?? null,
+        href: k.href ?? ""
       };
     });
   },
@@ -4450,14 +4454,14 @@ const te = {
    * console.log(urls[0]) // highest quality rendition
    * ```
    */
-  async getAssets(t) {
-    var s;
-    const e = await fetch(
-      `https://images-api.nasa.gov/asset/${encodeURIComponent(t)}`
+  async getAssets(n) {
+    var t;
+    const s = await fetch(
+      `https://images-api.nasa.gov/asset/${encodeURIComponent(n)}`
     );
-    if (!e.ok) throw new Error(`NASA asset fetch error: ${e.status}`);
-    const a = await e.json(), i = (n) => n.includes("~orig") ? 0 : n.includes("~large") ? 1 : n.includes("~medium") ? 2 : n.includes("~small") ? 3 : 4;
-    return (((s = a.collection) == null ? void 0 : s.items) ?? []).map((n) => n.href).sort((n, r) => i(n) - i(r));
+    if (!s.ok) throw new Error(`NASA asset fetch error: ${s.status}`);
+    const e = await s.json(), i = (r) => r.includes("~orig") ? 0 : r.includes("~large") ? 1 : r.includes("~medium") ? 2 : r.includes("~small") ? 3 : 4;
+    return (((t = e.collection) == null ? void 0 : t.items) ?? []).map((r) => r.href).sort((r, l) => i(r) - i(l));
   },
   /**
    * Convenience helper that returns the single highest-quality image URL
@@ -4482,8 +4486,8 @@ const te = {
    * }
    * ```
    */
-  async getBestImageUrl(t) {
-    return (await this.getAssets(t)).filter((i) => /\.(jpe?g|png|gif|tiff?)$/i.test(i))[0] ?? null;
+  async getBestImageUrl(n) {
+    return (await this.getAssets(n)).filter((i) => /\.(jpe?g|png|gif|tiff?)$/i.test(i))[0] ?? null;
   },
   /**
    * Fetch the NASA Astronomy Picture of the Day (APOD).
@@ -4510,15 +4514,15 @@ const te = {
    * const historic = await NASA.apod('1995-06-16')
    * ```
    */
-  async apod(t) {
-    const e = new URLSearchParams({ api_key: Q });
-    if (t) {
-      const s = t instanceof Date ? t : new Date(t);
-      e.set("date", s.toISOString().slice(0, 10));
+  async apod(n) {
+    const s = new URLSearchParams({ api_key: es });
+    if (n) {
+      const t = n instanceof Date ? n : new Date(n);
+      s.set("date", t.toISOString().slice(0, 10));
     }
-    const a = await fetch(`https://api.nasa.gov/planetary/apod?${e.toString()}`);
-    if (!a.ok) throw new Error(`APOD error: ${a.status} ${a.statusText}`);
-    const i = await a.json();
+    const e = await fetch(`https://api.nasa.gov/planetary/apod?${s.toString()}`);
+    if (!e.ok) throw new Error(`APOD error: ${e.status} ${e.statusText}`);
+    const i = await e.json();
     return {
       title: i.title,
       date: i.date,
@@ -4554,24 +4558,24 @@ const te = {
    * const batch = await NASA.recentAPOD(20)
    * ```
    */
-  async recentAPOD(t = 7) {
-    const e = new URLSearchParams({
-      api_key: Q,
-      count: String(t),
+  async recentAPOD(n = 7) {
+    const s = new URLSearchParams({
+      api_key: es,
+      count: String(n),
       thumbs: "true"
-    }), a = await fetch(`https://api.nasa.gov/planetary/apod?${e.toString()}`);
-    if (!a.ok) throw new Error(`APOD error: ${a.status} ${a.statusText}`);
-    return (await a.json()).map((s) => ({
-      title: s.title,
-      date: s.date,
-      explanation: s.explanation,
-      url: s.url,
-      hdUrl: s.hdurl ?? s.url,
-      mediaType: s.media_type === "video" ? "video" : "image",
-      copyright: s.copyright ?? "NASA"
+    }), e = await fetch(`https://api.nasa.gov/planetary/apod?${s.toString()}`);
+    if (!e.ok) throw new Error(`APOD error: ${e.status} ${e.statusText}`);
+    return (await e.json()).map((t) => ({
+      title: t.title,
+      date: t.date,
+      explanation: t.explanation,
+      url: t.url,
+      hdUrl: t.hdurl ?? t.url,
+      mediaType: t.media_type === "video" ? "video" : "image",
+      copyright: t.copyright ?? "NASA"
     }));
   }
-}, le = {
+}, ms = {
   /**
    * Search the ESA Hubble Space Telescope image archive.
    *
@@ -4597,30 +4601,30 @@ const te = {
    *
    * @see {@link https://esahubble.org/api/v1/ | ESA Hubble API docs}
    */
-  async searchHubble(t, e = 10) {
-    const a = await fetch(
-      `https://esahubble.org/api/v1/images/?search=${encodeURIComponent(t)}&limit=${e}`
+  async searchHubble(n, s = 10) {
+    const e = await fetch(
+      `https://esahubble.org/api/v1/images/?search=${encodeURIComponent(n)}&limit=${s}`
     );
-    if (!a.ok) throw new Error(`ESA Hubble API error: ${a.status}`);
-    return ((await a.json()).results ?? []).map((s) => {
-      var r, c;
-      const n = ((c = (r = s.image_files) == null ? void 0 : r[0]) == null ? void 0 : c.file_url) ?? null;
+    if (!e.ok) throw new Error(`ESA Hubble API error: ${e.status}`);
+    return ((await e.json()).results ?? []).map((t) => {
+      var l, c;
+      const r = ((c = (l = t.image_files) == null ? void 0 : l[0]) == null ? void 0 : c.file_url) ?? null;
       return {
-        id: s.id ?? "",
-        title: s.title ?? "",
-        description: s.description ?? "",
-        credit: s.credit ?? "",
-        date: s.release_date ?? "",
-        imageUrl: n,
-        thumbUrl: (n == null ? void 0 : n.replace("original", "screen")) ?? null,
-        tags: s.subject_category ?? []
+        id: t.id ?? "",
+        title: t.title ?? "",
+        description: t.description ?? "",
+        credit: t.credit ?? "",
+        date: t.release_date ?? "",
+        imageUrl: r,
+        thumbUrl: (r == null ? void 0 : r.replace("original", "screen")) ?? null,
+        tags: t.subject_category ?? []
       };
     });
   }
 };
-async function Re(t) {
-  var n;
-  const e = new URLSearchParams({
+async function Es(n) {
+  var r;
+  const s = new URLSearchParams({
     REQUEST: "doQuery",
     LANG: "ADQL",
     FORMAT: "json",
@@ -4628,117 +4632,568 @@ async function Re(t) {
       "SELECT TOP 1 main_id, ra, dec, otype",
       "FROM basic",
       "JOIN ident ON ident.oidref = basic.oid",
-      `WHERE id = '${t.replace(/'/g, "''")}'`
+      `WHERE id = '${n.replace(/'/g, "''")}'`
     ].join(" ")
-  }), a = await fetch("https://simbad.cds.unistra.fr/simbad/sim-tap/sync", {
+  }), e = await fetch("https://simbad.cds.unistra.fr/simbad/sim-tap/sync", {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: e.toString()
+    body: s.toString()
   });
-  if (!a.ok) throw new Error(`Simbad error: ${a.status}`);
-  const s = (n = (await a.json()).data) == null ? void 0 : n[0];
-  return s ? { id: s[0], ra: s[1], dec: s[2], type: s[3] } : null;
+  if (!e.ok) throw new Error(`Simbad error: ${e.status}`);
+  const t = (r = (await e.json()).data) == null ? void 0 : r[0];
+  return t ? { id: t[0], ra: t[1], dec: t[2], type: t[3] } : null;
 }
-const Z = {
+const Os = {
+  acrab: { g: "/rings.v3.skycell/0938/008/rings.v3.skycell.0938.008.stk.g.unconv.fits", i: "/rings.v3.skycell/0938/008/rings.v3.skycell.0938.008.stk.i.unconv.fits", r: "/rings.v3.skycell/0938/008/rings.v3.skycell.0938.008.stk.r.unconv.fits", y: "/rings.v3.skycell/0938/008/rings.v3.skycell.0938.008.stk.y.unconv.fits", z: "/rings.v3.skycell/0938/008/rings.v3.skycell.0938.008.stk.z.unconv.fits" },
+  adhafera: { g: "/rings.v3.skycell/1800/085/rings.v3.skycell.1800.085.stk.g.unconv.fits", i: "/rings.v3.skycell/1800/085/rings.v3.skycell.1800.085.stk.i.unconv.fits", r: "/rings.v3.skycell/1800/085/rings.v3.skycell.1800.085.stk.r.unconv.fits", y: "/rings.v3.skycell/1800/085/rings.v3.skycell.1800.085.stk.y.unconv.fits", z: "/rings.v3.skycell/1800/085/rings.v3.skycell.1800.085.stk.z.unconv.fits" },
+  adhara: { g: "/rings.v3.skycell/0658/075/rings.v3.skycell.0658.075.stk.g.unconv.fits", i: "/rings.v3.skycell/0658/075/rings.v3.skycell.0658.075.stk.i.unconv.fits", r: "/rings.v3.skycell/0658/075/rings.v3.skycell.0658.075.stk.r.unconv.fits", y: "/rings.v3.skycell/0658/075/rings.v3.skycell.0658.075.stk.y.unconv.fits", z: "/rings.v3.skycell/0658/075/rings.v3.skycell.0658.075.stk.z.unconv.fits" },
+  albireo: { g: "/rings.v3.skycell/1915/098/rings.v3.skycell.1915.098.stk.g.unconv.fits", i: "/rings.v3.skycell/1915/098/rings.v3.skycell.1915.098.stk.i.unconv.fits", r: "/rings.v3.skycell/1915/098/rings.v3.skycell.1915.098.stk.r.unconv.fits", y: "/rings.v3.skycell/1915/098/rings.v3.skycell.1915.098.stk.y.unconv.fits", z: "/rings.v3.skycell/1915/098/rings.v3.skycell.1915.098.stk.z.unconv.fits" },
+  alchiba: { g: "/rings.v3.skycell/0755/080/rings.v3.skycell.0755.080.stk.g.unconv.fits", i: "/rings.v3.skycell/0755/080/rings.v3.skycell.0755.080.stk.i.unconv.fits", r: "/rings.v3.skycell/0755/080/rings.v3.skycell.0755.080.stk.r.unconv.fits", y: "/rings.v3.skycell/0755/080/rings.v3.skycell.0755.080.stk.y.unconv.fits", z: "/rings.v3.skycell/0755/080/rings.v3.skycell.0755.080.stk.z.unconv.fits" },
+  aldebaran: { g: "/rings.v3.skycell/1694/010/rings.v3.skycell.1694.010.stk.g.unconv.fits", i: "/rings.v3.skycell/1694/010/rings.v3.skycell.1694.010.stk.i.unconv.fits", r: "/rings.v3.skycell/1694/010/rings.v3.skycell.1694.010.stk.r.unconv.fits", y: "/rings.v3.skycell/1694/010/rings.v3.skycell.1694.010.stk.y.unconv.fits", z: "/rings.v3.skycell/1694/010/rings.v3.skycell.1694.010.stk.z.unconv.fits" },
+  alderamin: { g: "/rings.v3.skycell/2494/065/rings.v3.skycell.2494.065.stk.g.unconv.fits", i: "/rings.v3.skycell/2494/065/rings.v3.skycell.2494.065.stk.i.unconv.fits", r: "/rings.v3.skycell/2494/065/rings.v3.skycell.2494.065.stk.r.unconv.fits", y: "/rings.v3.skycell/2494/065/rings.v3.skycell.2494.065.stk.y.unconv.fits", z: "/rings.v3.skycell/2494/065/rings.v3.skycell.2494.065.stk.z.unconv.fits" },
+  algedi: { g: "/rings.v3.skycell/1040/080/rings.v3.skycell.1040.080.stk.g.unconv.fits", i: "/rings.v3.skycell/1040/080/rings.v3.skycell.1040.080.stk.i.unconv.fits", r: "/rings.v3.skycell/1040/080/rings.v3.skycell.1040.080.stk.r.unconv.fits", y: "/rings.v3.skycell/1040/080/rings.v3.skycell.1040.080.stk.y.unconv.fits", z: "/rings.v3.skycell/1040/080/rings.v3.skycell.1040.080.stk.z.unconv.fits" },
+  algenib: { g: "/rings.v3.skycell/1591/076/rings.v3.skycell.1591.076.stk.g.unconv.fits", i: "/rings.v3.skycell/1591/076/rings.v3.skycell.1591.076.stk.i.unconv.fits", r: "/rings.v3.skycell/1591/076/rings.v3.skycell.1591.076.stk.r.unconv.fits", y: "/rings.v3.skycell/1591/076/rings.v3.skycell.1591.076.stk.y.unconv.fits", z: "/rings.v3.skycell/1591/076/rings.v3.skycell.1591.076.stk.z.unconv.fits" },
+  algieba: { g: "/rings.v3.skycell/1715/094/rings.v3.skycell.1715.094.stk.g.unconv.fits", i: "/rings.v3.skycell/1715/094/rings.v3.skycell.1715.094.stk.i.unconv.fits", r: "/rings.v3.skycell/1715/094/rings.v3.skycell.1715.094.stk.r.unconv.fits", y: "/rings.v3.skycell/1715/094/rings.v3.skycell.1715.094.stk.y.unconv.fits", z: "/rings.v3.skycell/1715/094/rings.v3.skycell.1715.094.stk.z.unconv.fits" },
+  algol: { g: "/rings.v3.skycell/2166/026/rings.v3.skycell.2166.026.stk.g.unconv.fits", i: "/rings.v3.skycell/2166/026/rings.v3.skycell.2166.026.stk.i.unconv.fits", r: "/rings.v3.skycell/2166/026/rings.v3.skycell.2166.026.stk.r.unconv.fits", y: "/rings.v3.skycell/2166/026/rings.v3.skycell.2166.026.stk.y.unconv.fits", z: "/rings.v3.skycell/2166/026/rings.v3.skycell.2166.026.stk.z.unconv.fits" },
+  algorab: { g: "/rings.v3.skycell/0925/087/rings.v3.skycell.0925.087.stk.g.unconv.fits", i: "/rings.v3.skycell/0925/087/rings.v3.skycell.0925.087.stk.i.unconv.fits", r: "/rings.v3.skycell/0925/087/rings.v3.skycell.0925.087.stk.r.unconv.fits", y: "/rings.v3.skycell/0925/087/rings.v3.skycell.0925.087.stk.y.unconv.fits", z: "/rings.v3.skycell/0925/087/rings.v3.skycell.0925.087.stk.z.unconv.fits" },
+  alhena: { g: "/rings.v3.skycell/1702/017/rings.v3.skycell.1702.017.stk.g.unconv.fits", i: "/rings.v3.skycell/1702/017/rings.v3.skycell.1702.017.stk.i.unconv.fits", r: "/rings.v3.skycell/1702/017/rings.v3.skycell.1702.017.stk.r.unconv.fits", y: "/rings.v3.skycell/1702/017/rings.v3.skycell.1702.017.stk.y.unconv.fits", z: "/rings.v3.skycell/1702/017/rings.v3.skycell.1702.017.stk.z.unconv.fits" },
+  alioth: { g: "/rings.v3.skycell/2379/098/rings.v3.skycell.2379.098.stk.g.unconv.fits", i: "/rings.v3.skycell/2379/098/rings.v3.skycell.2379.098.stk.i.unconv.fits", r: "/rings.v3.skycell/2379/098/rings.v3.skycell.2379.098.stk.r.unconv.fits", y: "/rings.v3.skycell/2379/098/rings.v3.skycell.2379.098.stk.y.unconv.fits", z: "/rings.v3.skycell/2379/098/rings.v3.skycell.2379.098.stk.z.unconv.fits" },
+  aljanah: { g: "/rings.v3.skycell/2075/047/rings.v3.skycell.2075.047.stk.g.unconv.fits", i: "/rings.v3.skycell/2075/047/rings.v3.skycell.2075.047.stk.i.unconv.fits", r: "/rings.v3.skycell/2075/047/rings.v3.skycell.2075.047.stk.r.unconv.fits", y: "/rings.v3.skycell/2075/047/rings.v3.skycell.2075.047.stk.y.unconv.fits", z: "/rings.v3.skycell/2075/047/rings.v3.skycell.2075.047.stk.z.unconv.fits" },
+  alkaid: { g: "/rings.v3.skycell/2323/030/rings.v3.skycell.2323.030.stk.g.unconv.fits", i: "/rings.v3.skycell/2323/030/rings.v3.skycell.2323.030.stk.i.unconv.fits", r: "/rings.v3.skycell/2323/030/rings.v3.skycell.2323.030.stk.r.unconv.fits", y: "/rings.v3.skycell/2323/030/rings.v3.skycell.2323.030.stk.y.unconv.fits", z: "/rings.v3.skycell/2323/030/rings.v3.skycell.2323.030.stk.z.unconv.fits" },
+  alkalurops: { g: "/rings.v3.skycell/2131/032/rings.v3.skycell.2131.032.stk.g.unconv.fits", i: "/rings.v3.skycell/2131/032/rings.v3.skycell.2131.032.stk.i.unconv.fits", r: "/rings.v3.skycell/2131/032/rings.v3.skycell.2131.032.stk.r.unconv.fits", y: "/rings.v3.skycell/2131/032/rings.v3.skycell.2131.032.stk.y.unconv.fits", z: "/rings.v3.skycell/2131/032/rings.v3.skycell.2131.032.stk.z.unconv.fits" },
+  alkaphrah: { g: "/rings.v3.skycell/2249/076/rings.v3.skycell.2249.076.stk.g.unconv.fits", i: "/rings.v3.skycell/2249/076/rings.v3.skycell.2249.076.stk.i.unconv.fits", r: "/rings.v3.skycell/2249/076/rings.v3.skycell.2249.076.stk.r.unconv.fits", y: "/rings.v3.skycell/2249/076/rings.v3.skycell.2249.076.stk.y.unconv.fits", z: "/rings.v3.skycell/2249/076/rings.v3.skycell.2249.076.stk.z.unconv.fits" },
+  alkes: { g: "/rings.v3.skycell/0919/041/rings.v3.skycell.0919.041.stk.g.unconv.fits", i: "/rings.v3.skycell/0919/041/rings.v3.skycell.0919.041.stk.i.unconv.fits", r: "/rings.v3.skycell/0919/041/rings.v3.skycell.0919.041.stk.r.unconv.fits", y: "/rings.v3.skycell/0919/041/rings.v3.skycell.0919.041.stk.y.unconv.fits", z: "/rings.v3.skycell/0919/041/rings.v3.skycell.0919.041.stk.z.unconv.fits" },
+  almach: { g: "/rings.v3.skycell/2163/056/rings.v3.skycell.2163.056.stk.g.unconv.fits", i: "/rings.v3.skycell/2163/056/rings.v3.skycell.2163.056.stk.i.unconv.fits", r: "/rings.v3.skycell/2163/056/rings.v3.skycell.2163.056.stk.r.unconv.fits", y: "/rings.v3.skycell/2163/056/rings.v3.skycell.2163.056.stk.y.unconv.fits", z: "/rings.v3.skycell/2163/056/rings.v3.skycell.2163.056.stk.z.unconv.fits" },
+  alnilam: { g: "/rings.v3.skycell/1253/064/rings.v3.skycell.1253.064.stk.g.unconv.fits", i: "/rings.v3.skycell/1253/064/rings.v3.skycell.1253.064.stk.i.unconv.fits", r: "/rings.v3.skycell/1253/064/rings.v3.skycell.1253.064.stk.r.unconv.fits", y: "/rings.v3.skycell/1253/064/rings.v3.skycell.1253.064.stk.y.unconv.fits", z: "/rings.v3.skycell/1253/064/rings.v3.skycell.1253.064.stk.z.unconv.fits" },
+  alnitak: { g: "/rings.v3.skycell/1253/052/rings.v3.skycell.1253.052.stk.g.unconv.fits", i: "/rings.v3.skycell/1253/052/rings.v3.skycell.1253.052.stk.i.unconv.fits", r: "/rings.v3.skycell/1253/052/rings.v3.skycell.1253.052.stk.r.unconv.fits", y: "/rings.v3.skycell/1253/052/rings.v3.skycell.1253.052.stk.y.unconv.fits", z: "/rings.v3.skycell/1253/052/rings.v3.skycell.1253.052.stk.z.unconv.fits" },
+  alphard: { g: "/rings.v3.skycell/1089/084/rings.v3.skycell.1089.084.stk.g.unconv.fits", i: "/rings.v3.skycell/1089/084/rings.v3.skycell.1089.084.stk.i.unconv.fits", r: "/rings.v3.skycell/1089/084/rings.v3.skycell.1089.084.stk.r.unconv.fits", y: "/rings.v3.skycell/1089/084/rings.v3.skycell.1089.084.stk.y.unconv.fits", z: "/rings.v3.skycell/1089/084/rings.v3.skycell.1089.084.stk.z.unconv.fits" },
+  alpheratz: { g: "/rings.v3.skycell/1930/020/rings.v3.skycell.1930.020.stk.g.unconv.fits", i: "/rings.v3.skycell/1930/020/rings.v3.skycell.1930.020.stk.i.unconv.fits", r: "/rings.v3.skycell/1930/020/rings.v3.skycell.1930.020.stk.r.unconv.fits", y: "/rings.v3.skycell/1930/020/rings.v3.skycell.1930.020.stk.y.unconv.fits", z: "/rings.v3.skycell/1930/020/rings.v3.skycell.1930.020.stk.z.unconv.fits" },
+  alshat: { g: "/rings.v3.skycell/1041/088/rings.v3.skycell.1041.088.stk.g.unconv.fits", i: "/rings.v3.skycell/1041/088/rings.v3.skycell.1041.088.stk.i.unconv.fits", r: "/rings.v3.skycell/1041/088/rings.v3.skycell.1041.088.stk.r.unconv.fits", y: "/rings.v3.skycell/1041/088/rings.v3.skycell.1041.088.stk.y.unconv.fits", z: "/rings.v3.skycell/1041/088/rings.v3.skycell.1041.088.stk.z.unconv.fits" },
+  altair: { g: "/rings.v3.skycell/1575/029/rings.v3.skycell.1575.029.stk.g.unconv.fits", i: "/rings.v3.skycell/1575/029/rings.v3.skycell.1575.029.stk.i.unconv.fits", r: "/rings.v3.skycell/1575/029/rings.v3.skycell.1575.029.stk.r.unconv.fits", y: "/rings.v3.skycell/1575/029/rings.v3.skycell.1575.029.stk.y.unconv.fits", z: "/rings.v3.skycell/1575/029/rings.v3.skycell.1575.029.stk.z.unconv.fits" },
+  alterf: { g: "/rings.v3.skycell/1797/071/rings.v3.skycell.1797.071.stk.g.unconv.fits", i: "/rings.v3.skycell/1797/071/rings.v3.skycell.1797.071.stk.i.unconv.fits", r: "/rings.v3.skycell/1797/071/rings.v3.skycell.1797.071.stk.r.unconv.fits", y: "/rings.v3.skycell/1797/071/rings.v3.skycell.1797.071.stk.y.unconv.fits", z: "/rings.v3.skycell/1797/071/rings.v3.skycell.1797.071.stk.z.unconv.fits" },
+  aludra: { g: "/rings.v3.skycell/0659/061/rings.v3.skycell.0659.061.stk.g.unconv.fits", i: "/rings.v3.skycell/0659/061/rings.v3.skycell.0659.061.stk.i.unconv.fits", r: "/rings.v3.skycell/0659/061/rings.v3.skycell.0659.061.stk.r.unconv.fits", y: "/rings.v3.skycell/0659/061/rings.v3.skycell.0659.061.stk.y.unconv.fits", z: "/rings.v3.skycell/0659/061/rings.v3.skycell.0659.061.stk.z.unconv.fits" },
+  "alula-australis": { g: "/rings.v3.skycell/1967/083/rings.v3.skycell.1967.083.stk.g.unconv.fits", i: "/rings.v3.skycell/1967/083/rings.v3.skycell.1967.083.stk.i.unconv.fits", r: "/rings.v3.skycell/1967/083/rings.v3.skycell.1967.083.stk.r.unconv.fits", y: "/rings.v3.skycell/1967/083/rings.v3.skycell.1967.083.stk.y.unconv.fits", z: "/rings.v3.skycell/1967/083/rings.v3.skycell.1967.083.stk.z.unconv.fits" },
+  antares: { g: "/rings.v3.skycell/0770/031/rings.v3.skycell.0770.031.stk.g.unconv.fits", i: "/rings.v3.skycell/0770/031/rings.v3.skycell.0770.031.stk.i.unconv.fits", r: "/rings.v3.skycell/0770/031/rings.v3.skycell.0770.031.stk.r.unconv.fits", y: "/rings.v3.skycell/0770/031/rings.v3.skycell.0770.031.stk.y.unconv.fits", z: "/rings.v3.skycell/0770/031/rings.v3.skycell.0770.031.stk.z.unconv.fits" },
+  arcturus: { g: "/rings.v3.skycell/1729/073/rings.v3.skycell.1729.073.stk.g.unconv.fits", i: "/rings.v3.skycell/1729/073/rings.v3.skycell.1729.073.stk.i.unconv.fits", r: "/rings.v3.skycell/1729/073/rings.v3.skycell.1729.073.stk.r.unconv.fits", y: "/rings.v3.skycell/1729/073/rings.v3.skycell.1729.073.stk.y.unconv.fits", z: "/rings.v3.skycell/1729/073/rings.v3.skycell.1729.073.stk.z.unconv.fits" },
+  arneb: { g: "/rings.v3.skycell/0900/056/rings.v3.skycell.0900.056.stk.g.unconv.fits", i: "/rings.v3.skycell/0900/056/rings.v3.skycell.0900.056.stk.i.unconv.fits", r: "/rings.v3.skycell/0900/056/rings.v3.skycell.0900.056.stk.r.unconv.fits", y: "/rings.v3.skycell/0900/056/rings.v3.skycell.0900.056.stk.y.unconv.fits", z: "/rings.v3.skycell/0900/056/rings.v3.skycell.0900.056.stk.z.unconv.fits" },
+  azelfafage: { g: "/rings.v3.skycell/2283/065/rings.v3.skycell.2283.065.stk.g.unconv.fits", i: "/rings.v3.skycell/2283/065/rings.v3.skycell.2283.065.stk.i.unconv.fits", r: "/rings.v3.skycell/2283/065/rings.v3.skycell.2283.065.stk.r.unconv.fits", y: "/rings.v3.skycell/2283/065/rings.v3.skycell.2283.065.stk.y.unconv.fits", z: "/rings.v3.skycell/2283/065/rings.v3.skycell.2283.065.stk.z.unconv.fits" },
+  "baten-kaitos": { g: "/rings.v3.skycell/1061/046/rings.v3.skycell.1061.046.stk.g.unconv.fits", i: "/rings.v3.skycell/1061/046/rings.v3.skycell.1061.046.stk.i.unconv.fits", r: "/rings.v3.skycell/1061/046/rings.v3.skycell.1061.046.stk.r.unconv.fits", y: "/rings.v3.skycell/1061/046/rings.v3.skycell.1061.046.stk.y.unconv.fits", z: "/rings.v3.skycell/1061/046/rings.v3.skycell.1061.046.stk.z.unconv.fits" },
+  bellatrix: { g: "/rings.v3.skycell/1432/054/rings.v3.skycell.1432.054.stk.g.unconv.fits", i: "/rings.v3.skycell/1432/054/rings.v3.skycell.1432.054.stk.i.unconv.fits", r: "/rings.v3.skycell/1432/054/rings.v3.skycell.1432.054.stk.r.unconv.fits", y: "/rings.v3.skycell/1432/054/rings.v3.skycell.1432.054.stk.y.unconv.fits", z: "/rings.v3.skycell/1432/054/rings.v3.skycell.1432.054.stk.z.unconv.fits" },
+  betelgeuse: { g: "/rings.v3.skycell/1434/085/rings.v3.skycell.1434.085.stk.g.unconv.fits", i: "/rings.v3.skycell/1434/085/rings.v3.skycell.1434.085.stk.i.unconv.fits", r: "/rings.v3.skycell/1434/085/rings.v3.skycell.1434.085.stk.r.unconv.fits", y: "/rings.v3.skycell/1434/085/rings.v3.skycell.1434.085.stk.y.unconv.fits", z: "/rings.v3.skycell/1434/085/rings.v3.skycell.1434.085.stk.z.unconv.fits" },
+  biham: { g: "/rings.v3.skycell/1494/052/rings.v3.skycell.1494.052.stk.g.unconv.fits", i: "/rings.v3.skycell/1494/052/rings.v3.skycell.1494.052.stk.i.unconv.fits", r: "/rings.v3.skycell/1494/052/rings.v3.skycell.1494.052.stk.r.unconv.fits", y: "/rings.v3.skycell/1494/052/rings.v3.skycell.1494.052.stk.y.unconv.fits", z: "/rings.v3.skycell/1494/052/rings.v3.skycell.1494.052.stk.z.unconv.fits" },
+  capella: { g: "/rings.v3.skycell/2239/044/rings.v3.skycell.2239.044.stk.g.unconv.fits", i: "/rings.v3.skycell/2239/044/rings.v3.skycell.2239.044.stk.i.unconv.fits", r: "/rings.v3.skycell/2239/044/rings.v3.skycell.2239.044.stk.r.unconv.fits", y: "/rings.v3.skycell/2239/044/rings.v3.skycell.2239.044.stk.y.unconv.fits", z: "/rings.v3.skycell/2239/044/rings.v3.skycell.2239.044.stk.z.unconv.fits" },
+  caph: { g: "/rings.v3.skycell/2404/072/rings.v3.skycell.2404.072.stk.g.unconv.fits", i: "/rings.v3.skycell/2404/072/rings.v3.skycell.2404.072.stk.i.unconv.fits", r: "/rings.v3.skycell/2404/072/rings.v3.skycell.2404.072.stk.r.unconv.fits", y: "/rings.v3.skycell/2404/072/rings.v3.skycell.2404.072.stk.y.unconv.fits", z: "/rings.v3.skycell/2404/072/rings.v3.skycell.2404.072.stk.z.unconv.fits" },
+  chara: { g: "/rings.v3.skycell/2193/038/rings.v3.skycell.2193.038.stk.g.unconv.fits", i: "/rings.v3.skycell/2193/038/rings.v3.skycell.2193.038.stk.i.unconv.fits", r: "/rings.v3.skycell/2193/038/rings.v3.skycell.2193.038.stk.r.unconv.fits", y: "/rings.v3.skycell/2193/038/rings.v3.skycell.2193.038.stk.y.unconv.fits", z: "/rings.v3.skycell/2193/038/rings.v3.skycell.2193.038.stk.z.unconv.fits" },
+  chertan: { g: "/rings.v3.skycell/1631/082/rings.v3.skycell.1631.082.stk.g.unconv.fits", i: "/rings.v3.skycell/1631/082/rings.v3.skycell.1631.082.stk.i.unconv.fits", r: "/rings.v3.skycell/1631/082/rings.v3.skycell.1631.082.stk.r.unconv.fits", y: "/rings.v3.skycell/1631/082/rings.v3.skycell.1631.082.stk.y.unconv.fits", z: "/rings.v3.skycell/1631/082/rings.v3.skycell.1631.082.stk.z.unconv.fits" },
+  "cor-caroli": { g: "/rings.v3.skycell/2124/056/rings.v3.skycell.2124.056.stk.g.unconv.fits", i: "/rings.v3.skycell/2124/056/rings.v3.skycell.2124.056.stk.i.unconv.fits", r: "/rings.v3.skycell/2124/056/rings.v3.skycell.2124.056.stk.r.unconv.fits", y: "/rings.v3.skycell/2124/056/rings.v3.skycell.2124.056.stk.y.unconv.fits", z: "/rings.v3.skycell/2124/056/rings.v3.skycell.2124.056.stk.z.unconv.fits" },
+  cursa: { g: "/rings.v3.skycell/1162/074/rings.v3.skycell.1162.074.stk.g.unconv.fits", i: "/rings.v3.skycell/1162/074/rings.v3.skycell.1162.074.stk.i.unconv.fits", r: "/rings.v3.skycell/1162/074/rings.v3.skycell.1162.074.stk.r.unconv.fits", y: "/rings.v3.skycell/1162/074/rings.v3.skycell.1162.074.stk.y.unconv.fits", z: "/rings.v3.skycell/1162/074/rings.v3.skycell.1162.074.stk.z.unconv.fits" },
+  dabih: { g: "/rings.v3.skycell/1041/038/rings.v3.skycell.1041.038.stk.g.unconv.fits", i: "/rings.v3.skycell/1041/038/rings.v3.skycell.1041.038.stk.i.unconv.fits", r: "/rings.v3.skycell/1041/038/rings.v3.skycell.1041.038.stk.r.unconv.fits", y: "/rings.v3.skycell/1041/038/rings.v3.skycell.1041.038.stk.y.unconv.fits", z: "/rings.v3.skycell/1041/038/rings.v3.skycell.1041.038.stk.z.unconv.fits" },
+  deneb: { g: "/rings.v3.skycell/2280/033/rings.v3.skycell.2280.033.stk.g.unconv.fits", i: "/rings.v3.skycell/2280/033/rings.v3.skycell.2280.033.stk.i.unconv.fits", r: "/rings.v3.skycell/2280/033/rings.v3.skycell.2280.033.stk.r.unconv.fits", y: "/rings.v3.skycell/2280/033/rings.v3.skycell.2280.033.stk.y.unconv.fits", z: "/rings.v3.skycell/2280/033/rings.v3.skycell.2280.033.stk.z.unconv.fits" },
+  "deneb-algedi": { g: "/rings.v3.skycell/0958/094/rings.v3.skycell.0958.094.stk.g.unconv.fits", i: "/rings.v3.skycell/0958/094/rings.v3.skycell.0958.094.stk.i.unconv.fits", r: "/rings.v3.skycell/0958/094/rings.v3.skycell.0958.094.stk.r.unconv.fits", y: "/rings.v3.skycell/0958/094/rings.v3.skycell.0958.094.stk.y.unconv.fits", z: "/rings.v3.skycell/0958/094/rings.v3.skycell.0958.094.stk.z.unconv.fits" },
+  denebola: { g: "/rings.v3.skycell/1633/061/rings.v3.skycell.1633.061.stk.g.unconv.fits", i: "/rings.v3.skycell/1633/061/rings.v3.skycell.1633.061.stk.i.unconv.fits", r: "/rings.v3.skycell/1633/061/rings.v3.skycell.1633.061.stk.r.unconv.fits", y: "/rings.v3.skycell/1633/061/rings.v3.skycell.1633.061.stk.y.unconv.fits", z: "/rings.v3.skycell/1633/061/rings.v3.skycell.1633.061.stk.z.unconv.fits" },
+  diphda: { g: "/rings.v3.skycell/0883/058/rings.v3.skycell.0883.058.stk.g.unconv.fits", i: "/rings.v3.skycell/0883/058/rings.v3.skycell.0883.058.stk.i.unconv.fits", r: "/rings.v3.skycell/0883/058/rings.v3.skycell.0883.058.stk.r.unconv.fits", y: "/rings.v3.skycell/0883/058/rings.v3.skycell.0883.058.stk.y.unconv.fits", z: "/rings.v3.skycell/0883/058/rings.v3.skycell.0883.058.stk.z.unconv.fits" },
+  dschubba: { g: "/rings.v3.skycell/0852/034/rings.v3.skycell.0852.034.stk.g.unconv.fits", i: "/rings.v3.skycell/0852/034/rings.v3.skycell.0852.034.stk.i.unconv.fits", r: "/rings.v3.skycell/0852/034/rings.v3.skycell.0852.034.stk.r.unconv.fits", y: "/rings.v3.skycell/0852/034/rings.v3.skycell.0852.034.stk.y.unconv.fits", z: "/rings.v3.skycell/0852/034/rings.v3.skycell.0852.034.stk.z.unconv.fits" },
+  dubhe: { g: "/rings.v3.skycell/2475/047/rings.v3.skycell.2475.047.stk.g.unconv.fits", i: "/rings.v3.skycell/2475/047/rings.v3.skycell.2475.047.stk.i.unconv.fits", r: "/rings.v3.skycell/2475/047/rings.v3.skycell.2475.047.stk.r.unconv.fits", y: "/rings.v3.skycell/2475/047/rings.v3.skycell.2475.047.stk.y.unconv.fits", z: "/rings.v3.skycell/2475/047/rings.v3.skycell.2475.047.stk.z.unconv.fits" },
+  elnath: { g: "/rings.v3.skycell/1948/015/rings.v3.skycell.1948.015.stk.g.unconv.fits", i: "/rings.v3.skycell/1948/015/rings.v3.skycell.1948.015.stk.i.unconv.fits", r: "/rings.v3.skycell/1948/015/rings.v3.skycell.1948.015.stk.r.unconv.fits", y: "/rings.v3.skycell/1948/015/rings.v3.skycell.1948.015.stk.y.unconv.fits", z: "/rings.v3.skycell/1948/015/rings.v3.skycell.1948.015.stk.z.unconv.fits" },
+  eltanin: { g: "/rings.v3.skycell/2334/086/rings.v3.skycell.2334.086.stk.g.unconv.fits", i: "/rings.v3.skycell/2334/086/rings.v3.skycell.2334.086.stk.i.unconv.fits", r: "/rings.v3.skycell/2334/086/rings.v3.skycell.2334.086.stk.r.unconv.fits", y: "/rings.v3.skycell/2334/086/rings.v3.skycell.2334.086.stk.y.unconv.fits", z: "/rings.v3.skycell/2334/086/rings.v3.skycell.2334.086.stk.z.unconv.fits" },
+  enif: { g: "/rings.v3.skycell/1582/048/rings.v3.skycell.1582.048.stk.g.unconv.fits", i: "/rings.v3.skycell/1582/048/rings.v3.skycell.1582.048.stk.i.unconv.fits", r: "/rings.v3.skycell/1582/048/rings.v3.skycell.1582.048.stk.r.unconv.fits", y: "/rings.v3.skycell/1582/048/rings.v3.skycell.1582.048.stk.y.unconv.fits", z: "/rings.v3.skycell/1582/048/rings.v3.skycell.1582.048.stk.z.unconv.fits" },
+  fomalhaut: { g: "/rings.v3.skycell/0711/059/rings.v3.skycell.0711.059.stk.g.unconv.fits", i: "/rings.v3.skycell/0711/059/rings.v3.skycell.0711.059.stk.i.unconv.fits", r: "/rings.v3.skycell/0711/059/rings.v3.skycell.0711.059.stk.r.unconv.fits", y: "/rings.v3.skycell/0711/059/rings.v3.skycell.0711.059.stk.y.unconv.fits", z: "/rings.v3.skycell/0711/059/rings.v3.skycell.0711.059.stk.z.unconv.fits" },
+  gemma: { g: "/rings.v3.skycell/1901/062/rings.v3.skycell.1901.062.stk.g.unconv.fits", i: "/rings.v3.skycell/1901/062/rings.v3.skycell.1901.062.stk.i.unconv.fits", r: "/rings.v3.skycell/1901/062/rings.v3.skycell.1901.062.stk.r.unconv.fits", y: "/rings.v3.skycell/1901/062/rings.v3.skycell.1901.062.stk.y.unconv.fits", z: "/rings.v3.skycell/1901/062/rings.v3.skycell.1901.062.stk.z.unconv.fits" },
+  gienah: { g: "/rings.v3.skycell/0924/065/rings.v3.skycell.0924.065.stk.g.unconv.fits", i: "/rings.v3.skycell/0924/065/rings.v3.skycell.0924.065.stk.i.unconv.fits", r: "/rings.v3.skycell/0924/065/rings.v3.skycell.0924.065.stk.r.unconv.fits", y: "/rings.v3.skycell/0924/065/rings.v3.skycell.0924.065.stk.y.unconv.fits", z: "/rings.v3.skycell/0924/065/rings.v3.skycell.0924.065.stk.z.unconv.fits" },
+  hamal: { g: "/rings.v3.skycell/1771/080/rings.v3.skycell.1771.080.stk.g.unconv.fits", i: "/rings.v3.skycell/1771/080/rings.v3.skycell.1771.080.stk.i.unconv.fits", r: "/rings.v3.skycell/1771/080/rings.v3.skycell.1771.080.stk.r.unconv.fits", y: "/rings.v3.skycell/1771/080/rings.v3.skycell.1771.080.stk.y.unconv.fits", z: "/rings.v3.skycell/1771/080/rings.v3.skycell.1771.080.stk.z.unconv.fits" },
+  hassaleh: { g: "/rings.v3.skycell/2025/028/rings.v3.skycell.2025.028.stk.g.unconv.fits", i: "/rings.v3.skycell/2025/028/rings.v3.skycell.2025.028.stk.i.unconv.fits", r: "/rings.v3.skycell/2025/028/rings.v3.skycell.2025.028.stk.r.unconv.fits", y: "/rings.v3.skycell/2025/028/rings.v3.skycell.2025.028.stk.y.unconv.fits", z: "/rings.v3.skycell/2025/028/rings.v3.skycell.2025.028.stk.z.unconv.fits" },
+  homam: { g: "/rings.v3.skycell/1585/073/rings.v3.skycell.1585.073.stk.g.unconv.fits", i: "/rings.v3.skycell/1585/073/rings.v3.skycell.1585.073.stk.i.unconv.fits", r: "/rings.v3.skycell/1585/073/rings.v3.skycell.1585.073.stk.r.unconv.fits", y: "/rings.v3.skycell/1585/073/rings.v3.skycell.1585.073.stk.y.unconv.fits", z: "/rings.v3.skycell/1585/073/rings.v3.skycell.1585.073.stk.z.unconv.fits" },
+  izar: { g: "/rings.v3.skycell/1898/071/rings.v3.skycell.1898.071.stk.g.unconv.fits", i: "/rings.v3.skycell/1898/071/rings.v3.skycell.1898.071.stk.i.unconv.fits", r: "/rings.v3.skycell/1898/071/rings.v3.skycell.1898.071.stk.r.unconv.fits", y: "/rings.v3.skycell/1898/071/rings.v3.skycell.1898.071.stk.y.unconv.fits", z: "/rings.v3.skycell/1898/071/rings.v3.skycell.1898.071.stk.z.unconv.fits" },
+  kochab: { g: "/rings.v3.skycell/2588/057/rings.v3.skycell.2588.057.stk.g.unconv.fits", i: "/rings.v3.skycell/2588/057/rings.v3.skycell.2588.057.stk.i.unconv.fits", r: "/rings.v3.skycell/2588/057/rings.v3.skycell.2588.057.stk.r.unconv.fits", y: "/rings.v3.skycell/2588/057/rings.v3.skycell.2588.057.stk.y.unconv.fits", z: "/rings.v3.skycell/2588/057/rings.v3.skycell.2588.057.stk.z.unconv.fits" },
+  kornephoros: { g: "/rings.v3.skycell/1822/037/rings.v3.skycell.1822.037.stk.g.unconv.fits", i: "/rings.v3.skycell/1822/037/rings.v3.skycell.1822.037.stk.i.unconv.fits", r: "/rings.v3.skycell/1822/037/rings.v3.skycell.1822.037.stk.r.unconv.fits", y: "/rings.v3.skycell/1822/037/rings.v3.skycell.1822.037.stk.y.unconv.fits", z: "/rings.v3.skycell/1822/037/rings.v3.skycell.1822.037.stk.z.unconv.fits" },
+  kraz: { g: "/rings.v3.skycell/0840/014/rings.v3.skycell.0840.014.stk.g.unconv.fits", i: "/rings.v3.skycell/0840/014/rings.v3.skycell.0840.014.stk.i.unconv.fits", r: "/rings.v3.skycell/0840/014/rings.v3.skycell.0840.014.stk.r.unconv.fits", y: "/rings.v3.skycell/0840/014/rings.v3.skycell.0840.014.stk.y.unconv.fits", z: "/rings.v3.skycell/0840/014/rings.v3.skycell.0840.014.stk.z.unconv.fits" },
+  m1: { g: "/rings.v3.skycell/1784/059/rings.v3.skycell.1784.059.stk.g.unconv.fits", i: "/rings.v3.skycell/1784/059/rings.v3.skycell.1784.059.stk.i.unconv.fits", r: "/rings.v3.skycell/1784/059/rings.v3.skycell.1784.059.stk.r.unconv.fits", y: "/rings.v3.skycell/1784/059/rings.v3.skycell.1784.059.stk.y.unconv.fits", z: "/rings.v3.skycell/1784/059/rings.v3.skycell.1784.059.stk.z.unconv.fits" },
+  m10: { g: "/rings.v3.skycell/1206/096/rings.v3.skycell.1206.096.stk.g.unconv.fits", i: "/rings.v3.skycell/1206/096/rings.v3.skycell.1206.096.stk.i.unconv.fits", r: "/rings.v3.skycell/1206/096/rings.v3.skycell.1206.096.stk.r.unconv.fits", y: "/rings.v3.skycell/1206/096/rings.v3.skycell.1206.096.stk.y.unconv.fits", z: "/rings.v3.skycell/1206/096/rings.v3.skycell.1206.096.stk.z.unconv.fits" },
+  m100: { g: "/rings.v3.skycell/1635/091/rings.v3.skycell.1635.091.stk.g.unconv.fits", i: "/rings.v3.skycell/1635/091/rings.v3.skycell.1635.091.stk.i.unconv.fits", r: "/rings.v3.skycell/1635/091/rings.v3.skycell.1635.091.stk.r.unconv.fits", y: "/rings.v3.skycell/1635/091/rings.v3.skycell.1635.091.stk.y.unconv.fits", z: "/rings.v3.skycell/1635/091/rings.v3.skycell.1635.091.stk.z.unconv.fits" },
+  m101: { g: "/rings.v3.skycell/2381/053/rings.v3.skycell.2381.053.stk.g.unconv.fits", i: "/rings.v3.skycell/2381/053/rings.v3.skycell.2381.053.stk.i.unconv.fits", r: "/rings.v3.skycell/2381/053/rings.v3.skycell.2381.053.stk.r.unconv.fits", y: "/rings.v3.skycell/2381/053/rings.v3.skycell.2381.053.stk.y.unconv.fits", z: "/rings.v3.skycell/2381/053/rings.v3.skycell.2381.053.stk.z.unconv.fits" },
+  m102: { g: "/rings.v3.skycell/2384/098/rings.v3.skycell.2384.098.stk.g.unconv.fits", i: "/rings.v3.skycell/2384/098/rings.v3.skycell.2384.098.stk.i.unconv.fits", r: "/rings.v3.skycell/2384/098/rings.v3.skycell.2384.098.stk.r.unconv.fits", y: "/rings.v3.skycell/2384/098/rings.v3.skycell.2384.098.stk.y.unconv.fits", z: "/rings.v3.skycell/2384/098/rings.v3.skycell.2384.098.stk.z.unconv.fits" },
+  m103: { g: "/rings.v3.skycell/2457/015/rings.v3.skycell.2457.015.stk.g.unconv.fits", i: "/rings.v3.skycell/2457/015/rings.v3.skycell.2457.015.stk.i.unconv.fits", r: "/rings.v3.skycell/2457/015/rings.v3.skycell.2457.015.stk.r.unconv.fits", y: "/rings.v3.skycell/2457/015/rings.v3.skycell.2457.015.stk.y.unconv.fits", z: "/rings.v3.skycell/2457/015/rings.v3.skycell.2457.015.stk.z.unconv.fits" },
+  m104: { g: "/rings.v3.skycell/1101/005/rings.v3.skycell.1101.005.stk.g.unconv.fits", i: "/rings.v3.skycell/1101/005/rings.v3.skycell.1101.005.stk.i.unconv.fits", r: "/rings.v3.skycell/1101/005/rings.v3.skycell.1101.005.stk.r.unconv.fits", y: "/rings.v3.skycell/1101/005/rings.v3.skycell.1101.005.stk.y.unconv.fits", z: "/rings.v3.skycell/1101/005/rings.v3.skycell.1101.005.stk.z.unconv.fits" },
+  m105: { g: "/rings.v3.skycell/1630/019/rings.v3.skycell.1630.019.stk.g.unconv.fits", i: "/rings.v3.skycell/1630/019/rings.v3.skycell.1630.019.stk.i.unconv.fits", r: "/rings.v3.skycell/1630/019/rings.v3.skycell.1630.019.stk.r.unconv.fits", y: "/rings.v3.skycell/1630/019/rings.v3.skycell.1630.019.stk.y.unconv.fits", z: "/rings.v3.skycell/1630/019/rings.v3.skycell.1630.019.stk.z.unconv.fits" },
+  m106: { g: "/rings.v3.skycell/2258/086/rings.v3.skycell.2258.086.stk.g.unconv.fits", i: "/rings.v3.skycell/2258/086/rings.v3.skycell.2258.086.stk.i.unconv.fits", r: "/rings.v3.skycell/2258/086/rings.v3.skycell.2258.086.stk.r.unconv.fits", y: "/rings.v3.skycell/2258/086/rings.v3.skycell.2258.086.stk.y.unconv.fits", z: "/rings.v3.skycell/2258/086/rings.v3.skycell.2258.086.stk.z.unconv.fits" },
+  m107: { g: "/rings.v3.skycell/1027/078/rings.v3.skycell.1027.078.stk.g.unconv.fits", i: "/rings.v3.skycell/1027/078/rings.v3.skycell.1027.078.stk.i.unconv.fits", r: "/rings.v3.skycell/1027/078/rings.v3.skycell.1027.078.stk.r.unconv.fits", y: "/rings.v3.skycell/1027/078/rings.v3.skycell.1027.078.stk.y.unconv.fits", z: "/rings.v3.skycell/1027/078/rings.v3.skycell.1027.078.stk.z.unconv.fits" },
+  m108: { g: "/rings.v3.skycell/2375/098/rings.v3.skycell.2375.098.stk.g.unconv.fits", i: "/rings.v3.skycell/2375/098/rings.v3.skycell.2375.098.stk.i.unconv.fits", r: "/rings.v3.skycell/2375/098/rings.v3.skycell.2375.098.stk.r.unconv.fits", y: "/rings.v3.skycell/2375/098/rings.v3.skycell.2375.098.stk.y.unconv.fits", z: "/rings.v3.skycell/2375/098/rings.v3.skycell.2375.098.stk.z.unconv.fits" },
+  m109: { g: "/rings.v3.skycell/2376/031/rings.v3.skycell.2376.031.stk.g.unconv.fits", i: "/rings.v3.skycell/2376/031/rings.v3.skycell.2376.031.stk.i.unconv.fits", r: "/rings.v3.skycell/2376/031/rings.v3.skycell.2376.031.stk.r.unconv.fits", y: "/rings.v3.skycell/2376/031/rings.v3.skycell.2376.031.stk.y.unconv.fits", z: "/rings.v3.skycell/2376/031/rings.v3.skycell.2376.031.stk.z.unconv.fits" },
+  m11: { g: "/rings.v3.skycell/1213/045/rings.v3.skycell.1213.045.stk.g.unconv.fits", i: "/rings.v3.skycell/1213/045/rings.v3.skycell.1213.045.stk.i.unconv.fits", r: "/rings.v3.skycell/1213/045/rings.v3.skycell.1213.045.stk.r.unconv.fits", y: "/rings.v3.skycell/1213/045/rings.v3.skycell.1213.045.stk.y.unconv.fits", z: "/rings.v3.skycell/1213/045/rings.v3.skycell.1213.045.stk.z.unconv.fits" },
+  m110: { g: "/rings.v3.skycell/2159/045/rings.v3.skycell.2159.045.stk.g.unconv.fits", i: "/rings.v3.skycell/2159/045/rings.v3.skycell.2159.045.stk.i.unconv.fits", r: "/rings.v3.skycell/2159/045/rings.v3.skycell.2159.045.stk.r.unconv.fits", y: "/rings.v3.skycell/2159/045/rings.v3.skycell.2159.045.stk.y.unconv.fits", z: "/rings.v3.skycell/2159/045/rings.v3.skycell.2159.045.stk.z.unconv.fits" },
+  m12: { g: "/rings.v3.skycell/1295/055/rings.v3.skycell.1295.055.stk.g.unconv.fits", i: "/rings.v3.skycell/1295/055/rings.v3.skycell.1295.055.stk.i.unconv.fits", r: "/rings.v3.skycell/1295/055/rings.v3.skycell.1295.055.stk.r.unconv.fits", y: "/rings.v3.skycell/1295/055/rings.v3.skycell.1295.055.stk.y.unconv.fits", z: "/rings.v3.skycell/1295/055/rings.v3.skycell.1295.055.stk.z.unconv.fits" },
+  m13: { g: "/rings.v3.skycell/2135/014/rings.v3.skycell.2135.014.stk.g.unconv.fits", i: "/rings.v3.skycell/2135/014/rings.v3.skycell.2135.014.stk.i.unconv.fits", r: "/rings.v3.skycell/2135/014/rings.v3.skycell.2135.014.stk.r.unconv.fits", y: "/rings.v3.skycell/2135/014/rings.v3.skycell.2135.014.stk.y.unconv.fits", z: "/rings.v3.skycell/2135/014/rings.v3.skycell.2135.014.stk.z.unconv.fits" },
+  m14: { g: "/rings.v3.skycell/1298/014/rings.v3.skycell.1298.014.stk.g.unconv.fits", i: "/rings.v3.skycell/1298/014/rings.v3.skycell.1298.014.stk.i.unconv.fits", r: "/rings.v3.skycell/1298/014/rings.v3.skycell.1298.014.stk.r.unconv.fits", y: "/rings.v3.skycell/1298/014/rings.v3.skycell.1298.014.stk.y.unconv.fits", z: "/rings.v3.skycell/1298/014/rings.v3.skycell.1298.014.stk.z.unconv.fits" },
+  m15: { g: "/rings.v3.skycell/1669/006/rings.v3.skycell.1669.006.stk.g.unconv.fits", i: "/rings.v3.skycell/1669/006/rings.v3.skycell.1669.006.stk.i.unconv.fits", r: "/rings.v3.skycell/1669/006/rings.v3.skycell.1669.006.stk.r.unconv.fits", y: "/rings.v3.skycell/1669/006/rings.v3.skycell.1669.006.stk.y.unconv.fits", z: "/rings.v3.skycell/1669/006/rings.v3.skycell.1669.006.stk.z.unconv.fits" },
+  m16: { g: "/rings.v3.skycell/1033/053/rings.v3.skycell.1033.053.stk.g.unconv.fits", i: "/rings.v3.skycell/1033/053/rings.v3.skycell.1033.053.stk.i.unconv.fits", r: "/rings.v3.skycell/1033/053/rings.v3.skycell.1033.053.stk.r.unconv.fits", y: "/rings.v3.skycell/1033/053/rings.v3.skycell.1033.053.stk.y.unconv.fits", z: "/rings.v3.skycell/1033/053/rings.v3.skycell.1033.053.stk.z.unconv.fits" },
+  m17: { g: "/rings.v3.skycell/0946/097/rings.v3.skycell.0946.097.stk.g.unconv.fits", i: "/rings.v3.skycell/0946/097/rings.v3.skycell.0946.097.stk.i.unconv.fits", r: "/rings.v3.skycell/0946/097/rings.v3.skycell.0946.097.stk.r.unconv.fits", y: "/rings.v3.skycell/0946/097/rings.v3.skycell.0946.097.stk.y.unconv.fits", z: "/rings.v3.skycell/0946/097/rings.v3.skycell.0946.097.stk.z.unconv.fits" },
+  m18: { g: "/rings.v3.skycell/0946/078/rings.v3.skycell.0946.078.stk.g.unconv.fits", i: "/rings.v3.skycell/0946/078/rings.v3.skycell.0946.078.stk.i.unconv.fits", r: "/rings.v3.skycell/0946/078/rings.v3.skycell.0946.078.stk.r.unconv.fits", y: "/rings.v3.skycell/0946/078/rings.v3.skycell.0946.078.stk.y.unconv.fits", z: "/rings.v3.skycell/0946/078/rings.v3.skycell.0946.078.stk.z.unconv.fits" },
+  m19: { g: "/rings.v3.skycell/0772/042/rings.v3.skycell.0772.042.stk.g.unconv.fits", i: "/rings.v3.skycell/0772/042/rings.v3.skycell.0772.042.stk.i.unconv.fits", r: "/rings.v3.skycell/0772/042/rings.v3.skycell.0772.042.stk.r.unconv.fits", y: "/rings.v3.skycell/0772/042/rings.v3.skycell.0772.042.stk.y.unconv.fits", z: "/rings.v3.skycell/0772/042/rings.v3.skycell.0772.042.stk.z.unconv.fits" },
+  m2: { g: "/rings.v3.skycell/1313/076/rings.v3.skycell.1313.076.stk.g.unconv.fits", i: "/rings.v3.skycell/1313/076/rings.v3.skycell.1313.076.stk.i.unconv.fits", r: "/rings.v3.skycell/1313/076/rings.v3.skycell.1313.076.stk.r.unconv.fits", y: "/rings.v3.skycell/1313/076/rings.v3.skycell.1313.076.stk.y.unconv.fits", z: "/rings.v3.skycell/1313/076/rings.v3.skycell.1313.076.stk.z.unconv.fits" },
+  m20: { g: "/rings.v3.skycell/0859/023/rings.v3.skycell.0859.023.stk.g.unconv.fits", i: "/rings.v3.skycell/0859/023/rings.v3.skycell.0859.023.stk.i.unconv.fits", r: "/rings.v3.skycell/0859/023/rings.v3.skycell.0859.023.stk.r.unconv.fits", y: "/rings.v3.skycell/0859/023/rings.v3.skycell.0859.023.stk.y.unconv.fits", z: "/rings.v3.skycell/0859/023/rings.v3.skycell.0859.023.stk.z.unconv.fits" },
+  m21: { g: "/rings.v3.skycell/0859/032/rings.v3.skycell.0859.032.stk.g.unconv.fits", i: "/rings.v3.skycell/0859/032/rings.v3.skycell.0859.032.stk.i.unconv.fits", r: "/rings.v3.skycell/0859/032/rings.v3.skycell.0859.032.stk.r.unconv.fits", y: "/rings.v3.skycell/0859/032/rings.v3.skycell.0859.032.stk.y.unconv.fits", z: "/rings.v3.skycell/0859/032/rings.v3.skycell.0859.032.stk.z.unconv.fits" },
+  m22: { g: "/rings.v3.skycell/0861/003/rings.v3.skycell.0861.003.stk.g.unconv.fits", i: "/rings.v3.skycell/0861/003/rings.v3.skycell.0861.003.stk.i.unconv.fits", r: "/rings.v3.skycell/0861/003/rings.v3.skycell.0861.003.stk.r.unconv.fits", y: "/rings.v3.skycell/0861/003/rings.v3.skycell.0861.003.stk.y.unconv.fits", z: "/rings.v3.skycell/0861/003/rings.v3.skycell.0861.003.stk.z.unconv.fits" },
+  m23: { g: "/rings.v3.skycell/0944/021/rings.v3.skycell.0944.021.stk.g.unconv.fits", i: "/rings.v3.skycell/0944/021/rings.v3.skycell.0944.021.stk.i.unconv.fits", r: "/rings.v3.skycell/0944/021/rings.v3.skycell.0944.021.stk.r.unconv.fits", y: "/rings.v3.skycell/0944/021/rings.v3.skycell.0944.021.stk.y.unconv.fits", z: "/rings.v3.skycell/0944/021/rings.v3.skycell.0944.021.stk.z.unconv.fits" },
+  m24: { g: "/rings.v3.skycell/0946/039/rings.v3.skycell.0946.039.stk.g.unconv.fits", i: "/rings.v3.skycell/0946/039/rings.v3.skycell.0946.039.stk.i.unconv.fits", r: "/rings.v3.skycell/0946/039/rings.v3.skycell.0946.039.stk.r.unconv.fits", y: "/rings.v3.skycell/0946/039/rings.v3.skycell.0946.039.stk.y.unconv.fits", z: "/rings.v3.skycell/0946/039/rings.v3.skycell.0946.039.stk.z.unconv.fits" },
+  m25: { g: "/rings.v3.skycell/0946/021/rings.v3.skycell.0946.021.stk.g.unconv.fits", i: "/rings.v3.skycell/0946/021/rings.v3.skycell.0946.021.stk.i.unconv.fits", r: "/rings.v3.skycell/0946/021/rings.v3.skycell.0946.021.stk.r.unconv.fits", y: "/rings.v3.skycell/0946/021/rings.v3.skycell.0946.021.stk.y.unconv.fits", z: "/rings.v3.skycell/0946/021/rings.v3.skycell.0946.021.stk.z.unconv.fits" },
+  m26: { g: "/rings.v3.skycell/1123/060/rings.v3.skycell.1123.060.stk.g.unconv.fits", i: "/rings.v3.skycell/1123/060/rings.v3.skycell.1123.060.stk.i.unconv.fits", r: "/rings.v3.skycell/1123/060/rings.v3.skycell.1123.060.stk.r.unconv.fits", y: "/rings.v3.skycell/1123/060/rings.v3.skycell.1123.060.stk.y.unconv.fits", z: "/rings.v3.skycell/1123/060/rings.v3.skycell.1123.060.stk.z.unconv.fits" },
+  m27: { g: "/rings.v3.skycell/1834/065/rings.v3.skycell.1834.065.stk.g.unconv.fits", i: "/rings.v3.skycell/1834/065/rings.v3.skycell.1834.065.stk.i.unconv.fits", r: "/rings.v3.skycell/1834/065/rings.v3.skycell.1834.065.stk.r.unconv.fits", y: "/rings.v3.skycell/1834/065/rings.v3.skycell.1834.065.stk.y.unconv.fits", z: "/rings.v3.skycell/1834/065/rings.v3.skycell.1834.065.stk.z.unconv.fits" },
+  m28: { g: "/rings.v3.skycell/0777/076/rings.v3.skycell.0777.076.stk.g.unconv.fits", i: "/rings.v3.skycell/0777/076/rings.v3.skycell.0777.076.stk.i.unconv.fits", r: "/rings.v3.skycell/0777/076/rings.v3.skycell.0777.076.stk.r.unconv.fits", y: "/rings.v3.skycell/0777/076/rings.v3.skycell.0777.076.stk.y.unconv.fits", z: "/rings.v3.skycell/0777/076/rings.v3.skycell.0777.076.stk.z.unconv.fits" },
+  m29: { g: "/rings.v3.skycell/2146/064/rings.v3.skycell.2146.064.stk.g.unconv.fits", i: "/rings.v3.skycell/2146/064/rings.v3.skycell.2146.064.stk.i.unconv.fits", r: "/rings.v3.skycell/2146/064/rings.v3.skycell.2146.064.stk.r.unconv.fits", y: "/rings.v3.skycell/2146/064/rings.v3.skycell.2146.064.stk.y.unconv.fits", z: "/rings.v3.skycell/2146/064/rings.v3.skycell.2146.064.stk.z.unconv.fits" },
+  m3: { g: "/rings.v3.skycell/1975/003/rings.v3.skycell.1975.003.stk.g.unconv.fits", i: "/rings.v3.skycell/1975/003/rings.v3.skycell.1975.003.stk.i.unconv.fits", r: "/rings.v3.skycell/1975/003/rings.v3.skycell.1975.003.stk.r.unconv.fits", y: "/rings.v3.skycell/1975/003/rings.v3.skycell.1975.003.stk.y.unconv.fits", z: "/rings.v3.skycell/1975/003/rings.v3.skycell.1975.003.stk.z.unconv.fits" },
+  m30: { g: "/rings.v3.skycell/0872/026/rings.v3.skycell.0872.026.stk.g.unconv.fits", i: "/rings.v3.skycell/0872/026/rings.v3.skycell.0872.026.stk.i.unconv.fits", r: "/rings.v3.skycell/0872/026/rings.v3.skycell.0872.026.stk.r.unconv.fits", y: "/rings.v3.skycell/0872/026/rings.v3.skycell.0872.026.stk.y.unconv.fits", z: "/rings.v3.skycell/0872/026/rings.v3.skycell.0872.026.stk.z.unconv.fits" },
+  m31: { g: "/rings.v3.skycell/2159/034/rings.v3.skycell.2159.034.stk.g.unconv.fits", i: "/rings.v3.skycell/2159/034/rings.v3.skycell.2159.034.stk.i.unconv.fits", r: "/rings.v3.skycell/2159/034/rings.v3.skycell.2159.034.stk.r.unconv.fits", y: "/rings.v3.skycell/2159/034/rings.v3.skycell.2159.034.stk.y.unconv.fits", z: "/rings.v3.skycell/2159/034/rings.v3.skycell.2159.034.stk.z.unconv.fits" },
+  m32: { g: "/rings.v3.skycell/2159/024/rings.v3.skycell.2159.024.stk.g.unconv.fits", i: "/rings.v3.skycell/2159/024/rings.v3.skycell.2159.024.stk.i.unconv.fits", r: "/rings.v3.skycell/2159/024/rings.v3.skycell.2159.024.stk.r.unconv.fits", y: "/rings.v3.skycell/2159/024/rings.v3.skycell.2159.024.stk.y.unconv.fits", z: "/rings.v3.skycell/2159/024/rings.v3.skycell.2159.024.stk.z.unconv.fits" },
+  m33: { g: "/rings.v3.skycell/1935/063/rings.v3.skycell.1935.063.stk.g.unconv.fits", i: "/rings.v3.skycell/1935/063/rings.v3.skycell.1935.063.stk.i.unconv.fits", r: "/rings.v3.skycell/1935/063/rings.v3.skycell.1935.063.stk.r.unconv.fits", y: "/rings.v3.skycell/1935/063/rings.v3.skycell.1935.063.stk.y.unconv.fits", z: "/rings.v3.skycell/1935/063/rings.v3.skycell.1935.063.stk.z.unconv.fits" },
+  m34: { g: "/rings.v3.skycell/2165/068/rings.v3.skycell.2165.068.stk.g.unconv.fits", i: "/rings.v3.skycell/2165/068/rings.v3.skycell.2165.068.stk.i.unconv.fits", r: "/rings.v3.skycell/2165/068/rings.v3.skycell.2165.068.stk.r.unconv.fits", y: "/rings.v3.skycell/2165/068/rings.v3.skycell.2165.068.stk.y.unconv.fits", z: "/rings.v3.skycell/2165/068/rings.v3.skycell.2165.068.stk.z.unconv.fits" },
+  m35: { g: "/rings.v3.skycell/1869/004/rings.v3.skycell.1869.004.stk.g.unconv.fits", i: "/rings.v3.skycell/1869/004/rings.v3.skycell.1869.004.stk.i.unconv.fits", r: "/rings.v3.skycell/1869/004/rings.v3.skycell.1869.004.stk.r.unconv.fits", y: "/rings.v3.skycell/1869/004/rings.v3.skycell.1869.004.stk.y.unconv.fits", z: "/rings.v3.skycell/1869/004/rings.v3.skycell.1869.004.stk.z.unconv.fits" },
+  m36: { g: "/rings.v3.skycell/2027/057/rings.v3.skycell.2027.057.stk.g.unconv.fits", i: "/rings.v3.skycell/2027/057/rings.v3.skycell.2027.057.stk.i.unconv.fits", r: "/rings.v3.skycell/2027/057/rings.v3.skycell.2027.057.stk.r.unconv.fits", y: "/rings.v3.skycell/2027/057/rings.v3.skycell.2027.057.stk.y.unconv.fits", z: "/rings.v3.skycell/2027/057/rings.v3.skycell.2027.057.stk.z.unconv.fits" },
+  m37: { g: "/rings.v3.skycell/2028/019/rings.v3.skycell.2028.019.stk.g.unconv.fits", i: "/rings.v3.skycell/2028/019/rings.v3.skycell.2028.019.stk.i.unconv.fits", r: "/rings.v3.skycell/2028/019/rings.v3.skycell.2028.019.stk.r.unconv.fits", y: "/rings.v3.skycell/2028/019/rings.v3.skycell.2028.019.stk.y.unconv.fits", z: "/rings.v3.skycell/2028/019/rings.v3.skycell.2028.019.stk.z.unconv.fits" },
+  m38: { g: "/rings.v3.skycell/2026/091/rings.v3.skycell.2026.091.stk.g.unconv.fits", i: "/rings.v3.skycell/2026/091/rings.v3.skycell.2026.091.stk.i.unconv.fits", r: "/rings.v3.skycell/2026/091/rings.v3.skycell.2026.091.stk.r.unconv.fits", y: "/rings.v3.skycell/2026/091/rings.v3.skycell.2026.091.stk.y.unconv.fits", z: "/rings.v3.skycell/2026/091/rings.v3.skycell.2026.091.stk.z.unconv.fits" },
+  m39: { g: "/rings.v3.skycell/2343/016/rings.v3.skycell.2343.016.stk.g.unconv.fits", i: "/rings.v3.skycell/2343/016/rings.v3.skycell.2343.016.stk.i.unconv.fits", r: "/rings.v3.skycell/2343/016/rings.v3.skycell.2343.016.stk.r.unconv.fits", y: "/rings.v3.skycell/2343/016/rings.v3.skycell.2343.016.stk.y.unconv.fits", z: "/rings.v3.skycell/2343/016/rings.v3.skycell.2343.016.stk.z.unconv.fits" },
+  m4: { g: "/rings.v3.skycell/0770/034/rings.v3.skycell.0770.034.stk.g.unconv.fits", i: "/rings.v3.skycell/0770/034/rings.v3.skycell.0770.034.stk.i.unconv.fits", r: "/rings.v3.skycell/0770/034/rings.v3.skycell.0770.034.stk.r.unconv.fits", y: "/rings.v3.skycell/0770/034/rings.v3.skycell.0770.034.stk.y.unconv.fits", z: "/rings.v3.skycell/0770/034/rings.v3.skycell.0770.034.stk.z.unconv.fits" },
+  m40: { g: "/rings.v3.skycell/2430/057/rings.v3.skycell.2430.057.stk.g.unconv.fits", i: "/rings.v3.skycell/2430/057/rings.v3.skycell.2430.057.stk.i.unconv.fits", r: "/rings.v3.skycell/2430/057/rings.v3.skycell.2430.057.stk.r.unconv.fits", y: "/rings.v3.skycell/2430/057/rings.v3.skycell.2430.057.stk.y.unconv.fits", z: "/rings.v3.skycell/2430/057/rings.v3.skycell.2430.057.stk.z.unconv.fits" },
+  m41: { g: "/rings.v3.skycell/0820/088/rings.v3.skycell.0820.088.stk.g.unconv.fits", i: "/rings.v3.skycell/0820/088/rings.v3.skycell.0820.088.stk.i.unconv.fits", r: "/rings.v3.skycell/0820/088/rings.v3.skycell.0820.088.stk.r.unconv.fits", y: "/rings.v3.skycell/0820/088/rings.v3.skycell.0820.088.stk.y.unconv.fits", z: "/rings.v3.skycell/0820/088/rings.v3.skycell.0820.088.stk.z.unconv.fits" },
+  m42: { g: "/rings.v3.skycell/1164/067/rings.v3.skycell.1164.067.stk.g.unconv.fits", i: "/rings.v3.skycell/1164/067/rings.v3.skycell.1164.067.stk.i.unconv.fits", y: "/rings.v3.skycell/1164/067/rings.v3.skycell.1164.067.stk.y.unconv.fits", z: "/rings.v3.skycell/1164/067/rings.v3.skycell.1164.067.stk.z.unconv.fits" },
+  m43: { g: "/rings.v3.skycell/1164/067/rings.v3.skycell.1164.067.stk.g.unconv.fits", i: "/rings.v3.skycell/1164/067/rings.v3.skycell.1164.067.stk.i.unconv.fits", y: "/rings.v3.skycell/1164/067/rings.v3.skycell.1164.067.stk.y.unconv.fits", z: "/rings.v3.skycell/1164/067/rings.v3.skycell.1164.067.stk.z.unconv.fits" },
+  m44: { g: "/rings.v3.skycell/1709/094/rings.v3.skycell.1709.094.stk.g.unconv.fits", i: "/rings.v3.skycell/1709/094/rings.v3.skycell.1709.094.stk.i.unconv.fits", r: "/rings.v3.skycell/1709/094/rings.v3.skycell.1709.094.stk.r.unconv.fits", y: "/rings.v3.skycell/1709/094/rings.v3.skycell.1709.094.stk.y.unconv.fits", z: "/rings.v3.skycell/1709/094/rings.v3.skycell.1709.094.stk.z.unconv.fits" },
+  m45: { g: "/rings.v3.skycell/1861/005/rings.v3.skycell.1861.005.stk.g.unconv.fits", i: "/rings.v3.skycell/1861/005/rings.v3.skycell.1861.005.stk.i.unconv.fits", r: "/rings.v3.skycell/1861/005/rings.v3.skycell.1861.005.stk.r.unconv.fits", y: "/rings.v3.skycell/1861/005/rings.v3.skycell.1861.005.stk.y.unconv.fits", z: "/rings.v3.skycell/1861/005/rings.v3.skycell.1861.005.stk.z.unconv.fits" },
+  m46: { g: "/rings.v3.skycell/0994/022/rings.v3.skycell.0994.022.stk.g.unconv.fits", i: "/rings.v3.skycell/0994/022/rings.v3.skycell.0994.022.stk.i.unconv.fits", r: "/rings.v3.skycell/0994/022/rings.v3.skycell.0994.022.stk.r.unconv.fits", y: "/rings.v3.skycell/0994/022/rings.v3.skycell.0994.022.stk.y.unconv.fits", z: "/rings.v3.skycell/0994/022/rings.v3.skycell.0994.022.stk.z.unconv.fits" },
+  m47: { g: "/rings.v3.skycell/0994/035/rings.v3.skycell.0994.035.stk.g.unconv.fits", i: "/rings.v3.skycell/0994/035/rings.v3.skycell.0994.035.stk.i.unconv.fits", r: "/rings.v3.skycell/0994/035/rings.v3.skycell.0994.035.stk.r.unconv.fits", y: "/rings.v3.skycell/0994/035/rings.v3.skycell.0994.035.stk.y.unconv.fits", z: "/rings.v3.skycell/0994/035/rings.v3.skycell.0994.035.stk.z.unconv.fits" },
+  m48: { g: "/rings.v3.skycell/1174/059/rings.v3.skycell.1174.059.stk.g.unconv.fits", i: "/rings.v3.skycell/1174/059/rings.v3.skycell.1174.059.stk.i.unconv.fits", r: "/rings.v3.skycell/1174/059/rings.v3.skycell.1174.059.stk.r.unconv.fits", y: "/rings.v3.skycell/1174/059/rings.v3.skycell.1174.059.stk.y.unconv.fits", z: "/rings.v3.skycell/1174/059/rings.v3.skycell.1174.059.stk.z.unconv.fits" },
+  m49: { g: "/rings.v3.skycell/1547/001/rings.v3.skycell.1547.001.stk.g.unconv.fits", i: "/rings.v3.skycell/1547/001/rings.v3.skycell.1547.001.stk.i.unconv.fits", r: "/rings.v3.skycell/1547/001/rings.v3.skycell.1547.001.stk.r.unconv.fits", y: "/rings.v3.skycell/1547/001/rings.v3.skycell.1547.001.stk.y.unconv.fits", z: "/rings.v3.skycell/1547/001/rings.v3.skycell.1547.001.stk.z.unconv.fits" },
+  m5: { g: "/rings.v3.skycell/1379/050/rings.v3.skycell.1379.050.stk.g.unconv.fits", i: "/rings.v3.skycell/1379/050/rings.v3.skycell.1379.050.stk.i.unconv.fits", r: "/rings.v3.skycell/1379/050/rings.v3.skycell.1379.050.stk.r.unconv.fits", y: "/rings.v3.skycell/1379/050/rings.v3.skycell.1379.050.stk.y.unconv.fits", z: "/rings.v3.skycell/1379/050/rings.v3.skycell.1379.050.stk.z.unconv.fits" },
+  m50: { g: "/rings.v3.skycell/1080/093/rings.v3.skycell.1080.093.stk.g.unconv.fits", i: "/rings.v3.skycell/1080/093/rings.v3.skycell.1080.093.stk.i.unconv.fits", r: "/rings.v3.skycell/1080/093/rings.v3.skycell.1080.093.stk.r.unconv.fits", y: "/rings.v3.skycell/1080/093/rings.v3.skycell.1080.093.stk.y.unconv.fits", z: "/rings.v3.skycell/1080/093/rings.v3.skycell.1080.093.stk.z.unconv.fits" },
+  m51: { g: "/rings.v3.skycell/2261/075/rings.v3.skycell.2261.075.stk.g.unconv.fits", i: "/rings.v3.skycell/2261/075/rings.v3.skycell.2261.075.stk.i.unconv.fits", r: "/rings.v3.skycell/2261/075/rings.v3.skycell.2261.075.stk.r.unconv.fits", y: "/rings.v3.skycell/2261/075/rings.v3.skycell.2261.075.stk.y.unconv.fits", z: "/rings.v3.skycell/2261/075/rings.v3.skycell.2261.075.stk.z.unconv.fits" },
+  m52: { g: "/rings.v3.skycell/2498/035/rings.v3.skycell.2498.035.stk.g.unconv.fits", i: "/rings.v3.skycell/2498/035/rings.v3.skycell.2498.035.stk.i.unconv.fits", r: "/rings.v3.skycell/2498/035/rings.v3.skycell.2498.035.stk.r.unconv.fits", y: "/rings.v3.skycell/2498/035/rings.v3.skycell.2498.035.stk.y.unconv.fits", z: "/rings.v3.skycell/2498/035/rings.v3.skycell.2498.035.stk.z.unconv.fits" },
+  m53: { g: "/rings.v3.skycell/1725/051/rings.v3.skycell.1725.051.stk.g.unconv.fits", i: "/rings.v3.skycell/1725/051/rings.v3.skycell.1725.051.stk.i.unconv.fits", r: "/rings.v3.skycell/1725/051/rings.v3.skycell.1725.051.stk.r.unconv.fits", y: "/rings.v3.skycell/1725/051/rings.v3.skycell.1725.051.stk.y.unconv.fits", z: "/rings.v3.skycell/1725/051/rings.v3.skycell.1725.051.stk.z.unconv.fits" },
+  m56: { g: "/rings.v3.skycell/1993/050/rings.v3.skycell.1993.050.stk.g.unconv.fits", i: "/rings.v3.skycell/1993/050/rings.v3.skycell.1993.050.stk.i.unconv.fits", r: "/rings.v3.skycell/1993/050/rings.v3.skycell.1993.050.stk.r.unconv.fits", y: "/rings.v3.skycell/1993/050/rings.v3.skycell.1993.050.stk.y.unconv.fits", z: "/rings.v3.skycell/1993/050/rings.v3.skycell.1993.050.stk.z.unconv.fits" },
+  m57: { g: "/rings.v3.skycell/2069/026/rings.v3.skycell.2069.026.stk.g.unconv.fits", i: "/rings.v3.skycell/2069/026/rings.v3.skycell.2069.026.stk.i.unconv.fits", r: "/rings.v3.skycell/2069/026/rings.v3.skycell.2069.026.stk.r.unconv.fits", y: "/rings.v3.skycell/2069/026/rings.v3.skycell.2069.026.stk.y.unconv.fits", z: "/rings.v3.skycell/2069/026/rings.v3.skycell.2069.026.stk.z.unconv.fits" },
+  m58: { g: "/rings.v3.skycell/1548/096/rings.v3.skycell.1548.096.stk.g.unconv.fits", i: "/rings.v3.skycell/1548/096/rings.v3.skycell.1548.096.stk.i.unconv.fits", r: "/rings.v3.skycell/1548/096/rings.v3.skycell.1548.096.stk.r.unconv.fits", y: "/rings.v3.skycell/1548/096/rings.v3.skycell.1548.096.stk.y.unconv.fits", z: "/rings.v3.skycell/1548/096/rings.v3.skycell.1548.096.stk.z.unconv.fits" },
+  m59: { g: "/rings.v3.skycell/1548/094/rings.v3.skycell.1548.094.stk.g.unconv.fits", i: "/rings.v3.skycell/1548/094/rings.v3.skycell.1548.094.stk.i.unconv.fits", r: "/rings.v3.skycell/1548/094/rings.v3.skycell.1548.094.stk.r.unconv.fits", y: "/rings.v3.skycell/1548/094/rings.v3.skycell.1548.094.stk.y.unconv.fits", z: "/rings.v3.skycell/1548/094/rings.v3.skycell.1548.094.stk.z.unconv.fits" },
+  m60: { g: "/rings.v3.skycell/1548/083/rings.v3.skycell.1548.083.stk.g.unconv.fits", i: "/rings.v3.skycell/1548/083/rings.v3.skycell.1548.083.stk.i.unconv.fits", r: "/rings.v3.skycell/1548/083/rings.v3.skycell.1548.083.stk.r.unconv.fits", y: "/rings.v3.skycell/1548/083/rings.v3.skycell.1548.083.stk.y.unconv.fits", z: "/rings.v3.skycell/1548/083/rings.v3.skycell.1548.083.stk.z.unconv.fits" },
+  m61: { g: "/rings.v3.skycell/1458/016/rings.v3.skycell.1458.016.stk.g.unconv.fits", i: "/rings.v3.skycell/1458/016/rings.v3.skycell.1458.016.stk.i.unconv.fits", r: "/rings.v3.skycell/1458/016/rings.v3.skycell.1458.016.stk.r.unconv.fits", y: "/rings.v3.skycell/1458/016/rings.v3.skycell.1458.016.stk.y.unconv.fits", z: "/rings.v3.skycell/1458/016/rings.v3.skycell.1458.016.stk.z.unconv.fits" },
+  m63: { g: "/rings.v3.skycell/2195/059/rings.v3.skycell.2195.059.stk.g.unconv.fits", i: "/rings.v3.skycell/2195/059/rings.v3.skycell.2195.059.stk.i.unconv.fits", r: "/rings.v3.skycell/2195/059/rings.v3.skycell.2195.059.stk.r.unconv.fits", y: "/rings.v3.skycell/2195/059/rings.v3.skycell.2195.059.stk.y.unconv.fits", z: "/rings.v3.skycell/2195/059/rings.v3.skycell.2195.059.stk.z.unconv.fits" },
+  m64: { g: "/rings.v3.skycell/1809/041/rings.v3.skycell.1809.041.stk.g.unconv.fits", i: "/rings.v3.skycell/1809/041/rings.v3.skycell.1809.041.stk.i.unconv.fits", r: "/rings.v3.skycell/1809/041/rings.v3.skycell.1809.041.stk.r.unconv.fits", y: "/rings.v3.skycell/1809/041/rings.v3.skycell.1809.041.stk.y.unconv.fits", z: "/rings.v3.skycell/1809/041/rings.v3.skycell.1809.041.stk.z.unconv.fits" },
+  m65: { g: "/rings.v3.skycell/1631/020/rings.v3.skycell.1631.020.stk.g.unconv.fits", i: "/rings.v3.skycell/1631/020/rings.v3.skycell.1631.020.stk.i.unconv.fits", r: "/rings.v3.skycell/1631/020/rings.v3.skycell.1631.020.stk.r.unconv.fits", y: "/rings.v3.skycell/1631/020/rings.v3.skycell.1631.020.stk.y.unconv.fits", z: "/rings.v3.skycell/1631/020/rings.v3.skycell.1631.020.stk.z.unconv.fits" },
+  m66: { g: "/rings.v3.skycell/1632/029/rings.v3.skycell.1632.029.stk.g.unconv.fits", i: "/rings.v3.skycell/1632/029/rings.v3.skycell.1632.029.stk.i.unconv.fits", r: "/rings.v3.skycell/1632/029/rings.v3.skycell.1632.029.stk.r.unconv.fits", y: "/rings.v3.skycell/1632/029/rings.v3.skycell.1632.029.stk.y.unconv.fits", z: "/rings.v3.skycell/1632/029/rings.v3.skycell.1632.029.stk.z.unconv.fits" },
+  m67: { g: "/rings.v3.skycell/1534/096/rings.v3.skycell.1534.096.stk.g.unconv.fits", i: "/rings.v3.skycell/1534/096/rings.v3.skycell.1534.096.stk.i.unconv.fits", r: "/rings.v3.skycell/1534/096/rings.v3.skycell.1534.096.stk.r.unconv.fits", y: "/rings.v3.skycell/1534/096/rings.v3.skycell.1534.096.stk.y.unconv.fits", z: "/rings.v3.skycell/1534/096/rings.v3.skycell.1534.096.stk.z.unconv.fits" },
+  m68: { g: "/rings.v3.skycell/0757/032/rings.v3.skycell.0757.032.stk.g.unconv.fits", i: "/rings.v3.skycell/0757/032/rings.v3.skycell.0757.032.stk.i.unconv.fits", r: "/rings.v3.skycell/0757/032/rings.v3.skycell.0757.032.stk.r.unconv.fits", y: "/rings.v3.skycell/0757/032/rings.v3.skycell.0757.032.stk.y.unconv.fits", z: "/rings.v3.skycell/0757/032/rings.v3.skycell.0757.032.stk.z.unconv.fits" },
+  m71: { g: "/rings.v3.skycell/1749/062/rings.v3.skycell.1749.062.stk.g.unconv.fits", i: "/rings.v3.skycell/1749/062/rings.v3.skycell.1749.062.stk.i.unconv.fits", r: "/rings.v3.skycell/1749/062/rings.v3.skycell.1749.062.stk.r.unconv.fits", y: "/rings.v3.skycell/1749/062/rings.v3.skycell.1749.062.stk.y.unconv.fits", z: "/rings.v3.skycell/1749/062/rings.v3.skycell.1749.062.stk.z.unconv.fits" },
+  m72: { g: "/rings.v3.skycell/1043/088/rings.v3.skycell.1043.088.stk.g.unconv.fits", i: "/rings.v3.skycell/1043/088/rings.v3.skycell.1043.088.stk.i.unconv.fits", r: "/rings.v3.skycell/1043/088/rings.v3.skycell.1043.088.stk.r.unconv.fits", y: "/rings.v3.skycell/1043/088/rings.v3.skycell.1043.088.stk.y.unconv.fits", z: "/rings.v3.skycell/1043/088/rings.v3.skycell.1043.088.stk.z.unconv.fits" },
+  m73: { g: "/rings.v3.skycell/1043/085/rings.v3.skycell.1043.085.stk.g.unconv.fits", i: "/rings.v3.skycell/1043/085/rings.v3.skycell.1043.085.stk.i.unconv.fits", r: "/rings.v3.skycell/1043/085/rings.v3.skycell.1043.085.stk.r.unconv.fits", y: "/rings.v3.skycell/1043/085/rings.v3.skycell.1043.085.stk.y.unconv.fits", z: "/rings.v3.skycell/1043/085/rings.v3.skycell.1043.085.stk.z.unconv.fits" },
+  m74: { g: "/rings.v3.skycell/1596/095/rings.v3.skycell.1596.095.stk.g.unconv.fits", i: "/rings.v3.skycell/1596/095/rings.v3.skycell.1596.095.stk.i.unconv.fits", r: "/rings.v3.skycell/1596/095/rings.v3.skycell.1596.095.stk.r.unconv.fits", y: "/rings.v3.skycell/1596/095/rings.v3.skycell.1596.095.stk.y.unconv.fits", z: "/rings.v3.skycell/1596/095/rings.v3.skycell.1596.095.stk.z.unconv.fits" },
+  m75: { g: "/rings.v3.skycell/0866/051/rings.v3.skycell.0866.051.stk.g.unconv.fits", i: "/rings.v3.skycell/0866/051/rings.v3.skycell.0866.051.stk.i.unconv.fits", r: "/rings.v3.skycell/0866/051/rings.v3.skycell.0866.051.stk.r.unconv.fits", y: "/rings.v3.skycell/0866/051/rings.v3.skycell.0866.051.stk.y.unconv.fits", z: "/rings.v3.skycell/0866/051/rings.v3.skycell.0866.051.stk.z.unconv.fits" },
+  m76: { g: "/rings.v3.skycell/2293/082/rings.v3.skycell.2293.082.stk.g.unconv.fits", i: "/rings.v3.skycell/2293/082/rings.v3.skycell.2293.082.stk.i.unconv.fits", r: "/rings.v3.skycell/2293/082/rings.v3.skycell.2293.082.stk.r.unconv.fits", y: "/rings.v3.skycell/2293/082/rings.v3.skycell.2293.082.stk.y.unconv.fits", z: "/rings.v3.skycell/2293/082/rings.v3.skycell.2293.082.stk.z.unconv.fits" },
+  m77: { g: "/rings.v3.skycell/1242/093/rings.v3.skycell.1242.093.stk.g.unconv.fits", i: "/rings.v3.skycell/1242/093/rings.v3.skycell.1242.093.stk.i.unconv.fits", r: "/rings.v3.skycell/1242/093/rings.v3.skycell.1242.093.stk.r.unconv.fits", y: "/rings.v3.skycell/1242/093/rings.v3.skycell.1242.093.stk.y.unconv.fits", z: "/rings.v3.skycell/1242/093/rings.v3.skycell.1242.093.stk.z.unconv.fits" },
+  m78: { g: "/rings.v3.skycell/1344/008/rings.v3.skycell.1344.008.stk.g.unconv.fits", i: "/rings.v3.skycell/1344/008/rings.v3.skycell.1344.008.stk.i.unconv.fits", r: "/rings.v3.skycell/1344/008/rings.v3.skycell.1344.008.stk.r.unconv.fits", y: "/rings.v3.skycell/1344/008/rings.v3.skycell.1344.008.stk.y.unconv.fits", z: "/rings.v3.skycell/1344/008/rings.v3.skycell.1344.008.stk.z.unconv.fits" },
+  m79: { g: "/rings.v3.skycell/0732/080/rings.v3.skycell.0732.080.stk.g.unconv.fits", i: "/rings.v3.skycell/0732/080/rings.v3.skycell.0732.080.stk.i.unconv.fits", r: "/rings.v3.skycell/0732/080/rings.v3.skycell.0732.080.stk.r.unconv.fits", y: "/rings.v3.skycell/0732/080/rings.v3.skycell.0732.080.stk.y.unconv.fits", z: "/rings.v3.skycell/0732/080/rings.v3.skycell.0732.080.stk.z.unconv.fits" },
+  m8: { g: "/rings.v3.skycell/0776/097/rings.v3.skycell.0776.097.stk.g.unconv.fits", i: "/rings.v3.skycell/0776/097/rings.v3.skycell.0776.097.stk.i.unconv.fits", r: "/rings.v3.skycell/0776/097/rings.v3.skycell.0776.097.stk.r.unconv.fits", y: "/rings.v3.skycell/0776/097/rings.v3.skycell.0776.097.stk.y.unconv.fits", z: "/rings.v3.skycell/0776/097/rings.v3.skycell.0776.097.stk.z.unconv.fits" },
+  m80: { g: "/rings.v3.skycell/0853/025/rings.v3.skycell.0853.025.stk.g.unconv.fits", i: "/rings.v3.skycell/0853/025/rings.v3.skycell.0853.025.stk.i.unconv.fits", r: "/rings.v3.skycell/0853/025/rings.v3.skycell.0853.025.stk.r.unconv.fits", y: "/rings.v3.skycell/0853/025/rings.v3.skycell.0853.025.stk.y.unconv.fits", z: "/rings.v3.skycell/0853/025/rings.v3.skycell.0853.025.stk.z.unconv.fits" },
+  m81: { g: "/rings.v3.skycell/2552/028/rings.v3.skycell.2552.028.stk.g.unconv.fits", i: "/rings.v3.skycell/2552/028/rings.v3.skycell.2552.028.stk.i.unconv.fits", r: "/rings.v3.skycell/2552/028/rings.v3.skycell.2552.028.stk.r.unconv.fits", y: "/rings.v3.skycell/2552/028/rings.v3.skycell.2552.028.stk.y.unconv.fits", z: "/rings.v3.skycell/2552/028/rings.v3.skycell.2552.028.stk.z.unconv.fits" },
+  m82: { g: "/rings.v3.skycell/2552/048/rings.v3.skycell.2552.048.stk.g.unconv.fits", i: "/rings.v3.skycell/2552/048/rings.v3.skycell.2552.048.stk.i.unconv.fits", r: "/rings.v3.skycell/2552/048/rings.v3.skycell.2552.048.stk.r.unconv.fits", y: "/rings.v3.skycell/2552/048/rings.v3.skycell.2552.048.stk.y.unconv.fits", z: "/rings.v3.skycell/2552/048/rings.v3.skycell.2552.048.stk.z.unconv.fits" },
+  m83: { g: "/rings.v3.skycell/0680/056/rings.v3.skycell.0680.056.stk.g.unconv.fits", i: "/rings.v3.skycell/0680/056/rings.v3.skycell.0680.056.stk.i.unconv.fits", r: "/rings.v3.skycell/0680/056/rings.v3.skycell.0680.056.stk.r.unconv.fits", y: "/rings.v3.skycell/0680/056/rings.v3.skycell.0680.056.stk.y.unconv.fits", z: "/rings.v3.skycell/0680/056/rings.v3.skycell.0680.056.stk.z.unconv.fits" },
+  m84: { g: "/rings.v3.skycell/1636/029/rings.v3.skycell.1636.029.stk.g.unconv.fits", i: "/rings.v3.skycell/1636/029/rings.v3.skycell.1636.029.stk.i.unconv.fits", r: "/rings.v3.skycell/1636/029/rings.v3.skycell.1636.029.stk.r.unconv.fits", y: "/rings.v3.skycell/1636/029/rings.v3.skycell.1636.029.stk.y.unconv.fits", z: "/rings.v3.skycell/1636/029/rings.v3.skycell.1636.029.stk.z.unconv.fits" },
+  m85: { g: "/rings.v3.skycell/1723/059/rings.v3.skycell.1723.059.stk.g.unconv.fits", i: "/rings.v3.skycell/1723/059/rings.v3.skycell.1723.059.stk.i.unconv.fits", r: "/rings.v3.skycell/1723/059/rings.v3.skycell.1723.059.stk.r.unconv.fits", y: "/rings.v3.skycell/1723/059/rings.v3.skycell.1723.059.stk.y.unconv.fits", z: "/rings.v3.skycell/1723/059/rings.v3.skycell.1723.059.stk.z.unconv.fits" },
+  m86: { g: "/rings.v3.skycell/1636/028/rings.v3.skycell.1636.028.stk.g.unconv.fits", i: "/rings.v3.skycell/1636/028/rings.v3.skycell.1636.028.stk.i.unconv.fits", r: "/rings.v3.skycell/1636/028/rings.v3.skycell.1636.028.stk.r.unconv.fits", y: "/rings.v3.skycell/1636/028/rings.v3.skycell.1636.028.stk.y.unconv.fits", z: "/rings.v3.skycell/1636/028/rings.v3.skycell.1636.028.stk.z.unconv.fits" },
+  m87: { g: "/rings.v3.skycell/1636/006/rings.v3.skycell.1636.006.stk.g.unconv.fits", i: "/rings.v3.skycell/1636/006/rings.v3.skycell.1636.006.stk.i.unconv.fits", r: "/rings.v3.skycell/1636/006/rings.v3.skycell.1636.006.stk.r.unconv.fits", y: "/rings.v3.skycell/1636/006/rings.v3.skycell.1636.006.stk.y.unconv.fits", z: "/rings.v3.skycell/1636/006/rings.v3.skycell.1636.006.stk.z.unconv.fits" },
+  "m87-bh": { g: "/rings.v3.skycell/1636/006/rings.v3.skycell.1636.006.stk.g.unconv.fits", i: "/rings.v3.skycell/1636/006/rings.v3.skycell.1636.006.stk.i.unconv.fits", r: "/rings.v3.skycell/1636/006/rings.v3.skycell.1636.006.stk.r.unconv.fits", y: "/rings.v3.skycell/1636/006/rings.v3.skycell.1636.006.stk.y.unconv.fits", z: "/rings.v3.skycell/1636/006/rings.v3.skycell.1636.006.stk.z.unconv.fits" },
+  m88: { g: "/rings.v3.skycell/1636/065/rings.v3.skycell.1636.065.stk.g.unconv.fits", i: "/rings.v3.skycell/1636/065/rings.v3.skycell.1636.065.stk.i.unconv.fits", r: "/rings.v3.skycell/1636/065/rings.v3.skycell.1636.065.stk.r.unconv.fits", y: "/rings.v3.skycell/1636/065/rings.v3.skycell.1636.065.stk.y.unconv.fits", z: "/rings.v3.skycell/1636/065/rings.v3.skycell.1636.065.stk.z.unconv.fits" },
+  m89: { g: "/rings.v3.skycell/1636/013/rings.v3.skycell.1636.013.stk.g.unconv.fits", i: "/rings.v3.skycell/1636/013/rings.v3.skycell.1636.013.stk.i.unconv.fits", r: "/rings.v3.skycell/1636/013/rings.v3.skycell.1636.013.stk.r.unconv.fits", y: "/rings.v3.skycell/1636/013/rings.v3.skycell.1636.013.stk.y.unconv.fits", z: "/rings.v3.skycell/1636/013/rings.v3.skycell.1636.013.stk.z.unconv.fits" },
+  m9: { g: "/rings.v3.skycell/0942/034/rings.v3.skycell.0942.034.stk.g.unconv.fits", i: "/rings.v3.skycell/0942/034/rings.v3.skycell.0942.034.stk.i.unconv.fits", r: "/rings.v3.skycell/0942/034/rings.v3.skycell.0942.034.stk.r.unconv.fits", y: "/rings.v3.skycell/0942/034/rings.v3.skycell.0942.034.stk.y.unconv.fits", z: "/rings.v3.skycell/0942/034/rings.v3.skycell.0942.034.stk.z.unconv.fits" },
+  m90: { g: "/rings.v3.skycell/1636/022/rings.v3.skycell.1636.022.stk.g.unconv.fits", i: "/rings.v3.skycell/1636/022/rings.v3.skycell.1636.022.stk.i.unconv.fits", r: "/rings.v3.skycell/1636/022/rings.v3.skycell.1636.022.stk.r.unconv.fits", y: "/rings.v3.skycell/1636/022/rings.v3.skycell.1636.022.stk.y.unconv.fits", z: "/rings.v3.skycell/1636/022/rings.v3.skycell.1636.022.stk.z.unconv.fits" },
+  m91: { g: "/rings.v3.skycell/1636/063/rings.v3.skycell.1636.063.stk.g.unconv.fits", i: "/rings.v3.skycell/1636/063/rings.v3.skycell.1636.063.stk.i.unconv.fits", r: "/rings.v3.skycell/1636/063/rings.v3.skycell.1636.063.stk.r.unconv.fits", y: "/rings.v3.skycell/1636/063/rings.v3.skycell.1636.063.stk.y.unconv.fits", z: "/rings.v3.skycell/1636/063/rings.v3.skycell.1636.063.stk.z.unconv.fits" },
+  m92: { g: "/rings.v3.skycell/2206/075/rings.v3.skycell.2206.075.stk.g.unconv.fits", i: "/rings.v3.skycell/2206/075/rings.v3.skycell.2206.075.stk.i.unconv.fits", r: "/rings.v3.skycell/2206/075/rings.v3.skycell.2206.075.stk.r.unconv.fits", y: "/rings.v3.skycell/2206/075/rings.v3.skycell.2206.075.stk.y.unconv.fits", z: "/rings.v3.skycell/2206/075/rings.v3.skycell.2206.075.stk.z.unconv.fits" },
+  m93: { g: "/rings.v3.skycell/0823/004/rings.v3.skycell.0823.004.stk.g.unconv.fits", i: "/rings.v3.skycell/0823/004/rings.v3.skycell.0823.004.stk.i.unconv.fits", r: "/rings.v3.skycell/0823/004/rings.v3.skycell.0823.004.stk.r.unconv.fits", y: "/rings.v3.skycell/0823/004/rings.v3.skycell.0823.004.stk.y.unconv.fits", z: "/rings.v3.skycell/0823/004/rings.v3.skycell.0823.004.stk.z.unconv.fits" },
+  m94: { g: "/rings.v3.skycell/2193/021/rings.v3.skycell.2193.021.stk.g.unconv.fits", i: "/rings.v3.skycell/2193/021/rings.v3.skycell.2193.021.stk.i.unconv.fits", r: "/rings.v3.skycell/2193/021/rings.v3.skycell.2193.021.stk.r.unconv.fits", y: "/rings.v3.skycell/2193/021/rings.v3.skycell.2193.021.stk.y.unconv.fits", z: "/rings.v3.skycell/2193/021/rings.v3.skycell.2193.021.stk.z.unconv.fits" },
+  m95: { g: "/rings.v3.skycell/1541/096/rings.v3.skycell.1541.096.stk.g.unconv.fits", i: "/rings.v3.skycell/1541/096/rings.v3.skycell.1541.096.stk.i.unconv.fits", r: "/rings.v3.skycell/1541/096/rings.v3.skycell.1541.096.stk.r.unconv.fits", y: "/rings.v3.skycell/1541/096/rings.v3.skycell.1541.096.stk.y.unconv.fits", z: "/rings.v3.skycell/1541/096/rings.v3.skycell.1541.096.stk.z.unconv.fits" },
+  m96: { g: "/rings.v3.skycell/1541/095/rings.v3.skycell.1541.095.stk.g.unconv.fits", i: "/rings.v3.skycell/1541/095/rings.v3.skycell.1541.095.stk.i.unconv.fits", r: "/rings.v3.skycell/1541/095/rings.v3.skycell.1541.095.stk.r.unconv.fits", y: "/rings.v3.skycell/1541/095/rings.v3.skycell.1541.095.stk.y.unconv.fits", z: "/rings.v3.skycell/1541/095/rings.v3.skycell.1541.095.stk.z.unconv.fits" },
+  m97: { g: "/rings.v3.skycell/2375/077/rings.v3.skycell.2375.077.stk.g.unconv.fits", i: "/rings.v3.skycell/2375/077/rings.v3.skycell.2375.077.stk.i.unconv.fits", r: "/rings.v3.skycell/2375/077/rings.v3.skycell.2375.077.stk.r.unconv.fits", y: "/rings.v3.skycell/2375/077/rings.v3.skycell.2375.077.stk.y.unconv.fits", z: "/rings.v3.skycell/2375/077/rings.v3.skycell.2375.077.stk.z.unconv.fits" },
+  m98: { g: "/rings.v3.skycell/1635/076/rings.v3.skycell.1635.076.stk.g.unconv.fits", i: "/rings.v3.skycell/1635/076/rings.v3.skycell.1635.076.stk.i.unconv.fits", r: "/rings.v3.skycell/1635/076/rings.v3.skycell.1635.076.stk.r.unconv.fits", y: "/rings.v3.skycell/1635/076/rings.v3.skycell.1635.076.stk.y.unconv.fits", z: "/rings.v3.skycell/1635/076/rings.v3.skycell.1635.076.stk.z.unconv.fits" },
+  m99: { g: "/rings.v3.skycell/1635/063/rings.v3.skycell.1635.063.stk.g.unconv.fits", i: "/rings.v3.skycell/1635/063/rings.v3.skycell.1635.063.stk.i.unconv.fits", r: "/rings.v3.skycell/1635/063/rings.v3.skycell.1635.063.stk.r.unconv.fits", y: "/rings.v3.skycell/1635/063/rings.v3.skycell.1635.063.stk.y.unconv.fits", z: "/rings.v3.skycell/1635/063/rings.v3.skycell.1635.063.stk.z.unconv.fits" },
+  maasym: { g: "/rings.v3.skycell/1908/056/rings.v3.skycell.1908.056.stk.g.unconv.fits", i: "/rings.v3.skycell/1908/056/rings.v3.skycell.1908.056.stk.i.unconv.fits", r: "/rings.v3.skycell/1908/056/rings.v3.skycell.1908.056.stk.r.unconv.fits", y: "/rings.v3.skycell/1908/056/rings.v3.skycell.1908.056.stk.y.unconv.fits", z: "/rings.v3.skycell/1908/056/rings.v3.skycell.1908.056.stk.z.unconv.fits" },
+  markab: { g: "/rings.v3.skycell/1675/088/rings.v3.skycell.1675.088.stk.g.unconv.fits", i: "/rings.v3.skycell/1675/088/rings.v3.skycell.1675.088.stk.i.unconv.fits", r: "/rings.v3.skycell/1675/088/rings.v3.skycell.1675.088.stk.r.unconv.fits", y: "/rings.v3.skycell/1675/088/rings.v3.skycell.1675.088.stk.y.unconv.fits", z: "/rings.v3.skycell/1675/088/rings.v3.skycell.1675.088.stk.z.unconv.fits" },
+  marsic: { g: "/rings.v3.skycell/1736/026/rings.v3.skycell.1736.026.stk.g.unconv.fits", i: "/rings.v3.skycell/1736/026/rings.v3.skycell.1736.026.stk.i.unconv.fits", r: "/rings.v3.skycell/1736/026/rings.v3.skycell.1736.026.stk.r.unconv.fits", y: "/rings.v3.skycell/1736/026/rings.v3.skycell.1736.026.stk.y.unconv.fits", z: "/rings.v3.skycell/1736/026/rings.v3.skycell.1736.026.stk.z.unconv.fits" },
+  matar: { g: "/rings.v3.skycell/2005/057/rings.v3.skycell.2005.057.stk.g.unconv.fits", i: "/rings.v3.skycell/2005/057/rings.v3.skycell.2005.057.stk.i.unconv.fits", r: "/rings.v3.skycell/2005/057/rings.v3.skycell.2005.057.stk.r.unconv.fits", y: "/rings.v3.skycell/2005/057/rings.v3.skycell.2005.057.stk.y.unconv.fits", z: "/rings.v3.skycell/2005/057/rings.v3.skycell.2005.057.stk.z.unconv.fits" },
+  mebsuta: { g: "/rings.v3.skycell/1871/024/rings.v3.skycell.1871.024.stk.g.unconv.fits", i: "/rings.v3.skycell/1871/024/rings.v3.skycell.1871.024.stk.i.unconv.fits", r: "/rings.v3.skycell/1871/024/rings.v3.skycell.1871.024.stk.r.unconv.fits", y: "/rings.v3.skycell/1871/024/rings.v3.skycell.1871.024.stk.y.unconv.fits", z: "/rings.v3.skycell/1871/024/rings.v3.skycell.1871.024.stk.z.unconv.fits" },
+  megrez: { g: "/rings.v3.skycell/2430/029/rings.v3.skycell.2430.029.stk.g.unconv.fits", i: "/rings.v3.skycell/2430/029/rings.v3.skycell.2430.029.stk.i.unconv.fits", r: "/rings.v3.skycell/2430/029/rings.v3.skycell.2430.029.stk.r.unconv.fits", y: "/rings.v3.skycell/2430/029/rings.v3.skycell.2430.029.stk.y.unconv.fits", z: "/rings.v3.skycell/2430/029/rings.v3.skycell.2430.029.stk.z.unconv.fits" },
+  menkalinan: { g: "/rings.v3.skycell/2241/025/rings.v3.skycell.2241.025.stk.g.unconv.fits", i: "/rings.v3.skycell/2241/025/rings.v3.skycell.2241.025.stk.i.unconv.fits", r: "/rings.v3.skycell/2241/025/rings.v3.skycell.2241.025.stk.r.unconv.fits", y: "/rings.v3.skycell/2241/025/rings.v3.skycell.2241.025.stk.y.unconv.fits", z: "/rings.v3.skycell/2241/025/rings.v3.skycell.2241.025.stk.z.unconv.fits" },
+  menkar: { g: "/rings.v3.skycell/1423/002/rings.v3.skycell.1423.002.stk.g.unconv.fits", i: "/rings.v3.skycell/1423/002/rings.v3.skycell.1423.002.stk.i.unconv.fits", r: "/rings.v3.skycell/1423/002/rings.v3.skycell.1423.002.stk.r.unconv.fits", y: "/rings.v3.skycell/1423/002/rings.v3.skycell.1423.002.stk.y.unconv.fits", z: "/rings.v3.skycell/1423/002/rings.v3.skycell.1423.002.stk.z.unconv.fits" },
+  merak: { g: "/rings.v3.skycell/2427/015/rings.v3.skycell.2427.015.stk.g.unconv.fits", i: "/rings.v3.skycell/2427/015/rings.v3.skycell.2427.015.stk.i.unconv.fits", r: "/rings.v3.skycell/2427/015/rings.v3.skycell.2427.015.stk.r.unconv.fits", y: "/rings.v3.skycell/2427/015/rings.v3.skycell.2427.015.stk.y.unconv.fits", z: "/rings.v3.skycell/2427/015/rings.v3.skycell.2427.015.stk.z.unconv.fits" },
+  minkar: { g: "/rings.v3.skycell/0839/039/rings.v3.skycell.0839.039.stk.g.unconv.fits", i: "/rings.v3.skycell/0839/039/rings.v3.skycell.0839.039.stk.i.unconv.fits", r: "/rings.v3.skycell/0839/039/rings.v3.skycell.0839.039.stk.r.unconv.fits", y: "/rings.v3.skycell/0839/039/rings.v3.skycell.0839.039.stk.y.unconv.fits", z: "/rings.v3.skycell/0839/039/rings.v3.skycell.0839.039.stk.z.unconv.fits" },
+  mintaka: { g: "/rings.v3.skycell/1253/097/rings.v3.skycell.1253.097.stk.g.unconv.fits", i: "/rings.v3.skycell/1253/097/rings.v3.skycell.1253.097.stk.i.unconv.fits", r: "/rings.v3.skycell/1253/097/rings.v3.skycell.1253.097.stk.r.unconv.fits", y: "/rings.v3.skycell/1253/097/rings.v3.skycell.1253.097.stk.y.unconv.fits", z: "/rings.v3.skycell/1253/097/rings.v3.skycell.1253.097.stk.z.unconv.fits" },
+  mirach: { g: "/rings.v3.skycell/2013/098/rings.v3.skycell.2013.098.stk.g.unconv.fits", i: "/rings.v3.skycell/2013/098/rings.v3.skycell.2013.098.stk.i.unconv.fits", r: "/rings.v3.skycell/2013/098/rings.v3.skycell.2013.098.stk.r.unconv.fits", y: "/rings.v3.skycell/2013/098/rings.v3.skycell.2013.098.stk.y.unconv.fits", z: "/rings.v3.skycell/2013/098/rings.v3.skycell.2013.098.stk.z.unconv.fits" },
+  mirfak: { g: "/rings.v3.skycell/2298/049/rings.v3.skycell.2298.049.stk.g.unconv.fits", i: "/rings.v3.skycell/2298/049/rings.v3.skycell.2298.049.stk.i.unconv.fits", r: "/rings.v3.skycell/2298/049/rings.v3.skycell.2298.049.stk.r.unconv.fits", y: "/rings.v3.skycell/2298/049/rings.v3.skycell.2298.049.stk.y.unconv.fits", z: "/rings.v3.skycell/2298/049/rings.v3.skycell.2298.049.stk.z.unconv.fits" },
+  mirzam: { g: "/rings.v3.skycell/0903/056/rings.v3.skycell.0903.056.stk.g.unconv.fits", i: "/rings.v3.skycell/0903/056/rings.v3.skycell.0903.056.stk.i.unconv.fits", r: "/rings.v3.skycell/0903/056/rings.v3.skycell.0903.056.stk.r.unconv.fits", y: "/rings.v3.skycell/0903/056/rings.v3.skycell.0903.056.stk.y.unconv.fits", z: "/rings.v3.skycell/0903/056/rings.v3.skycell.0903.056.stk.z.unconv.fits" },
+  mizar: { g: "/rings.v3.skycell/2380/077/rings.v3.skycell.2380.077.stk.g.unconv.fits", i: "/rings.v3.skycell/2380/077/rings.v3.skycell.2380.077.stk.i.unconv.fits", r: "/rings.v3.skycell/2380/077/rings.v3.skycell.2380.077.stk.r.unconv.fits", y: "/rings.v3.skycell/2380/077/rings.v3.skycell.2380.077.stk.y.unconv.fits", z: "/rings.v3.skycell/2380/077/rings.v3.skycell.2380.077.stk.z.unconv.fits" },
+  muphrid: { g: "/rings.v3.skycell/1728/056/rings.v3.skycell.1728.056.stk.g.unconv.fits", i: "/rings.v3.skycell/1728/056/rings.v3.skycell.1728.056.stk.i.unconv.fits", r: "/rings.v3.skycell/1728/056/rings.v3.skycell.1728.056.stk.r.unconv.fits", y: "/rings.v3.skycell/1728/056/rings.v3.skycell.1728.056.stk.y.unconv.fits", z: "/rings.v3.skycell/1728/056/rings.v3.skycell.1728.056.stk.z.unconv.fits" },
+  muscida: { g: "/rings.v3.skycell/2470/015/rings.v3.skycell.2470.015.stk.g.unconv.fits", i: "/rings.v3.skycell/2470/015/rings.v3.skycell.2470.015.stk.i.unconv.fits", r: "/rings.v3.skycell/2470/015/rings.v3.skycell.2470.015.stk.r.unconv.fits", y: "/rings.v3.skycell/2470/015/rings.v3.skycell.2470.015.stk.y.unconv.fits", z: "/rings.v3.skycell/2470/015/rings.v3.skycell.2470.015.stk.z.unconv.fits" },
+  nashira: { g: "/rings.v3.skycell/0958/088/rings.v3.skycell.0958.088.stk.g.unconv.fits", i: "/rings.v3.skycell/0958/088/rings.v3.skycell.0958.088.stk.i.unconv.fits", r: "/rings.v3.skycell/0958/088/rings.v3.skycell.0958.088.stk.r.unconv.fits", y: "/rings.v3.skycell/0958/088/rings.v3.skycell.0958.088.stk.y.unconv.fits", z: "/rings.v3.skycell/0958/088/rings.v3.skycell.0958.088.stk.z.unconv.fits" },
+  navi: { g: "/rings.v3.skycell/2456/017/rings.v3.skycell.2456.017.stk.g.unconv.fits", i: "/rings.v3.skycell/2456/017/rings.v3.skycell.2456.017.stk.i.unconv.fits", r: "/rings.v3.skycell/2456/017/rings.v3.skycell.2456.017.stk.r.unconv.fits", y: "/rings.v3.skycell/2456/017/rings.v3.skycell.2456.017.stk.y.unconv.fits", z: "/rings.v3.skycell/2456/017/rings.v3.skycell.2456.017.stk.z.unconv.fits" },
+  nekkar: { g: "/rings.v3.skycell/2200/019/rings.v3.skycell.2200.019.stk.g.unconv.fits", i: "/rings.v3.skycell/2200/019/rings.v3.skycell.2200.019.stk.i.unconv.fits", r: "/rings.v3.skycell/2200/019/rings.v3.skycell.2200.019.stk.r.unconv.fits", y: "/rings.v3.skycell/2200/019/rings.v3.skycell.2200.019.stk.y.unconv.fits", z: "/rings.v3.skycell/2200/019/rings.v3.skycell.2200.019.stk.z.unconv.fits" },
+  ngc7293: { g: "/rings.v3.skycell/0875/077/rings.v3.skycell.0875.077.stk.g.unconv.fits", i: "/rings.v3.skycell/0875/077/rings.v3.skycell.0875.077.stk.i.unconv.fits", r: "/rings.v3.skycell/0875/077/rings.v3.skycell.0875.077.stk.r.unconv.fits", y: "/rings.v3.skycell/0875/077/rings.v3.skycell.0875.077.stk.y.unconv.fits", z: "/rings.v3.skycell/0875/077/rings.v3.skycell.0875.077.stk.z.unconv.fits" },
+  nunki: { g: "/rings.v3.skycell/0779/048/rings.v3.skycell.0779.048.stk.g.unconv.fits", i: "/rings.v3.skycell/0779/048/rings.v3.skycell.0779.048.stk.i.unconv.fits", r: "/rings.v3.skycell/0779/048/rings.v3.skycell.0779.048.stk.r.unconv.fits", y: "/rings.v3.skycell/0779/048/rings.v3.skycell.0779.048.stk.y.unconv.fits", z: "/rings.v3.skycell/0779/048/rings.v3.skycell.0779.048.stk.z.unconv.fits" },
+  nusakan: { g: "/rings.v3.skycell/1981/025/rings.v3.skycell.1981.025.stk.g.unconv.fits", i: "/rings.v3.skycell/1981/025/rings.v3.skycell.1981.025.stk.i.unconv.fits", r: "/rings.v3.skycell/1981/025/rings.v3.skycell.1981.025.stk.r.unconv.fits", y: "/rings.v3.skycell/1981/025/rings.v3.skycell.1981.025.stk.y.unconv.fits", z: "/rings.v3.skycell/1981/025/rings.v3.skycell.1981.025.stk.z.unconv.fits" },
+  phecda: { g: "/rings.v3.skycell/2376/042/rings.v3.skycell.2376.042.stk.g.unconv.fits", i: "/rings.v3.skycell/2376/042/rings.v3.skycell.2376.042.stk.i.unconv.fits", r: "/rings.v3.skycell/2376/042/rings.v3.skycell.2376.042.stk.r.unconv.fits", y: "/rings.v3.skycell/2376/042/rings.v3.skycell.2376.042.stk.y.unconv.fits", z: "/rings.v3.skycell/2376/042/rings.v3.skycell.2376.042.stk.z.unconv.fits" },
+  polaris: { g: "/rings.v3.skycell/2643/033/rings.v3.skycell.2643.033.stk.g.unconv.fits", i: "/rings.v3.skycell/2643/033/rings.v3.skycell.2643.033.stk.i.unconv.fits", r: "/rings.v3.skycell/2643/033/rings.v3.skycell.2643.033.stk.r.unconv.fits", y: "/rings.v3.skycell/2643/033/rings.v3.skycell.2643.033.stk.y.unconv.fits", z: "/rings.v3.skycell/2643/033/rings.v3.skycell.2643.033.stk.z.unconv.fits" },
+  pollux: { g: "/rings.v3.skycell/1956/009/rings.v3.skycell.1956.009.stk.g.unconv.fits", i: "/rings.v3.skycell/1956/009/rings.v3.skycell.1956.009.stk.i.unconv.fits", r: "/rings.v3.skycell/1956/009/rings.v3.skycell.1956.009.stk.r.unconv.fits", y: "/rings.v3.skycell/1956/009/rings.v3.skycell.1956.009.stk.y.unconv.fits", z: "/rings.v3.skycell/1956/009/rings.v3.skycell.1956.009.stk.z.unconv.fits" },
+  porrima: { g: "/rings.v3.skycell/1280/068/rings.v3.skycell.1280.068.stk.g.unconv.fits", i: "/rings.v3.skycell/1280/068/rings.v3.skycell.1280.068.stk.i.unconv.fits", r: "/rings.v3.skycell/1280/068/rings.v3.skycell.1280.068.stk.r.unconv.fits", y: "/rings.v3.skycell/1280/068/rings.v3.skycell.1280.068.stk.y.unconv.fits", z: "/rings.v3.skycell/1280/068/rings.v3.skycell.1280.068.stk.z.unconv.fits" },
+  princeps: { g: "/rings.v3.skycell/2057/031/rings.v3.skycell.2057.031.stk.g.unconv.fits", i: "/rings.v3.skycell/2057/031/rings.v3.skycell.2057.031.stk.i.unconv.fits", r: "/rings.v3.skycell/2057/031/rings.v3.skycell.2057.031.stk.r.unconv.fits", y: "/rings.v3.skycell/2057/031/rings.v3.skycell.2057.031.stk.y.unconv.fits", z: "/rings.v3.skycell/2057/031/rings.v3.skycell.2057.031.stk.z.unconv.fits" },
+  procyon: { g: "/rings.v3.skycell/1440/031/rings.v3.skycell.1440.031.stk.g.unconv.fits", i: "/rings.v3.skycell/1440/031/rings.v3.skycell.1440.031.stk.i.unconv.fits", r: "/rings.v3.skycell/1440/031/rings.v3.skycell.1440.031.stk.r.unconv.fits", y: "/rings.v3.skycell/1440/031/rings.v3.skycell.1440.031.stk.y.unconv.fits", z: "/rings.v3.skycell/1440/031/rings.v3.skycell.1440.031.stk.z.unconv.fits" },
+  propus: { g: "/rings.v3.skycell/1786/066/rings.v3.skycell.1786.066.stk.g.unconv.fits", i: "/rings.v3.skycell/1786/066/rings.v3.skycell.1786.066.stk.i.unconv.fits", r: "/rings.v3.skycell/1786/066/rings.v3.skycell.1786.066.stk.r.unconv.fits", y: "/rings.v3.skycell/1786/066/rings.v3.skycell.1786.066.stk.y.unconv.fits", z: "/rings.v3.skycell/1786/066/rings.v3.skycell.1786.066.stk.z.unconv.fits" },
+  ran: { g: "/rings.v3.skycell/1067/063/rings.v3.skycell.1067.063.stk.g.unconv.fits", i: "/rings.v3.skycell/1067/063/rings.v3.skycell.1067.063.stk.i.unconv.fits", r: "/rings.v3.skycell/1067/063/rings.v3.skycell.1067.063.stk.r.unconv.fits", y: "/rings.v3.skycell/1067/063/rings.v3.skycell.1067.063.stk.y.unconv.fits", z: "/rings.v3.skycell/1067/063/rings.v3.skycell.1067.063.stk.z.unconv.fits" },
+  rasalas: { g: "/rings.v3.skycell/1882/057/rings.v3.skycell.1882.057.stk.g.unconv.fits", i: "/rings.v3.skycell/1882/057/rings.v3.skycell.1882.057.stk.i.unconv.fits", r: "/rings.v3.skycell/1882/057/rings.v3.skycell.1882.057.stk.r.unconv.fits", y: "/rings.v3.skycell/1882/057/rings.v3.skycell.1882.057.stk.y.unconv.fits", z: "/rings.v3.skycell/1882/057/rings.v3.skycell.1882.057.stk.z.unconv.fits" },
+  rasalhague: { g: "/rings.v3.skycell/1654/010/rings.v3.skycell.1654.010.stk.g.unconv.fits", i: "/rings.v3.skycell/1654/010/rings.v3.skycell.1654.010.stk.i.unconv.fits", r: "/rings.v3.skycell/1654/010/rings.v3.skycell.1654.010.stk.r.unconv.fits", y: "/rings.v3.skycell/1654/010/rings.v3.skycell.1654.010.stk.y.unconv.fits", z: "/rings.v3.skycell/1654/010/rings.v3.skycell.1654.010.stk.z.unconv.fits" },
+  rastaban: { g: "/rings.v3.skycell/2389/003/rings.v3.skycell.2389.003.stk.g.unconv.fits", i: "/rings.v3.skycell/2389/003/rings.v3.skycell.2389.003.stk.i.unconv.fits", r: "/rings.v3.skycell/2389/003/rings.v3.skycell.2389.003.stk.r.unconv.fits", y: "/rings.v3.skycell/2389/003/rings.v3.skycell.2389.003.stk.y.unconv.fits", z: "/rings.v3.skycell/2389/003/rings.v3.skycell.2389.003.stk.z.unconv.fits" },
+  regulus: { g: "/rings.v3.skycell/1539/098/rings.v3.skycell.1539.098.stk.g.unconv.fits", i: "/rings.v3.skycell/1539/098/rings.v3.skycell.1539.098.stk.i.unconv.fits", r: "/rings.v3.skycell/1539/098/rings.v3.skycell.1539.098.stk.r.unconv.fits", y: "/rings.v3.skycell/1539/098/rings.v3.skycell.1539.098.stk.y.unconv.fits", z: "/rings.v3.skycell/1539/098/rings.v3.skycell.1539.098.stk.z.unconv.fits" },
+  rigel: { g: "/rings.v3.skycell/1073/090/rings.v3.skycell.1073.090.stk.g.unconv.fits", i: "/rings.v3.skycell/1073/090/rings.v3.skycell.1073.090.stk.i.unconv.fits", r: "/rings.v3.skycell/1073/090/rings.v3.skycell.1073.090.stk.r.unconv.fits", y: "/rings.v3.skycell/1073/090/rings.v3.skycell.1073.090.stk.y.unconv.fits", z: "/rings.v3.skycell/1073/090/rings.v3.skycell.1073.090.stk.z.unconv.fits" },
+  rotanev: { g: "/rings.v3.skycell/1666/068/rings.v3.skycell.1666.068.stk.g.unconv.fits", i: "/rings.v3.skycell/1666/068/rings.v3.skycell.1666.068.stk.i.unconv.fits", r: "/rings.v3.skycell/1666/068/rings.v3.skycell.1666.068.stk.r.unconv.fits", y: "/rings.v3.skycell/1666/068/rings.v3.skycell.1666.068.stk.y.unconv.fits", z: "/rings.v3.skycell/1666/068/rings.v3.skycell.1666.068.stk.z.unconv.fits" },
+  ruchba: { g: "/rings.v3.skycell/2278/028/rings.v3.skycell.2278.028.stk.g.unconv.fits", i: "/rings.v3.skycell/2278/028/rings.v3.skycell.2278.028.stk.i.unconv.fits", r: "/rings.v3.skycell/2278/028/rings.v3.skycell.2278.028.stk.r.unconv.fits", y: "/rings.v3.skycell/2278/028/rings.v3.skycell.2278.028.stk.y.unconv.fits", z: "/rings.v3.skycell/2278/028/rings.v3.skycell.2278.028.stk.z.unconv.fits" },
+  ruchbah: { g: "/rings.v3.skycell/2457/008/rings.v3.skycell.2457.008.stk.g.unconv.fits", i: "/rings.v3.skycell/2457/008/rings.v3.skycell.2457.008.stk.i.unconv.fits", r: "/rings.v3.skycell/2457/008/rings.v3.skycell.2457.008.stk.r.unconv.fits", y: "/rings.v3.skycell/2457/008/rings.v3.skycell.2457.008.stk.y.unconv.fits", z: "/rings.v3.skycell/2457/008/rings.v3.skycell.2457.008.stk.z.unconv.fits" },
+  sabik: { g: "/rings.v3.skycell/1029/005/rings.v3.skycell.1029.005.stk.g.unconv.fits", i: "/rings.v3.skycell/1029/005/rings.v3.skycell.1029.005.stk.i.unconv.fits", r: "/rings.v3.skycell/1029/005/rings.v3.skycell.1029.005.stk.r.unconv.fits", y: "/rings.v3.skycell/1029/005/rings.v3.skycell.1029.005.stk.y.unconv.fits", z: "/rings.v3.skycell/1029/005/rings.v3.skycell.1029.005.stk.z.unconv.fits" },
+  sadachbia: { g: "/rings.v3.skycell/1316/066/rings.v3.skycell.1316.066.stk.g.unconv.fits", i: "/rings.v3.skycell/1316/066/rings.v3.skycell.1316.066.stk.i.unconv.fits", r: "/rings.v3.skycell/1316/066/rings.v3.skycell.1316.066.stk.r.unconv.fits", y: "/rings.v3.skycell/1316/066/rings.v3.skycell.1316.066.stk.y.unconv.fits", z: "/rings.v3.skycell/1316/066/rings.v3.skycell.1316.066.stk.z.unconv.fits" },
+  sadalmelik: { g: "/rings.v3.skycell/1315/096/rings.v3.skycell.1315.096.stk.g.unconv.fits", i: "/rings.v3.skycell/1315/096/rings.v3.skycell.1315.096.stk.i.unconv.fits", r: "/rings.v3.skycell/1315/096/rings.v3.skycell.1315.096.stk.r.unconv.fits", y: "/rings.v3.skycell/1315/096/rings.v3.skycell.1315.096.stk.y.unconv.fits", z: "/rings.v3.skycell/1315/096/rings.v3.skycell.1315.096.stk.z.unconv.fits" },
+  sadalsuud: { g: "/rings.v3.skycell/1223/066/rings.v3.skycell.1223.066.stk.g.unconv.fits", i: "/rings.v3.skycell/1223/066/rings.v3.skycell.1223.066.stk.i.unconv.fits", r: "/rings.v3.skycell/1223/066/rings.v3.skycell.1223.066.stk.r.unconv.fits", y: "/rings.v3.skycell/1223/066/rings.v3.skycell.1223.066.stk.y.unconv.fits", z: "/rings.v3.skycell/1223/066/rings.v3.skycell.1223.066.stk.z.unconv.fits" },
+  sadr: { g: "/rings.v3.skycell/2215/007/rings.v3.skycell.2215.007.stk.g.unconv.fits", i: "/rings.v3.skycell/2215/007/rings.v3.skycell.2215.007.stk.i.unconv.fits", r: "/rings.v3.skycell/2215/007/rings.v3.skycell.2215.007.stk.r.unconv.fits", y: "/rings.v3.skycell/2215/007/rings.v3.skycell.2215.007.stk.y.unconv.fits", z: "/rings.v3.skycell/2215/007/rings.v3.skycell.2215.007.stk.z.unconv.fits" },
+  saiph: { g: "/rings.v3.skycell/1075/050/rings.v3.skycell.1075.050.stk.g.unconv.fits", i: "/rings.v3.skycell/1075/050/rings.v3.skycell.1075.050.stk.i.unconv.fits", r: "/rings.v3.skycell/1075/050/rings.v3.skycell.1075.050.stk.r.unconv.fits", y: "/rings.v3.skycell/1075/050/rings.v3.skycell.1075.050.stk.y.unconv.fits", z: "/rings.v3.skycell/1075/050/rings.v3.skycell.1075.050.stk.z.unconv.fits" },
+  sarin: { g: "/rings.v3.skycell/1907/025/rings.v3.skycell.1907.025.stk.g.unconv.fits", i: "/rings.v3.skycell/1907/025/rings.v3.skycell.1907.025.stk.i.unconv.fits", r: "/rings.v3.skycell/1907/025/rings.v3.skycell.1907.025.stk.r.unconv.fits", y: "/rings.v3.skycell/1907/025/rings.v3.skycell.1907.025.stk.y.unconv.fits", z: "/rings.v3.skycell/1907/025/rings.v3.skycell.1907.025.stk.z.unconv.fits" },
+  scheat: { g: "/rings.v3.skycell/2006/005/rings.v3.skycell.2006.005.stk.g.unconv.fits", i: "/rings.v3.skycell/2006/005/rings.v3.skycell.2006.005.stk.i.unconv.fits", r: "/rings.v3.skycell/2006/005/rings.v3.skycell.2006.005.stk.r.unconv.fits", y: "/rings.v3.skycell/2006/005/rings.v3.skycell.2006.005.stk.y.unconv.fits", z: "/rings.v3.skycell/2006/005/rings.v3.skycell.2006.005.stk.z.unconv.fits" },
+  schedar: { g: "/rings.v3.skycell/2405/010/rings.v3.skycell.2405.010.stk.g.unconv.fits", i: "/rings.v3.skycell/2405/010/rings.v3.skycell.2405.010.stk.i.unconv.fits", r: "/rings.v3.skycell/2405/010/rings.v3.skycell.2405.010.stk.r.unconv.fits", y: "/rings.v3.skycell/2405/010/rings.v3.skycell.2405.010.stk.y.unconv.fits", z: "/rings.v3.skycell/2405/010/rings.v3.skycell.2405.010.stk.z.unconv.fits" },
+  seginus: { g: "/rings.v3.skycell/2129/058/rings.v3.skycell.2129.058.stk.g.unconv.fits", i: "/rings.v3.skycell/2129/058/rings.v3.skycell.2129.058.stk.i.unconv.fits", r: "/rings.v3.skycell/2129/058/rings.v3.skycell.2129.058.stk.r.unconv.fits", y: "/rings.v3.skycell/2129/058/rings.v3.skycell.2129.058.stk.y.unconv.fits", z: "/rings.v3.skycell/2129/058/rings.v3.skycell.2129.058.stk.z.unconv.fits" },
+  "sgr-a-star": { g: "/rings.v3.skycell/0693/070/rings.v3.skycell.0693.070.stk.g.unconv.fits", i: "/rings.v3.skycell/0693/070/rings.v3.skycell.0693.070.stk.i.unconv.fits", r: "/rings.v3.skycell/0693/070/rings.v3.skycell.0693.070.stk.r.unconv.fits", y: "/rings.v3.skycell/0693/070/rings.v3.skycell.0693.070.stk.y.unconv.fits", z: "/rings.v3.skycell/0693/070/rings.v3.skycell.0693.070.stk.z.unconv.fits" },
+  sheliak: { g: "/rings.v3.skycell/2069/038/rings.v3.skycell.2069.038.stk.g.unconv.fits", i: "/rings.v3.skycell/2069/038/rings.v3.skycell.2069.038.stk.i.unconv.fits", r: "/rings.v3.skycell/2069/038/rings.v3.skycell.2069.038.stk.r.unconv.fits", y: "/rings.v3.skycell/2069/038/rings.v3.skycell.2069.038.stk.y.unconv.fits", z: "/rings.v3.skycell/2069/038/rings.v3.skycell.2069.038.stk.z.unconv.fits" },
+  sirius: { g: "/rings.v3.skycell/0904/083/rings.v3.skycell.0904.083.stk.g.unconv.fits", i: "/rings.v3.skycell/0904/083/rings.v3.skycell.0904.083.stk.i.unconv.fits", r: "/rings.v3.skycell/0904/083/rings.v3.skycell.0904.083.stk.r.unconv.fits", y: "/rings.v3.skycell/0904/083/rings.v3.skycell.0904.083.stk.y.unconv.fits", z: "/rings.v3.skycell/0904/083/rings.v3.skycell.0904.083.stk.z.unconv.fits" },
+  skat: { g: "/rings.v3.skycell/1050/004/rings.v3.skycell.1050.004.stk.g.unconv.fits", i: "/rings.v3.skycell/1050/004/rings.v3.skycell.1050.004.stk.i.unconv.fits", r: "/rings.v3.skycell/1050/004/rings.v3.skycell.1050.004.stk.r.unconv.fits", y: "/rings.v3.skycell/1050/004/rings.v3.skycell.1050.004.stk.y.unconv.fits", z: "/rings.v3.skycell/1050/004/rings.v3.skycell.1050.004.stk.z.unconv.fits" },
+  spica: { g: "/rings.v3.skycell/1104/027/rings.v3.skycell.1104.027.stk.g.unconv.fits", i: "/rings.v3.skycell/1104/027/rings.v3.skycell.1104.027.stk.i.unconv.fits", r: "/rings.v3.skycell/1104/027/rings.v3.skycell.1104.027.stk.r.unconv.fits", y: "/rings.v3.skycell/1104/027/rings.v3.skycell.1104.027.stk.y.unconv.fits", z: "/rings.v3.skycell/1104/027/rings.v3.skycell.1104.027.stk.z.unconv.fits" },
+  sualocin: { g: "/rings.v3.skycell/1666/097/rings.v3.skycell.1666.097.stk.g.unconv.fits", i: "/rings.v3.skycell/1666/097/rings.v3.skycell.1666.097.stk.i.unconv.fits", r: "/rings.v3.skycell/1666/097/rings.v3.skycell.1666.097.stk.r.unconv.fits", y: "/rings.v3.skycell/1666/097/rings.v3.skycell.1666.097.stk.y.unconv.fits", z: "/rings.v3.skycell/1666/097/rings.v3.skycell.1666.097.stk.z.unconv.fits" },
+  subra: { g: "/rings.v3.skycell/1538/048/rings.v3.skycell.1538.048.stk.g.unconv.fits", i: "/rings.v3.skycell/1538/048/rings.v3.skycell.1538.048.stk.i.unconv.fits", r: "/rings.v3.skycell/1538/048/rings.v3.skycell.1538.048.stk.r.unconv.fits", y: "/rings.v3.skycell/1538/048/rings.v3.skycell.1538.048.stk.y.unconv.fits", z: "/rings.v3.skycell/1538/048/rings.v3.skycell.1538.048.stk.z.unconv.fits" },
+  sulafat: { g: "/rings.v3.skycell/2069/013/rings.v3.skycell.2069.013.stk.g.unconv.fits", i: "/rings.v3.skycell/2069/013/rings.v3.skycell.2069.013.stk.i.unconv.fits", r: "/rings.v3.skycell/2069/013/rings.v3.skycell.2069.013.stk.r.unconv.fits", y: "/rings.v3.skycell/2069/013/rings.v3.skycell.2069.013.stk.y.unconv.fits", z: "/rings.v3.skycell/2069/013/rings.v3.skycell.2069.013.stk.z.unconv.fits" },
+  talitha: { g: "/rings.v3.skycell/2311/000/rings.v3.skycell.2311.000.stk.g.unconv.fits", i: "/rings.v3.skycell/2311/000/rings.v3.skycell.2311.000.stk.i.unconv.fits", r: "/rings.v3.skycell/2311/000/rings.v3.skycell.2311.000.stk.r.unconv.fits", y: "/rings.v3.skycell/2311/000/rings.v3.skycell.2311.000.stk.y.unconv.fits", z: "/rings.v3.skycell/2311/000/rings.v3.skycell.2311.000.stk.z.unconv.fits" },
+  "tania-borealis": { g: "/rings.v3.skycell/2186/073/rings.v3.skycell.2186.073.stk.g.unconv.fits", i: "/rings.v3.skycell/2186/073/rings.v3.skycell.2186.073.stk.i.unconv.fits", r: "/rings.v3.skycell/2186/073/rings.v3.skycell.2186.073.stk.r.unconv.fits", y: "/rings.v3.skycell/2186/073/rings.v3.skycell.2186.073.stk.y.unconv.fits", z: "/rings.v3.skycell/2186/073/rings.v3.skycell.2186.073.stk.z.unconv.fits" },
+  tarazed: { g: "/rings.v3.skycell/1574/061/rings.v3.skycell.1574.061.stk.g.unconv.fits", i: "/rings.v3.skycell/1574/061/rings.v3.skycell.1574.061.stk.i.unconv.fits", r: "/rings.v3.skycell/1574/061/rings.v3.skycell.1574.061.stk.r.unconv.fits", y: "/rings.v3.skycell/1574/061/rings.v3.skycell.1574.061.stk.y.unconv.fits", z: "/rings.v3.skycell/1574/061/rings.v3.skycell.1574.061.stk.z.unconv.fits" },
+  tejat: { g: "/rings.v3.skycell/1786/061/rings.v3.skycell.1786.061.stk.g.unconv.fits", i: "/rings.v3.skycell/1786/061/rings.v3.skycell.1786.061.stk.i.unconv.fits", r: "/rings.v3.skycell/1786/061/rings.v3.skycell.1786.061.stk.r.unconv.fits", y: "/rings.v3.skycell/1786/061/rings.v3.skycell.1786.061.stk.y.unconv.fits", z: "/rings.v3.skycell/1786/061/rings.v3.skycell.1786.061.stk.z.unconv.fits" },
+  thuban: { g: "/rings.v3.skycell/2522/016/rings.v3.skycell.2522.016.stk.g.unconv.fits", i: "/rings.v3.skycell/2522/016/rings.v3.skycell.2522.016.stk.i.unconv.fits", r: "/rings.v3.skycell/2522/016/rings.v3.skycell.2522.016.stk.r.unconv.fits", y: "/rings.v3.skycell/2522/016/rings.v3.skycell.2522.016.stk.y.unconv.fits", z: "/rings.v3.skycell/2522/016/rings.v3.skycell.2522.016.stk.z.unconv.fits" },
+  tureis: { g: "/rings.v3.skycell/0742/097/rings.v3.skycell.0742.097.stk.g.unconv.fits", i: "/rings.v3.skycell/0742/097/rings.v3.skycell.0742.097.stk.i.unconv.fits", r: "/rings.v3.skycell/0742/097/rings.v3.skycell.0742.097.stk.r.unconv.fits", y: "/rings.v3.skycell/0742/097/rings.v3.skycell.0742.097.stk.y.unconv.fits", z: "/rings.v3.skycell/0742/097/rings.v3.skycell.0742.097.stk.z.unconv.fits" },
+  unukalhai: { g: "/rings.v3.skycell/1470/061/rings.v3.skycell.1470.061.stk.g.unconv.fits", i: "/rings.v3.skycell/1470/061/rings.v3.skycell.1470.061.stk.i.unconv.fits", r: "/rings.v3.skycell/1470/061/rings.v3.skycell.1470.061.stk.r.unconv.fits", y: "/rings.v3.skycell/1470/061/rings.v3.skycell.1470.061.stk.y.unconv.fits", z: "/rings.v3.skycell/1470/061/rings.v3.skycell.1470.061.stk.z.unconv.fits" },
+  vega: { g: "/rings.v3.skycell/2141/066/rings.v3.skycell.2141.066.stk.g.unconv.fits", i: "/rings.v3.skycell/2141/066/rings.v3.skycell.2141.066.stk.i.unconv.fits", r: "/rings.v3.skycell/2141/066/rings.v3.skycell.2141.066.stk.r.unconv.fits", y: "/rings.v3.skycell/2141/066/rings.v3.skycell.2141.066.stk.y.unconv.fits", z: "/rings.v3.skycell/2141/066/rings.v3.skycell.2141.066.stk.z.unconv.fits" },
+  wasat: { g: "/rings.v3.skycell/1790/048/rings.v3.skycell.1790.048.stk.g.unconv.fits", i: "/rings.v3.skycell/1790/048/rings.v3.skycell.1790.048.stk.i.unconv.fits", r: "/rings.v3.skycell/1790/048/rings.v3.skycell.1790.048.stk.r.unconv.fits", y: "/rings.v3.skycell/1790/048/rings.v3.skycell.1790.048.stk.y.unconv.fits", z: "/rings.v3.skycell/1790/048/rings.v3.skycell.1790.048.stk.z.unconv.fits" },
+  wezen: { g: "/rings.v3.skycell/0738/031/rings.v3.skycell.0738.031.stk.g.unconv.fits", i: "/rings.v3.skycell/0738/031/rings.v3.skycell.0738.031.stk.i.unconv.fits", r: "/rings.v3.skycell/0738/031/rings.v3.skycell.0738.031.stk.r.unconv.fits", y: "/rings.v3.skycell/0738/031/rings.v3.skycell.0738.031.stk.y.unconv.fits", z: "/rings.v3.skycell/0738/031/rings.v3.skycell.0738.031.stk.z.unconv.fits" },
+  "yed-prior": { g: "/rings.v3.skycell/1293/006/rings.v3.skycell.1293.006.stk.g.unconv.fits", i: "/rings.v3.skycell/1293/006/rings.v3.skycell.1293.006.stk.i.unconv.fits", r: "/rings.v3.skycell/1293/006/rings.v3.skycell.1293.006.stk.r.unconv.fits", y: "/rings.v3.skycell/1293/006/rings.v3.skycell.1293.006.stk.y.unconv.fits", z: "/rings.v3.skycell/1293/006/rings.v3.skycell.1293.006.stk.z.unconv.fits" },
+  zaurak: { g: "/rings.v3.skycell/0981/069/rings.v3.skycell.0981.069.stk.g.unconv.fits", i: "/rings.v3.skycell/0981/069/rings.v3.skycell.0981.069.stk.i.unconv.fits", r: "/rings.v3.skycell/0981/069/rings.v3.skycell.0981.069.stk.r.unconv.fits", y: "/rings.v3.skycell/0981/069/rings.v3.skycell.0981.069.stk.y.unconv.fits", z: "/rings.v3.skycell/0981/069/rings.v3.skycell.0981.069.stk.z.unconv.fits" },
+  zosma: { g: "/rings.v3.skycell/1803/011/rings.v3.skycell.1803.011.stk.g.unconv.fits", i: "/rings.v3.skycell/1803/011/rings.v3.skycell.1803.011.stk.i.unconv.fits", r: "/rings.v3.skycell/1803/011/rings.v3.skycell.1803.011.stk.r.unconv.fits", y: "/rings.v3.skycell/1803/011/rings.v3.skycell.1803.011.stk.y.unconv.fits", z: "/rings.v3.skycell/1803/011/rings.v3.skycell.1803.011.stk.z.unconv.fits" },
+  zubenelgenubi: { g: "/rings.v3.skycell/0933/092/rings.v3.skycell.0933.092.stk.g.unconv.fits", i: "/rings.v3.skycell/0933/092/rings.v3.skycell.0933.092.stk.i.unconv.fits", r: "/rings.v3.skycell/0933/092/rings.v3.skycell.0933.092.stk.r.unconv.fits", y: "/rings.v3.skycell/0933/092/rings.v3.skycell.0933.092.stk.y.unconv.fits", z: "/rings.v3.skycell/0933/092/rings.v3.skycell.0933.092.stk.z.unconv.fits" },
+  zubeneschamali: { g: "/rings.v3.skycell/1111/068/rings.v3.skycell.1111.068.stk.g.unconv.fits", i: "/rings.v3.skycell/1111/068/rings.v3.skycell.1111.068.stk.i.unconv.fits", r: "/rings.v3.skycell/1111/068/rings.v3.skycell.1111.068.stk.r.unconv.fits", y: "/rings.v3.skycell/1111/068/rings.v3.skycell.1111.068.stk.y.unconv.fits", z: "/rings.v3.skycell/1111/068/rings.v3.skycell.1111.068.stk.z.unconv.fits" }
+}, Fs = {
+  star: 15,
+  planet: 10,
+  nebula: 20,
+  galaxy: 12,
+  cluster: 20,
+  "black-hole": 8
+};
+function js(n, s, e = {}) {
+  const { padding: i = 1.6, minFov: t = 4, maxFov: r = 120 } = e, l = n != null ? n * i : Fs[s] ?? 15;
+  return Math.max(t, Math.min(r, l));
+}
+const Vs = 0.25;
+async function Bs(n, s, e, i, t = {}) {
+  if (e < -30) return null;
+  const r = Os[n];
+  if (!r) return null;
+  const { outputSize: l = 1024, timeout: c = 15e3 } = t, o = Math.round(i * 60 / Vs), g = Math.max(l, Math.min(o, 1e4)), v = r.i ?? r.r ?? r.g, k = r.r ?? r.g ?? r.i, a = r.g ?? r.r ?? r.i;
+  if (!v && !k && !a) return null;
+  const y = new URL("https://ps1images.stsci.edu/cgi-bin/fitscut.cgi");
+  v && y.searchParams.set("red", v), k && y.searchParams.set("green", k), a && y.searchParams.set("blue", a), y.searchParams.set("size", String(g)), y.searchParams.set("output_size", String(Math.min(l, g))), y.searchParams.set("format", "jpg"), y.searchParams.set("autoscale", "99.5");
+  try {
+    const u = await fetch(y.toString(), {
+      method: "HEAD",
+      signal: AbortSignal.timeout(c)
+    });
+    if (!u.ok) return null;
+    const d = u.headers.get("content-length");
+    return d && parseInt(d) < 8e3 ? null : {
+      url: y.toString(),
+      format: "jpg",
+      credit: "Pan-STARRS/STScI",
+      source: "panstarrs"
+    };
+  } catch {
+    return null;
+  }
+}
+async function Hs(n, s, e, i = {}) {
+  const { timeout: t = 15e3 } = i, r = s > -40 ? "poss2ukstu_red" : "poss1_red", l = new URL("https://archive.stsci.edu/cgi-bin/dss_search");
+  l.searchParams.set("r", n.toFixed(6)), l.searchParams.set("d", s.toFixed(6)), l.searchParams.set("e", "J2000"), l.searchParams.set("w", e.toFixed(2)), l.searchParams.set("h", e.toFixed(2)), l.searchParams.set("f", "gif"), l.searchParams.set("v", r), l.searchParams.set("s", "on"), l.searchParams.set("compress", "none");
+  try {
+    const c = await fetch(l.toString(), {
+      method: "HEAD",
+      signal: AbortSignal.timeout(t)
+    });
+    if (!c.ok) return null;
+    const o = c.headers.get("content-length");
+    return o && parseInt(o) < 2e3 ? null : {
+      url: l.toString(),
+      format: "gif",
+      credit: "DSS/STScI",
+      source: "dss"
+    };
+  } catch {
+    return null;
+  }
+}
+let T = null, ls = null;
+function Us(n) {
+  T = n;
+}
+function Ks(n) {
+  ls = n;
+}
+const q = {
+  // ── Solar system ──────────────────────────────────────────────────────────
+  sun: [{ filename: "The_Sun_by_the_Atmospheric_Imaging_Assembly_of_NASA%27s_Solar_Dynamics_Observatory_-_20100819.jpg", credit: "NASA/SDO (AIA)" }],
+  mercury: [{ filename: "Mercury_in_color_-_Prockter07-edit1.jpg", credit: "NASA/Johns Hopkins APL/Carnegie Inst. Washington" }],
+  venus: [{ filename: "PIA00271-_Venus_-_3D_Perspective_View_of_Maat_Mons.jpg", credit: "NASA/JPL" }],
+  earth: [{ filename: "The_Blue_Marble_(remastered).jpg", credit: "NASA/Apollo 17" }],
+  moon: [{ filename: "FullMoon2010.jpg", credit: "Gregory H. Revera (CC BY-SA 3.0)" }],
+  mars: [{ filename: "OSIRIS_Mars_true_color.jpg", credit: "ESA/MPS/UPD/LAM/IAA/RSSD/INTA/UPM/DASP/IDA" }],
+  jupiter: [{ filename: "Jupiter_and_its_shrunken_Great_Red_Spot.jpg", credit: "NASA · ESA · A. Simon (GSFC)" }],
+  saturn: [{ filename: "Saturn_during_Equinox.jpg", credit: "NASA/JPL/Space Science Institute" }],
+  uranus: [{ filename: "Uranus2.jpg", credit: "NASA/JPL-Caltech" }],
+  neptune: [{ filename: "Neptune_-_Voyager_2_(29347980845)_flatten_crop.jpg", credit: "NASA/JPL" }],
+  // ── Bright stars ───────────────────────────────────────────────────────────
+  sirius: [{ filename: "A_Guiding_Star.jpg", credit: "ESO/J. Girard" }],
+  canopus: [{ filename: "Star_Canopus.superstructures.ajb.jpg", credit: "Ajepbah (CC BY-SA 3.0)" }],
+  vega: [{ filename: "Vega_star.jpg", credit: "Talesofaviewfinder (CC BY-SA 4.0)" }],
+  procyon: [{ filename: "4heic0516d.jpg", credit: "ESA/Hubble · Akira Fujii" }],
+  albireo: [{ filename: "Albireo_double_star.jpg", credit: "N. B. (CC BY-SA 4.0)" }],
+  mintaka: [{ filename: "Orion_Head_to_Toe.jpg", credit: "Rogelio Bernal Andreo (CC BY-SA 3.0)" }],
+  acrab: [{ filename: "Rho_Ophiucus_Widefield.jpg", credit: "Rogelio Bernal Andreo (CC BY-SA 3.0)" }],
+  // ── Messier objects ───────────────────────────────────────────────────────
   m1: [{ filename: "Crab_Nebula.jpg", credit: "NASA · ESA · J. Hester & A. Loll (ASU)" }],
   m8: [{ filename: "Lagoon_Nebula_from_ESO.jpg", credit: "ESO/INAF-VST/OmegaCAM" }],
+  m13: [{ filename: "Messier_13_Hubble_WikiSky.jpg", credit: "NASA · ESA · Hubble Heritage Team" }],
   m16: [{ filename: "Pillars_of_creation_2014_HST_WFC3-UVIS_full-res_denoised.jpg", credit: "NASA · ESA · Hubble Heritage Team" }],
   m17: [{ filename: "Omega_Nebula.jpg", credit: "ESO" }],
   m20: [{ filename: "Trifid_Nebula_by_Spitzer.jpg", credit: "NASA/JPL-Caltech" }],
   m27: [{ filename: "Dumbbell_Nebula_by_HST.jpg", credit: "NASA · ESA" }],
   m31: [{ filename: "Andromeda_Galaxy_(with_h-alpha).jpg", credit: "Adam Evans (CC BY 2.0)" }],
+  m33: [{ filename: "Triangulum_Galaxy_(full).jpg", credit: "NASA · ESA · M. Durbin, J. Dalcanton, B.F. Williams (Univ. of Washington)" }],
   m42: [{ filename: "Orion_Nebula_-_Hubble_2006_mosaic_18000.jpg", credit: "NASA · ESA · M. Robberto (STScI/ESA)" }],
   m45: [{ filename: "Pleiades_large.jpg", credit: "NASA · ESA · AURA/Caltech" }],
   m51: [{ filename: "Messier51_sRGB.jpg", credit: "NASA · ESA · S. Beckwith (STScI) · Hubble Heritage Team" }],
   m57: [{ filename: "M57_The_Ring_Nebula.jpg", credit: "NASA · ESA · Hubble Heritage Team" }],
+  m63: [{ filename: "Messier63_-_HST_-_Potw1901a.jpg", credit: "ESA/Hubble · NASA" }],
+  m78: [{ filename: "Messier_78_-_Hubble.jpg", credit: "ESA/Hubble · NASA/D. Padgett (GSFC)" }],
   m81: [{ filename: "Messier_81_HST.jpg", credit: "NASA · ESA · Hubble Heritage Team" }],
+  m82: [{ filename: "M82_HST_ACS_2006-14-a-large_web.jpg", credit: "NASA · ESA · Hubble Heritage Team" }],
+  m83: [{ filename: "Messier_83_-_Hubble_-_STScI-PRC2014-04a.jpg", credit: "NASA · ESA · Hubble Heritage Team" }],
+  m87: [{ filename: "Messier_87_Hubble_WikiSky.jpg", credit: "NASA · ESA · Hubble Heritage Team" }],
   m101: [{ filename: "M101_hires_STScI-PRC2006-10a.jpg", credit: "NASA · ESA · Hubble Heritage Team" }],
-  m104: [{ filename: "M104_ngc4594_sombrero_galaxy_hi-res.jpg", credit: "NASA · ESA · Hubble Heritage Team" }]
+  m104: [{ filename: "M104_ngc4594_sombrero_galaxy_hi-res.jpg", credit: "NASA · ESA · Hubble Heritage Team" }],
+  m109: [{ filename: "M109,_NGC_3992_(noao-m109).jpg", credit: "NOIRLab/NSF/AURA" }],
+  // ── Deep-sky extras ───────────────────────────────────────────────────────
+  ngc7293: [{ filename: "Helix_Nebula_-_NGC_7293.jpg", credit: "NASA · ESA · C.R. O'Dell (Vanderbilt)" }],
+  "omega-cen": [{ filename: "Omega_Centauri_by_ESO.jpg", credit: "ESO" }],
+  "m87-bh": [{ filename: "Black_hole_-_Messier_87_crop_max_res.jpg", credit: "Event Horizon Telescope · CC BY 4.0" }]
 };
-async function xe(t, e = {}) {
-  const { source: a = "nasa", limit: i = 5 } = e, s = [];
-  if (a === "nasa" || a === "all") {
-    const n = await te.searchImages(t, { pageSize: i });
-    for (const r of n) {
-      if (!r.nasaId) continue;
-      const l = (await te.getAssets(r.nasaId)).filter((o) => /\.(jpe?g|png|tiff?)$/i.test(o));
-      l.length > 0 && s.push({
-        urls: l,
-        previewUrl: r.previewUrl,
-        title: r.title,
-        credit: r.center ? `NASA/${r.center}` : "NASA",
+async function ds(n, s = {}) {
+  const { source: e = "nasa", limit: i = 5 } = s, t = [];
+  if (e === "nasa" || e === "all") {
+    const r = await ts.searchImages(n, { pageSize: i });
+    for (const l of r) {
+      if (!l.nasaId) continue;
+      const o = (await ts.getAssets(l.nasaId)).filter((g) => /\.(jpe?g|png|tiff?)$/i.test(g));
+      o.length > 0 && t.push({
+        urls: o,
+        previewUrl: l.previewUrl,
+        title: l.title,
+        credit: l.center ? `NASA/${l.center}` : "NASA",
         source: "nasa"
       });
     }
   }
-  if (a === "esa" || a === "all") {
-    const n = await le.searchHubble(t, i);
-    for (const r of n) {
-      const c = [r.imageUrl, r.thumbUrl].filter((l) => l !== null);
-      c.length > 0 && s.push({
+  if (e === "esa" || e === "all") {
+    const r = await ms.searchHubble(n, i);
+    for (const l of r) {
+      const c = [l.imageUrl, l.thumbUrl].filter((o) => o !== null);
+      c.length > 0 && t.push({
         urls: c,
-        previewUrl: r.thumbUrl,
-        title: r.title,
-        credit: r.credit || "ESA/Hubble",
+        previewUrl: l.thumbUrl,
+        title: l.title,
+        credit: l.credit || "ESA/Hubble",
         source: "esa"
       });
     }
   }
-  return s.slice(0, i);
+  return t.slice(0, i);
 }
-function Le(t) {
+const H = /* @__PURE__ */ new Map();
+function rs(n, s, e) {
+  return `${n}::${s}::${e}`;
+}
+function $s(n) {
+  if (T)
+    for (const s of n) {
+      const e = T(s);
+      if (!e) continue;
+      const i = rs(s, 1200, "nasa");
+      H.has(i) || as(s, e.name, { prefetch: !1 }).catch(() => {
+      });
+    }
+}
+const vs = /^(m|ngc|ic|sh2|arp|abell)\s*\d/i;
+function qs(n, s) {
+  const e = [], i = T == null ? void 0 : T(n);
+  if (i != null && i.aliases)
+    for (const t of i.aliases)
+      vs.test(t) && e.push(t);
+  return vs.test(n) && e.push(n.toUpperCase()), e.push(`${s} ${(i == null ? void 0 : i.type) ?? "astronomy"}`), e;
+}
+async function as(n, s, e = {}) {
+  const {
+    width: i = 1200,
+    srcsetWidths: t = [640, 1024, 1600],
+    source: r = "all",
+    cutoutTimeout: l = 15e3,
+    skipCutouts: c = !0,
+    prefetch: o
+  } = e, g = rs(n, i, r);
+  if (H.has(g))
+    return H.get(g) ?? null;
+  let v = null;
+  const k = q[n];
+  if (k != null && k.length) {
+    const a = k[0];
+    v = {
+      src: R.wikimediaUrl(a.filename, i),
+      srcset: R.srcset(t, (y) => R.wikimediaUrl(a.filename, y)),
+      placeholder: R.wikimediaUrl(a.filename, 64),
+      credit: a.credit,
+      source: "static"
+    };
+  }
+  if (!v && !c && T) {
+    const a = T(n);
+    if (a && a.ra !== null && a.dec !== null) {
+      const y = js(a.size_arcmin, a.type), u = { outputSize: i, timeout: l }, d = await Bs(n, a.ra, a.dec, y, u);
+      if (d && (v = {
+        src: d.url,
+        srcset: null,
+        placeholder: null,
+        credit: d.credit,
+        source: "panstarrs"
+      }), !v) {
+        const f = await Hs(a.ra, a.dec, y, u);
+        f && (v = {
+          src: f.url,
+          srcset: null,
+          placeholder: null,
+          credit: f.credit,
+          source: "dss"
+        });
+      }
+    }
+  }
+  if (!v) {
+    const a = qs(n, s), y = r === "nasa" ? ["nasa"] : r === "esa" ? ["esa"] : ["esa", "nasa"];
+    for (const u of y) {
+      if (v) break;
+      for (const d of a)
+        try {
+          const f = await ds(d, { source: u, limit: 1 });
+          if (f.length > 0) {
+            const b = f[0];
+            v = {
+              src: b.previewUrl ?? b.urls[0],
+              srcset: null,
+              placeholder: null,
+              credit: b.credit,
+              source: b.source
+            };
+            break;
+          }
+        } catch {
+        }
+    }
+  }
+  if (H.set(g, v), v && o !== !1 && T && ls) {
+    const a = T(n);
+    if (a && a.ra !== null && a.dec !== null) {
+      const y = typeof o == "object" ? o : {}, { radius: u = 5, limit: d = 8 } = y, f = ls({ ra: a.ra, dec: a.dec }, u).filter((b) => b.object.id !== n && !H.has(rs(b.object.id, i, r))).slice(0, d);
+      for (const b of f)
+        as(b.object.id, b.object.name, { ...e, prefetch: !1 }).catch(() => {
+        });
+    }
+  }
+  return v;
+}
+function Ws(n) {
   return {
-    id: t.id,
-    name: t.name,
+    id: n.id,
+    name: n.name,
     aliases: [],
     type: "star",
-    ra: t.ra,
-    dec: t.dec,
-    magnitude: t.mag,
-    spectral: t.spec,
+    ra: n.ra,
+    dec: n.dec,
+    magnitude: n.mag,
+    spectral: n.spec,
     description: "",
     tags: ["star"]
   };
 }
-function Te(t) {
+function Ys(n) {
   return {
-    id: `m${t.messier}`,
-    name: t.name,
-    aliases: [`M${t.messier}`, ...t.ngc ? [t.ngc] : []],
-    type: t.type,
-    subtype: t.subtype,
-    ra: t.ra,
-    dec: t.dec,
-    magnitude: t.mag,
-    description: t.description,
-    tags: ["messier", t.type]
+    id: `m${n.messier}`,
+    name: n.name,
+    aliases: [`M${n.messier}`, ...n.ngc ? [n.ngc] : []],
+    type: n.type,
+    subtype: n.subtype,
+    ra: n.ra,
+    dec: n.dec,
+    magnitude: n.mag,
+    description: n.description,
+    tags: ["messier", n.type],
+    ...n.size_arcmin != null ? { size_arcmin: n.size_arcmin } : {}
   };
 }
-const O = [
-  ...Ie,
-  ...B.map(Le),
-  ...ie.map(Te),
-  ...we
-], Ne = new Map(O.map((t) => [t.id, t])), Pe = new Map(
-  O.flatMap(
-    (t) => [t.name, ...t.aliases].map((e) => [e.toLowerCase(), t])
+const P = [
+  ...Ps,
+  ...U.map(Ws),
+  ...cs.map(Ys),
+  ...Gs
+], ps = new Map(P.map((n) => [n.id, n])), Js = new Map(
+  P.flatMap(
+    (n) => [n.name, ...n.aliases].map((s) => [s.toLowerCase(), n])
   )
-), Ge = new Map(
-  B.map((t) => [t.name.toLowerCase(), t])
-), Oe = new Map(
-  oe.map((t) => [t.abbr.toLowerCase(), t])
-), Ee = new Map(
-  ie.map((t) => [t.messier, t])
-), ze = O.map((t) => {
-  var e;
+);
+Us((n) => {
+  const s = ps.get(n);
+  return s ? { id: s.id, ra: s.ra, dec: s.dec, size_arcmin: s.size_arcmin, type: s.type, name: s.name, aliases: s.aliases } : null;
+});
+Ks(
+  (n, s) => P.filter(
+    (e) => e.ra !== null && e.dec !== null
+  ).map((e) => ({
+    object: e,
+    separation: M.angularSeparation(n, { ra: e.ra, dec: e.dec })
+  })).filter((e) => e.separation <= s).sort((e, i) => e.separation - i.separation)
+);
+const Xs = new Map(
+  U.map((n) => [n.name.toLowerCase(), n])
+), Qs = new Map(
+  us.map((n) => [n.abbr.toLowerCase(), n])
+), Zs = new Map(
+  cs.map((n) => [n.messier, n])
+), se = P.map((n) => {
+  var s;
   return {
-    object: t,
-    nameLower: t.name.toLowerCase(),
-    aliasesLower: t.aliases.map((a) => a.toLowerCase()),
-    descriptionLower: t.description.toLowerCase(),
-    subtypeLower: (e = t.subtype) == null ? void 0 : e.toLowerCase()
+    object: n,
+    nameLower: n.name.toLowerCase(),
+    aliasesLower: n.aliases.map((e) => e.toLowerCase()),
+    descriptionLower: n.description.toLowerCase(),
+    subtypeLower: (s = n.subtype) == null ? void 0 : s.toLowerCase()
   };
-}), Fe = {
+}), ee = {
   // ── Unified queries ────────────────────────────────────────────────────
   /**
    * Look up a celestial object by its exact identifier.
@@ -4755,8 +5210,8 @@ const O = [
    * // => null
    * ```
    */
-  get(t) {
-    return Ne.get(t) ?? null;
+  get(n) {
+    return ps.get(n) ?? null;
   },
   /**
    * Look up a celestial object by name or any known alias (case-insensitive).
@@ -4773,8 +5228,8 @@ const O = [
    * // => { id: 'venus', name: 'Venus', ... }
    * ```
    */
-  getByName(t) {
-    return Pe.get(t.toLowerCase()) ?? null;
+  getByName(n) {
+    return Js.get(n.toLowerCase()) ?? null;
   },
   /**
    * Return a shallow copy of the full unified catalog.
@@ -4791,7 +5246,7 @@ const O = [
    * ```
    */
   all() {
-    return [...O];
+    return [...P];
   },
   /**
    * Filter the unified catalog by object type.
@@ -4808,8 +5263,8 @@ const O = [
    * // => [{ id: 'mercury', ... }, { id: 'venus', ... }, ...]
    * ```
    */
-  getByType(t) {
-    return O.filter((e) => e.type === t);
+  getByType(n) {
+    return P.filter((s) => s.type === n);
   },
   /**
    * Filter the unified catalog by a tag string.
@@ -4826,8 +5281,8 @@ const O = [
    * // => Sun, planets, and Moon
    * ```
    */
-  getByTag(t) {
-    return O.filter((e) => e.tags.includes(t));
+  getByTag(n) {
+    return P.filter((s) => s.tags.includes(n));
   },
   /**
    * Fuzzy search across name, aliases, description, and tags.
@@ -4848,13 +5303,13 @@ const O = [
    * // => all objects with 'spiral' in name, subtype, description, or tags
    * ```
    */
-  search(t) {
-    const e = t.toLowerCase().trim();
-    return e ? ze.map((a) => {
-      var s;
+  search(n) {
+    const s = n.toLowerCase().trim();
+    return s ? se.map((e) => {
+      var t;
       let i = 0;
-      return a.object.id === e && (i += 100), a.nameLower === e && (i += 90), a.nameLower.startsWith(e) && (i += 50), a.aliasesLower.some((n) => n === e) && (i += 80), a.aliasesLower.some((n) => n.includes(e)) && (i += 20), a.nameLower.includes(e) && (i += 15), a.descriptionLower.includes(e) && (i += 5), a.object.tags.some((n) => n.includes(e)) && (i += 8), (s = a.subtypeLower) != null && s.includes(e) && (i += 10), { object: a.object, score: i };
-    }).filter((a) => a.score > 0).sort((a, i) => i.score - a.score).map((a) => a.object) : [];
+      return e.object.id === s && (i += 100), e.nameLower === s && (i += 90), e.nameLower.startsWith(s) && (i += 50), e.aliasesLower.some((r) => r === s) && (i += 80), e.aliasesLower.some((r) => r.includes(s)) && (i += 20), e.nameLower.includes(s) && (i += 15), e.descriptionLower.includes(s) && (i += 5), e.object.tags.some((r) => r.includes(s)) && (i += 8), (t = e.subtypeLower) != null && t.includes(s) && (i += 10), { object: e.object, score: i };
+    }).filter((e) => e.score > 0).sort((e, i) => i.score - e.score).map((e) => e.object) : [];
   },
   /**
    * Find all objects within a given angular radius of a sky position.
@@ -4877,13 +5332,13 @@ const O = [
    * )
    * ```
    */
-  nearby(t, e) {
-    return O.filter(
-      (a) => a.ra !== null && a.dec !== null
-    ).map((a) => ({
-      object: a,
-      separation: k.angularSeparation(t, { ra: a.ra, dec: a.dec })
-    })).filter((a) => a.separation <= e).sort((a, i) => a.separation - i.separation);
+  nearby(n, s) {
+    return P.filter(
+      (e) => e.ra !== null && e.dec !== null
+    ).map((e) => ({
+      object: e,
+      separation: M.angularSeparation(n, { ra: e.ra, dec: e.dec })
+    })).filter((e) => e.separation <= s).sort((e, i) => e.separation - i.separation);
   },
   // ── Image helpers ─────────────────────────────────────────────────────
   /**
@@ -4905,9 +5360,9 @@ const O = [
    * // => []
    * ```
    */
-  imageUrls(t, e) {
-    const a = Z[t];
-    return a != null && a.length ? a.map((i) => P.wikimediaUrl(i.filename, e)) : [];
+  imageUrls(n, s) {
+    const e = q[n];
+    return e != null && e.length ? e.map((i) => R.wikimediaUrl(i.filename, s)) : [];
   },
   /**
    * Build a {@link ProgressiveImageOptions} config from the static fallback registry.
@@ -4926,12 +5381,12 @@ const O = [
    * // => { placeholder: '...64px...', src: '...1024px...', srcHD: '...2048px...' }
    * ```
    */
-  progressiveImage(t, e = 800) {
-    const a = Z[t], i = a == null ? void 0 : a[0];
+  progressiveImage(n, s = 800) {
+    const e = q[n], i = e == null ? void 0 : e[0];
     return i ? {
-      placeholder: P.wikimediaUrl(i.filename, 64),
-      src: P.wikimediaUrl(i.filename, e),
-      srcHD: P.wikimediaUrl(i.filename, e * 2)
+      placeholder: R.wikimediaUrl(i.filename, 64),
+      src: R.wikimediaUrl(i.filename, s),
+      srcHD: R.wikimediaUrl(i.filename, s * 2)
     } : null;
   },
   /**
@@ -4951,9 +5406,9 @@ const O = [
    * // => '...640px-... 640w, ...1280px-... 1280w, ...1920px-... 1920w'
    * ```
    */
-  imageSrcset(t, e = [640, 1280, 1920]) {
-    const a = Z[t], i = a == null ? void 0 : a[0];
-    return i ? P.srcset(e, (s) => P.wikimediaUrl(i.filename, s)) : null;
+  imageSrcset(n, s = [640, 1280, 1920]) {
+    const e = q[n], i = e == null ? void 0 : e[0];
+    return i ? R.srcset(s, (t) => R.wikimediaUrl(i.filename, t)) : null;
   },
   /**
    * Search NASA and/or ESA APIs for images of any celestial object by name.
@@ -4973,7 +5428,46 @@ const O = [
    * images.forEach(img => console.log(img.title, img.urls[0]))
    * ```
    */
-  resolveImages: xe,
+  resolveImages: ds,
+  /**
+   * Unified image pipeline — resolves the best available image for any
+   * celestial object and returns it in an optimized, ready-to-render format.
+   *
+   * Runs a cascading lookup: static registry (instant) → NASA → ESA.
+   * Results from API sources are cached in memory. The consumer only needs
+   * to provide the object ID and name — the pipeline handles source selection,
+   * URL construction, and responsive `srcset` generation.
+   *
+   * @param id   - Object ID (e.g. `'mars'`, `'m42'`, `'sirius'`).
+   * @param name - Display name for API search fallback (e.g. `'Mars'`).
+   * @param opts - Width, srcset, and source preferences.
+   * @returns The best available image, or `null` if nothing was found.
+   *
+   * @example
+   * ```ts
+   * const img = await Data.getImage('mars', 'Mars')
+   * if (img) {
+   *   heroEl.src = img.src
+   *   heroEl.srcset = img.srcset ?? ''
+   *   creditEl.textContent = img.credit
+   * }
+   * ```
+   */
+  getImage: as,
+  /**
+   * Prefetch images for a list of object IDs in the background.
+   *
+   * Results are stored in the in-memory cache so subsequent
+   * {@link Data.getImage} calls resolve instantly.
+   *
+   * @param ids - Object IDs to prefetch.
+   *
+   * @example
+   * ```ts
+   * Data.prefetchImages(filteredObjects.map(o => o.id))
+   * ```
+   */
+  prefetchImages: $s,
   // ── Bright star queries ────────────────────────────────────────────────
   /**
    * Get all bright stars in the catalog (~200 IAU named stars).
@@ -4987,7 +5481,7 @@ const O = [
    * ```
    */
   stars() {
-    return B;
+    return U;
   },
   /**
    * Look up a bright star by its IAU proper name (case-insensitive).
@@ -5001,8 +5495,8 @@ const O = [
    * // => { id: 'sirius', name: 'Sirius', con: 'CMa', mag: -1.46, ... }
    * ```
    */
-  getStarByName(t) {
-    return Ge.get(t.toLowerCase()) ?? null;
+  getStarByName(n) {
+    return Xs.get(n.toLowerCase()) ?? null;
   },
   /**
    * Get all bright stars belonging to a given constellation.
@@ -5017,9 +5511,9 @@ const O = [
    * // => [Rigel, Betelgeuse, Bellatrix, Alnilam, Alnitak, Mintaka, Saiph]
    * ```
    */
-  getStarsByConstellation(t) {
-    const e = t.toUpperCase();
-    return B.filter((a) => a.con.toUpperCase() === e);
+  getStarsByConstellation(n) {
+    const s = n.toUpperCase();
+    return U.filter((e) => e.con.toUpperCase() === s);
   },
   /**
    * Find bright stars within a given angular radius of a sky position.
@@ -5040,11 +5534,11 @@ const O = [
    * )
    * ```
    */
-  nearbyStars(t, e) {
-    return B.map((a) => ({
-      star: a,
-      separation: k.angularSeparation(t, { ra: a.ra, dec: a.dec })
-    })).filter((a) => a.separation <= e).sort((a, i) => a.separation - i.separation);
+  nearbyStars(n, s) {
+    return U.map((e) => ({
+      star: e,
+      separation: M.angularSeparation(n, { ra: e.ra, dec: e.dec })
+    })).filter((e) => e.separation <= s).sort((e, i) => e.separation - i.separation);
   },
   // ── Constellation queries ────────────────────────────────────────────────
   /**
@@ -5059,7 +5553,7 @@ const O = [
    * ```
    */
   constellations() {
-    return oe;
+    return us;
   },
   /**
    * Look up a constellation by its 3-letter IAU abbreviation (case-insensitive).
@@ -5073,8 +5567,8 @@ const O = [
    * // => { abbr: 'Ori', name: 'Orion', genitive: 'Orionis', area: 594, ... }
    * ```
    */
-  getConstellation(t) {
-    return Oe.get(t.toLowerCase()) ?? null;
+  getConstellation(n) {
+    return Qs.get(n.toLowerCase()) ?? null;
   },
   // ── Messier catalog queries ────────────────────────────────────────────
   /**
@@ -5089,7 +5583,7 @@ const O = [
    * ```
    */
   messier() {
-    return ie;
+    return cs;
   },
   /**
    * Look up a Messier object by its catalog number.
@@ -5106,8 +5600,8 @@ const O = [
    * // => { messier: 1, name: 'Crab Nebula', ... }
    * ```
    */
-  getMessier(t) {
-    return Ee.get(t) ?? null;
+  getMessier(n) {
+    return Zs.get(n) ?? null;
   },
   // ── Meteor shower queries ──────────────────────────────────────────────
   /**
@@ -5123,7 +5617,7 @@ const O = [
    * ```
    */
   showers() {
-    return re;
+    return gs;
   },
   /**
    * Get meteor showers that are active on a given date.
@@ -5143,11 +5637,11 @@ const O = [
    * // => ['Perseids', 'Kappa Cygnids', ...]
    * ```
    */
-  getActiveShowers(t) {
-    const a = ((k.planetEcliptic("earth", t).lon + 180) % 360 + 360) % 360;
-    return re.filter((i) => Math.abs(((a - i.solarLon + 180) % 360 + 360) % 360 - 180) < 20);
+  getActiveShowers(n) {
+    const e = ((M.planetEcliptic("earth", n).lon + 180) % 360 + 360) % 360;
+    return gs.filter((i) => Math.abs(((e - i.solarLon + 180) % 360 + 360) % 360 - 180) < 20);
   }
-}, We = {
+}, ge = {
   sun: {
     id: "sun",
     name: "Sun Surface",
@@ -5303,7 +5797,7 @@ const O = [
     width: 2048,
     height: 1024
   }
-}, Ye = {
+}, ve = {
   milky_way: {
     id: "milky_way",
     name: "Milky Way Panorama",
@@ -5326,41 +5820,41 @@ const O = [
     width: 8192,
     height: 4096
   }
-}, L = C.DEG_TO_RAD;
-function $(t, e, a = 500) {
-  const i = e.ra * L, s = e.dec * L, n = t.ra * L, r = t.dec * L, c = n - i, l = Math.sin(s) * Math.sin(r) + Math.cos(s) * Math.cos(r) * Math.cos(c), o = 2 / (1 + l);
+}, L = S.DEG_TO_RAD;
+function Y(n, s, e = 500) {
+  const i = s.ra * L, t = s.dec * L, r = n.ra * L, l = n.dec * L, c = r - i, o = Math.sin(t) * Math.sin(l) + Math.cos(t) * Math.cos(l) * Math.cos(c), g = 2 / (1 + o);
   return {
-    x: o * Math.cos(r) * Math.sin(c) * a,
-    y: o * (Math.cos(s) * Math.sin(r) - Math.sin(s) * Math.cos(r) * Math.cos(c)) * a,
-    visible: l > -0.95
+    x: g * Math.cos(l) * Math.sin(c) * e,
+    y: g * (Math.cos(t) * Math.sin(l) - Math.sin(t) * Math.cos(l) * Math.cos(c)) * e,
+    visible: o > -0.95
   };
 }
-function q(t, e) {
-  const { width: a, height: i } = e, s = (t.ra - 180) * L, n = t.dec * L;
-  let r = n;
-  for (let o = 0; o < 10; o++) {
-    const d = 4 * Math.cos(r) ** 2 + 2;
-    if (Math.abs(d) < 1e-9) break;
-    r -= (2 * r + Math.sin(2 * r) - Math.PI * Math.sin(n)) / d;
+function J(n, s) {
+  const { width: e, height: i } = s, t = (n.ra - 180) * L, r = n.dec * L;
+  let l = r;
+  for (let g = 0; g < 10; g++) {
+    const v = 4 * Math.cos(l) ** 2 + 2;
+    if (Math.abs(v) < 1e-9) break;
+    l -= (2 * l + Math.sin(2 * l) - Math.PI * Math.sin(r)) / v;
   }
-  const c = a / 2 + a / (2 * Math.PI) * (2 * Math.SQRT2 / Math.PI) * s * Math.cos(r), l = i / 2 - i / 2 * Math.SQRT2 * Math.sin(r);
-  return { x: c, y: l, visible: !0 };
+  const c = e / 2 + e / (2 * Math.PI) * (2 * Math.SQRT2 / Math.PI) * t * Math.cos(l), o = i / 2 - i / 2 * Math.SQRT2 * Math.sin(l);
+  return { x: c, y: o, visible: !0 };
 }
-function W(t, e, a = 400) {
-  const i = e.ra * L, s = e.dec * L, n = t.ra * L, r = t.dec * L, c = n - i, l = Math.sin(s) * Math.sin(r) + Math.cos(s) * Math.cos(r) * Math.cos(c);
-  return l <= 0 ? { x: 0, y: 0, visible: !1 } : {
-    x: a * Math.cos(r) * Math.sin(c) / l,
-    y: a * (Math.cos(s) * Math.sin(r) - Math.sin(s) * Math.cos(r) * Math.cos(c)) / l,
-    visible: l > 0
+function X(n, s, e = 400) {
+  const i = s.ra * L, t = s.dec * L, r = n.ra * L, l = n.dec * L, c = r - i, o = Math.sin(t) * Math.sin(l) + Math.cos(t) * Math.cos(l) * Math.cos(c);
+  return o <= 0 ? { x: 0, y: 0, visible: !1 } : {
+    x: e * Math.cos(l) * Math.sin(c) / o,
+    y: e * (Math.cos(t) * Math.sin(l) - Math.sin(t) * Math.cos(l) * Math.cos(c)) / o,
+    visible: o > 0
   };
 }
-function Ve(t) {
+function ne(n) {
   var i;
-  if (t.type === "nebula") return "#ff7744";
-  if (t.type === "galaxy") return "#ffddaa";
-  if (t.type === "cluster") return "#aaccff";
-  if (t.type === "black-hole") return "#ff4400";
-  const e = (i = t.spectral) == null ? void 0 : i[0], a = {
+  if (n.type === "nebula") return "#ff7744";
+  if (n.type === "galaxy") return "#ffddaa";
+  if (n.type === "cluster") return "#aaccff";
+  if (n.type === "black-hole") return "#ff4400";
+  const s = (i = n.spectral) == null ? void 0 : i[0], e = {
     O: "#9bb0ff",
     B: "#aabfff",
     A: "#cad7ff",
@@ -5369,136 +5863,136 @@ function Ve(t) {
     K: "#ffd2a1",
     M: "#ffcc6f"
   };
-  return e && e in a ? a[e] ?? "#ffffff" : "#ffffff";
+  return s && s in e ? e[s] ?? "#ffffff" : "#ffffff";
 }
-function se(t, e, a = {}) {
+function os(n, s, e = {}) {
   const {
     projection: i = "stereographic",
-    center: s = { ra: 0, dec: 0 },
-    scale: n = 300,
-    showGrid: r = !0,
+    center: t = { ra: 0, dec: 0 },
+    scale: r = 300,
+    showGrid: l = !0,
     showLabels: c = !0,
-    showMagnitudeLimit: l = 8,
-    background: o = "#000008",
-    gridColor: d = "rgba(255,255,255,0.12)",
-    labelColor: p = "rgba(255,255,255,0.7)"
-  } = a, m = t.getContext("2d");
-  if (!m) throw new Error("Canvas 2D context not available");
-  const u = t.width, g = t.height, _ = u / 2, f = g / 2, v = (b) => {
+    showMagnitudeLimit: o = 8,
+    background: g = "#000008",
+    gridColor: v = "rgba(255,255,255,0.12)",
+    labelColor: k = "rgba(255,255,255,0.7)"
+  } = e, a = n.getContext("2d");
+  if (!a) throw new Error("Canvas 2D context not available");
+  const y = n.width, u = n.height, d = y / 2, f = u / 2, b = (p) => {
     if (i === "mollweide")
-      return q(b, { width: u, height: g });
-    const h = i === "gnomonic" ? W(b, s, n) : $(b, s, n);
-    return { x: _ + h.x, y: f - h.y, visible: h.visible };
+      return J(p, { width: y, height: u });
+    const m = i === "gnomonic" ? X(p, t, r) : Y(p, t, r);
+    return { x: d + m.x, y: f - m.y, visible: m.visible };
   };
-  if (m.fillStyle = o, m.fillRect(0, 0, u, g), r) {
-    m.strokeStyle = d, m.lineWidth = 0.5;
-    for (let b = -90; b <= 90; b += 30) {
-      m.beginPath();
-      let h = !1;
-      for (let S = 0; S <= 360; S += 4) {
-        const y = v({ ra: S, dec: b });
-        if (!y.visible || y.x < -u || y.x > 2 * u) {
-          h = !1;
+  if (a.fillStyle = g, a.fillRect(0, 0, y, u), l) {
+    a.strokeStyle = v, a.lineWidth = 0.5;
+    for (let p = -90; p <= 90; p += 30) {
+      a.beginPath();
+      let m = !1;
+      for (let A = 0; A <= 360; A += 4) {
+        const h = b({ ra: A, dec: p });
+        if (!h.visible || h.x < -y || h.x > 2 * y) {
+          m = !1;
           continue;
         }
-        h ? m.lineTo(y.x, y.y) : (m.moveTo(y.x, y.y), h = !0);
+        m ? a.lineTo(h.x, h.y) : (a.moveTo(h.x, h.y), m = !0);
       }
-      m.stroke();
+      a.stroke();
     }
-    for (let b = 0; b < 360; b += 30) {
-      m.beginPath();
-      let h = !1;
-      for (let S = -90; S <= 90; S += 4) {
-        const y = v({ ra: b, dec: S });
-        if (!y.visible || y.y < -g || y.y > 2 * g) {
-          h = !1;
+    for (let p = 0; p < 360; p += 30) {
+      a.beginPath();
+      let m = !1;
+      for (let A = -90; A <= 90; A += 4) {
+        const h = b({ ra: p, dec: A });
+        if (!h.visible || h.y < -u || h.y > 2 * u) {
+          m = !1;
           continue;
         }
-        h ? m.lineTo(y.x, y.y) : (m.moveTo(y.x, y.y), h = !0);
+        m ? a.lineTo(h.x, h.y) : (a.moveTo(h.x, h.y), m = !0);
       }
-      m.stroke();
+      a.stroke();
     }
   }
-  if (a.showConstellationLines && a.constellations) {
-    m.strokeStyle = a.constellationLineColor ?? "rgba(100,149,237,0.35)", m.lineWidth = 0.8;
-    for (const b of a.constellations)
-      for (const h of b.stickFigure) {
-        const S = v({ ra: h[0], dec: h[1] }), y = v({ ra: h[2], dec: h[3] });
-        !S.visible || !y.visible || S.x < -50 || S.x > u + 50 || y.x < -50 || y.x > u + 50 || (m.beginPath(), m.moveTo(S.x, S.y), m.lineTo(y.x, y.y), m.stroke());
+  if (e.showConstellationLines && e.constellations) {
+    a.strokeStyle = e.constellationLineColor ?? "rgba(100,149,237,0.35)", a.lineWidth = 0.8;
+    for (const p of e.constellations)
+      for (const m of p.stickFigure) {
+        const A = b({ ra: m[0], dec: m[1] }), h = b({ ra: m[2], dec: m[3] });
+        !A.visible || !h.visible || A.x < -50 || A.x > y + 50 || h.x < -50 || h.x > y + 50 || (a.beginPath(), a.moveTo(A.x, A.y), a.lineTo(h.x, h.y), a.stroke());
       }
   }
-  if (a.showConstellationLabels && a.constellations) {
-    m.fillStyle = a.constellationLabelColor ?? "rgba(100,149,237,0.5)", m.font = "11px sans-serif", m.textAlign = "center";
-    for (const b of a.constellations) {
-      const h = v({ ra: b.ra, dec: b.dec });
-      h.visible && (h.x < 0 || h.x > u || h.y < 0 || h.y > g || m.fillText(b.name, h.x, h.y));
+  if (e.showConstellationLabels && e.constellations) {
+    a.fillStyle = e.constellationLabelColor ?? "rgba(100,149,237,0.5)", a.font = "11px sans-serif", a.textAlign = "center";
+    for (const p of e.constellations) {
+      const m = b({ ra: p.ra, dec: p.dec });
+      m.visible && (m.x < 0 || m.x > y || m.y < 0 || m.y > u || a.fillText(p.name, m.x, m.y));
     }
-    m.textAlign = "left";
+    a.textAlign = "left";
   }
-  for (const b of e) {
-    if (b.ra === null || b.dec === null || b.magnitude !== null && b.magnitude > l) continue;
-    const h = v({ ra: b.ra, dec: b.dec });
-    if (!h.visible || h.x < -50 || h.x > u + 50 || h.y < -50 || h.y > g + 50) continue;
-    const S = b.magnitude ?? 5, y = Math.max(1.5, Math.min(10, (6 - S) * 0.9 + 1.5)), D = Ve(b);
-    if (m.save(), b.type === "galaxy")
-      m.strokeStyle = D, m.lineWidth = 1, m.beginPath(), m.ellipse(h.x, h.y, y * 2.5, y * 1.2, 0.4, 0, Math.PI * 2), m.stroke();
-    else if (b.type === "nebula")
-      m.fillStyle = D + "33", m.strokeStyle = D, m.lineWidth = 0.8, m.beginPath(), m.rect(h.x - y, h.y - y, y * 2, y * 2), m.fill(), m.stroke();
-    else if (b.type === "cluster")
-      m.strokeStyle = D, m.lineWidth = 1, m.beginPath(), m.arc(h.x, h.y, y * 1.8, 0, Math.PI * 2), m.stroke(), b.subtype === "globular" && (m.beginPath(), m.moveTo(h.x - y * 1.8, h.y), m.lineTo(h.x + y * 1.8, h.y), m.moveTo(h.x, h.y - y * 1.8), m.lineTo(h.x, h.y + y * 1.8), m.stroke());
+  for (const p of s) {
+    if (p.ra === null || p.dec === null || p.magnitude !== null && p.magnitude > o) continue;
+    const m = b({ ra: p.ra, dec: p.dec });
+    if (!m.visible || m.x < -50 || m.x > y + 50 || m.y < -50 || m.y > u + 50) continue;
+    const A = p.magnitude ?? 5, h = Math.max(1.5, Math.min(10, (6 - A) * 0.9 + 1.5)), C = ne(p);
+    if (a.save(), p.type === "galaxy")
+      a.strokeStyle = C, a.lineWidth = 1, a.beginPath(), a.ellipse(m.x, m.y, h * 2.5, h * 1.2, 0.4, 0, Math.PI * 2), a.stroke();
+    else if (p.type === "nebula")
+      a.fillStyle = C + "33", a.strokeStyle = C, a.lineWidth = 0.8, a.beginPath(), a.rect(m.x - h, m.y - h, h * 2, h * 2), a.fill(), a.stroke();
+    else if (p.type === "cluster")
+      a.strokeStyle = C, a.lineWidth = 1, a.beginPath(), a.arc(m.x, m.y, h * 1.8, 0, Math.PI * 2), a.stroke(), p.subtype === "globular" && (a.beginPath(), a.moveTo(m.x - h * 1.8, m.y), a.lineTo(m.x + h * 1.8, m.y), a.moveTo(m.x, m.y - h * 1.8), a.lineTo(m.x, m.y + h * 1.8), a.stroke());
     else {
-      const x = m.createRadialGradient(h.x, h.y, 0, h.x, h.y, y * 2.5);
-      x.addColorStop(0, D), x.addColorStop(0.3, D + "cc"), x.addColorStop(1, D + "00"), m.fillStyle = x, m.beginPath(), m.arc(h.x, h.y, y * 2.5, 0, Math.PI * 2), m.fill();
+      const x = a.createRadialGradient(m.x, m.y, 0, m.x, m.y, h * 2.5);
+      x.addColorStop(0, C), x.addColorStop(0.3, C + "cc"), x.addColorStop(1, C + "00"), a.fillStyle = x, a.beginPath(), a.arc(m.x, m.y, h * 2.5, 0, Math.PI * 2), a.fill();
     }
-    c && S < 3.5 && (m.fillStyle = p, m.font = `${Math.max(10, 13 - S)}px sans-serif`, m.fillText(b.name, h.x + y + 4, h.y - y)), m.restore();
+    c && A < 3.5 && (a.fillStyle = k, a.font = `${Math.max(10, 13 - A)}px sans-serif`, a.fillText(p.name, m.x + h + 4, m.y - h)), a.restore();
   }
 }
-const Je = { stereographic: $, mollweide: q, gnomonic: W, render: se }, H = C.DEG_TO_RAD, z = 1 / H;
-function je(t, e, a, i) {
-  const s = t / i, n = e / i, r = Math.sqrt(s * s + n * n);
-  if (r === 0) return { ra: a.ra, dec: a.dec };
-  const c = 2 * Math.atan(r / 2), l = Math.sin(c), o = Math.cos(c), d = a.dec * H, p = a.ra * H, m = Math.asin(o * Math.sin(d) + n * l * Math.cos(d) / r) * z, u = (p + Math.atan2(
-    s * l,
-    r * Math.cos(d) * o - n * Math.sin(d) * l
-  )) * z;
-  return !isFinite(u) || !isFinite(m) ? null : { ra: (u % 360 + 360) % 360, dec: m };
+const ke = { stereographic: Y, mollweide: J, gnomonic: X, render: os }, K = S.DEG_TO_RAD, F = 1 / K;
+function ie(n, s, e, i) {
+  const t = n / i, r = s / i, l = Math.sqrt(t * t + r * r);
+  if (l === 0) return { ra: e.ra, dec: e.dec };
+  const c = 2 * Math.atan(l / 2), o = Math.sin(c), g = Math.cos(c), v = e.dec * K, k = e.ra * K, a = Math.asin(g * Math.sin(v) + r * o * Math.cos(v) / l) * F, y = (k + Math.atan2(
+    t * o,
+    l * Math.cos(v) * g - r * Math.sin(v) * o
+  )) * F;
+  return !isFinite(y) || !isFinite(a) ? null : { ra: (y % 360 + 360) % 360, dec: a };
 }
-function Be(t, e, a, i) {
-  const s = t / i, n = e / i, r = Math.sqrt(s * s + n * n), c = a.dec * H, l = a.ra * H, o = Math.atan(r), d = Math.sin(o), p = Math.cos(o);
-  let m, u;
-  return r === 0 ? (m = a.dec, u = a.ra) : (m = Math.asin(p * Math.sin(c) + n * d * Math.cos(c) / r) * z, u = (l + Math.atan2(
-    s * d,
-    r * Math.cos(c) * p - n * Math.sin(c) * d
-  )) * z), !isFinite(u) || !isFinite(m) ? null : { ra: (u % 360 + 360) % 360, dec: m };
+function te(n, s, e, i) {
+  const t = n / i, r = s / i, l = Math.sqrt(t * t + r * r), c = e.dec * K, o = e.ra * K, g = Math.atan(l), v = Math.sin(g), k = Math.cos(g);
+  let a, y;
+  return l === 0 ? (a = e.dec, y = e.ra) : (a = Math.asin(k * Math.sin(c) + r * v * Math.cos(c) / l) * F, y = (o + Math.atan2(
+    t * v,
+    l * Math.cos(c) * k - r * Math.sin(c) * v
+  )) * F), !isFinite(y) || !isFinite(a) ? null : { ra: (y % 360 + 360) % 360, dec: a };
 }
-function He(t, e, a, i) {
-  const n = -(e - i / 2) / (i / 2) / Math.SQRT2;
-  if (Math.abs(n) > 1) return null;
-  const r = Math.asin(n), c = (t - a / 2) / (a / (2 * Math.PI)), l = Math.cos(r);
-  if (Math.abs(l) < 1e-12)
-    return { ra: 180, dec: n > 0 ? 90 : -90 };
-  const o = c / (2 * Math.SQRT2 / Math.PI * l);
-  if (Math.abs(o) > Math.PI) return null;
-  const d = (2 * r + Math.sin(2 * r)) / Math.PI;
-  if (Math.abs(d) > 1) return null;
-  const p = Math.asin(d), m = ((o * z + 180) % 360 + 360) % 360, u = p * z;
-  return !isFinite(m) || !isFinite(u) ? null : { ra: m, dec: u };
+function le(n, s, e, i) {
+  const r = -(s - i / 2) / (i / 2) / Math.SQRT2;
+  if (Math.abs(r) > 1) return null;
+  const l = Math.asin(r), c = (n - e / 2) / (e / (2 * Math.PI)), o = Math.cos(l);
+  if (Math.abs(o) < 1e-12)
+    return { ra: 180, dec: r > 0 ? 90 : -90 };
+  const g = c / (2 * Math.SQRT2 / Math.PI * o);
+  if (Math.abs(g) > Math.PI) return null;
+  const v = (2 * l + Math.sin(2 * l)) / Math.PI;
+  if (Math.abs(v) > 1) return null;
+  const k = Math.asin(v), a = ((g * F + 180) % 360 + 360) % 360, y = k * F;
+  return !isFinite(a) || !isFinite(y) ? null : { ra: a, dec: y };
 }
-function ne(t, e, a, i, s, n, r) {
-  if (s === "mollweide")
-    return He(t, e, a, i);
-  const c = a / 2, l = i / 2, o = t - c, d = l - e;
-  return s === "gnomonic" ? Be(o, d, n, r) : je(o, d, n, r);
+function ks(n, s, e, i, t, r, l) {
+  if (t === "mollweide")
+    return le(n, s, e, i);
+  const c = e / 2, o = i / 2, g = n - c, v = o - s;
+  return t === "gnomonic" ? te(g, v, r, l) : ie(g, v, r, l);
 }
-function ee(t, e, a, i) {
-  let s = null, n = 1 / 0;
-  for (const r of t) {
-    const c = r.x - e, l = r.y - a, o = c * c + l * l, d = Math.max(i, r.radius);
-    o < d * d && o < n && (n = o, s = r);
+function ns(n, s, e, i) {
+  let t = null, r = 1 / 0;
+  for (const l of n) {
+    const c = l.x - s, o = l.y - e, g = c * c + o * o, v = Math.max(i, l.radius);
+    g < v * v && g < r && (r = g, t = l);
   }
-  return s;
+  return t;
 }
-const ae = C.DEG_TO_RAD, Ue = 250, Ke = 10, R = {
+const is = S.DEG_TO_RAD, re = 250, ce = 10, w = {
   panEnabled: !0,
   zoomEnabled: !0,
   selectEnabled: !0,
@@ -5508,91 +6002,91 @@ const ae = C.DEG_TO_RAD, Ue = 250, Ke = 10, R = {
   hitRadius: 15,
   realTimeInterval: 1e3
 };
-class me {
-  constructor(e, a, i = {}) {
-    var r, c;
-    this._projectedCache = [], this._selectedObject = null, this._hoveredObject = null, this._listeners = /* @__PURE__ */ new Map(), this._rafId = null, this._dirty = !1, this._realTimeTimer = null, this._pointers = /* @__PURE__ */ new Map(), this._disposed = !1, this._panAnimId = null, this._onPointerDown = (l) => {
+class fs {
+  constructor(s, e, i = {}) {
+    var l, c;
+    this._projectedCache = [], this._selectedObject = null, this._hoveredObject = null, this._listeners = /* @__PURE__ */ new Map(), this._rafId = null, this._dirty = !1, this._realTimeTimer = null, this._pointers = /* @__PURE__ */ new Map(), this._disposed = !1, this._panAnimId = null, this._onPointerDown = (o) => {
       if (this._disposed) return;
-      this._canvas.setPointerCapture(l.pointerId);
-      const { x: o, y: d } = this._canvasCoords(l);
-      this._pointers.set(l.pointerId, {
-        startX: o,
-        startY: d,
-        lastX: o,
-        lastY: d,
+      this._canvas.setPointerCapture(o.pointerId);
+      const { x: g, y: v } = this._canvasCoords(o);
+      this._pointers.set(o.pointerId, {
+        startX: g,
+        startY: v,
+        lastX: g,
+        lastY: v,
         startTime: performance.now()
       });
-    }, this._onPointerMove = (l) => {
+    }, this._onPointerMove = (o) => {
       if (this._disposed) return;
-      const { x: o, y: d } = this._canvasCoords(l), p = this._pointers.get(l.pointerId);
-      if (p && this._pointers.size === 1 && (this._opts.panEnabled ?? R.panEnabled)) {
-        const m = o - p.lastX, u = d - p.lastY;
-        if (p.lastX = o, p.lastY = d, this._view.projection === "mollweide") {
-          const g = this._canvas.width, _ = this._canvas.height, f = ne(o - m, d - u, g, _, "mollweide", this._view.center, this._view.scale), v = ne(o, d, g, _, "mollweide", this._view.center, this._view.scale);
-          if (f && v) {
-            let b = f.ra - v.ra;
-            b > 180 && (b -= 360), b < -180 && (b += 360), this._view.center = {
-              ra: ((this._view.center.ra + b) % 360 + 360) % 360,
-              dec: Math.max(-90, Math.min(90, this._view.center.dec + (f.dec - v.dec)))
+      const { x: g, y: v } = this._canvasCoords(o), k = this._pointers.get(o.pointerId);
+      if (k && this._pointers.size === 1 && (this._opts.panEnabled ?? w.panEnabled)) {
+        const a = g - k.lastX, y = v - k.lastY;
+        if (k.lastX = g, k.lastY = v, this._view.projection === "mollweide") {
+          const u = this._canvas.width, d = this._canvas.height, f = ks(g - a, v - y, u, d, "mollweide", this._view.center, this._view.scale), b = ks(g, v, u, d, "mollweide", this._view.center, this._view.scale);
+          if (f && b) {
+            let p = f.ra - b.ra;
+            p > 180 && (p -= 360), p < -180 && (p += 360), this._view.center = {
+              ra: ((this._view.center.ra + p) % 360 + 360) % 360,
+              dec: Math.max(-90, Math.min(90, this._view.center.dec + (f.dec - b.dec)))
             }, this._markDirty(), this._emitViewChange();
           }
         } else {
-          const g = m / this._view.scale / ae, _ = u / this._view.scale / ae;
+          const u = a / this._view.scale / is, d = y / this._view.scale / is;
           this._view.center = {
-            ra: ((this._view.center.ra - g) % 360 + 360) % 360,
-            dec: Math.max(-90, Math.min(90, this._view.center.dec + _))
+            ra: ((this._view.center.ra - u) % 360 + 360) % 360,
+            dec: Math.max(-90, Math.min(90, this._view.center.dec + d))
           }, this._markDirty(), this._emitViewChange();
         }
         return;
       }
-      if (p && this._pointers.size === 2 && (this._opts.zoomEnabled ?? R.zoomEnabled)) {
-        p.lastX = o, p.lastY = d;
-        const m = [...this._pointers.keys()], u = this._pointers.get(m[0]), g = this._pointers.get(m[1]), _ = Math.hypot(u.lastX - g.lastX, u.lastY - g.lastY), f = Math.hypot(
-          (m[0] === l.pointerId ? o - (o - p.lastX + (p.lastX - u.lastX)) : u.lastX) - g.lastX,
-          (m[0] === l.pointerId ? d - (d - p.lastY + (p.lastY - u.lastY)) : u.lastY) - g.lastY
+      if (k && this._pointers.size === 2 && (this._opts.zoomEnabled ?? w.zoomEnabled)) {
+        k.lastX = g, k.lastY = v;
+        const a = [...this._pointers.keys()], y = this._pointers.get(a[0]), u = this._pointers.get(a[1]), d = Math.hypot(y.lastX - u.lastX, y.lastY - u.lastY), f = Math.hypot(
+          (a[0] === o.pointerId ? g - (g - k.lastX + (k.lastX - y.lastX)) : y.lastX) - u.lastX,
+          (a[0] === o.pointerId ? v - (v - k.lastY + (k.lastY - y.lastY)) : y.lastY) - u.lastY
         );
         if (f > 0) {
-          const v = _ / f;
-          this._view.scale = this._clampScale(this._view.scale * v), this._markDirty(), this._emitViewChange();
+          const b = d / f;
+          this._view.scale = this._clampScale(this._view.scale * b), this._markDirty(), this._emitViewChange();
         }
         return;
       }
-      if (this._pointers.size === 0 && (this._opts.hoverEnabled ?? R.hoverEnabled)) {
-        const m = this._opts.hitRadius ?? R.hitRadius, u = ee(this._projectedCache, o, d, m), g = (u == null ? void 0 : u.object) ?? null;
-        g !== this._hoveredObject && (this._hoveredObject = g, this._markDirty(), this._emit("hover", {
-          object: g,
-          point: u ? { x: u.x, y: u.y, visible: !0 } : null,
-          event: l
+      if (this._pointers.size === 0 && (this._opts.hoverEnabled ?? w.hoverEnabled)) {
+        const a = this._opts.hitRadius ?? w.hitRadius, y = ns(this._projectedCache, g, v, a), u = (y == null ? void 0 : y.object) ?? null;
+        u !== this._hoveredObject && (this._hoveredObject = u, this._markDirty(), this._emit("hover", {
+          object: u,
+          point: y ? { x: y.x, y: y.y, visible: !0 } : null,
+          event: o
         }));
       }
-    }, this._onPointerUp = (l) => {
+    }, this._onPointerUp = (o) => {
       if (this._disposed) return;
-      const o = this._pointers.get(l.pointerId);
-      if (this._pointers.delete(l.pointerId), !o) return;
-      const d = performance.now() - o.startTime, p = Math.hypot(o.lastX - o.startX, o.lastY - o.startY);
-      if (d < Ue && p < Ke && (this._opts.selectEnabled ?? R.selectEnabled)) {
-        const m = this._opts.hitRadius ?? R.hitRadius, u = ee(this._projectedCache, o.lastX, o.lastY, m);
-        u ? (this._selectedObject = u.object, this._markDirty(), this._emit("select", {
-          object: u.object,
-          point: { x: u.x, y: u.y, visible: !0 },
-          event: l
+      const g = this._pointers.get(o.pointerId);
+      if (this._pointers.delete(o.pointerId), !g) return;
+      const v = performance.now() - g.startTime, k = Math.hypot(g.lastX - g.startX, g.lastY - g.startY);
+      if (v < re && k < ce && (this._opts.selectEnabled ?? w.selectEnabled)) {
+        const a = this._opts.hitRadius ?? w.hitRadius, y = ns(this._projectedCache, g.lastX, g.lastY, a);
+        y ? (this._selectedObject = y.object, this._markDirty(), this._emit("select", {
+          object: y.object,
+          point: { x: y.x, y: y.y, visible: !0 },
+          event: o
         })) : this._selectedObject && (this._selectedObject = null, this._markDirty());
       }
-    }, this._onWheel = (l) => {
-      if (this._disposed || !(this._opts.zoomEnabled ?? R.zoomEnabled)) return;
-      l.preventDefault();
-      const o = l.deltaY > 0 ? 0.9 : 1.1, d = this._clampScale(this._view.scale * o);
-      d !== this._view.scale && (this._view.scale = d, this._markDirty(), this._emitViewChange());
+    }, this._onWheel = (o) => {
+      if (this._disposed || !(this._opts.zoomEnabled ?? w.zoomEnabled)) return;
+      o.preventDefault();
+      const g = o.deltaY > 0 ? 0.9 : 1.1, v = this._clampScale(this._view.scale * g);
+      v !== this._view.scale && (this._view.scale = v, this._markDirty(), this._emitViewChange());
     };
-    const s = e.getContext("2d");
-    if (!s) throw new Error("Canvas 2D context not available");
-    this._canvas = e, this._ctx = s, this._objects = a, this._opts = i, this._view = {
-      center: { ra: ((r = i.center) == null ? void 0 : r.ra) ?? 0, dec: ((c = i.center) == null ? void 0 : c.dec) ?? 0 },
+    const t = s.getContext("2d");
+    if (!t) throw new Error("Canvas 2D context not available");
+    this._canvas = s, this._ctx = t, this._objects = e, this._opts = i, this._view = {
+      center: { ra: ((l = i.center) == null ? void 0 : l.ra) ?? 0, dec: ((c = i.center) == null ? void 0 : c.dec) ?? 0 },
       scale: i.scale ?? 300,
       projection: i.projection ?? "stereographic"
     }, this._abortController = new AbortController();
-    const n = this._abortController.signal;
-    e.addEventListener("pointerdown", this._onPointerDown, { signal: n }), e.addEventListener("pointermove", this._onPointerMove, { signal: n }), e.addEventListener("pointerup", this._onPointerUp, { signal: n }), e.addEventListener("pointercancel", this._onPointerUp, { signal: n }), e.addEventListener("wheel", this._onWheel, { passive: !1, signal: n }), e.style.touchAction = "none", i.realTime && this.startRealTime(i.observer), this.render();
+    const r = this._abortController.signal;
+    s.addEventListener("pointerdown", this._onPointerDown, { signal: r }), s.addEventListener("pointermove", this._onPointerMove, { signal: r }), s.addEventListener("pointerup", this._onPointerUp, { signal: r }), s.addEventListener("pointercancel", this._onPointerUp, { signal: r }), s.addEventListener("wheel", this._onWheel, { passive: !1, signal: r }), s.style.touchAction = "none", i.realTime && this.startRealTime(i.observer), this.render();
   }
   // ── Event emitter ────────────────────────────────────────────────────────
   /**
@@ -5601,20 +6095,20 @@ class me {
    * @param event   - Event name (`'select'`, `'hover'`, or `'viewchange'`).
    * @param handler - Callback invoked when the event fires.
    */
-  on(e, a) {
-    this._listeners.has(e) || this._listeners.set(e, /* @__PURE__ */ new Set()), this._listeners.get(e).add(a);
+  on(s, e) {
+    this._listeners.has(s) || this._listeners.set(s, /* @__PURE__ */ new Set()), this._listeners.get(s).add(e);
   }
   /**
    * Unsubscribe from an interaction event.
    */
-  off(e, a) {
+  off(s, e) {
     var i;
-    (i = this._listeners.get(e)) == null || i.delete(a);
+    (i = this._listeners.get(s)) == null || i.delete(e);
   }
-  _emit(e, a) {
-    const i = this._listeners.get(e);
+  _emit(s, e) {
+    const i = this._listeners.get(s);
     if (i)
-      for (const s of i) s(a);
+      for (const t of i) t(e);
   }
   // ── View ─────────────────────────────────────────────────────────────────
   /** Get the current view state. */
@@ -5625,8 +6119,8 @@ class me {
    * Programmatically set the view centre, scale, and/or projection.
    * Triggers a re-render and emits `'viewchange'`.
    */
-  setView(e) {
-    e.center && (this._view.center = { ...e.center }), e.scale !== void 0 && (this._view.scale = this._clampScale(e.scale)), e.projection && (this._view.projection = e.projection), this._markDirty(), this._emitViewChange();
+  setView(s) {
+    s.center && (this._view.center = { ...s.center }), s.scale !== void 0 && (this._view.scale = this._clampScale(s.scale)), s.projection && (this._view.projection = s.projection), this._markDirty(), this._emitViewChange();
   }
   /**
    * Animate the view to a new centre and/or scale.
@@ -5635,20 +6129,20 @@ class me {
    * @param opts.scale - Target scale (optional, defaults to current).
    * @param opts.durationMs - Animation duration in ms (default 800).
    */
-  panTo(e, a = {}) {
+  panTo(s, e = {}) {
     this._panAnimId !== null && (cancelAnimationFrame(this._panAnimId), this._panAnimId = null);
-    const { scale: i, durationMs: s = 800 } = a, n = { ...this._view.center }, r = this._view.scale, c = i !== void 0 ? this._clampScale(i) : r, l = performance.now();
-    let o = e.ra - n.ra;
-    o > 180 && (o -= 360), o < -180 && (o += 360);
-    const d = (p) => {
+    const { scale: i, durationMs: t = 800 } = e, r = { ...this._view.center }, l = this._view.scale, c = i !== void 0 ? this._clampScale(i) : l, o = performance.now();
+    let g = s.ra - r.ra;
+    g > 180 && (g -= 360), g < -180 && (g += 360);
+    const v = (k) => {
       if (this._disposed) return;
-      const m = Math.min((p - l) / s, 1), u = m < 0.5 ? 2 * m * m : 1 - (-2 * m + 2) ** 2 / 2;
+      const a = Math.min((k - o) / t, 1), y = a < 0.5 ? 2 * a * a : 1 - (-2 * a + 2) ** 2 / 2;
       this._view.center = {
-        ra: ((n.ra + o * u) % 360 + 360) % 360,
-        dec: n.dec + (e.dec - n.dec) * u
-      }, this._view.scale = r + (c - r) * u, this.render(), m < 1 ? this._panAnimId = requestAnimationFrame(d) : (this._panAnimId = null, this._emitViewChange());
+        ra: ((r.ra + g * y) % 360 + 360) % 360,
+        dec: r.dec + (s.dec - r.dec) * y
+      }, this._view.scale = l + (c - l) * y, this.render(), a < 1 ? this._panAnimId = requestAnimationFrame(v) : (this._panAnimId = null, this._emitViewChange());
     };
-    this._panAnimId = requestAnimationFrame(d);
+    this._panAnimId = requestAnimationFrame(v);
   }
   // ── Selection / hover ────────────────────────────────────────────────────
   /** The currently selected object, or `null`. */
@@ -5662,29 +6156,29 @@ class me {
   /**
    * Programmatically select an object by its `id`. Pass `null` to clear.
    */
-  select(e) {
-    e === null ? this._selectedObject = null : this._selectedObject = this._objects.find((a) => a.id === e) ?? null, this._markDirty();
+  select(s) {
+    s === null ? this._selectedObject = null : this._selectedObject = this._objects.find((e) => e.id === s) ?? null, this._markDirty();
   }
   /**
    * Return the celestial object at a given canvas pixel position, or `null`.
    */
-  objectAt(e, a) {
-    const i = this._opts.hitRadius ?? R.hitRadius, s = ee(this._projectedCache, e, a, i);
-    return (s == null ? void 0 : s.object) ?? null;
+  objectAt(s, e) {
+    const i = this._opts.hitRadius ?? w.hitRadius, t = ns(this._projectedCache, s, e, i);
+    return (t == null ? void 0 : t.object) ?? null;
   }
   // ── Data ─────────────────────────────────────────────────────────────────
   /** Replace the objects array and re-render. */
-  setObjects(e) {
-    this._objects = e, this._markDirty();
+  setObjects(s) {
+    this._objects = s, this._markDirty();
   }
   /** Merge new options and re-render. */
-  setOptions(e) {
-    this._opts = { ...this._opts, ...e }, e.center && (this._view.center = { ...e.center }), e.scale !== void 0 && (this._view.scale = this._clampScale(e.scale)), e.projection && (this._view.projection = e.projection), this._markDirty();
+  setOptions(s) {
+    this._opts = { ...this._opts, ...s }, s.center && (this._view.center = { ...s.center }), s.scale !== void 0 && (this._view.scale = this._clampScale(s.scale)), s.projection && (this._view.projection = s.projection), this._markDirty();
   }
   // ── FOV ──────────────────────────────────────────────────────────────────
   /** Set or clear the FOV indicator overlay(s). */
-  setFOV(e) {
-    e === null ? delete this._opts.fov : this._opts.fov = e, this._markDirty();
+  setFOV(s) {
+    s === null ? delete this._opts.fov : this._opts.fov = s, this._markDirty();
   }
   // ── Real-time mode ───────────────────────────────────────────────────────
   /**
@@ -5695,8 +6189,8 @@ class me {
    *                   {@link InteractiveSkyMapOptions.observer}.
    * @throws If no observer parameters are available.
    */
-  startRealTime(e) {
-    if (e && (this._opts.observer = e), !this._opts.observer)
+  startRealTime(s) {
+    if (s && (this._opts.observer = s), !this._opts.observer)
       throw new Error("Observer parameters required for real-time mode");
     this.stopRealTime(), this._realTimeLoop();
   }
@@ -5712,13 +6206,13 @@ class me {
    */
   render() {
     if (this._disposed) return;
-    const e = this._canvas, a = this._ctx, i = e.width, s = e.height;
-    se(e, this._objects, {
+    const s = this._canvas, e = this._ctx, i = s.width, t = s.height;
+    os(s, this._objects, {
       ...this._opts,
       center: this._view.center,
       scale: this._view.scale,
       projection: this._view.projection
-    }), this._rebuildProjectedCache(), this._hoveredObject && this._drawHighlight(a, this._hoveredObject, "hover", i, s), this._selectedObject && this._drawHighlight(a, this._selectedObject, "select", i, s), this._opts.fov && this._drawFOV(a, i, s), this._opts.hud && this._drawHUD(a, i, s), this._dirty = !1;
+    }), this._rebuildProjectedCache(), this._hoveredObject && this._drawHighlight(e, this._hoveredObject, "hover", i, t), this._selectedObject && this._drawHighlight(e, this._selectedObject, "select", i, t), this._opts.fov && this._drawFOV(e, i, t), this._opts.hud && this._drawHUD(e, i, t), this._dirty = !1;
   }
   // ── Lifecycle ────────────────────────────────────────────────────────────
   /**
@@ -5730,11 +6224,11 @@ class me {
   }
   // ── Pointer handling (private) ───────────────────────────────────────────
   /** Convert a pointer event to canvas-space coordinates (DPI-aware). */
-  _canvasCoords(e) {
-    const a = this._canvas.getBoundingClientRect(), i = this._canvas.width / a.width, s = this._canvas.height / a.height;
+  _canvasCoords(s) {
+    const e = this._canvas.getBoundingClientRect(), i = this._canvas.width / e.width, t = this._canvas.height / e.height;
     return {
-      x: (e.clientX - a.left) * i,
-      y: (e.clientY - a.top) * s
+      x: (s.clientX - e.left) * i,
+      y: (s.clientY - e.top) * t
     };
   }
   // ── Rendering helpers (private) ──────────────────────────────────────────
@@ -5743,9 +6237,9 @@ class me {
       this._rafId = null, this._dirty && !this._disposed && this.render();
     }));
   }
-  _clampScale(e) {
-    const a = this._opts.minScale ?? R.minScale, i = this._opts.maxScale ?? R.maxScale;
-    return Math.max(a, Math.min(i, e));
+  _clampScale(s) {
+    const e = this._opts.minScale ?? w.minScale, i = this._opts.maxScale ?? w.maxScale;
+    return Math.max(e, Math.min(i, s));
   }
   _emitViewChange() {
     this._emit("viewchange", {
@@ -5758,309 +6252,314 @@ class me {
    * Unified forward-project helper (same logic as renderSkyMap's internal
    * `project` function) returning absolute canvas coordinates.
    */
-  _project(e) {
-    const a = this._canvas.width, i = this._canvas.height;
+  _project(s) {
+    const e = this._canvas.width, i = this._canvas.height;
     if (this._view.projection === "mollweide")
-      return q(e, { width: a, height: i });
-    const s = this._view.projection === "gnomonic" ? W(e, this._view.center, this._view.scale) : $(e, this._view.center, this._view.scale);
-    return { x: a / 2 + s.x, y: i / 2 - s.y, visible: s.visible };
+      return J(s, { width: e, height: i });
+    const t = this._view.projection === "gnomonic" ? X(s, this._view.center, this._view.scale) : Y(s, this._view.center, this._view.scale);
+    return { x: e / 2 + t.x, y: i / 2 - t.y, visible: t.visible };
   }
   /** Rebuild the projected-object cache used for hit-testing and highlights. */
   _rebuildProjectedCache() {
-    const e = this._opts.showMagnitudeLimit ?? 8, a = this._canvas.width, i = this._canvas.height, s = [];
-    for (const n of this._objects) {
-      if (n.ra === null || n.dec === null || n.magnitude !== null && n.magnitude > e) continue;
-      const r = this._project({ ra: n.ra, dec: n.dec });
-      if (!r.visible || r.x < -50 || r.x > a + 50 || r.y < -50 || r.y > i + 50) continue;
-      const c = n.magnitude ?? 5, l = Math.max(1.5, Math.min(10, (6 - c) * 0.9 + 1.5));
-      s.push({ object: n, x: r.x, y: r.y, radius: l * 2.5 });
+    const s = this._opts.showMagnitudeLimit ?? 8, e = this._canvas.width, i = this._canvas.height, t = [];
+    for (const r of this._objects) {
+      if (r.ra === null || r.dec === null || r.magnitude !== null && r.magnitude > s) continue;
+      const l = this._project({ ra: r.ra, dec: r.dec });
+      if (!l.visible || l.x < -50 || l.x > e + 50 || l.y < -50 || l.y > i + 50) continue;
+      const c = r.magnitude ?? 5, o = Math.max(1.5, Math.min(10, (6 - c) * 0.9 + 1.5));
+      t.push({ object: r, x: l.x, y: l.y, radius: o * 2.5 });
     }
-    this._projectedCache = s;
+    this._projectedCache = t;
   }
   /** Draw a highlight ring around a specific object. */
-  _drawHighlight(e, a, i, s, n) {
-    var d;
-    const r = this._projectedCache.find((p) => p.object === a);
-    if (!r) return;
-    const c = i === "hover" ? this._opts.hoverHighlight : this._opts.selectHighlight, l = (c == null ? void 0 : c.color) ?? (i === "hover" ? "rgba(255,255,255,0.6)" : "rgba(100,200,255,0.8)"), o = (c == null ? void 0 : c.radius) ?? (i === "hover" ? 20 : 24);
-    if (e.save(), e.strokeStyle = l, e.lineWidth = i === "hover" ? 1.5 : 2, e.beginPath(), e.arc(r.x, r.y, o, 0, Math.PI * 2), e.stroke(), i === "hover" && (((d = this._opts.hoverHighlight) == null ? void 0 : d.showLabel) ?? !0)) {
-      const p = this._opts.labelColor ?? "rgba(255,255,255,0.9)";
-      e.fillStyle = p, e.font = "13px sans-serif", e.textAlign = "left";
-      const m = a.name, u = a.magnitude !== null ? ` (${a.magnitude.toFixed(1)})` : "";
-      e.fillText(m + u, r.x + o + 6, r.y - 4), e.textAlign = "left";
+  _drawHighlight(s, e, i, t, r) {
+    var v;
+    const l = this._projectedCache.find((k) => k.object === e);
+    if (!l) return;
+    const c = i === "hover" ? this._opts.hoverHighlight : this._opts.selectHighlight, o = (c == null ? void 0 : c.color) ?? (i === "hover" ? "rgba(255,255,255,0.6)" : "rgba(100,200,255,0.8)"), g = (c == null ? void 0 : c.radius) ?? (i === "hover" ? 20 : 24);
+    if (s.save(), s.strokeStyle = o, s.lineWidth = i === "hover" ? 1.5 : 2, s.beginPath(), s.arc(l.x, l.y, g, 0, Math.PI * 2), s.stroke(), i === "hover" && (((v = this._opts.hoverHighlight) == null ? void 0 : v.showLabel) ?? !0)) {
+      const k = this._opts.labelColor ?? "rgba(255,255,255,0.9)";
+      s.fillStyle = k, s.font = "13px sans-serif", s.textAlign = "left";
+      const a = e.name, y = e.magnitude !== null ? ` (${e.magnitude.toFixed(1)})` : "";
+      s.fillText(a + y, l.x + g + 6, l.y - 4), s.textAlign = "left";
     }
-    e.restore();
+    s.restore();
   }
   /** Draw FOV indicator overlay(s). */
-  _drawFOV(e, a, i) {
-    const s = Array.isArray(this._opts.fov) ? this._opts.fov : this._opts.fov ? [this._opts.fov] : [];
-    for (const n of s) {
-      if (!n) continue;
-      const r = n.center ?? this._view.center, c = n.color ?? "rgba(255,255,100,0.6)", l = n.lineWidth ?? 1.5;
-      e.save(), e.strokeStyle = c, e.lineWidth = l, e.setLineDash([6, 4]), e.beginPath();
-      const o = 72;
-      let d = !1;
-      for (let p = 0; p <= o; p++) {
-        const m = p / o * 2 * Math.PI, u = r.dec + n.radiusDeg * Math.sin(m), g = Math.cos(r.dec * ae), _ = r.ra + (g > 1e-6 ? n.radiusDeg * Math.cos(m) / g : 0), f = this._project({ ra: _, dec: Math.max(-90, Math.min(90, u)) });
+  _drawFOV(s, e, i) {
+    const t = Array.isArray(this._opts.fov) ? this._opts.fov : this._opts.fov ? [this._opts.fov] : [];
+    for (const r of t) {
+      if (!r) continue;
+      const l = r.center ?? this._view.center, c = r.color ?? "rgba(255,255,100,0.6)", o = r.lineWidth ?? 1.5;
+      s.save(), s.strokeStyle = c, s.lineWidth = o, s.setLineDash([6, 4]), s.beginPath();
+      const g = 72;
+      let v = !1;
+      for (let k = 0; k <= g; k++) {
+        const a = k / g * 2 * Math.PI, y = l.dec + r.radiusDeg * Math.sin(a), u = Math.cos(l.dec * is), d = l.ra + (u > 1e-6 ? r.radiusDeg * Math.cos(a) / u : 0), f = this._project({ ra: d, dec: Math.max(-90, Math.min(90, y)) });
         if (!f.visible) {
-          d = !1;
+          v = !1;
           continue;
         }
-        d ? e.lineTo(f.x, f.y) : (e.moveTo(f.x, f.y), d = !0);
+        v ? s.lineTo(f.x, f.y) : (s.moveTo(f.x, f.y), v = !0);
       }
-      if (e.stroke(), e.setLineDash([]), n.label) {
-        const p = this._project({
-          ra: r.ra,
-          dec: Math.max(-90, Math.min(90, r.dec + n.radiusDeg))
+      if (s.stroke(), s.setLineDash([]), r.label) {
+        const k = this._project({
+          ra: l.ra,
+          dec: Math.max(-90, Math.min(90, l.dec + r.radiusDeg))
         });
-        p.visible && (e.fillStyle = c, e.font = "11px sans-serif", e.textAlign = "center", e.fillText(n.label, p.x, p.y - 6), e.textAlign = "left");
+        k.visible && (s.fillStyle = c, s.font = "11px sans-serif", s.textAlign = "center", s.fillText(r.label, k.x, k.y - 6), s.textAlign = "left");
       }
-      e.restore();
+      s.restore();
     }
   }
   /** Draw HUD elements (cardinal labels, horizon line, zenith marker). */
-  _drawHUD(e, a, i) {
-    const s = this._opts.hud, n = s.color ?? "rgba(255,255,255,0.5)", r = s.observer ?? this._opts.observer;
-    if (e.save(), e.fillStyle = n, e.strokeStyle = n, e.font = "14px sans-serif", s.cardinalDirections && (e.textAlign = "center", e.fillText("N", a / 2, 18), e.fillText("S", a / 2, i - 6), e.textAlign = "left", e.fillText("E", 6, i / 2 + 5), e.textAlign = "right", e.fillText("W", a - 6, i / 2 + 5), e.textAlign = "left"), r) {
-      const c = { ...r, date: r.date ?? /* @__PURE__ */ new Date() };
-      if (s.horizonLine) {
-        e.strokeStyle = s.color ?? "rgba(0,200,100,0.4)", e.lineWidth = 1, e.setLineDash([4, 4]), e.beginPath();
-        let l = !1;
-        for (let o = 0; o <= 360; o += 2) {
-          const d = k.horizontalToEquatorial({ alt: 0, az: o }, c), p = this._project(d);
-          if (!p.visible) {
-            l = !1;
+  _drawHUD(s, e, i) {
+    const t = this._opts.hud, r = t.color ?? "rgba(255,255,255,0.5)", l = t.observer ?? this._opts.observer;
+    if (s.save(), s.fillStyle = r, s.strokeStyle = r, s.font = "14px sans-serif", t.cardinalDirections && (s.textAlign = "center", s.fillText("N", e / 2, 18), s.fillText("S", e / 2, i - 6), s.textAlign = "left", s.fillText("E", 6, i / 2 + 5), s.textAlign = "right", s.fillText("W", e - 6, i / 2 + 5), s.textAlign = "left"), l) {
+      const c = { ...l, date: l.date ?? /* @__PURE__ */ new Date() };
+      if (t.horizonLine) {
+        s.strokeStyle = t.color ?? "rgba(0,200,100,0.4)", s.lineWidth = 1, s.setLineDash([4, 4]), s.beginPath();
+        let o = !1;
+        for (let g = 0; g <= 360; g += 2) {
+          const v = M.horizontalToEquatorial({ alt: 0, az: g }, c), k = this._project(v);
+          if (!k.visible) {
+            o = !1;
             continue;
           }
-          l ? e.lineTo(p.x, p.y) : (e.moveTo(p.x, p.y), l = !0);
+          o ? s.lineTo(k.x, k.y) : (s.moveTo(k.x, k.y), o = !0);
         }
-        e.stroke(), e.setLineDash([]);
+        s.stroke(), s.setLineDash([]);
       }
-      if (s.zenithMarker) {
-        const l = k.horizontalToEquatorial({ alt: 90, az: 0 }, c), o = this._project(l);
-        if (o.visible) {
-          e.strokeStyle = s.color ?? "rgba(255,255,255,0.5)", e.lineWidth = 1.5;
-          const d = 8;
-          e.beginPath(), e.moveTo(o.x - d, o.y), e.lineTo(o.x + d, o.y), e.moveTo(o.x, o.y - d), e.lineTo(o.x, o.y + d), e.stroke(), e.fillStyle = n, e.font = "11px sans-serif", e.textAlign = "center", e.fillText("Z", o.x, o.y - d - 4), e.textAlign = "left";
+      if (t.zenithMarker) {
+        const o = M.horizontalToEquatorial({ alt: 90, az: 0 }, c), g = this._project(o);
+        if (g.visible) {
+          s.strokeStyle = t.color ?? "rgba(255,255,255,0.5)", s.lineWidth = 1.5;
+          const v = 8;
+          s.beginPath(), s.moveTo(g.x - v, g.y), s.lineTo(g.x + v, g.y), s.moveTo(g.x, g.y - v), s.lineTo(g.x, g.y + v), s.stroke(), s.fillStyle = r, s.font = "11px sans-serif", s.textAlign = "center", s.fillText("Z", g.x, g.y - v - 4), s.textAlign = "left";
         }
       }
     }
-    e.restore();
+    s.restore();
   }
   // ── Real-time internals ──────────────────────────────────────────────────
   _realTimeLoop() {
     if (this._disposed) return;
-    const e = this._opts.observer;
-    if (!e) return;
-    const a = /* @__PURE__ */ new Date(), i = k.lst(a, e.lng);
-    this._view.center = { ra: i, dec: e.lat }, this._markDirty(), this._emitViewChange(), this._realTimeTimer = setTimeout(
+    const s = this._opts.observer;
+    if (!s) return;
+    const e = /* @__PURE__ */ new Date(), i = M.lst(e, s.lng);
+    this._view.center = { ra: i, dec: s.lat }, this._markDirty(), this._emitViewChange(), this._realTimeTimer = setTimeout(
       () => this._realTimeLoop(),
-      this._opts.realTimeInterval ?? R.realTimeInterval
+      this._opts.realTimeInterval ?? w.realTimeInterval
     );
   }
 }
-function $e(t, e, a) {
-  return new me(t, e, a);
+function ae(n, s, e) {
+  return new fs(n, s, e);
 }
-async function de(t, e = {}) {
-  const { duration: a = 400, easing: i = "ease-in-out", signal: s } = e;
-  if (s != null && s.aborted) return;
+async function hs(n, s = {}) {
+  const { duration: e = 400, easing: i = "ease-in-out", signal: t } = s;
+  if (t != null && t.aborted) return;
   if (!("startViewTransition" in document)) {
-    await t();
+    await n();
     return;
   }
-  document.documentElement.style.setProperty("--cosmos-vt-duration", `${a}ms`), document.documentElement.style.setProperty("--cosmos-vt-easing", i), await document.startViewTransition(t).finished;
+  document.documentElement.style.setProperty("--cosmos-vt-duration", `${e}ms`), document.documentElement.style.setProperty("--cosmos-vt-easing", i), await document.startViewTransition(n).finished;
 }
-function pe(t, e = {}) {
+function bs(n, s = {}) {
   const {
-    delay: a = 0,
+    delay: e = 0,
     stagger: i = 60,
-    duration: s = 500,
-    from: n = "bottom",
-    distance: r = "20px",
+    duration: t = 500,
+    from: r = "bottom",
+    distance: l = "20px",
     signal: c
-  } = e;
+  } = s;
   if (c != null && c.aborted) return Promise.resolve();
+  const g = {
+    top: `translateY(-${l})`,
+    bottom: `translateY(${l})`,
+    left: `translateX(-${l})`,
+    right: `translateX(${l})`
+  }[r], v = [...n.children];
+  return v.forEach((k) => {
+    k.style.opacity = "0", k.style.transform = g, k.style.transition = "none";
+  }), v.length === 0 ? Promise.resolve() : new Promise((k) => {
+    const a = performance.now() + e, y = () => {
+      v.forEach((d) => {
+        d.style.opacity = "1", d.style.transform = "none", d.style.transition = "";
+      }), k();
+    };
+    c == null || c.addEventListener("abort", y, { once: !0 });
+    const u = (d) => {
+      if (c != null && c.aborted) return;
+      let f = !0;
+      for (let b = 0; b < v.length; b++) {
+        const p = a + b * i;
+        if (d >= p) {
+          const m = v[b];
+          m.style.opacity === "0" && (m.style.transition = `opacity ${t}ms ease, transform ${t}ms cubic-bezier(0.2,0,0,1)`, m.style.opacity = "1", m.style.transform = "none"), d < p + t && (f = !1);
+        } else
+          f = !1;
+      }
+      f ? (c == null || c.removeEventListener("abort", y), k()) : requestAnimationFrame(u);
+    };
+    requestAnimationFrame(() => requestAnimationFrame(u));
+  });
+}
+function _s(n, s = {}) {
+  const {
+    stagger: e = 40,
+    duration: i = 300,
+    from: t = "bottom",
+    distance: r = "12px",
+    signal: l
+  } = s;
+  if (l != null && l.aborted) return Promise.resolve();
   const o = {
     top: `translateY(-${r})`,
     bottom: `translateY(${r})`,
     left: `translateX(-${r})`,
     right: `translateX(${r})`
-  }[n], d = [...t.children];
-  return d.forEach((p) => {
-    p.style.opacity = "0", p.style.transform = o, p.style.transition = "none";
-  }), d.length === 0 ? Promise.resolve() : new Promise((p) => {
-    const m = performance.now() + a, u = () => {
-      d.forEach((_) => {
-        _.style.opacity = "1", _.style.transform = "none", _.style.transition = "";
-      }), p();
+  }[t], g = [...n.children].reverse();
+  return g.length === 0 ? Promise.resolve() : new Promise((v) => {
+    const k = performance.now(), a = () => {
+      g.forEach((u) => {
+        u.style.opacity = "0", u.style.transform = o, u.style.transition = "";
+      }), v();
     };
-    c == null || c.addEventListener("abort", u, { once: !0 });
-    const g = (_) => {
-      if (c != null && c.aborted) return;
-      let f = !0;
-      for (let v = 0; v < d.length; v++) {
-        const b = m + v * i;
-        if (_ >= b) {
-          const h = d[v];
-          h.style.opacity === "0" && (h.style.transition = `opacity ${s}ms ease, transform ${s}ms cubic-bezier(0.2,0,0,1)`, h.style.opacity = "1", h.style.transform = "none"), _ < b + s && (f = !1);
+    l == null || l.addEventListener("abort", a, { once: !0 });
+    const y = (u) => {
+      if (l != null && l.aborted) return;
+      let d = !0;
+      for (let f = 0; f < g.length; f++) {
+        const b = k + f * e;
+        if (u >= b) {
+          const p = g[f];
+          p.style.opacity !== "0" && (p.style.transition = `opacity ${i}ms ease, transform ${i}ms ease`, p.style.opacity = "0", p.style.transform = o), u < b + i && (d = !1);
         } else
-          f = !1;
+          d = !1;
       }
-      f ? (c == null || c.removeEventListener("abort", u), p()) : requestAnimationFrame(g);
+      d ? (l == null || l.removeEventListener("abort", a), v()) : requestAnimationFrame(y);
     };
-    requestAnimationFrame(() => requestAnimationFrame(g));
+    requestAnimationFrame(y);
   });
 }
-function ue(t, e = {}) {
-  const {
-    stagger: a = 40,
-    duration: i = 300,
-    from: s = "bottom",
-    distance: n = "12px",
-    signal: r
-  } = e;
-  if (r != null && r.aborted) return Promise.resolve();
-  const l = {
-    top: `translateY(-${n})`,
-    bottom: `translateY(${n})`,
-    left: `translateX(-${n})`,
-    right: `translateX(${n})`
-  }[s], o = [...t.children].reverse();
-  return o.length === 0 ? Promise.resolve() : new Promise((d) => {
-    const p = performance.now(), m = () => {
-      o.forEach((g) => {
-        g.style.opacity = "0", g.style.transform = l, g.style.transition = "";
-      }), d();
-    };
-    r == null || r.addEventListener("abort", m, { once: !0 });
-    const u = (g) => {
-      if (r != null && r.aborted) return;
-      let _ = !0;
-      for (let f = 0; f < o.length; f++) {
-        const v = p + f * a;
-        if (g >= v) {
-          const b = o[f];
-          b.style.opacity !== "0" && (b.style.transition = `opacity ${i}ms ease, transform ${i}ms ease`, b.style.opacity = "0", b.style.transform = l), g < v + i && (_ = !1);
-        } else
-          _ = !1;
-      }
-      _ ? (r == null || r.removeEventListener("abort", m), d()) : requestAnimationFrame(u);
-    };
-    requestAnimationFrame(u);
-  });
-}
-function K(t, e, a = 300) {
+function W(n, s, e = 300) {
   return new Promise((i) => {
-    t.style.transition = `opacity ${a}ms ease`, t.style.opacity = e === "in" ? "1" : "0", t.style.pointerEvents = e === "in" ? "auto" : "none";
-    const s = () => {
-      t.removeEventListener("transitionend", s), i();
+    n.style.transition = `opacity ${e}ms ease`, n.style.opacity = s === "in" ? "1" : "0", n.style.pointerEvents = s === "in" ? "auto" : "none";
+    const t = () => {
+      n.removeEventListener("transitionend", t), i();
     };
-    t.addEventListener("transitionend", s, { once: !0 }), setTimeout(i, a + 50);
+    n.addEventListener("transitionend", t, { once: !0 }), setTimeout(i, e + 50);
   });
 }
-async function he(t, e, a = 400) {
-  e.style.opacity = "0", e.style.pointerEvents = "none", e.style.display = "", await Promise.all([
-    K(t, "out", a),
-    K(e, "in", a)
-  ]), t.style.display = "none";
+async function zs(n, s, e = 400) {
+  s.style.opacity = "0", s.style.pointerEvents = "none", s.style.display = "", await Promise.all([
+    W(n, "out", e),
+    W(s, "in", e)
+  ]), n.style.display = "none";
 }
-function ge(t, e = {}) {
-  const { duration: a = 500, easing: i = "cubic-bezier(0.4,0,0.2,1)", onDone: s, signal: n } = e;
-  if (n != null && n.aborted) return;
-  const r = t.getBoundingClientRect(), c = window.innerWidth / r.width, l = window.innerHeight / r.height, o = window.innerWidth / 2 - (r.left + r.width / 2), d = window.innerHeight / 2 - (r.top + r.height / 2);
-  t.style.transformOrigin = "center center", t.style.transition = "none", t.style.transform = "translate(0,0) scale(1,1)", requestAnimationFrame(() => {
-    n != null && n.aborted || requestAnimationFrame(() => {
-      if (n != null && n.aborted) return;
-      t.style.transition = `transform ${a}ms ${i}`, t.style.transform = `translate(${o}px, ${d}px) scale(${c}, ${l})`;
-      const p = () => {
-        t.removeEventListener("transitionend", p), t.style.transform = "", t.style.transition = "", s == null || s();
+function Ms(n, s = {}) {
+  const { duration: e = 500, easing: i = "cubic-bezier(0.4,0,0.2,1)", onDone: t, signal: r } = s;
+  if (r != null && r.aborted) return;
+  const l = n.getBoundingClientRect(), c = window.innerWidth / l.width, o = window.innerHeight / l.height, g = window.innerWidth / 2 - (l.left + l.width / 2), v = window.innerHeight / 2 - (l.top + l.height / 2);
+  n.style.transformOrigin = "center center", n.style.transition = "none", n.style.transform = "translate(0,0) scale(1,1)", requestAnimationFrame(() => {
+    r != null && r.aborted || requestAnimationFrame(() => {
+      if (r != null && r.aborted) return;
+      n.style.transition = `transform ${e}ms ${i}`, n.style.transform = `translate(${g}px, ${v}px) scale(${c}, ${o})`;
+      const k = () => {
+        n.removeEventListener("transitionend", k), n.style.transform = "", n.style.transition = "", t == null || t();
       };
-      t.addEventListener("transitionend", p, { once: !0 }), setTimeout(p, a + 100);
+      n.addEventListener("transitionend", k, { once: !0 }), setTimeout(k, e + 100);
     });
   });
 }
-function be(t, e = {}, a) {
-  const { duration: i = 400, easing: s = "cubic-bezier(0.4,0,0.2,1)", onDone: n, signal: r } = e;
-  if (r != null && r.aborted) return;
-  const c = t.getBoundingClientRect(), l = c.width / window.innerWidth, o = c.height / window.innerHeight, d = c.left + c.width / 2 - window.innerWidth / 2, p = c.top + c.height / 2 - window.innerHeight / 2, m = !a, u = a ?? document.createElement("div");
-  m && (Object.assign(u.style, {
+function As(n, s = {}, e) {
+  const { duration: i = 400, easing: t = "cubic-bezier(0.4,0,0.2,1)", onDone: r, signal: l } = s;
+  if (l != null && l.aborted) return;
+  const c = n.getBoundingClientRect(), o = c.width / window.innerWidth, g = c.height / window.innerHeight, v = c.left + c.width / 2 - window.innerWidth / 2, k = c.top + c.height / 2 - window.innerHeight / 2, a = !e, y = e ?? document.createElement("div");
+  a && (Object.assign(y.style, {
     position: "fixed",
     inset: "0",
     pointerEvents: "none",
     zIndex: "9999",
     transformOrigin: "center center"
-  }), document.body.appendChild(u)), u.style.transition = `transform ${i}ms ${s}, opacity ${i * 0.6}ms ease ${i * 0.4}ms`;
-  const g = () => {
-    u.removeEventListener("transitionend", g), m && u.remove(), n == null || n();
+  }), document.body.appendChild(y)), y.style.transition = `transform ${i}ms ${t}, opacity ${i * 0.6}ms ease ${i * 0.4}ms`;
+  const u = () => {
+    y.removeEventListener("transitionend", u), a && y.remove(), r == null || r();
   };
   requestAnimationFrame(() => {
-    if (r != null && r.aborted) {
-      g();
+    if (l != null && l.aborted) {
+      u();
       return;
     }
-    u.style.transform = `translate(${d}px, ${p}px) scale(${l}, ${o})`, u.style.opacity = "0", u.addEventListener("transitionend", g, { once: !0 }), setTimeout(g, i + 100);
+    y.style.transform = `translate(${v}px, ${k}px) scale(${o}, ${g})`, y.style.opacity = "0", y.addEventListener("transitionend", u, { once: !0 }), setTimeout(u, i + 100);
   });
 }
-const Xe = {
-  morph: de,
-  staggerIn: pe,
-  staggerOut: ue,
-  fade: K,
-  crossfade: he,
-  heroExpand: ge,
-  heroCollapse: be
-}, Qe = {
-  CONSTANTS: C,
-  Units: Me,
-  Math: k,
-  Sun: Ae,
-  Moon: G,
-  Eclipse: De,
-  Data: Fe,
-  Media: P,
-  API: { NASA: te, ESA: le, resolveSimbad: Re },
-  SkyMap: { render: se, stereographic: $, mollweide: q, gnomonic: W, Interactive: me, create: $e },
-  Transitions: { morph: de, staggerIn: pe, staggerOut: ue, fade: K, crossfade: he, heroExpand: ge, heroCollapse: be }
+const ye = {
+  morph: hs,
+  staggerIn: bs,
+  staggerOut: _s,
+  fade: W,
+  crossfade: zs,
+  heroExpand: Ms,
+  heroCollapse: As
+}, ue = {
+  CONSTANTS: S,
+  Units: Is,
+  Math: M,
+  Sun: Rs,
+  Moon: E,
+  Eclipse: Ns,
+  Data: ee,
+  Media: R,
+  API: { NASA: ts, ESA: ms, resolveSimbad: Es },
+  SkyMap: { render: os, stereographic: Y, mollweide: J, gnomonic: X, Interactive: fs, create: ae },
+  Transitions: { morph: hs, staggerIn: bs, staggerOut: _s, fade: W, crossfade: zs, heroExpand: Ms, heroCollapse: As }
 };
 export {
-  k as AstroMath,
-  B as BRIGHT_STARS,
-  C as CONSTANTS,
-  oe as CONSTELLATIONS,
-  we as DEEP_SKY_EXTRAS,
-  Fe as Data,
-  le as ESA,
-  De as Eclipse,
-  Z as IMAGE_FALLBACKS,
-  me as InteractiveSkyMap,
-  ie as MESSIER_CATALOG,
-  re as METEOR_SHOWERS,
-  P as Media,
-  G as Moon,
-  te as NASA,
-  We as PLANET_TEXTURES,
-  Ie as SOLAR_SYSTEM,
-  Ye as STAR_TEXTURES,
-  Je as SkyMap,
-  Ae as Sun,
-  Xe as Transitions,
-  Me as Units,
-  ne as canvasToEquatorial,
-  $e as createInteractiveSkyMap,
-  he as crossfade,
-  Qe as default,
-  K as fade,
-  W as gnomonic,
-  be as heroCollapse,
-  ge as heroExpand,
-  q as mollweide,
-  de as morph,
-  se as renderSkyMap,
-  xe as resolveImages,
-  Re as resolveSimbad,
-  Ve as spectralColor,
-  pe as staggerIn,
-  ue as staggerOut,
-  $ as stereographic
+  M as AstroMath,
+  U as BRIGHT_STARS,
+  S as CONSTANTS,
+  us as CONSTELLATIONS,
+  Gs as DEEP_SKY_EXTRAS,
+  ee as Data,
+  ms as ESA,
+  Ns as Eclipse,
+  q as IMAGE_FALLBACKS,
+  fs as InteractiveSkyMap,
+  cs as MESSIER_CATALOG,
+  gs as METEOR_SHOWERS,
+  R as Media,
+  E as Moon,
+  ts as NASA,
+  ge as PLANET_TEXTURES,
+  Ps as SOLAR_SYSTEM,
+  ve as STAR_TEXTURES,
+  ke as SkyMap,
+  Rs as Sun,
+  ye as Transitions,
+  Is as Units,
+  ks as canvasToEquatorial,
+  js as computeFov,
+  ae as createInteractiveSkyMap,
+  zs as crossfade,
+  ue as default,
+  W as fade,
+  as as getObjectImage,
+  X as gnomonic,
+  As as heroCollapse,
+  Ms as heroExpand,
+  J as mollweide,
+  hs as morph,
+  $s as prefetchImages,
+  os as renderSkyMap,
+  ds as resolveImages,
+  Es as resolveSimbad,
+  ne as spectralColor,
+  bs as staggerIn,
+  _s as staggerOut,
+  Y as stereographic,
+  Hs as tryDSS,
+  Bs as tryPanSTARRS
 };

@@ -1,14 +1,26 @@
-import type { ImageRef } from '../types.js';
+import type { ImageRef, ObjectImageResult, GetImageOptions, ProximityResult, EquatorialCoord } from '../types.js';
+interface CatalogInfo {
+    id: string;
+    ra: number | null;
+    dec: number | null;
+    size_arcmin?: number | undefined;
+    type: string;
+    name: string;
+    aliases: string[];
+}
+type CatalogLookupFn = (id: string) => CatalogInfo | null;
+type NearbyFn = (center: EquatorialCoord, radiusDeg: number) => ProximityResult[];
+/** @internal Wire the catalog lookup. Called once from index.ts. */
+export declare function _setCatalogLookup(fn: CatalogLookupFn): void;
+/** @internal Wire the nearby-search function. Called once from index.ts. */
+export declare function _setNearbyFn(fn: NearbyFn): void;
 /**
- * Curated Wikimedia Commons image entries for the most iconic Messier objects.
+ * Curated Wikimedia Commons image entries for the most iconic celestial objects.
  *
  * Each key is an object ID (e.g. `'m42'`) mapping to an array of
  * {@link ImageRef} records with a Wikimedia `filename` and `credit` string.
  * These are guaranteed-available with no API call needed, making them
  * ideal for offline fallbacks and static site generation.
- *
- * Use {@link Data.imageUrls}, {@link Data.progressiveImage}, or
- * {@link Data.imageSrcset} for convenient URL generation from this registry.
  *
  * @example
  * ```ts
@@ -17,8 +29,6 @@ import type { ImageRef } from '../types.js';
  * const orionImages = IMAGE_FALLBACKS['m42']
  * console.log(orionImages?.[0].filename)
  * // => 'Orion_Nebula_-_Hubble_2006_mosaic_18000.jpg'
- * console.log(orionImages?.[0].credit)
- * // => 'NASA . ESA . M. Robberto (STScI/ESA)'
  * ```
  */
 export declare const IMAGE_FALLBACKS: Readonly<Record<string, ImageRef[]>>;
@@ -74,3 +84,64 @@ export interface ResolveImageOptions {
  * ```
  */
 export declare function resolveImages(name: string, opts?: ResolveImageOptions): Promise<ResolvedImage[]>;
+/**
+ * Prefetch images for a list of object IDs in the background.
+ *
+ * Fires off `getObjectImage` for each ID concurrently (with `prefetch: false`
+ * to avoid recursive expansion). Results are stored in the in-memory cache
+ * so subsequent `Data.getImage()` calls for these objects resolve instantly.
+ *
+ * Call this when you know which objects the user is likely to view next —
+ * e.g. when a list of objects renders or when filtering narrows the results.
+ *
+ * @param ids - Object IDs to prefetch (e.g. `['m1', 'm2', 'm3']`).
+ *
+ * @example
+ * ```ts
+ * // Prefetch when a filtered list renders
+ * Data.prefetchImages(filteredObjects.map(o => o.id))
+ *
+ * // Later, when user taps M2:
+ * const img = await Data.getImage('m2', 'M2') // instant from cache
+ * ```
+ */
+export declare function prefetchImages(ids: string[]): void;
+/**
+ * Unified image pipeline that resolves the best available image for any
+ * celestial object, with built-in auto-prefetching of nearby objects.
+ *
+ * The pipeline runs a cascade of sources in priority order:
+ * 1. **In-memory cache** — instant (0ms) for previously resolved images.
+ * 2. **Curated Wikimedia static registry** — hand-picked iconic images
+ *    served via Wikimedia's thumbnail API with responsive `srcset`.
+ *    No network validation — URLs are trusted for zero-latency resolution.
+ * 3. **NASA / ESA text search** — high-quality press release imagery.
+ * 4. **Pan-STARRS DR2 cutout** *(opt-in, `skipCutouts: false`)* —
+ *    coordinate-based color composite. Accurate but raw survey data.
+ * 5. **DSS cutout** *(opt-in)* — full-sky grayscale fallback.
+ *
+ * After resolving, the pipeline automatically prefetches images for nearby
+ * objects in the background, so spatial browsing feels instant.
+ *
+ * @param id   - Object ID (e.g. `'mars'`, `'m42'`, `'sirius'`).
+ * @param name - Object display name used for API searches when no
+ *               coordinate-based source is available.
+ * @param opts - Width, srcset, cutout, and prefetch options.
+ * @returns The best available image, or `null` if no image could be found.
+ *
+ * @example
+ * ```ts
+ * // Just works — auto-prefetches nearby objects
+ * const img = await Data.getImage('m42', 'Orion Nebula', { width: 1200 })
+ * if (img) {
+ *   heroEl.src = img.src
+ *   heroEl.srcset = img.srcset ?? ''
+ *   creditEl.textContent = img.credit
+ * }
+ *
+ * // Disable auto-prefetch
+ * const img2 = await Data.getImage('m42', 'Orion Nebula', { prefetch: false })
+ * ```
+ */
+export declare function getObjectImage(id: string, name: string, opts?: GetImageOptions): Promise<ObjectImageResult | null>;
+export {};

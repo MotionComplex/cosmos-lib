@@ -1,4 +1,4 @@
-import { resolveImages } from './images.js';
+import { resolveImages, getObjectImage, prefetchImages } from './images.js';
 import type { CelestialObject, ObjectType, ProximityResult, EquatorialCoord, ProgressiveImageOptions } from '../types.js';
 import type { BrightStar } from './stars.js';
 import type { Constellation } from './constellations.js';
@@ -16,7 +16,9 @@ export { BRIGHT_STARS } from './stars.js';
 export { CONSTELLATIONS } from './constellations.js';
 export { MESSIER_CATALOG } from './messier.js';
 export { METEOR_SHOWERS } from './showers.js';
-export { IMAGE_FALLBACKS, resolveImages } from './images.js';
+export { IMAGE_FALLBACKS, resolveImages, getObjectImage, prefetchImages } from './images.js';
+export { computeFov, tryPanSTARRS, tryDSS } from './cutouts.js';
+export type { CutoutResult, CutoutOptions } from './cutouts.js';
 /**
  * Unified data-access facade for all built-in astronomical catalogs.
  *
@@ -231,6 +233,45 @@ export declare const Data: {
      * ```
      */
     resolveImages: typeof resolveImages;
+    /**
+     * Unified image pipeline — resolves the best available image for any
+     * celestial object and returns it in an optimized, ready-to-render format.
+     *
+     * Runs a cascading lookup: static registry (instant) → NASA → ESA.
+     * Results from API sources are cached in memory. The consumer only needs
+     * to provide the object ID and name — the pipeline handles source selection,
+     * URL construction, and responsive `srcset` generation.
+     *
+     * @param id   - Object ID (e.g. `'mars'`, `'m42'`, `'sirius'`).
+     * @param name - Display name for API search fallback (e.g. `'Mars'`).
+     * @param opts - Width, srcset, and source preferences.
+     * @returns The best available image, or `null` if nothing was found.
+     *
+     * @example
+     * ```ts
+     * const img = await Data.getImage('mars', 'Mars')
+     * if (img) {
+     *   heroEl.src = img.src
+     *   heroEl.srcset = img.srcset ?? ''
+     *   creditEl.textContent = img.credit
+     * }
+     * ```
+     */
+    getImage: typeof getObjectImage;
+    /**
+     * Prefetch images for a list of object IDs in the background.
+     *
+     * Results are stored in the in-memory cache so subsequent
+     * {@link Data.getImage} calls resolve instantly.
+     *
+     * @param ids - Object IDs to prefetch.
+     *
+     * @example
+     * ```ts
+     * Data.prefetchImages(filteredObjects.map(o => o.id))
+     * ```
+     */
+    prefetchImages: typeof prefetchImages;
     /**
      * Get all bright stars in the catalog (~200 IAU named stars).
      *
