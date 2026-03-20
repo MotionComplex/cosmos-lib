@@ -29,6 +29,8 @@ export { AstroMath }                           from './math.js'
 export { Sun }                                 from './sun.js'
 export { Moon }                                from './moon.js'
 export { Eclipse }                             from './eclipse.js'
+export { Planner }                             from './planner.js'
+export type { VisibleObject, WhatsUpOptions, VisibilityCurvePoint, BestWindowResult, PlanetEvent, MoonInterference, AirmassPoint } from './planner.js'
 export type { EclipseEvent }                   from './eclipse.js'
 export { Data, SOLAR_SYSTEM, DEEP_SKY_EXTRAS, BRIGHT_STARS, CONSTELLATIONS, MESSIER_CATALOG, METEOR_SHOWERS, IMAGE_FALLBACKS, resolveImages, getObjectImage, prefetchImages, computeFov, tryPanSTARRS, tryDSS } from './data/index.js'
 export type { SolarSystemBody, BrightStar, Constellation, MessierObject, MeteorShower, ResolvedImage, ResolveImageOptions, CutoutResult, CutoutOptions } from './data/index.js'
@@ -102,6 +104,7 @@ import { AstroMath }                           from './math.js'
 import { Sun }                                 from './sun.js'
 import { Moon }                                from './moon.js'
 import { Eclipse }                             from './eclipse.js'
+import { Planner }                             from './planner.js'
 import { Data }                                from './data/index.js'
 import { Media }                               from './media.js'
 import { NASA, ESA, resolveSimbad }            from './api.js'
@@ -135,6 +138,7 @@ const Cosmos = {
   Sun,
   Moon,
   Eclipse,
+  Planner,
   Data,
   Media,
   API:         { NASA, ESA, resolveSimbad },

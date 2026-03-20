@@ -11,30 +11,40 @@
 
 Transform the current render-only `renderSkyMap` into a fully interactive experience.
 
-- [ ] Pan & zoom (mouse drag, scroll wheel, touch pinch)
-- [ ] Click-to-identify — tap a star/object, return its `CelestialObject` data
-- [ ] Hover detection — highlight objects, show name/magnitude
-- [ ] FOV indicator overlay — telescope/binocular field of view circle
-- [ ] Real-time mode — auto-update as sidereal time advances
-- [ ] Configurable HUD (cardinal directions, horizon line, zenith marker)
-- [ ] Event emitter for interactions (`onSelect`, `onHover`, `onViewChange`)
+- [x] Pan & zoom (mouse drag, scroll wheel, touch pinch)
+- [x] Click-to-identify — tap a star/object, return its `CelestialObject` data
+- [x] Hover detection — highlight objects, show name/magnitude
+- [x] FOV indicator overlay — telescope/binocular field of view circle
+- [x] Real-time mode — auto-update as sidereal time advances
+- [x] Configurable HUD (cardinal directions, horizon line, zenith marker)
+- [x] Event emitter for interactions (`onSelect`, `onHover`, `onViewChange`)
+- [ ] **Docs & examples:**
+  - [ ] TypeDoc comments on all public API (classes, methods, options, events)
+  - [ ] Usage guide with code samples (pan/zoom, hit-testing, event listeners, HUD, FOV overlays)
+  - [ ] `observatory-app`: already integrated (`SkyMapView.tsx`) — verify docs link in `DocsReference`
+  - [ ] `react-native-app`: N/A (canvas-based renderer, no RN equivalent)
 
 ---
 
 ## P2 — Observation Planning (`whatsUp`)
 
-**Status:** Not started
-**Entry point:** New `src/planner.ts` module
+**Status:** Complete
+**Entry point:** `src/planner.ts`
 
 The killer utility: "What can I see tonight?"
 
-- [ ] `whatsUp(observer, options)` — objects above horizon, sorted by altitude, filtered by magnitude limit
-- [ ] `bestWindow(objectId, observer, date)` — when an object reaches max altitude on a given night
-- [ ] `visibilityCurve(objectId, observer, date)` — altitude vs. time array for plotting
-- [ ] Opposition/conjunction detection for planets
-- [ ] Moon interference scoring (angular separation + illumination)
-- [ ] Airmass calculation for photometry-aware planning
-- [ ] Filter by object type, constellation, catalog
+- [x] `whatsUp(observer, options)` — objects above horizon, sorted by altitude, filtered by magnitude limit
+- [x] `bestWindow(objectId, observer, date)` — when an object reaches max altitude on a given night
+- [x] `visibilityCurve(objectId, observer, date)` — altitude vs. time array for plotting
+- [x] Opposition/conjunction detection for planets
+- [x] Moon interference scoring (angular separation + illumination)
+- [x] Airmass calculation for photometry-aware planning
+- [x] Filter by object type, constellation, catalog
+- [ ] **Docs & examples:**
+  - [ ] TypeDoc comments on `Planner` module, all methods, option interfaces, and result types
+  - [ ] Usage guide with code samples (`whatsUp` basics, filtering, `bestWindow`, `visibilityCurve` plotting, moon interference, airmass)
+  - [ ] `observatory-app`: add "What's Up" panel to `Observatory` dashboard (replace manual bright-star loop with `Planner.whatsUp`); add visibility curve chart to `ObjectDetail`
+  - [ ] `react-native-app`: refactor Tonight screen to use `Planner.whatsUp` for the visible objects list; show moon interference badges on object cards
 
 ---
 
@@ -52,6 +62,11 @@ Decouple observation time from wall-clock time.
 - [ ] Snap-to-event (jump to next rise/set/transit)
 - [ ] Integration with sky map (drive rendering automatically)
 - [ ] Frame-accurate timing via `requestAnimationFrame`
+- [ ] **Docs & examples:**
+  - [ ] TypeDoc comments on `AstroClock` class, all methods, events, and options
+  - [ ] Usage guide with code samples (basic playback, speed control, snap-to-event, sky map integration)
+  - [ ] `observatory-app`: add play/pause/speed transport controls to `SkyMapView`, drive `ObserverContext` date from clock
+  - [ ] `react-native-app`: add time-travel slider/stepper to Tonight screen to scrub forward/backward through the night
 
 ---
 
@@ -70,6 +85,11 @@ Meet developers where they are.
 - [ ] `<SkyMap />` component wrapping the interactive sky map
 - [ ] SSR-safe — no DOM access during server render
 - [ ] React as optional peer dependency (like Three.js pattern)
+- [ ] **Docs & examples:**
+  - [ ] TypeDoc comments on every hook (params, return value, re-render behaviour, SSR safety)
+  - [ ] Usage guide with code samples (basic usage, combining hooks, SSR patterns)
+  - [ ] `observatory-app`: refactor `Observatory.tsx` + `MoonView.tsx` to replace inline `useMemo` chains with `useSkyPosition`, `useMoonPhase`, `useTwilight`, `useWhatsUp`
+  - [ ] `react-native-app`: refactor Tonight screen (`index.tsx`) and Detail screen to use hooks instead of manual `useMemo` + `AstroMath` calls
 
 ---
 
@@ -86,6 +106,11 @@ Remove adoption friction — most developers search npmjs.com.
 - [ ] Add npm badge to README
 - [ ] Publish initial public release
 - [ ] Set up provenance attestations (npm `--provenance`)
+- [ ] **Docs & examples:**
+  - [ ] Update README installation instructions with public npm registry
+  - [ ] Add npm version/download badges to README
+  - [ ] `observatory-app`: update `package.json` to install from public npm instead of monorepo link
+  - [ ] `react-native-app`: update `package.json` to install from public npm instead of monorepo link
 
 ---
 
@@ -103,6 +128,11 @@ Support serious charting apps without bloating the default bundle.
 - [ ] Integrate loaded tiers into `Data.search()`, `Data.nearby()`, sky map rendering
 - [ ] Binary format option (compact typed arrays) for Tier 2
 - [ ] Attribution & license compliance for HYG database
+- [ ] **Docs & examples:**
+  - [ ] TypeDoc comments on `Data.loadStarTier()`, tier constants, and binary format options
+  - [ ] Usage guide with code samples (lazy loading, progress feedback, bundle-size implications)
+  - [ ] `observatory-app`: add "Load more stars" toggle in `SkyMapView` that loads Tier 1/2 on demand; extend `Catalog` magnitude slider to show deeper stars when loaded
+  - [ ] `react-native-app`: add Tier 1 lazy-load button in Catalog screen with loading indicator
 
 ---
 
@@ -120,6 +150,11 @@ Upcoming astronomical events feed — a unique differentiator.
 - [ ] Integration with existing eclipse module
 - [ ] Integration with existing meteor shower data (peak dates → alerts)
 - [ ] iCal export for calendar integration
+- [ ] **Docs & examples:**
+  - [ ] TypeDoc comments on `nextEvents()`, `nextEvent()`, event types, and iCal export
+  - [ ] Usage guide with code samples (upcoming events list, calendar integration, type filtering)
+  - [ ] `observatory-app`: add new `/events` route with a timeline view (reuse `EclipseView` card pattern), show next 3 events on `Observatory` dashboard
+  - [ ] `react-native-app`: add "Events" tab showing upcoming events list with date/type badges, tappable cards linking to detail
 
 ---
 
@@ -139,6 +174,11 @@ TLE parsing + SGP4/SDP4 propagation.
 - [ ] Batch pass prediction for multiple satellites
 - [ ] Iridium flare prediction (stretch goal)
 - [ ] ISS-specific convenience (`Satellites.iss()`)
+- [ ] **Docs & examples:**
+  - [ ] TypeDoc comments on `Satellite` class, TLE parser, pass prediction, and CelesTrak integration
+  - [ ] Usage guide with code samples (TLE parsing, pass prediction, ISS tracking, batch queries)
+  - [ ] `observatory-app`: add satellite layer toggle in `SkyMapView` (ISS track overlay), new `/satellites` route with upcoming pass table
+  - [ ] `react-native-app`: add "ISS" card on Tonight screen showing next visible pass with countdown timer
 
 ---
 
@@ -147,6 +187,7 @@ TLE parsing + SGP4/SDP4 propagation.
 These are valuable but lower priority than the P1–P8 items above.
 
 ### Astrophotography Helpers
+
 - Milky Way core position & visibility
 - Golden hour / blue hour explicit API
 - Moon interference scoring for deep-sky targets
@@ -154,32 +195,37 @@ These are valuable but lower priority than the P1–P8 items above.
 - Polar alignment helper (Polaris offset from true pole)
 
 ### WebGL/WebGPU Sky Renderer
+
 - GPU-accelerated renderer for 100K+ star smooth pan/zoom
 - Milky Way background texture
 - Atmosphere gradient (horizon glow)
 - Separate `/webgl` entry point alongside Canvas
 
 ### Coordinate I/O & Interop
+
 - FITS WCS header parsing
 - VOTable XML parsing
 - Multi-resolver name resolution (Simbad + NED + VizieR)
 - Export formats: KML, CSV, JSON observation logs
 
 ### Offline-First & SSR
+
 - Ensure all math/data modules are DOM-free for Node.js SSR
 - Service worker recipe for caching NASA/ESA API responses
 - `isServer` / `isBrowser` guards where needed
 
 ### Framework Bindings (beyond React)
+
 - Vue composables (`/vue` entry point)
 - Svelte stores (`/svelte` entry point)
 - Solid.js signals
 
 ### Developer Experience
+
 - `playground/` demo app (interactive, deployable)
 - CLI tool (`npx cosmos tonight --lat 40 --lon -74`)
 - Storybook or similar for visual component testing
 
 ---
 
-*Last updated: 2026-03-19*
+_Last updated: 2026-03-21_
