@@ -22,7 +22,9 @@
     "paths": {
       "cosmos-lib": ["../../src"],
       "cosmos-lib/*": ["../../src/*"],
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "three": ["./node_modules/three"],
+      "three/*": ["./node_modules/three/*"]
     }
   },
   "include": ["src", "../../src"]
