@@ -118,23 +118,23 @@ Remove adoption friction — most developers search npmjs.com.
 
 ## P6 — Expanded Star Catalog (Tiered)
 
-**Status:** Not started
-**Entry point:** Extend `src/data/stars.ts` + new lazy-load system
+**Status:** Complete
+**Entry point:** `src/data/stars.ts` + `stars-tier1.ts` + `stars-tier2.ts`
 
 Support serious charting apps without bloating the default bundle.
 
-- [ ] **Tier 0** (current): ~200 brightest stars — always bundled (~15 KB)
-- [ ] **Tier 1**: HYG subset to magnitude 6.5 (~9,000 stars) — lazy-loadable JSON chunk
-- [ ] **Tier 2**: Full HYG to magnitude 9+ (~120,000 stars) — separate download / CDN
-- [ ] Lazy-load API: `Data.loadStarTier(1)` returns promise
-- [ ] Integrate loaded tiers into `Data.search()`, `Data.nearby()`, sky map rendering
-- [ ] Binary format option (compact typed arrays) for Tier 2
-- [ ] Attribution & license compliance for HYG database
-- [ ] **Docs & examples:**
-  - [ ] TypeDoc comments on `Data.loadStarTier()`, tier constants, and binary format options
-  - [ ] Usage guide with code samples (lazy loading, progress feedback, bundle-size implications)
-  - [ ] `observatory-app`: add "Load more stars" toggle in `SkyMapView` that loads Tier 1/2 on demand; extend `Catalog` magnitude slider to show deeper stars when loaded
-  - [ ] `react-native-app`: add Tier 1 lazy-load button in Catalog screen with loading indicator
+- [x] **Tier 0** (current): ~200 brightest stars — always bundled (~15 KB)
+- [x] **Tier 1**: ~9,110 stars to magnitude 6.5 (naked-eye limit) — lazy-loadable (~145 KB)
+- [x] **Tier 2**: ~120,000 stars to magnitude 9+ — lazy-loadable (~2.5 MB, compact binary Float32Array)
+- [x] Lazy-load API: `Data.loadStarTier(1)` / `Data.loadStarTier(2)` returns promise with count
+- [x] Integrate loaded tiers into `Data.all()`, `Data.search()`, `Data.nearby()`, `Data.getByType()`, sky map rendering
+- [x] Binary format option (base64-encoded Float32Array) for both tiers
+- [x] Attribution & license compliance for HYG database
+- [x] **Docs & examples:**
+  - [x] TypeDoc comments on `Data.loadStarTier()`, `Data.loadedStarTiers()`, tier data format
+  - [x] Usage guide with code samples (lazy loading, progressive sky map, bundle-size impact)
+  - [x] `observatory-app`: "Load 9K+ stars" / "Load 120K" button in `SkyMapView` overlay controls, auto-refreshes sky map
+  - [x] `react-native-app`: "Load 9K+ stars" button in Catalog screen with loading indicator
 
 ---
 

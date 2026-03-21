@@ -27,6 +27,8 @@ export default function CatalogScreen() {
   const router = useRouter();
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState<ObjectType | 'all'>('all');
+  const [tierLoading, setTierLoading] = useState(false);
+  const [tierLabel, setTierLabel] = useState('Load 9K+ stars');
 
   const results = useMemo(() => {
     if (query.length > 0) {
@@ -64,6 +66,24 @@ export default function CatalogScreen() {
           autoCapitalize="none"
         />
       </View>
+
+      {/* Load more stars */}
+      {!Data.loadedStarTiers().has(1) && (
+        <Pressable
+          style={[styles.filterChip, styles.filterChipActive, { marginHorizontal: spacing.lg, marginBottom: spacing.sm }]}
+          onPress={async () => {
+            setTierLoading(true);
+            const n = await Data.loadStarTier(1);
+            setTierLabel(`${n.toLocaleString()} stars loaded`);
+            setTierLoading(false);
+          }}
+          disabled={tierLoading}
+        >
+          <Text style={styles.filterLabelActive}>
+            {tierLoading ? 'Loading…' : tierLabel}
+          </Text>
+        </Pressable>
+      )}
 
       {/* Filters */}
       <View style={styles.filterRow}>

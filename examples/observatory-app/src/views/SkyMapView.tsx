@@ -64,6 +64,8 @@ export function SkyMapView() {
   const [showHUD, setShowHUD] = useState(true)
   const [fovPreset, setFovPreset] = useState(0)
   const [selectedObject, setSelectedObject] = useState<CelestialObject | null>(null)
+  const [starTierLoading, setStarTierLoading] = useState(false)
+  const [starTierLabel, setStarTierLabel] = useState('Load 9K+ stars')
 
   // ── AstroClock — drives the sky map time ───────────────────────────────
   const clockRef = useRef<AstroClock | null>(null)
@@ -103,6 +105,22 @@ export function SkyMapView() {
     clockRef.current?.setDate(new Date())
     clockRef.current?.pause()
   }, [])
+
+  const handleLoadStars = useCallback(async () => {
+    if (starTierLoading) return
+    setStarTierLoading(true)
+    const tiers = Data.loadedStarTiers()
+    if (!tiers.has(1)) {
+      const n = await Data.loadStarTier(1)
+      setStarTierLabel(`${n.toLocaleString()} loaded — load 120K?`)
+      skymapRef.current?.setObjects(Data.all().filter(o => o.ra != null && o.dec != null))
+    } else if (!tiers.has(2)) {
+      const n = await Data.loadStarTier(2)
+      setStarTierLabel(`${(n + 9110).toLocaleString()} total`)
+      skymapRef.current?.setObjects(Data.all().filter(o => o.ra != null && o.dec != null))
+    }
+    setStarTierLoading(false)
+  }, [starTierLoading])
 
   // Use simDate instead of now when clock is playing; otherwise use wall clock
   const effectiveDate = clockPlaying ? simDate : now
@@ -322,6 +340,14 @@ export function SkyMapView() {
               ))}
             </select>
           </div>
+          <button
+            className={styles.projBtn}
+            onClick={handleLoadStars}
+            disabled={starTierLoading || Data.loadedStarTiers().has(2)}
+            title="Load expanded star catalog from HYG database"
+          >
+            {starTierLoading ? 'Loading...' : starTierLabel}
+          </button>
         </div>
       </div>
       <DocsReference entries={DOCS_ENTRIES} guides={DOCS_GUIDES} />

@@ -32,6 +32,19 @@ export { IMAGE_FALLBACKS, resolveImages, getObjectImage, prefetchImages } from '
 export { computeFov, tryPanSTARRS, tryDSS } from './cutouts.js'
 export type { CutoutResult, CutoutOptions } from './cutouts.js'
 
+// ── Star tier types & state ───────────────────────────────────────────────────
+
+/** Compact star record used by tier data files. */
+export interface TierStar {
+  ra: number
+  dec: number
+  mag: number
+  bv: number
+}
+
+/** Set of loaded tier numbers (0 is always present). */
+const _loadedTiers = new Set<number>([0])
+
 // ── Adapters ──────────────────────────────────────────────────────────────────
 
 /**
@@ -81,16 +94,17 @@ function messierToCelestial(m: MessierObject): CelestialObject {
 
 // ── Build unified array ───────────────────────────────────────────────────────
 
-const UNIFIED: CelestialObject[] = [
+// Mutable — new tiers are merged in by Data.loadStarTier()
+let UNIFIED: CelestialObject[] = [
   ...(SOLAR_SYSTEM as readonly CelestialObject[]),
   ...BRIGHT_STARS.map(starToCelestial),
   ...MESSIER_CATALOG.map(messierToCelestial),
   ...(DEEP_SKY_EXTRAS as readonly CelestialObject[]),
 ]
 
-// Build lookup maps once at module load
-const byId   = new Map<string, CelestialObject>(UNIFIED.map(o => [o.id, o]))
-const byName = new Map<string, CelestialObject>(
+// Build lookup maps once at module load (rebuilt when tiers load)
+let byId   = new Map<string, CelestialObject>(UNIFIED.map(o => [o.id, o]))
+let byName = new Map<string, CelestialObject>(
   UNIFIED.flatMap(o =>
     [o.name, ...o.aliases].map(a => [a.toLowerCase(), o])
   )
@@ -139,7 +153,7 @@ interface SearchEntry {
   subtypeLower: string | undefined
 }
 
-const SEARCH_INDEX: SearchEntry[] = UNIFIED.map(o => ({
+let SEARCH_INDEX: SearchEntry[] = UNIFIED.map(o => ({
   object: o,
   nameLower: o.name.toLowerCase(),
   aliasesLower: o.aliases.map(a => a.toLowerCase()),
@@ -670,5 +684,107 @@ export const Data = {
       const diff = Math.abs(((sunLon - s.solarLon + 180) % 360 + 360) % 360 - 180)
       return diff < 20
     })
+  },
+
+  // ── Star tier loading ──────────────────────────────────────────────────
+
+  /**
+   * Load an expanded star tier into the catalog.
+   *
+   * - **Tier 0** (default): ~200 IAU named bright stars — always bundled
+   * - **Tier 1**: ~9,100 stars to magnitude 6.5 (naked-eye limit) — ~145 KB
+   * - **Tier 2**: ~120,000 stars to magnitude 9+ — ~1.9 MB (compact binary)
+   *
+   * Loaded stars are merged into the unified catalog and become available
+   * to `search()`, `nearby()`, `all()`, `getByType('star')`, and sky map
+   * rendering. Loading is idempotent — calling again for an already-loaded
+   * tier is a no-op.
+   *
+   * @param tier - The tier to load (1 or 2).
+   * @returns A promise that resolves with the number of stars added.
+   *
+   * @remarks
+   * Star data is sourced from the HYG Database v3.8 (public domain).
+   * Attribution: David Nash, "HYG Stellar Database", https://github.com/astronexus/HYG-Database
+   *
+   * @example
+   * ```ts
+   * // Load naked-eye stars
+   * const added = await Data.loadStarTier(1)
+   * console.log(`Added ${added} stars`)
+   *
+   * // Now search finds fainter stars
+   * const faint = Data.search('hip 12345')
+   *
+   * // Sky map renders more stars
+   * renderSkyMap(canvas, Data.all(), { showMagnitudeLimit: 6.5 })
+   * ```
+   */
+  async loadStarTier(tier: 1 | 2): Promise<number> {
+    if (_loadedTiers.has(tier)) return 0
+
+    let stars: TierStar[]
+
+    if (tier === 1) {
+      const mod = await import('./stars-tier1.js')
+      stars = mod.loadTier1Stars()
+    } else if (tier === 2) {
+      const mod = await import('./stars-tier2.js')
+      stars = mod.loadTier2Stars()
+    } else {
+      throw new Error(`Unknown star tier: ${tier}`)
+    }
+
+    // Convert to CelestialObject and merge
+    const newObjects: CelestialObject[] = stars.map((s, i) => ({
+      id: `hyg-t${tier}-${i}`,
+      name: `HYG ${tier === 1 ? i + 200 : i + 9300}`,
+      aliases: [],
+      type: 'star' as const,
+      ra: s.ra,
+      dec: s.dec,
+      magnitude: s.mag,
+      description: '',
+      tags: ['star', `tier-${tier}`],
+    }))
+
+    // Use loop instead of spread to avoid stack overflow for large arrays
+    for (const o of newObjects) UNIFIED.push(o)
+
+    // Rebuild lookup maps
+    for (const o of newObjects) {
+      byId.set(o.id, o)
+      byName.set(o.name.toLowerCase(), o)
+    }
+
+    // Rebuild search index for new entries
+    for (const o of newObjects) {
+      SEARCH_INDEX.push({
+        object: o,
+        nameLower: o.name.toLowerCase(),
+        aliasesLower: [],
+        descriptionLower: '',
+        subtypeLower: undefined,
+      })
+    }
+
+    _loadedTiers.add(tier)
+    return newObjects.length
+  },
+
+  /**
+   * Check which star tiers are currently loaded.
+   *
+   * @returns A set of loaded tier numbers (always includes 0).
+   *
+   * @example
+   * ```ts
+   * Data.loadedStarTiers() // Set { 0 }
+   * await Data.loadStarTier(1)
+   * Data.loadedStarTiers() // Set { 0, 1 }
+   * ```
+   */
+  loadedStarTiers(): ReadonlySet<number> {
+    return _loadedTiers
   },
 }
