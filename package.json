@@ -4,7 +4,7 @@
     "registry": "https://registry.npmjs.org",
     "access": "public"
   },
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "Reusable astronomical utilities: data, math, media, sky maps, NASA APIs, and UI transitions.",
   "author": "",
   "license": "MIT",
