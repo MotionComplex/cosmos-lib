@@ -9,6 +9,7 @@ const NAV_ITEMS = [
   { path: '/catalog', icon: '☰', label: 'Catalog' },
   { path: '/moon', icon: '☽', label: 'Moon' },
   { path: '/eclipses', icon: '◐', label: 'Eclipses' },
+  { path: '/events', icon: '📅', label: 'Events' },
 ]
 
 export function Sidebar() {

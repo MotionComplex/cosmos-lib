@@ -43,6 +43,15 @@ export default function RootLayout() {
           }}
         />
         <Tabs.Screen
+          name="events"
+          options={{
+            title: 'Events',
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name="calendar-outline" size={size} color={color} />
+            ),
+          }}
+        />
+        <Tabs.Screen
           name="apod"
           options={{
             title: 'APOD',

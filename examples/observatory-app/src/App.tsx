@@ -16,6 +16,7 @@ import { SolarSystem } from './views/SolarSystem'
 import { Catalog } from './views/Catalog'
 import { MoonView } from './views/MoonView'
 import { EclipseView } from './views/EclipseView'
+import { EventsView } from './views/EventsView'
 import { ObjectDetail } from './views/ObjectDetail'
 import { useObserver } from './hooks/useObserver'
 import { createContext, useContext, Component } from 'react'
@@ -82,6 +83,7 @@ export function App() {
               <Route path="/catalog" element={<Catalog />} />
               <Route path="/moon" element={<MoonView />} />
               <Route path="/eclipses" element={<EclipseView />} />
+              <Route path="/events" element={<EventsView />} />
               <Route path="/object/:id" element={<ObjectDetail />} />
             </Routes>
           </ErrorBoundary>

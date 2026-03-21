@@ -140,23 +140,23 @@ Support serious charting apps without bloating the default bundle.
 
 ## P7 — Event Calendar
 
-**Status:** Not started
-**Entry point:** New `src/events.ts` module
+**Status:** Complete
+**Entry point:** `src/events.ts`
 
 Upcoming astronomical events feed — a unique differentiator.
 
-- [ ] `nextEvents(observer, options)` — upcoming events within a date range
-- [ ] Event types: conjunctions, oppositions, elongations, eclipses, meteor shower peaks, equinoxes, solstices, moon phases
-- [ ] `nextEvent(type)` — next occurrence of a specific event type
-- [ ] Planetary conjunction detection (angular separation threshold)
-- [ ] Integration with existing eclipse module
-- [ ] Integration with existing meteor shower data (peak dates → alerts)
-- [ ] iCal export for calendar integration
-- [ ] **Docs & examples:**
-  - [ ] TypeDoc comments on `nextEvents()`, `nextEvent()`, event types, and iCal export
-  - [ ] Usage guide with code samples (upcoming events list, calendar integration, type filtering)
-  - [ ] `observatory-app`: add new `/events` route with a timeline view (reuse `EclipseView` card pattern), show next 3 events on `Observatory` dashboard
-  - [ ] `react-native-app`: add "Events" tab showing upcoming events list with date/type badges, tappable cards linking to detail
+- [x] `nextEvents(observer, options)` — upcoming events within a date range
+- [x] Event types: conjunctions, oppositions, elongations, eclipses, meteor shower peaks, equinoxes, solstices, moon phases
+- [x] `nextEvent(type)` — next occurrence of a specific event type
+- [x] Planetary conjunction detection (angular separation threshold)
+- [x] Integration with existing eclipse module
+- [x] Integration with existing meteor shower data (peak dates → alerts)
+- [x] iCal export for calendar integration
+- [x] **Docs & examples:**
+  - [x] TypeDoc comments on `nextEvents()`, `nextEvent()`, `toICal()`, event types and categories
+  - [x] Usage guide with code samples (upcoming events, filtering, iCal export)
+  - [x] `observatory-app`: new `/events` route with timeline view + iCal export button; next 3 events preview on Observatory dashboard
+  - [x] `react-native-app`: new "Events" tab with date badges, category colors, and detail text
 
 ---
 

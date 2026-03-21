@@ -32,6 +32,8 @@ export { Eclipse }                             from './eclipse.js'
 export { Planner }                             from './planner.js'
 export type { VisibleObject, WhatsUpOptions, VisibilityCurvePoint, BestWindowResult, PlanetEvent, MoonInterference, AirmassPoint } from './planner.js'
 export { AstroClock }                          from './clock.js'
+export { Events }                              from './events.js'
+export type { AstroEvent, AstroEventCategory, NextEventsOptions, EventVisibility } from './events.js'
 export type { AstroClockOptions, AstroClockEventMap, AstroEventType } from './clock.js'
 export type { EclipseEvent }                   from './eclipse.js'
 export { Data, SOLAR_SYSTEM, DEEP_SKY_EXTRAS, BRIGHT_STARS, CONSTELLATIONS, MESSIER_CATALOG, METEOR_SHOWERS, IMAGE_FALLBACKS, resolveImages, getObjectImage, prefetchImages, computeFov, tryPanSTARRS, tryDSS } from './data/index.js'
@@ -108,6 +110,7 @@ import { Moon }                                from './moon.js'
 import { Eclipse }                             from './eclipse.js'
 import { Planner }                             from './planner.js'
 import { AstroClock }                          from './clock.js'
+import { Events }                              from './events.js'
 import { Data }                                from './data/index.js'
 import { Media }                               from './media.js'
 import { NASA, ESA, resolveSimbad }            from './api.js'
@@ -143,6 +146,7 @@ const Cosmos = {
   Eclipse,
   Planner,
   AstroClock,
+  Events,
   Data,
   Media,
   API:         { NASA, ESA, resolveSimbad },

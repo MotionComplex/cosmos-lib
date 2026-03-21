@@ -13,7 +13,7 @@
  */
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Sun, Moon, AstroMath, Data, Eclipse } from 'cosmos-lib'
+import { Sun, Moon, AstroMath, Data, Eclipse, Events } from 'cosmos-lib'
 import { useMoonPhase, useTwilight, useWhatsUp } from 'cosmos-lib/react'
 import { useObserverCtx } from '../App'
 import { useNow } from '../hooks/useNow'
@@ -295,6 +295,29 @@ export function Observatory() {
           </div>
         </section>
       )}
+      {/* Upcoming events preview */}
+      <section className={styles.section}>
+        <h2 className={styles.sectionTitle}>
+          Upcoming Events
+          <span style={{ fontSize: '13px', fontWeight: 400, opacity: 0.5, marginLeft: '8px', cursor: 'pointer' }} onClick={() => navigate('/events')}>
+            View all →
+          </span>
+        </h2>
+        <div className={styles.showerGrid}>
+          {Events.nextEvents({ ...observer, date: now }, { days: 60, limit: 3 }).map((event, i) => (
+            <div key={`${event.category}-${i}`} className={styles.showerCard} role="button" tabIndex={0} onClick={() => navigate('/events')} onKeyDown={e => e.key === 'Enter' && navigate('/events')}>
+              <div className={styles.showerHeader}>
+                <h3 className={styles.showerName}>{event.title}</h3>
+                <span className={styles.showerZHR} style={{ textTransform: 'uppercase', fontSize: '10px', letterSpacing: '0.5px' }}>{event.category}</span>
+              </div>
+              <div className={styles.showerMeta}>
+                <span>{event.date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</span>
+                {event.detail && <><span>·</span><span>{event.detail}</span></>}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
       <DocsReference entries={DOCS_ENTRIES} guides={DOCS_GUIDES} />
     </div>
   )
