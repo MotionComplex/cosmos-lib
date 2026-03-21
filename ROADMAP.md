@@ -187,13 +187,13 @@ TLE parsing + SGP4/SDP4 propagation.
 ## P9 — Astrophotography & Equipment
 
 **Status:** Not started
-**Entry point:** New `src/equipment.ts` module + `src/data/equipment/` database
+**Entry point:** New `src/astro-photo.ts` module + `src/equipment.ts` + `src/data/equipment/` database
 
 Turn "what can I photograph tonight?" into a one-liner.
 
 ### Equipment Database
 
-- [ ] Camera database (~50 popular bodies): DSLR, mirrorless, dedicated astro (ZWO, QHY). Fields: sensor width/height (mm), pixel size (μm), pixel count, type, mount
+- [ ] Camera database (~50 popular bodies): DSLR, mirrorless, dedicated astro (ZWO, QHY). Fields: sensor width/height (mm), pixel size (μm), pixel count, read noise (e⁻), type, mount
 - [ ] Telescope database (~40 popular OTAs): reflectors, refractors, SCTs, Maksutovs. Fields: aperture (mm), focal length (mm), focal ratio, type
 - [ ] Lens database (~30 popular lenses): wide-field to telephoto. Fields: focal length (mm), max aperture (mm), mount type
 - [ ] Accessory support: Barlow lenses, focal reducers, field flatteners (multiplier factor)
@@ -209,23 +209,62 @@ Turn "what can I photograph tonight?" into a one-liner.
 - [ ] `rig.maxExposure(observer, objectId?)` — max untracked exposure before star trails (NPF rule, accounts for declination)
 - [ ] `rig.bestTargets(observer, options?)` — objects that fit well in the FOV and are visible tonight
 - [ ] `rig.resolution()` — effective resolution vs. typical seeing conditions
-- [ ] Mosaic planner — how many panels needed to cover an object larger than the FOV
+- [ ] `rig.samplingAdvice(seeing?)` — oversampled/undersampled/optimal for typical or given seeing (arcsec)
+- [ ] Mosaic planner — how many panels (with configurable overlap %) to cover an object larger than the FOV
+
+### Imaging Session Planner
+
+The high-value orchestrator — combines darkness, altitude, moon, and airmass into a scored timeline.
+
+- [ ] `AstroPhoto.sessionPlan(observer, targets, rig?, options?)` — scored imaging plan for a night
+  - Inputs: observer location/date, list of target IDs or RA/Dec, optional rig for framing context
+  - Per-target output: optimal start/end times, transit time, peak altitude, airmass range, moon separation + interference score
+  - Overall output: suggested sequence sorted by set-time-first strategy (shoot western targets first)
+- [ ] `AstroPhoto.imagingWindow(objectId, observer, options?)` — single-target optimal window
+  - When target is above airmass threshold (default < 2.0) during astronomical darkness
+  - Factors: altitude curve, moon distance, meridian transit, darkness bounds
+- [ ] Multi-target sequencing: prioritize targets that set earlier, maximize total integration time across the night
+- [ ] Configurable constraints: min altitude, max airmass, min moon separation, meridian flip buffer (for GEM mounts)
+
+### Exposure Calculator
+
+- [ ] `AstroPhoto.maxExposure({ focalLength, aperture?, pixelSize, declination? })` — NPF rule: `(35 × aperture + 30 × pixelPitch) / focalLength`, with declination correction
+- [ ] `AstroPhoto.ruleOf500(focalLength, cropFactor?)` — quick estimate, returns max seconds
+- [ ] `AstroPhoto.subExposure({ readNoise, skyBrightness, gain, targetSNR? })` — optimal single sub length so sky-noise dominates read-noise
+- [ ] `AstroPhoto.totalIntegration({ subLength, subSNR, targetSNR })` — how many subs / total hours for desired SNR
+
+### Milky Way Core Tracker
+
+Landscape astrophotographers plan entire trips around galactic center visibility.
+
+- [ ] `AstroPhoto.milkyWay(observer)` — galactic center (Sgr A*) position, rise/set/transit times
+- [ ] `AstroPhoto.milkyWaySeason(observer)` — date range when the core is visible during astronomical darkness
+- [ ] Galactic plane orientation angle relative to horizon at a given time (for arch composition planning)
+- [ ] Azimuth of the core at key times (rise, transit, set) for foreground scouting
+- [ ] Builds on existing `AstroMath.equatorialToGalactic` / `galacticToEquatorial` transforms
+
+### Polar Alignment Helper
+
+- [ ] `AstroPhoto.polarAlignment(observer)` — Polaris offset from true NCP (precession-aware, currently ~0.66°)
+- [ ] Position angle of Polaris relative to NCP at current time — matches polar scope reticle view
+- [ ] Southern hemisphere: Sigma Octantis position + offset from SCP
+- [ ] Drift alignment calculator: given measured RA/Dec drift rates, compute required azimuth/altitude mount corrections
 
 ### Astrophotography Utilities
 
-- [ ] Milky Way core position & visibility window for a given date/location
-- [ ] Golden hour / blue hour explicit times (sun at specific altitudes)
-- [ ] Polar alignment helper — Polaris offset from true celestial pole (precession-aware)
-- [ ] Light pollution estimation from observer coordinates (Bortle scale approximation)
-- [ ] Optimal imaging time — when target is highest with least moon interference and lowest airmass
+- [ ] `Sun.goldenHour(observer)` / `Sun.blueHour(observer)` — explicit times (sun altitude -4° to +6° / -6° to -4°)
+- [ ] `AstroPhoto.flatFrameWindow(observer)` — optimal twilight flat timing (sun at -2° to -6°, even sky brightness)
+- [ ] `AstroPhoto.collimationStar(observer)` — brightest star near zenith right now (lowest atmospheric distortion)
+- [ ] Light pollution utilities: Bortle scale ↔ SQM (mag/arcsec²) ↔ naked-eye limiting magnitude conversions
+- [ ] `AstroPhoto.bortleClass(sqm)` / `AstroPhoto.sqmToNELM(sqm)` — unit conversions
 
 ### Docs & examples
 
 - [ ] **Docs & examples:**
-  - [ ] TypeDoc comments on `Equipment` module, rig builder, all calculation methods
-  - [ ] Usage guide with code samples (equipment lookup, rig building, FOV/framing, exposure calc, target recommendations)
-  - [ ] `observatory-app`: new `/astrophoto` route with equipment picker, FOV overlay on sky map, target recommendations list
-  - [ ] `react-native-app`: "My Gear" screen with equipment selector, tonight's best targets for selected rig
+  - [ ] TypeDoc comments on `AstroPhoto` module, `Equipment` module, rig builder, all calculation methods
+  - [ ] Usage guide with code samples (session planning, equipment lookup, rig building, FOV/framing, exposure calc, Milky Way, polar alignment)
+  - [ ] `observatory-app`: new `/astrophoto` route with equipment picker, session planner timeline, FOV overlay on sky map, Milky Way visibility card
+  - [ ] `react-native-app`: "My Gear" screen with equipment selector, tonight's session plan, Milky Way core countdown
 
 ---
 
@@ -233,11 +272,11 @@ Turn "what can I photograph tonight?" into a one-liner.
 
 These are valuable but lower priority than the P1–P9 items above.
 
-### Astrophotography (Additional)
+### Astrophotography (Additional — beyond P9)
 
-- Advanced stacking advisor (sub-exposure calculator based on read noise, sky brightness, gain)
 - FITS/XISF header reader for plate-solving integration
-- Drift alignment simulation
+- Observation/imaging log: structured session schema (target, gear, conditions, exposures, notes) with CSV/JSON export
+- Autoguider metrics: RMS error estimation from periodic error + seeing model
 
 ### WebGL/WebGPU Sky Renderer
 
@@ -273,4 +312,4 @@ These are valuable but lower priority than the P1–P9 items above.
 
 ---
 
-_Last updated: 2026-03-22_
+_Last updated: 2026-03-21_
