@@ -184,17 +184,60 @@ TLE parsing + SGP4/SDP4 propagation.
 
 ---
 
+## P9 — Astrophotography & Equipment
+
+**Status:** Not started
+**Entry point:** New `src/equipment.ts` module + `src/data/equipment/` database
+
+Turn "what can I photograph tonight?" into a one-liner.
+
+### Equipment Database
+
+- [ ] Camera database (~50 popular bodies): DSLR, mirrorless, dedicated astro (ZWO, QHY). Fields: sensor width/height (mm), pixel size (μm), pixel count, type, mount
+- [ ] Telescope database (~40 popular OTAs): reflectors, refractors, SCTs, Maksutovs. Fields: aperture (mm), focal length (mm), focal ratio, type
+- [ ] Lens database (~30 popular lenses): wide-field to telephoto. Fields: focal length (mm), max aperture (mm), mount type
+- [ ] Accessory support: Barlow lenses, focal reducers, field flatteners (multiplier factor)
+- [ ] `Equipment.cameras()`, `Equipment.telescopes()`, `Equipment.lenses()` — browse/search the database
+- [ ] `Equipment.camera(name)`, `Equipment.telescope(name)`, `Equipment.lens(name)` — lookup by name
+
+### Rig Builder & Calculations
+
+- [ ] `Equipment.rig({ camera, telescope?, lens?, barlow? })` — build a rig from database names or custom specs
+- [ ] `rig.fov()` — field of view in degrees (width × height)
+- [ ] `rig.pixelScale()` — arcseconds per pixel
+- [ ] `rig.framing(objectId)` — how well an object fits the sensor (fill %, fits, orientation, panel count for mosaics)
+- [ ] `rig.maxExposure(observer, objectId?)` — max untracked exposure before star trails (NPF rule, accounts for declination)
+- [ ] `rig.bestTargets(observer, options?)` — objects that fit well in the FOV and are visible tonight
+- [ ] `rig.resolution()` — effective resolution vs. typical seeing conditions
+- [ ] Mosaic planner — how many panels needed to cover an object larger than the FOV
+
+### Astrophotography Utilities
+
+- [ ] Milky Way core position & visibility window for a given date/location
+- [ ] Golden hour / blue hour explicit times (sun at specific altitudes)
+- [ ] Polar alignment helper — Polaris offset from true celestial pole (precession-aware)
+- [ ] Light pollution estimation from observer coordinates (Bortle scale approximation)
+- [ ] Optimal imaging time — when target is highest with least moon interference and lowest airmass
+
+### Docs & examples
+
+- [ ] **Docs & examples:**
+  - [ ] TypeDoc comments on `Equipment` module, rig builder, all calculation methods
+  - [ ] Usage guide with code samples (equipment lookup, rig building, FOV/framing, exposure calc, target recommendations)
+  - [ ] `observatory-app`: new `/astrophoto` route with equipment picker, FOV overlay on sky map, target recommendations list
+  - [ ] `react-native-app`: "My Gear" screen with equipment selector, tonight's best targets for selected rig
+
+---
+
 ## Future Considerations (Unranked)
 
-These are valuable but lower priority than the P1–P8 items above.
+These are valuable but lower priority than the P1–P9 items above.
 
-### Astrophotography Helpers
+### Astrophotography (Additional)
 
-- Milky Way core position & visibility
-- Golden hour / blue hour explicit API
-- Moon interference scoring for deep-sky targets
-- FOV calculator (sensor size + focal length → sky overlay)
-- Polar alignment helper (Polaris offset from true pole)
+- Advanced stacking advisor (sub-exposure calculator based on read noise, sky brightness, gain)
+- FITS/XISF header reader for plate-solving integration
+- Drift alignment simulation
 
 ### WebGL/WebGPU Sky Renderer
 
