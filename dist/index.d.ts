@@ -31,6 +31,10 @@ export { Planner } from './planner.js';
 export type { VisibleObject, WhatsUpOptions, VisibilityCurvePoint, BestWindowResult, PlanetEvent, MoonInterference, AirmassPoint } from './planner.js';
 export { AstroClock } from './clock.js';
 export { Events } from './events.js';
+export { Equipment, Rig } from './equipment.js';
+export { AstroPhoto } from './astro-photo.js';
+export type { SessionTarget, ImagingWindow, MilkyWayInfo, PolarAlignmentInfo, SessionPlanOptions } from './astro-photo.js';
+export type { Camera, Telescope, Lens, Tracker, FOV, FramingResult, SamplingAdvice, RigOptions } from './equipment.js';
 export type { AstroEvent, AstroEventCategory, NextEventsOptions, EventVisibility } from './events.js';
 export type { AstroClockOptions, AstroClockEventMap, AstroEventType } from './clock.js';
 export type { EclipseEvent } from './eclipse.js';
@@ -40,6 +44,8 @@ export { PLANET_TEXTURES, STAR_TEXTURES } from './data/textures.js';
 export type { TextureInfo } from './data/textures.js';
 export { Media } from './media.js';
 export { NASA, ESA, resolveSimbad } from './api.js';
+export { Astrobin } from './astrobin.js';
+export type { AstrobinCamera, AstrobinTelescope, AstrobinSearchOptions } from './astrobin.js';
 export { renderSkyMap, stereographic, mollweide, gnomonic, spectralColor, SkyMap } from './skymap.js';
 export { InteractiveSkyMap, createInteractiveSkyMap } from './skymap-interactive.js';
 export { canvasToEquatorial } from './skymap-hittest.js';
@@ -168,6 +174,86 @@ declare const Cosmos: {
         readonly nextEvent: (category: import("./events.js").AstroEventCategory, observer: import("./types.js").ObserverParams, days?: number) => import("./events.js").AstroEvent | null;
         readonly toICal: (events: import("./events.js").AstroEvent[], calendarName?: string) => string;
     };
+    readonly Equipment: {
+        readonly cameras: () => readonly import("./equipment.js").Camera[];
+        readonly camera: (name: string) => import("./equipment.js").Camera | null;
+        readonly telescopes: () => readonly import("./equipment.js").Telescope[];
+        readonly telescope: (name: string) => import("./equipment.js").Telescope | null;
+        readonly lenses: () => readonly import("./equipment.js").Lens[];
+        readonly lens: (name: string) => import("./equipment.js").Lens | null;
+        readonly trackers: () => readonly import("./equipment.js").Tracker[];
+        readonly tracker: (name: string) => import("./equipment.js").Tracker | null;
+        readonly rig: (options: import("./equipment.js").RigOptions) => import("./equipment.js").Rig;
+        readonly search: (query: string, limit?: number) => Array<{
+            category: "camera" | "telescope" | "lens" | "tracker";
+            name: string;
+            item: import("./equipment.js").Camera | import("./equipment.js").Telescope | import("./equipment.js").Lens | import("./equipment.js").Tracker;
+        }>;
+    };
+    readonly AstroPhoto: {
+        readonly sessionPlan: (observer: import("./types.js").ObserverParams, targets: string[], options?: import("./astro-photo.js").SessionPlanOptions) => import("./astro-photo.js").SessionTarget[];
+        readonly imagingWindow: (objectId: string, observer: import("./types.js").ObserverParams, maxAirmass?: number) => import("./astro-photo.js").ImagingWindow | null;
+        readonly maxExposure: (params: {
+            focalLength: number;
+            aperture?: number;
+            pixelSize?: number;
+            declination?: number;
+        }) => number;
+        readonly ruleOf500: (focalLength: number, cropFactor?: number) => number;
+        readonly subExposure: (params: {
+            readNoise: number;
+            skyBrightness: number;
+            targetRatio?: number;
+        }) => number;
+        readonly totalIntegration: (params: {
+            subLength: number;
+            subSNR: number;
+            targetSNR: number;
+        }) => {
+            hours: number;
+            subs: number;
+        };
+        readonly milkyWay: (observer: import("./types.js").ObserverParams) => import("./astro-photo.js").MilkyWayInfo;
+        readonly milkyWaySeason: (observer: import("./types.js").ObserverParams) => number[];
+        readonly polarAlignment: (observer: import("./types.js").ObserverParams) => import("./astro-photo.js").PolarAlignmentInfo;
+        readonly goldenHour: (observer: import("./types.js").ObserverParams) => {
+            morning: {
+                start: Date;
+                end: Date;
+            } | null;
+            evening: {
+                start: Date;
+                end: Date;
+            } | null;
+        };
+        readonly blueHour: (observer: import("./types.js").ObserverParams) => {
+            morning: {
+                start: Date;
+                end: Date;
+            } | null;
+            evening: {
+                start: Date;
+                end: Date;
+            } | null;
+        };
+        readonly flatFrameWindow: (observer: import("./types.js").ObserverParams) => {
+            morning: {
+                start: Date;
+                end: Date;
+            } | null;
+            evening: {
+                start: Date;
+                end: Date;
+            } | null;
+        };
+        readonly collimationStar: (observer: import("./types.js").ObserverParams) => {
+            name: string;
+            altitude: number;
+            azimuth: number;
+        } | null;
+        readonly bortleClass: (sqm: number) => number;
+        readonly sqmToNELM: (sqm: number) => number;
+    };
     readonly Data: {
         get(id: string): import("./types.js").CelestialObject | null;
         getByName(name: string): import("./types.js").CelestialObject | null;
@@ -222,6 +308,22 @@ declare const Cosmos: {
         };
         readonly ESA: {
             searchHubble(query: string, limit?: number): Promise<import("./types.js").ESAHubbleResult[]>;
+        };
+        readonly Astrobin: {
+            readonly setCredentials: (apiKey: string, apiSecret: string) => void;
+            readonly searchCameras: (query: string, options?: import("./astrobin.js").AstrobinSearchOptions) => Promise<import("./astrobin.js").AstrobinCamera[]>;
+            readonly searchTelescopes: (query: string, options?: import("./astrobin.js").AstrobinSearchOptions) => Promise<import("./astrobin.js").AstrobinTelescope[]>;
+            readonly toCamera: (astrobinCamera: import("./astrobin.js").AstrobinCamera, specs: {
+                sensorWidth: number;
+                sensorHeight: number;
+                pixelSize: number;
+                pixelsX?: number;
+                pixelsY?: number;
+            }) => import("./equipment.js").Camera;
+            readonly toTelescope: (astrobinTelescope: import("./astrobin.js").AstrobinTelescope, overrides?: {
+                aperture?: number;
+                focalLength?: number;
+            }) => import("./equipment.js").Telescope;
         };
         readonly resolveSimbad: typeof resolveSimbad;
     };
