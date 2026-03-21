@@ -33,6 +33,10 @@ export { Planner }                             from './planner.js'
 export type { VisibleObject, WhatsUpOptions, VisibilityCurvePoint, BestWindowResult, PlanetEvent, MoonInterference, AirmassPoint } from './planner.js'
 export { AstroClock }                          from './clock.js'
 export { Events }                              from './events.js'
+export { Equipment, Rig }                      from './equipment.js'
+export { AstroPhoto }                          from './astro-photo.js'
+export type { SessionTarget, ImagingWindow, MilkyWayInfo, PolarAlignmentInfo, SessionPlanOptions } from './astro-photo.js'
+export type { Camera, Telescope, Lens, Tracker, FOV, FramingResult, SamplingAdvice, RigOptions } from './equipment.js'
 export type { AstroEvent, AstroEventCategory, NextEventsOptions, EventVisibility } from './events.js'
 export type { AstroClockOptions, AstroClockEventMap, AstroEventType } from './clock.js'
 export type { EclipseEvent }                   from './eclipse.js'
@@ -42,6 +46,8 @@ export { PLANET_TEXTURES, STAR_TEXTURES }      from './data/textures.js'
 export type { TextureInfo }                    from './data/textures.js'
 export { Media }                               from './media.js'
 export { NASA, ESA, resolveSimbad }            from './api.js'
+export { Astrobin }                            from './astrobin.js'
+export type { AstrobinCamera, AstrobinTelescope, AstrobinSearchOptions } from './astrobin.js'
 export { renderSkyMap, stereographic, mollweide, gnomonic, spectralColor, SkyMap } from './skymap.js'
 export { InteractiveSkyMap, createInteractiveSkyMap } from './skymap-interactive.js'
 export { canvasToEquatorial } from './skymap-hittest.js'
@@ -111,9 +117,12 @@ import { Eclipse }                             from './eclipse.js'
 import { Planner }                             from './planner.js'
 import { AstroClock }                          from './clock.js'
 import { Events }                              from './events.js'
+import { Equipment }                           from './equipment.js'
+import { AstroPhoto }                          from './astro-photo.js'
 import { Data }                                from './data/index.js'
 import { Media }                               from './media.js'
 import { NASA, ESA, resolveSimbad }            from './api.js'
+import { Astrobin }                            from './astrobin.js'
 import { renderSkyMap, stereographic, mollweide, gnomonic } from './skymap.js'
 import { InteractiveSkyMap, createInteractiveSkyMap } from './skymap-interactive.js'
 import { morph, staggerIn, staggerOut, fade, crossfade, heroExpand, heroCollapse } from './transitions.js'
@@ -147,9 +156,11 @@ const Cosmos = {
   Planner,
   AstroClock,
   Events,
+  Equipment,
+  AstroPhoto,
   Data,
   Media,
-  API:         { NASA, ESA, resolveSimbad },
+  API:         { NASA, ESA, Astrobin, resolveSimbad },
   SkyMap:      { render: renderSkyMap, stereographic, mollweide, gnomonic, Interactive: InteractiveSkyMap, create: createInteractiveSkyMap },
   Transitions: { morph, staggerIn, staggerOut, fade, crossfade, heroExpand, heroCollapse },
 } as const

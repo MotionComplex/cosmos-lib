@@ -10,6 +10,7 @@ const NAV_ITEMS = [
   { path: '/moon', icon: '☽', label: 'Moon' },
   { path: '/eclipses', icon: '◐', label: 'Eclipses' },
   { path: '/events', icon: '📅', label: 'Events' },
+  { path: '/astrophoto', icon: '📷', label: 'Astrophoto' },
 ]
 
 export function Sidebar() {

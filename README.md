@@ -89,6 +89,9 @@ scene.add(group)
 | **AstroClock** | Simulation clock with speed control, forward/reverse playback, snap-to-event, and requestAnimationFrame support. | [Clock](docs/api/clock.md) |
 | **Sky Map** | Stereographic, Mollweide, and gnomonic projections. Interactive canvas sky chart with pan, zoom, click-to-identify, FOV overlays, HUD, and real-time tracking. | [Sky Map](docs/api/skymap.md) |
 | **React Hooks** | `useSkyPosition`, `useMoonPhase`, `useAstroClock`, `useWhatsUp`, `useTwilight`, `<SkyMap />`. SSR-safe. Optional peer dependency. | [React](docs/api/react.md) |
+| **Equipment** | 160+ cameras, telescopes, lenses, and star trackers. Rig builder with FOV, pixel scale, framing, exposure limits, payload check, and target recommendations. | [Astrophoto](docs/api/astrophoto.md) |
+| **AstroPhoto** | Session planner, exposure calculators (NPF, rule of 500, sub-exposure), Milky Way tracker, polar alignment, golden/blue hour, light pollution tools. | [Astrophoto](docs/api/astrophoto.md) |
+| **Events** | Upcoming events feed: moon phases, eclipses, meteor showers, oppositions, conjunctions, equinoxes, solstices. iCal export. Observer visibility scoring. | [Events](docs/api/events.md) |
 | **Media** | Progressive image loading with fallback chains, Wikimedia/Cloudinary URL builders, responsive `srcset` generation. | [Media](docs/api/media.md) |
 | **Transitions** | View Transitions API wrappers: morph, stagger reveal, fade, crossfade, hero expand/collapse. | [Transitions](docs/api/transitions.md) |
 | **Three.js** | Planet/nebula/starfield factories, LOD texture management, camera flights. Optional peer dependency. | [Three.js](docs/api/three.md) |

@@ -52,6 +52,15 @@ export default function RootLayout() {
           }}
         />
         <Tabs.Screen
+          name="astrophoto"
+          options={{
+            title: 'Astrophoto',
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name="camera-outline" size={size} color={color} />
+            ),
+          }}
+        />
+        <Tabs.Screen
           name="apod"
           options={{
             title: 'APOD',
