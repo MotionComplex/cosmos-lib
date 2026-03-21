@@ -27,6 +27,10 @@ export { AstroMath } from './math.js';
 export { Sun } from './sun.js';
 export { Moon } from './moon.js';
 export { Eclipse } from './eclipse.js';
+export { Planner } from './planner.js';
+export type { VisibleObject, WhatsUpOptions, VisibilityCurvePoint, BestWindowResult, PlanetEvent, MoonInterference, AirmassPoint } from './planner.js';
+export { AstroClock } from './clock.js';
+export type { AstroClockOptions, AstroClockEventMap, AstroEventType } from './clock.js';
 export type { EclipseEvent } from './eclipse.js';
 export { Data, SOLAR_SYSTEM, DEEP_SKY_EXTRAS, BRIGHT_STARS, CONSTELLATIONS, MESSIER_CATALOG, METEOR_SHOWERS, IMAGE_FALLBACKS, resolveImages, getObjectImage, prefetchImages, computeFov, tryPanSTARRS, tryDSS } from './data/index.js';
 export type { SolarSystemBody, BrightStar, Constellation, MessierObject, MeteorShower, ResolvedImage, ResolveImageOptions, CutoutResult, CutoutOptions } from './data/index.js';
@@ -39,6 +43,7 @@ export { InteractiveSkyMap, createInteractiveSkyMap } from './skymap-interactive
 export { canvasToEquatorial } from './skymap-hittest.js';
 export { morph, staggerIn, staggerOut, fade, crossfade, heroExpand, heroCollapse, Transitions, } from './transitions.js';
 export type { ObjectType, DistanceUnit, Distance, CelestialObject, SearchResult, ProximityResult, EquatorialCoord, HorizontalCoord, GalacticCoord, EclipticCoord, ObserverParams, ProjectedPoint, PlanetName, PlanetPosition, NutationResult, RiseTransitSet, MoonPhaseName, MoonPhase, MoonPosition, SunPosition, TwilightTimes, NASAImageResult, APODResult, ESAHubbleResult, SimbadResult, ImageRef, ProgressiveImageOptions, CloudinaryOptions, ObjectImageResult, GetImageOptions, ProjectionName, SkyMapRenderOptions, ProjectedObject, SkyMapViewState, SkyMapEventMap, FOVOverlayOptions, HUDOptions, InteractiveSkyMapOptions, MorphOptions, StaggerOptions, HeroExpandOptions, } from './types.js';
+import { AstroClock } from './clock.js';
 import { resolveSimbad } from './api.js';
 import { renderSkyMap, stereographic, mollweide, gnomonic } from './skymap.js';
 import { InteractiveSkyMap, createInteractiveSkyMap } from './skymap-interactive.js';
@@ -144,6 +149,18 @@ declare const Cosmos: {
         readonly _checkSolarEclipse: (newMoon: Date) => import("./eclipse.js").EclipseEvent | null;
         readonly _checkLunarEclipse: (fullMoon: Date) => import("./eclipse.js").EclipseEvent | null;
     };
+    readonly Planner: {
+        readonly whatsUp: (observer: import("./types.js").ObserverParams, options?: import("./planner.js").WhatsUpOptions) => import("./planner.js").VisibleObject[];
+        readonly bestWindow: (objectId: string, observer: import("./types.js").ObserverParams, minAlt?: number) => import("./planner.js").BestWindowResult | null;
+        readonly visibilityCurve: (objectId: string, observer: import("./types.js").ObserverParams, steps?: number) => import("./planner.js").VisibilityCurvePoint[] | null;
+        readonly planetEvents: (observer: import("./types.js").ObserverParams, options?: {
+            planets?: import("./types.js").PlanetName[];
+            days?: number;
+        }) => import("./planner.js").PlanetEvent[];
+        readonly moonInterference: (objectId: string, observer: import("./types.js").ObserverParams) => import("./planner.js").MoonInterference | null;
+        readonly airmassCurve: (objectId: string, observer: import("./types.js").ObserverParams, steps?: number) => import("./planner.js").AirmassPoint[] | null;
+    };
+    readonly AstroClock: typeof AstroClock;
     readonly Data: {
         get(id: string): import("./types.js").CelestialObject | null;
         getByName(name: string): import("./types.js").CelestialObject | null;

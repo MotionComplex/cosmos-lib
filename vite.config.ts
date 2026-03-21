@@ -31,6 +31,7 @@ export default defineConfig({
     rollupOptions: {
       external: ['three', 'react', 'react/jsx-runtime'],
       output: {
+        exports: 'named',
         globals: { three: 'THREE', react: 'React', 'react/jsx-runtime': 'jsxRuntime' },
       },
     },

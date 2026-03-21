@@ -95,22 +95,24 @@ Meet developers where they are.
 
 ## P5 — Public npm Publish
 
-**Status:** Not started
+**Status:** Ready to publish
 **Tracking:** Package registry & distribution
 
 Remove adoption friction — most developers search npmjs.com.
 
-- [ ] Switch from GitHub Package Registry to public npm
-- [ ] Reserve `@motioncomplex/cosmos-lib` on npmjs.com (or consider unscoped `cosmos-lib`)
-- [ ] Update `publishConfig` in package.json
-- [ ] Add npm badge to README
-- [ ] Publish initial public release
-- [ ] Set up provenance attestations (npm `--provenance`)
-- [ ] **Docs & examples:**
-  - [ ] Update README installation instructions with public npm registry
-  - [ ] Add npm version/download badges to README
-  - [ ] `observatory-app`: update `package.json` to install from public npm instead of monorepo link
-  - [ ] `react-native-app`: update `package.json` to install from public npm instead of monorepo link
+- [x] Switch from GitHub Package Registry to public npm
+- [x] Keep `@motioncomplex/cosmos-lib` scoped (matches npm username, guaranteed availability)
+- [x] Update `publishConfig` in package.json (`registry: npmjs.org`, `access: public`)
+- [x] Add npm version/download/license badges to README
+- [x] Set up provenance attestations (`npm publish --provenance` in CI)
+- [x] Update CI workflow (`.github/workflows/publish.yml`) to use `NPM_TOKEN` + npmjs.org registry
+- [ ] Add `NPM_TOKEN` secret to GitHub repo settings
+- [ ] Publish initial public release (`npm publish --provenance`)
+- [x] **Docs & examples:**
+  - [x] Update README with public npm install instructions and React hooks section
+  - [x] Add npm version/download badges to README
+  - [ ] `observatory-app`: update `package.json` to install from public npm after first publish
+  - [ ] `react-native-app`: update `package.json` to install from public npm after first publish
 
 ---
 

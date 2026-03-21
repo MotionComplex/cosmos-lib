@@ -1,8 +1,8 @@
 {
   "name": "@motioncomplex/cosmos-lib",
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com",
-    "access": "restricted"
+    "registry": "https://registry.npmjs.org",
+    "access": "public"
   },
   "version": "1.0.9",
   "description": "Reusable astronomical utilities: data, math, media, sky maps, NASA APIs, and UI transitions.",

@@ -1,13 +1,22 @@
 # cosmos-lib
 
-Reusable TypeScript library for astronomical data, coordinate math, sky maps, NASA/ESA APIs, media loading, and UI transitions. Zero runtime dependencies — Three.js support is an optional peer dependency in a separate entry point.
+[![npm version](https://img.shields.io/npm/v/@motioncomplex/cosmos-lib.svg)](https://www.npmjs.com/package/@motioncomplex/cosmos-lib)
+[![npm downloads](https://img.shields.io/npm/dm/@motioncomplex/cosmos-lib.svg)](https://www.npmjs.com/package/@motioncomplex/cosmos-lib)
+[![license](https://img.shields.io/npm/l/@motioncomplex/cosmos-lib.svg)](https://github.com/MotionComplex/cosmos-lib/blob/main/LICENSE)
+
+Reusable TypeScript library for astronomical data, coordinate math, sky maps, NASA/ESA APIs, media loading, and UI transitions. Zero runtime dependencies — Three.js and React support are optional peer dependencies in separate entry points.
 
 ## Install
 
 ```bash
 npm install @motioncomplex/cosmos-lib
-# optional — only needed if you use cosmos-lib/three
-npm install three
+```
+
+Optional peer dependencies (only install what you use):
+
+```bash
+npm install three    # for cosmos-lib/three (3D scene helpers)
+npm install react    # for cosmos-lib/react (React hooks & components)
 ```
 
 ## Quick start
@@ -42,6 +51,18 @@ const imgs = await Cosmos.API.NASA.searchImages('pillars of creation', { pageSiz
 import { AstroMath, Data, NASA, Units, renderSkyMap, staggerIn } from '@motioncomplex/cosmos-lib'
 ```
 
+## React hooks (optional)
+
+```ts
+import { useSkyPosition, useMoonPhase, useWhatsUp, useTwilight, SkyMap } from '@motioncomplex/cosmos-lib/react'
+
+// Reactive sky position — auto-updates every 10s
+const pos = useSkyPosition('sirius', { lat: 47.05, lng: 8.31 })
+
+// What's visible tonight?
+const visible = useWhatsUp({ lat: 47.05, lng: 8.31 }, { magnitudeLimit: 4 })
+```
+
 ## Three.js helpers (optional)
 
 ```ts
@@ -64,7 +85,10 @@ scene.add(group)
 | **AstroMath** | Julian dates, sidereal time, coordinate transforms (equatorial, horizontal, galactic, ecliptic), Kepler solver, planetary ephemeris, precession, nutation, refraction, rise/transit/set. | [Math](docs/api/math.md) |
 | **Sun / Moon / Eclipse** | Solar & lunar positions, moon phases, twilight times, eclipse prediction. | [Sun/Moon/Eclipse](docs/api/sun-moon-eclipse.md) |
 | **NASA / ESA / Simbad** | NASA Image Library, APOD, ESA Hubble archive, CDS Simbad object resolution. | [API Integrations](docs/api/api-integrations.md) |
-| **Sky Map** | Stereographic, Mollweide, and gnomonic projections. Canvas-based star chart rendering with constellation overlays. | [Sky Map](docs/api/skymap.md) |
+| **Planner** | "What's up tonight?" — visible objects, best observation windows, visibility curves, moon interference scoring, airmass, planet oppositions/conjunctions. | [Planner](docs/api/planner.md) |
+| **AstroClock** | Simulation clock with speed control, forward/reverse playback, snap-to-event, and requestAnimationFrame support. | [Clock](docs/api/clock.md) |
+| **Sky Map** | Stereographic, Mollweide, and gnomonic projections. Interactive canvas sky chart with pan, zoom, click-to-identify, FOV overlays, HUD, and real-time tracking. | [Sky Map](docs/api/skymap.md) |
+| **React Hooks** | `useSkyPosition`, `useMoonPhase`, `useAstroClock`, `useWhatsUp`, `useTwilight`, `<SkyMap />`. SSR-safe. Optional peer dependency. | [React](docs/api/react.md) |
 | **Media** | Progressive image loading with fallback chains, Wikimedia/Cloudinary URL builders, responsive `srcset` generation. | [Media](docs/api/media.md) |
 | **Transitions** | View Transitions API wrappers: morph, stagger reveal, fade, crossfade, hero expand/collapse. | [Transitions](docs/api/transitions.md) |
 | **Three.js** | Planet/nebula/starfield factories, LOD texture management, camera flights. Optional peer dependency. | [Three.js](docs/api/three.md) |
