@@ -70,14 +70,10 @@
     "vitest": "^4.1.0"
   },
   "peerDependencies": {
-    "react": ">=18.0.0",
     "three": ">=0.150.0"
   },
   "peerDependenciesMeta": {
     "three": {
-      "optional": true
-    },
-    "react": {
       "optional": true
     }
   },
