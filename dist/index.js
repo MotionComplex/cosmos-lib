@@ -1,6 +1,6 @@
-import { C as h, M as w, A as k, c as P, I as $, g as x, m as C, s as N, r as I, a as R, E as D, N as j, D as F, b as Y, P as X, S as K } from "./skymap-interactive-BBwTtzAL.js";
-import { B as ee, d as te, e as ie, f as ne, h as ae, i as se, j as re, k as oe, l as ce, n as le, o as ue, p as de, q as me, t as pe, u as he, v as fe } from "./skymap-interactive-BBwTtzAL.js";
-import { M as q } from "./media-DVOcIMa1.js";
+import { C as S, M as A, A as _, P as M, D as O, S as E, c as R, I as F, g as q, m as j, s as V, r as U, a as Y, E as B, N as X, b as G } from "./skymap-interactive-BBwTtzAL.js";
+import { B as ue, d as de, e as me, f as pe, h as he, i as fe, j as ge, k as ye, l as _e, n as we, o as Se, p as Ae, q as ve, t as Ee, u as ke, v as be } from "./skymap-interactive-BBwTtzAL.js";
+import { M as H } from "./media-DVOcIMa1.js";
 const J = {
   // ── Distance ───────────────────────────────────────────────────────────────
   /**
@@ -8,56 +8,56 @@ const J = {
    * @param au - Distance in AU.
    * @returns Distance in kilometres.
    */
-  auToKm: (e) => e * h.AU_TO_KM,
+  auToKm: (e) => e * S.AU_TO_KM,
   /**
    * Convert kilometres to Astronomical Units.
    * @param km - Distance in kilometres.
    * @returns Distance in AU.
    */
-  kmToAu: (e) => e / h.AU_TO_KM,
+  kmToAu: (e) => e / S.AU_TO_KM,
   /**
    * Convert light-years to parsecs.
    * @param ly - Distance in light-years.
    * @returns Distance in parsecs.
    */
-  lyToPc: (e) => e / h.PC_TO_LY,
+  lyToPc: (e) => e / S.PC_TO_LY,
   /**
    * Convert parsecs to light-years.
    * @param pc - Distance in parsecs.
    * @returns Distance in light-years.
    */
-  pcToLy: (e) => e * h.PC_TO_LY,
+  pcToLy: (e) => e * S.PC_TO_LY,
   /**
    * Convert parsecs to kilometres.
    * @param pc - Distance in parsecs.
    * @returns Distance in kilometres.
    */
-  pcToKm: (e) => e * h.PC_TO_KM,
+  pcToKm: (e) => e * S.PC_TO_KM,
   /**
    * Convert light-years to kilometres.
    * @param ly - Distance in light-years.
    * @returns Distance in kilometres.
    */
-  lyToKm: (e) => e * h.LY_TO_KM,
+  lyToKm: (e) => e * S.LY_TO_KM,
   /**
    * Convert kilometres to light-years.
    * @param km - Distance in kilometres.
    * @returns Distance in light-years.
    */
-  kmToLy: (e) => e / h.LY_TO_KM,
+  kmToLy: (e) => e / S.LY_TO_KM,
   // ── Angular ────────────────────────────────────────────────────────────────
   /**
    * Convert degrees to radians.
    * @param d - Angle in degrees.
    * @returns Angle in radians.
    */
-  degToRad: (e) => e * h.DEG_TO_RAD,
+  degToRad: (e) => e * S.DEG_TO_RAD,
   /**
    * Convert radians to degrees.
    * @param r - Angle in radians.
    * @returns Angle in degrees.
    */
-  radToDeg: (e) => e * h.RAD_TO_DEG,
+  radToDeg: (e) => e * S.RAD_TO_DEG,
   /**
    * Convert arcseconds to degrees.
    * @param a - Angle in arcseconds.
@@ -96,11 +96,11 @@ const J = {
    * ```
    */
   formatDistance(e) {
-    const a = e / h.AU_TO_KM;
-    if (a < 0.01) return `${e.toFixed(0)} km`;
-    if (a < 1e3) return `${a.toPrecision(4)} AU`;
-    const i = e / h.LY_TO_KM;
-    return i < 1e6 ? `${i.toPrecision(4)} ly` : `${(i / 1e6).toPrecision(4)} Mly`;
+    const i = e / S.AU_TO_KM;
+    if (i < 0.01) return `${e.toFixed(0)} km`;
+    if (i < 1e3) return `${i.toPrecision(4)} AU`;
+    const o = e / S.LY_TO_KM;
+    return o < 1e6 ? `${o.toPrecision(4)} ly` : `${(o / 1e6).toPrecision(4)} Mly`;
   },
   /**
    * Format decimal degrees as d°m′s″ (signed).
@@ -115,8 +115,8 @@ const J = {
    * ```
    */
   formatAngle(e) {
-    const a = e < 0 ? "-" : "", i = Math.abs(e), s = Math.floor(i), r = Math.floor((i - s) * 60), o = ((i - s) * 60 - r) * 60;
-    return `${a}${s}°${r}′${o.toFixed(1)}″`;
+    const i = e < 0 ? "-" : "", o = Math.abs(e), a = Math.floor(o), s = Math.floor((o - a) * 60), r = ((o - a) * 60 - s) * 60;
+    return `${i}${a}°${s}′${r.toFixed(1)}″`;
   },
   /**
    * Format Right Ascension from decimal degrees into hours/minutes/seconds.
@@ -131,10 +131,10 @@ const J = {
    * ```
    */
   formatRA(e) {
-    const a = (e % 360 + 360) % 360, i = Math.floor(a / 15), s = Math.floor((a / 15 - i) * 60), r = ((a / 15 - i) * 60 - s) * 60;
-    return `${i}h ${s}m ${r.toFixed(1)}s`;
+    const i = (e % 360 + 360) % 360, o = Math.floor(i / 15), a = Math.floor((i / 15 - o) * 60), s = ((i / 15 - o) * 60 - a) * 60;
+    return `${o}h ${a}m ${s.toFixed(1)}s`;
   }
-}, B = {
+}, x = {
   /**
    * Find the next solar eclipse after the given date.
    *
@@ -156,11 +156,11 @@ const J = {
    * ```
    */
   nextSolar(e = /* @__PURE__ */ new Date()) {
-    let a = new Date(e);
-    for (let i = 0; i < 26; i++) {
-      const s = w.nextPhase(a, "new"), r = this._checkSolarEclipse(s);
-      if (r) return r;
-      a = new Date(s.valueOf() + 864e5);
+    let i = new Date(e);
+    for (let o = 0; o < 26; o++) {
+      const a = A.nextPhase(i, "new"), s = this._checkSolarEclipse(a);
+      if (s) return s;
+      i = new Date(a.valueOf() + 864e5);
     }
     return null;
   },
@@ -185,11 +185,11 @@ const J = {
    * ```
    */
   nextLunar(e = /* @__PURE__ */ new Date()) {
-    let a = new Date(e);
-    for (let i = 0; i < 26; i++) {
-      const s = w.nextPhase(a, "full"), r = this._checkLunarEclipse(s);
-      if (r) return r;
-      a = new Date(s.valueOf() + 864e5);
+    let i = new Date(e);
+    for (let o = 0; o < 26; o++) {
+      const a = A.nextPhase(i, "full"), s = this._checkLunarEclipse(a);
+      if (s) return s;
+      i = new Date(a.valueOf() + 864e5);
     }
     return null;
   },
@@ -231,28 +231,28 @@ const J = {
    * solar.forEach(e => console.log(`${e.subtype} solar eclipse: ${e.date.toISOString()}`))
    * ```
    */
-  search(e, a, i) {
-    const s = [];
-    let r = new Date(e);
-    const o = a.valueOf();
-    for (; r.valueOf() < o; ) {
-      if (i !== "lunar") {
-        const t = w.nextPhase(r, "new");
-        if (t.valueOf() > o) break;
-        const n = this._checkSolarEclipse(t);
-        n && s.push(n);
+  search(e, i, o) {
+    const a = [];
+    let s = new Date(e);
+    const r = i.valueOf();
+    for (; s.valueOf() < r; ) {
+      if (o !== "lunar") {
+        const n = A.nextPhase(s, "new");
+        if (n.valueOf() > r) break;
+        const t = this._checkSolarEclipse(n);
+        t && a.push(t);
       }
-      if (i !== "solar") {
-        const t = w.nextPhase(r, "full");
-        if (t.valueOf() <= o) {
-          const n = this._checkLunarEclipse(t);
-          n && s.push(n);
+      if (o !== "solar") {
+        const n = A.nextPhase(s, "full");
+        if (n.valueOf() <= r) {
+          const t = this._checkLunarEclipse(n);
+          t && a.push(t);
         }
       }
-      r = new Date(r.valueOf() + 15 * 864e5);
+      s = new Date(s.valueOf() + 15 * 864e5);
     }
-    return s.sort((t, n) => t.date.valueOf() - n.date.valueOf()), s.filter(
-      (t, n) => n === 0 || Math.abs(t.date.valueOf() - s[n - 1].date.valueOf()) > 864e5
+    return a.sort((n, t) => n.date.valueOf() - t.date.valueOf()), a.filter(
+      (n, t) => t === 0 || Math.abs(n.date.valueOf() - a[t - 1].date.valueOf()) > 864e5
     );
   },
   /**
@@ -269,23 +269,23 @@ const J = {
    * @returns An {@link EclipseEvent} if a solar eclipse occurs at this new moon, or `null` otherwise.
    */
   _checkSolarEclipse(e) {
-    const a = w.position(e), i = k.planetEcliptic("earth", e), s = ((i.lon + 180) % 360 + 360) % 360;
-    if (Math.abs(a.eclipticLat) > 1.5) return null;
-    const o = i.r * 1495978707e-1, t = Math.atan2(696e3, o) * (180 / Math.PI), n = Math.atan2(1737.4, a.distance_km) * (180 / Math.PI), l = k.angularSeparation(
-      a,
-      k.eclipticToEquatorial({ lon: s, lat: 0 })
-    ), d = t + n;
-    if (l > d * 1.5) return null;
-    let u, c;
-    if (n >= t && l < n - t)
-      u = "total", c = 1;
-    else if (n < t && l < t - n)
-      u = "annular", c = n / t;
-    else if (l < d)
-      u = "partial", c = (d - l) / (2 * t);
+    const i = A.position(e), o = _.planetEcliptic("earth", e), a = ((o.lon + 180) % 360 + 360) % 360;
+    if (Math.abs(i.eclipticLat) > 1.5) return null;
+    const r = o.r * 1495978707e-1, n = Math.atan2(696e3, r) * (180 / Math.PI), t = Math.atan2(1737.4, i.distance_km) * (180 / Math.PI), c = _.angularSeparation(
+      i,
+      _.eclipticToEquatorial({ lon: a, lat: 0 })
+    ), l = n + t;
+    if (c > l * 1.5) return null;
+    let u, d;
+    if (t >= n && c < t - n)
+      u = "total", d = 1;
+    else if (t < n && c < n - t)
+      u = "annular", d = t / n;
+    else if (c < l)
+      u = "partial", d = (l - c) / (2 * n);
     else
       return null;
-    return { type: "solar", subtype: u, date: e, magnitude: c };
+    return { type: "solar", subtype: u, date: e, magnitude: d };
   },
   /**
    * Check if a full moon produces a lunar eclipse.
@@ -307,20 +307,244 @@ const J = {
    * @returns An {@link EclipseEvent} if a lunar eclipse occurs at this full moon, or `null` otherwise.
    */
   _checkLunarEclipse(e) {
-    const a = w.position(e), i = Math.abs(a.eclipticLat), s = Math.atan2(6371, a.distance_km) * (180 / Math.PI), r = s * 2.6, o = s * 4.3, t = Math.atan2(1737.4, a.distance_km) * (180 / Math.PI);
-    if (i > o + t) return null;
-    let n, l;
-    if (i < r - t)
-      n = "total", l = (r - i) / (2 * t);
-    else if (i < r + t)
-      n = "partial", l = (r + t - i) / (2 * t);
-    else if (i < o + t)
-      n = "penumbral", l = (o + t - i) / (2 * t);
+    const i = A.position(e), o = Math.abs(i.eclipticLat), a = Math.atan2(6371, i.distance_km) * (180 / Math.PI), s = a * 2.6, r = a * 4.3, n = Math.atan2(1737.4, i.distance_km) * (180 / Math.PI);
+    if (o > r + n) return null;
+    let t, c;
+    if (o < s - n)
+      t = "total", c = (s - o) / (2 * n);
+    else if (o < s + n)
+      t = "partial", c = (s + n - o) / (2 * n);
+    else if (o < r + n)
+      t = "penumbral", c = (r + n - o) / (2 * n);
     else
       return null;
-    return { type: "lunar", subtype: n, date: e, magnitude: Math.min(l, 1) };
+    return { type: "lunar", subtype: t, date: e, magnitude: Math.min(c, 1) };
   }
-}, V = {
+}, K = [
+  { target: "new", name: "New Moon" },
+  { target: "first-quarter", name: "First Quarter Moon" },
+  { target: "full", name: "Full Moon" },
+  { target: "last-quarter", name: "Last Quarter Moon" }
+];
+function b(e) {
+  return e.charAt(0).toUpperCase() + e.slice(1);
+}
+const z = {
+  /**
+   * Find upcoming astronomical events within a date range.
+   *
+   * Scans forward from the observer's date, aggregating events from
+   * multiple sources: moon phases, eclipses, meteor showers, planet
+   * events, equinoxes, and solstices. Results are sorted by date.
+   *
+   * @param observer - Observer location and start date.
+   * @param options - Filtering and limit options.
+   * @returns Array of events sorted by date.
+   *
+   * @example
+   * ```ts
+   * const events = Events.nextEvents(
+   *   { lat: 47, lng: 8, date: new Date('2024-01-01') },
+   *   { days: 365, categories: ['eclipse', 'opposition'] }
+   * )
+   * ```
+   */
+  nextEvents(e, i = {}) {
+    const { days: o = 90, categories: a, limit: s = 50 } = i, r = e.date ?? /* @__PURE__ */ new Date(), n = new Date(r.valueOf() + o * 864e5), t = [], c = (l) => !a || a.includes(l);
+    if (c("moon-phase") && t.push(...W(r, n)), c("eclipse") && t.push(...Q(r, n)), c("meteor-shower") && t.push(...Z(r, n)), c("opposition") || c("conjunction")) {
+      const l = M.planetEvents(e, { days: o });
+      for (const u of l)
+        if (c(u.type)) {
+          let d, f;
+          try {
+            const m = _.planetEcliptic(u.planet, u.date), h = _.eclipticToEquatorial(m);
+            d = h.ra, f = h.dec;
+          } catch {
+          }
+          t.push({
+            category: u.type,
+            title: `${b(u.planet)} ${u.type}`,
+            date: u.date,
+            detail: `Solar elongation: ${u.elongation.toFixed(1)}°`,
+            ra: d,
+            dec: f
+          });
+        }
+    }
+    if (c("elongation") && t.push(...ee(r, o)), c("equinox") && t.push(...T(r, n, "equinox")), c("solstice") && t.push(...T(r, n, "solstice")), e.lat !== void 0 && e.lng !== void 0)
+      for (const l of t)
+        l.ra !== void 0 && l.dec !== void 0 && (l.visibility = te(l, e));
+    return t.sort((l, u) => l.date.valueOf() - u.date.valueOf()), t.slice(0, s);
+  },
+  /**
+   * Find the next occurrence of a specific event category.
+   *
+   * @param category - The event category to search for.
+   * @param observer - Observer location and start date.
+   * @param days - How far to search forward. @defaultValue `365`
+   * @returns The next event, or `null` if none found in the range.
+   *
+   * @example
+   * ```ts
+   * const nextEclipse = Events.nextEvent('eclipse', { lat: 47, lng: 8 })
+   * const nextOpposition = Events.nextEvent('opposition', { lat: 47, lng: 8 })
+   * ```
+   */
+  nextEvent(e, i, o = 365) {
+    return this.nextEvents(i, { days: o, categories: [e], limit: 1 })[0] ?? null;
+  },
+  /**
+   * Export events as an iCal (`.ics`) string.
+   *
+   * Generates a valid iCalendar file with VEVENT entries for each event.
+   * Events are all-day events (no specific time) since most astronomical
+   * events span hours or occur at observer-dependent times.
+   *
+   * @param events - Array of events to export.
+   * @param calendarName - Calendar name. @defaultValue `'Astronomical Events'`
+   * @returns A string in iCalendar format, ready to save as `.ics`.
+   *
+   * @example
+   * ```ts
+   * const events = Events.nextEvents(observer, { days: 365 })
+   * const ical = Events.toICal(events)
+   * download('astro-events.ics', ical, 'text/calendar')
+   * ```
+   */
+  toICal(e, i = "Astronomical Events") {
+    const o = [
+      "BEGIN:VCALENDAR",
+      "VERSION:2.0",
+      "PRODID:-//cosmos-lib//Astronomical Events//EN",
+      `X-WR-CALNAME:${i}`
+    ];
+    for (const a of e) {
+      const s = a.date, r = `${s.getUTCFullYear()}${String(s.getUTCMonth() + 1).padStart(2, "0")}${String(s.getUTCDate()).padStart(2, "0")}`, n = `${r}-${a.category}-${a.title.replace(/\s/g, "-").toLowerCase()}@cosmos-lib`;
+      o.push(
+        "BEGIN:VEVENT",
+        `DTSTART;VALUE=DATE:${r}`,
+        `SUMMARY:${a.title}`,
+        `UID:${n}`
+      ), a.detail && o.push(`DESCRIPTION:${a.detail}`), o.push("END:VEVENT");
+    }
+    return o.push("END:VCALENDAR"), o.join(`\r
+`);
+  }
+};
+function W(e, i) {
+  const o = [];
+  for (const { target: a, name: s } of K) {
+    let r = new Date(e.valueOf());
+    for (let n = 0; n < 20; n++) {
+      const t = A.nextPhase(r, a);
+      if (t.valueOf() > i.valueOf()) break;
+      const c = A.position(t);
+      o.push({
+        category: "moon-phase",
+        title: s,
+        date: t,
+        ra: c.ra,
+        dec: c.dec
+      }), r = new Date(t.valueOf() + 864e5);
+    }
+  }
+  return o;
+}
+function Q(e, i) {
+  return x.search(e, i).map((a) => ({
+    category: "eclipse",
+    title: `${b(a.subtype)} ${a.type} eclipse`,
+    date: a.date,
+    detail: `Magnitude: ${a.magnitude.toFixed(3)}`
+  }));
+}
+function Z(e, i) {
+  const o = [], a = /* @__PURE__ */ new Set();
+  for (let s = e.valueOf(); s <= i.valueOf(); s += 864e5) {
+    const r = new Date(s), n = O.getActiveShowers(r);
+    for (const t of n) {
+      if (a.has(t.id)) continue;
+      const l = ((_.planetEcliptic("earth", r).lon + 180) % 360 + 360) % 360;
+      Math.abs(((l - t.solarLon + 180) % 360 + 360) % 360 - 180) < 2 && (a.add(t.id), o.push({
+        category: "meteor-shower",
+        title: `${t.name} meteor shower peak`,
+        date: r,
+        detail: `ZHR: ${t.zhr}, speed: ${t.speed} km/s${t.parentBody ? `, parent: ${t.parentBody}` : ""}`,
+        ra: t.radiantRA,
+        dec: t.radiantDec,
+        constellation: t.code
+      }));
+    }
+  }
+  return o;
+}
+function ee(e, i) {
+  const o = [], a = ["mercury", "venus"];
+  for (const s of a) {
+    let r = 0, n = !0;
+    for (let t = 0; t <= i; t++) {
+      const c = new Date(e.valueOf() + t * 864e5), l = _.planetEcliptic(s, c), u = _.eclipticToEquatorial(l), d = E.position(c), f = _.angularSeparation(u, { ra: d.ra, dec: d.dec });
+      if (t > 0) {
+        const m = f > r;
+        if (!m && n && r > 15) {
+          const h = l.lon, g = d.eclipticLon;
+          let p = h - g;
+          p > 180 && (p -= 360), p < -180 && (p += 360);
+          const w = p > 0 ? "east (evening)" : "west (morning)";
+          o.push({
+            category: "elongation",
+            title: `${b(s)} greatest elongation`,
+            date: new Date(e.valueOf() + (t - 1) * 864e5),
+            detail: `${r.toFixed(1)}° ${w}`
+          });
+        }
+        n = m;
+      }
+      r = f;
+    }
+  }
+  return o;
+}
+function T(e, i, o) {
+  const a = [], s = o === "equinox" ? [{ lon: 0, name: "Vernal equinox (March)" }, { lon: 180, name: "Autumnal equinox (September)" }] : [{ lon: 90, name: "Summer solstice (June)" }, { lon: 270, name: "Winter solstice (December)" }];
+  for (const { lon: r, name: n } of s) {
+    let t = -1;
+    for (let c = 0; c <= (i.valueOf() - e.valueOf()) / 864e5; c++) {
+      const l = new Date(e.valueOf() + c * 864e5), d = E.position(l).eclipticLon;
+      if (c > 0) {
+        let f = !1;
+        r === 0 ? f = t > 350 && d < 10 : f = t < r && d >= r, f && a.push({
+          category: o,
+          title: n,
+          date: l,
+          detail: `Sun ecliptic longitude: ${d.toFixed(2)}°`
+        });
+      }
+      t = d;
+    }
+  }
+  return a;
+}
+function te(e, i) {
+  const o = e.ra, a = e.dec, s = e.date, n = E.twilight({ ...i, date: s }).astronomicalDusk, c = E.twilight({ ...i, date: new Date(s.valueOf() + 864e5) }).astronomicalDawn, l = A.phase(s), u = A.position(s), d = _.angularSeparation({ ra: o, dec: a }, { ra: u.ra, dec: u.dec }), f = Math.max(0, Math.min(1, (120 - d) / 115)), m = l.illumination * f;
+  if (!n || !c)
+    return {
+      visible: !1,
+      peakAltitude: _.equatorialToHorizontal({ ra: o, dec: a }, { ...i, date: s }).alt,
+      moonInterference: m,
+      summary: "No astronomical darkness at this location"
+    };
+  const h = n.valueOf(), g = c.valueOf();
+  let p = -90;
+  for (let v = h; v <= g; v += 18e5) {
+    const $ = _.equatorialToHorizontal({ ra: o, dec: a }, { ...i, date: new Date(v) });
+    $.alt > p && (p = $.alt);
+  }
+  const w = p > 10;
+  let y;
+  return w ? m > 0.5 ? y = `Visible at ${p.toFixed(0)}° alt, but strong moon interference (${(m * 100).toFixed(0)}%)` : m > 0.2 ? y = `Good — ${p.toFixed(0)}° alt, moderate moon (${(m * 100).toFixed(0)}%)` : p > 50 ? y = `Excellent — ${p.toFixed(0)}° alt, dark skies` : y = `Good — ${p.toFixed(0)}° alt, low moon interference` : y = p > 0 ? `Low visibility — peak altitude only ${p.toFixed(0)}° above horizon` : "Not visible — target never rises above horizon at this location", { visible: w, peakAltitude: p, moonInterference: m, summary: y };
+}
+const ae = {
   sun: {
     id: "sun",
     name: "Sun Surface",
@@ -476,7 +700,7 @@ const J = {
     width: 2048,
     height: 1024
   }
-}, G = {
+}, ie = {
   milky_way: {
     id: "milky_way",
     name: "Milky Way Panorama",
@@ -500,214 +724,216 @@ const J = {
     height: 4096
   }
 };
-async function E(e, a = {}) {
-  const { duration: i = 400, easing: s = "ease-in-out", signal: r } = a;
-  if (r != null && r.aborted) return;
+async function L(e, i = {}) {
+  const { duration: o = 400, easing: a = "ease-in-out", signal: s } = i;
+  if (s != null && s.aborted) return;
   if (!("startViewTransition" in document)) {
     await e();
     return;
   }
-  document.documentElement.style.setProperty("--cosmos-vt-duration", `${i}ms`), document.documentElement.style.setProperty("--cosmos-vt-easing", s), await document.startViewTransition(e).finished;
+  document.documentElement.style.setProperty("--cosmos-vt-duration", `${o}ms`), document.documentElement.style.setProperty("--cosmos-vt-easing", a), await document.startViewTransition(e).finished;
 }
-function v(e, a = {}) {
+function P(e, i = {}) {
   const {
-    delay: i = 0,
-    stagger: s = 60,
-    duration: r = 500,
-    from: o = "bottom",
-    distance: t = "20px",
-    signal: n
-  } = a;
-  if (n != null && n.aborted) return Promise.resolve();
-  const d = {
-    top: `translateY(-${t})`,
-    bottom: `translateY(${t})`,
-    left: `translateX(-${t})`,
-    right: `translateX(${t})`
-  }[o], u = [...e.children];
-  return u.forEach((c) => {
-    c.style.opacity = "0", c.style.transform = d, c.style.transition = "none";
-  }), u.length === 0 ? Promise.resolve() : new Promise((c) => {
-    const y = performance.now() + i, m = () => {
-      u.forEach((f) => {
-        f.style.opacity = "1", f.style.transform = "none", f.style.transition = "";
-      }), c();
-    };
-    n == null || n.addEventListener("abort", m, { once: !0 });
-    const p = (f) => {
-      if (n != null && n.aborted) return;
-      let _ = !0;
-      for (let g = 0; g < u.length; g++) {
-        const S = y + g * s;
-        if (f >= S) {
-          const A = u[g];
-          A.style.opacity === "0" && (A.style.transition = `opacity ${r}ms ease, transform ${r}ms cubic-bezier(0.2,0,0,1)`, A.style.opacity = "1", A.style.transform = "none"), f < S + r && (_ = !1);
-        } else
-          _ = !1;
-      }
-      _ ? (n == null || n.removeEventListener("abort", m), c()) : requestAnimationFrame(p);
-    };
-    requestAnimationFrame(() => requestAnimationFrame(p));
-  });
-}
-function T(e, a = {}) {
-  const {
-    stagger: i = 40,
-    duration: s = 300,
+    delay: o = 0,
+    stagger: a = 60,
+    duration: s = 500,
     from: r = "bottom",
-    distance: o = "12px",
+    distance: n = "20px",
     signal: t
-  } = a;
+  } = i;
   if (t != null && t.aborted) return Promise.resolve();
   const l = {
-    top: `translateY(-${o})`,
-    bottom: `translateY(${o})`,
-    left: `translateX(-${o})`,
-    right: `translateX(${o})`
-  }[r], d = [...e.children].reverse();
-  return d.length === 0 ? Promise.resolve() : new Promise((u) => {
-    const c = performance.now(), y = () => {
-      d.forEach((p) => {
-        p.style.opacity = "0", p.style.transform = l, p.style.transition = "";
+    top: `translateY(-${n})`,
+    bottom: `translateY(${n})`,
+    left: `translateX(-${n})`,
+    right: `translateX(${n})`
+  }[r], u = [...e.children];
+  return u.forEach((d) => {
+    d.style.opacity = "0", d.style.transform = l, d.style.transition = "none";
+  }), u.length === 0 ? Promise.resolve() : new Promise((d) => {
+    const f = performance.now() + o, m = () => {
+      u.forEach((g) => {
+        g.style.opacity = "1", g.style.transform = "none", g.style.transition = "";
+      }), d();
+    };
+    t == null || t.addEventListener("abort", m, { once: !0 });
+    const h = (g) => {
+      if (t != null && t.aborted) return;
+      let p = !0;
+      for (let w = 0; w < u.length; w++) {
+        const y = f + w * a;
+        if (g >= y) {
+          const v = u[w];
+          v.style.opacity === "0" && (v.style.transition = `opacity ${s}ms ease, transform ${s}ms cubic-bezier(0.2,0,0,1)`, v.style.opacity = "1", v.style.transform = "none"), g < y + s && (p = !1);
+        } else
+          p = !1;
+      }
+      p ? (t == null || t.removeEventListener("abort", m), d()) : requestAnimationFrame(h);
+    };
+    requestAnimationFrame(() => requestAnimationFrame(h));
+  });
+}
+function D(e, i = {}) {
+  const {
+    stagger: o = 40,
+    duration: a = 300,
+    from: s = "bottom",
+    distance: r = "12px",
+    signal: n
+  } = i;
+  if (n != null && n.aborted) return Promise.resolve();
+  const c = {
+    top: `translateY(-${r})`,
+    bottom: `translateY(${r})`,
+    left: `translateX(-${r})`,
+    right: `translateX(${r})`
+  }[s], l = [...e.children].reverse();
+  return l.length === 0 ? Promise.resolve() : new Promise((u) => {
+    const d = performance.now(), f = () => {
+      l.forEach((h) => {
+        h.style.opacity = "0", h.style.transform = c, h.style.transition = "";
       }), u();
     };
-    t == null || t.addEventListener("abort", y, { once: !0 });
-    const m = (p) => {
-      if (t != null && t.aborted) return;
-      let f = !0;
-      for (let _ = 0; _ < d.length; _++) {
-        const g = c + _ * i;
-        if (p >= g) {
-          const S = d[_];
-          S.style.opacity !== "0" && (S.style.transition = `opacity ${s}ms ease, transform ${s}ms ease`, S.style.opacity = "0", S.style.transform = l), p < g + s && (f = !1);
+    n == null || n.addEventListener("abort", f, { once: !0 });
+    const m = (h) => {
+      if (n != null && n.aborted) return;
+      let g = !0;
+      for (let p = 0; p < l.length; p++) {
+        const w = d + p * o;
+        if (h >= w) {
+          const y = l[p];
+          y.style.opacity !== "0" && (y.style.transition = `opacity ${a}ms ease, transform ${a}ms ease`, y.style.opacity = "0", y.style.transform = c), h < w + a && (g = !1);
         } else
-          f = !1;
+          g = !1;
       }
-      f ? (t == null || t.removeEventListener("abort", y), u()) : requestAnimationFrame(m);
+      g ? (n == null || n.removeEventListener("abort", f), u()) : requestAnimationFrame(m);
     };
     requestAnimationFrame(m);
   });
 }
-function b(e, a, i = 300) {
-  return new Promise((s) => {
-    e.style.transition = `opacity ${i}ms ease`, e.style.opacity = a === "in" ? "1" : "0", e.style.pointerEvents = a === "in" ? "auto" : "none";
-    const r = () => {
-      e.removeEventListener("transitionend", r), s();
+function k(e, i, o = 300) {
+  return new Promise((a) => {
+    e.style.transition = `opacity ${o}ms ease`, e.style.opacity = i === "in" ? "1" : "0", e.style.pointerEvents = i === "in" ? "auto" : "none";
+    const s = () => {
+      e.removeEventListener("transitionend", s), a();
     };
-    e.addEventListener("transitionend", r, { once: !0 }), setTimeout(s, i + 50);
+    e.addEventListener("transitionend", s, { once: !0 }), setTimeout(a, o + 50);
   });
 }
-async function M(e, a, i = 400) {
-  a.style.opacity = "0", a.style.pointerEvents = "none", a.style.display = "", await Promise.all([
-    b(e, "out", i),
-    b(a, "in", i)
+async function C(e, i, o = 400) {
+  i.style.opacity = "0", i.style.pointerEvents = "none", i.style.display = "", await Promise.all([
+    k(e, "out", o),
+    k(i, "in", o)
   ]), e.style.display = "none";
 }
-function L(e, a = {}) {
-  const { duration: i = 500, easing: s = "cubic-bezier(0.4,0,0.2,1)", onDone: r, signal: o } = a;
-  if (o != null && o.aborted) return;
-  const t = e.getBoundingClientRect(), n = window.innerWidth / t.width, l = window.innerHeight / t.height, d = window.innerWidth / 2 - (t.left + t.width / 2), u = window.innerHeight / 2 - (t.top + t.height / 2);
+function N(e, i = {}) {
+  const { duration: o = 500, easing: a = "cubic-bezier(0.4,0,0.2,1)", onDone: s, signal: r } = i;
+  if (r != null && r.aborted) return;
+  const n = e.getBoundingClientRect(), t = window.innerWidth / n.width, c = window.innerHeight / n.height, l = window.innerWidth / 2 - (n.left + n.width / 2), u = window.innerHeight / 2 - (n.top + n.height / 2);
   e.style.transformOrigin = "center center", e.style.transition = "none", e.style.transform = "translate(0,0) scale(1,1)", requestAnimationFrame(() => {
-    o != null && o.aborted || requestAnimationFrame(() => {
-      if (o != null && o.aborted) return;
-      e.style.transition = `transform ${i}ms ${s}`, e.style.transform = `translate(${d}px, ${u}px) scale(${n}, ${l})`;
-      const c = () => {
-        e.removeEventListener("transitionend", c), e.style.transform = "", e.style.transition = "", r == null || r();
+    r != null && r.aborted || requestAnimationFrame(() => {
+      if (r != null && r.aborted) return;
+      e.style.transition = `transform ${o}ms ${a}`, e.style.transform = `translate(${l}px, ${u}px) scale(${t}, ${c})`;
+      const d = () => {
+        e.removeEventListener("transitionend", d), e.style.transform = "", e.style.transition = "", s == null || s();
       };
-      e.addEventListener("transitionend", c, { once: !0 }), setTimeout(c, i + 100);
+      e.addEventListener("transitionend", d, { once: !0 }), setTimeout(d, o + 100);
     });
   });
 }
-function O(e, a = {}, i) {
-  const { duration: s = 400, easing: r = "cubic-bezier(0.4,0,0.2,1)", onDone: o, signal: t } = a;
-  if (t != null && t.aborted) return;
-  const n = e.getBoundingClientRect(), l = n.width / window.innerWidth, d = n.height / window.innerHeight, u = n.left + n.width / 2 - window.innerWidth / 2, c = n.top + n.height / 2 - window.innerHeight / 2, y = !i, m = i ?? document.createElement("div");
-  y && (Object.assign(m.style, {
+function I(e, i = {}, o) {
+  const { duration: a = 400, easing: s = "cubic-bezier(0.4,0,0.2,1)", onDone: r, signal: n } = i;
+  if (n != null && n.aborted) return;
+  const t = e.getBoundingClientRect(), c = t.width / window.innerWidth, l = t.height / window.innerHeight, u = t.left + t.width / 2 - window.innerWidth / 2, d = t.top + t.height / 2 - window.innerHeight / 2, f = !o, m = o ?? document.createElement("div");
+  f && (Object.assign(m.style, {
     position: "fixed",
     inset: "0",
     pointerEvents: "none",
     zIndex: "9999",
     transformOrigin: "center center"
-  }), document.body.appendChild(m)), m.style.transition = `transform ${s}ms ${r}, opacity ${s * 0.6}ms ease ${s * 0.4}ms`;
-  const p = () => {
-    m.removeEventListener("transitionend", p), y && m.remove(), o == null || o();
+  }), document.body.appendChild(m)), m.style.transition = `transform ${a}ms ${s}, opacity ${a * 0.6}ms ease ${a * 0.4}ms`;
+  const h = () => {
+    m.removeEventListener("transitionend", h), f && m.remove(), r == null || r();
   };
   requestAnimationFrame(() => {
-    if (t != null && t.aborted) {
-      p();
+    if (n != null && n.aborted) {
+      h();
       return;
     }
-    m.style.transform = `translate(${u}px, ${c}px) scale(${l}, ${d})`, m.style.opacity = "0", m.addEventListener("transitionend", p, { once: !0 }), setTimeout(p, s + 100);
+    m.style.transform = `translate(${u}px, ${d}px) scale(${c}, ${l})`, m.style.opacity = "0", m.addEventListener("transitionend", h, { once: !0 }), setTimeout(h, a + 100);
   });
 }
-const W = {
-  morph: E,
-  staggerIn: v,
-  staggerOut: T,
-  fade: b,
-  crossfade: M,
-  heroExpand: L,
-  heroCollapse: O
-}, z = {
-  CONSTANTS: h,
+const se = {
+  morph: L,
+  staggerIn: P,
+  staggerOut: D,
+  fade: k,
+  crossfade: C,
+  heroExpand: N,
+  heroCollapse: I
+}, re = {
+  CONSTANTS: S,
   Units: J,
-  Math: k,
-  Sun: K,
-  Moon: w,
-  Eclipse: B,
-  Planner: X,
-  AstroClock: Y,
-  Data: F,
-  Media: q,
-  API: { NASA: j, ESA: D, resolveSimbad: R },
-  SkyMap: { render: I, stereographic: N, mollweide: C, gnomonic: x, Interactive: $, create: P },
-  Transitions: { morph: E, staggerIn: v, staggerOut: T, fade: b, crossfade: M, heroExpand: L, heroCollapse: O }
+  Math: _,
+  Sun: E,
+  Moon: A,
+  Eclipse: x,
+  Planner: M,
+  AstroClock: G,
+  Events: z,
+  Data: O,
+  Media: H,
+  API: { NASA: X, ESA: B, resolveSimbad: Y },
+  SkyMap: { render: U, stereographic: V, mollweide: j, gnomonic: q, Interactive: F, create: R },
+  Transitions: { morph: L, staggerIn: P, staggerOut: D, fade: k, crossfade: C, heroExpand: N, heroCollapse: I }
 };
 export {
-  Y as AstroClock,
-  k as AstroMath,
-  ee as BRIGHT_STARS,
-  h as CONSTANTS,
-  te as CONSTELLATIONS,
-  ie as DEEP_SKY_EXTRAS,
-  F as Data,
-  D as ESA,
-  B as Eclipse,
-  ne as IMAGE_FALLBACKS,
-  $ as InteractiveSkyMap,
-  ae as MESSIER_CATALOG,
-  se as METEOR_SHOWERS,
-  q as Media,
-  w as Moon,
-  j as NASA,
-  V as PLANET_TEXTURES,
-  X as Planner,
-  re as SOLAR_SYSTEM,
-  G as STAR_TEXTURES,
-  oe as SkyMap,
-  K as Sun,
-  W as Transitions,
+  G as AstroClock,
+  _ as AstroMath,
+  ue as BRIGHT_STARS,
+  S as CONSTANTS,
+  de as CONSTELLATIONS,
+  me as DEEP_SKY_EXTRAS,
+  O as Data,
+  B as ESA,
+  x as Eclipse,
+  z as Events,
+  pe as IMAGE_FALLBACKS,
+  F as InteractiveSkyMap,
+  he as MESSIER_CATALOG,
+  fe as METEOR_SHOWERS,
+  H as Media,
+  A as Moon,
+  X as NASA,
+  ae as PLANET_TEXTURES,
+  M as Planner,
+  ge as SOLAR_SYSTEM,
+  ie as STAR_TEXTURES,
+  ye as SkyMap,
+  E as Sun,
+  se as Transitions,
   J as Units,
-  ce as canvasToEquatorial,
-  le as computeFov,
-  P as createInteractiveSkyMap,
-  M as crossfade,
-  z as default,
-  b as fade,
-  ue as getObjectImage,
-  x as gnomonic,
-  O as heroCollapse,
-  L as heroExpand,
-  C as mollweide,
-  E as morph,
-  de as prefetchImages,
-  I as renderSkyMap,
-  me as resolveImages,
-  R as resolveSimbad,
-  pe as spectralColor,
-  v as staggerIn,
-  T as staggerOut,
-  N as stereographic,
-  he as tryDSS,
-  fe as tryPanSTARRS
+  _e as canvasToEquatorial,
+  we as computeFov,
+  R as createInteractiveSkyMap,
+  C as crossfade,
+  re as default,
+  k as fade,
+  Se as getObjectImage,
+  q as gnomonic,
+  I as heroCollapse,
+  N as heroExpand,
+  j as mollweide,
+  L as morph,
+  Ae as prefetchImages,
+  U as renderSkyMap,
+  ve as resolveImages,
+  Y as resolveSimbad,
+  Ee as spectralColor,
+  P as staggerIn,
+  D as staggerOut,
+  V as stereographic,
+  ke as tryDSS,
+  be as tryPanSTARRS
 };

@@ -30,6 +30,8 @@ export { Eclipse } from './eclipse.js';
 export { Planner } from './planner.js';
 export type { VisibleObject, WhatsUpOptions, VisibilityCurvePoint, BestWindowResult, PlanetEvent, MoonInterference, AirmassPoint } from './planner.js';
 export { AstroClock } from './clock.js';
+export { Events } from './events.js';
+export type { AstroEvent, AstroEventCategory, NextEventsOptions, EventVisibility } from './events.js';
 export type { AstroClockOptions, AstroClockEventMap, AstroEventType } from './clock.js';
 export type { EclipseEvent } from './eclipse.js';
 export { Data, SOLAR_SYSTEM, DEEP_SKY_EXTRAS, BRIGHT_STARS, CONSTELLATIONS, MESSIER_CATALOG, METEOR_SHOWERS, IMAGE_FALLBACKS, resolveImages, getObjectImage, prefetchImages, computeFov, tryPanSTARRS, tryDSS } from './data/index.js';
@@ -161,6 +163,11 @@ declare const Cosmos: {
         readonly airmassCurve: (objectId: string, observer: import("./types.js").ObserverParams, steps?: number) => import("./planner.js").AirmassPoint[] | null;
     };
     readonly AstroClock: typeof AstroClock;
+    readonly Events: {
+        readonly nextEvents: (observer: import("./types.js").ObserverParams, options?: import("./events.js").NextEventsOptions) => import("./events.js").AstroEvent[];
+        readonly nextEvent: (category: import("./events.js").AstroEventCategory, observer: import("./types.js").ObserverParams, days?: number) => import("./events.js").AstroEvent | null;
+        readonly toICal: (events: import("./events.js").AstroEvent[], calendarName?: string) => string;
+    };
     readonly Data: {
         get(id: string): import("./types.js").CelestialObject | null;
         getByName(name: string): import("./types.js").CelestialObject | null;
