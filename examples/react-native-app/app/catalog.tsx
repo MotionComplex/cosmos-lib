@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback } from "react";
 import {
   View,
   Text,
@@ -6,38 +6,37 @@ import {
   FlatList,
   StyleSheet,
   Pressable,
-} from 'react-native';
-import { useRouter } from 'expo-router';
-import { Data } from '@motioncomplex/cosmos-lib';
-import type { CelestialObject, ObjectType } from '@motioncomplex/cosmos-lib';
-import { ObjectCard } from '../src/components/ObjectCard';
-import { StarField } from '../src/components/StarField';
-import { colors, fonts, spacing, radius } from '../src/constants/theme';
+} from "react-native";
+import { useRouter } from "expo-router";
+import { Data } from "@motioncomplex/cosmos-lib";
+import type { CelestialObject, ObjectType } from "@motioncomplex/cosmos-lib";
+import { ObjectCard } from "../src/components/ObjectCard";
+import { StarField } from "../src/components/StarField";
+import { colors, fonts, spacing, radius } from "../src/constants/theme";
 
-const TYPE_FILTERS: { label: string; value: ObjectType | 'all' }[] = [
-  { label: 'All', value: 'all' },
-  { label: 'Stars', value: 'star' },
-  { label: 'Planets', value: 'planet' },
-  { label: 'Nebulae', value: 'nebula' },
-  { label: 'Galaxies', value: 'galaxy' },
-  { label: 'Clusters', value: 'cluster' },
+const TYPE_FILTERS: { label: string; value: ObjectType | "all" }[] = [
+  { label: "All", value: "all" },
+  { label: "Stars", value: "star" },
+  { label: "Planets", value: "planet" },
+  { label: "Nebulae", value: "nebula" },
+  { label: "Galaxies", value: "galaxy" },
+  { label: "Clusters", value: "cluster" },
 ];
 
 export default function CatalogScreen() {
   const router = useRouter();
-  const [query, setQuery] = useState('');
-  const [filter, setFilter] = useState<ObjectType | 'all'>('all');
+  const [query, setQuery] = useState("");
+  const [filter, setFilter] = useState<ObjectType | "all">("all");
   const [tierLoading, setTierLoading] = useState(false);
-  const [tierLabel, setTierLabel] = useState('Load 9K+ stars');
+  const [tierLabel, setTierLabel] = useState("Load 9K+ stars");
 
   const results = useMemo(() => {
     if (query.length > 0) {
       return Data.search(query)
-        .map((r) => r.object)
-        .filter((o) => filter === 'all' || o.type === filter)
+        .filter((o) => filter === "all" || o.type === filter)
         .slice(0, 60);
     }
-    const all = filter === 'all' ? Data.all() : Data.getByType(filter);
+    const all = filter === "all" ? Data.all() : Data.getByType(filter);
     return all
       .sort((a, b) => (a.magnitude ?? 99) - (b.magnitude ?? 99))
       .slice(0, 60);
@@ -45,7 +44,7 @@ export default function CatalogScreen() {
 
   const handlePress = useCallback(
     (obj: CelestialObject) => {
-      router.push({ pathname: '/detail', params: { id: obj.id } });
+      router.push({ pathname: "/detail", params: { id: obj.id } });
     },
     [router],
   );
@@ -67,20 +66,24 @@ export default function CatalogScreen() {
         />
       </View>
 
-      {/* Load more stars */}
-      {!Data.loadedStarTiers().has(1) && (
+      {/* Load more stars (requires cosmos-lib with tier loading support) */}
+      {'loadStarTier' in Data && (
         <Pressable
-          style={[styles.filterChip, styles.filterChipActive, { marginHorizontal: spacing.lg, marginBottom: spacing.sm }]}
+          style={[
+            styles.filterChip,
+            styles.filterChipActive,
+            { marginHorizontal: spacing.lg, marginBottom: spacing.sm },
+          ]}
           onPress={async () => {
             setTierLoading(true);
-            const n = await Data.loadStarTier(1);
+            const n = await (Data as any).loadStarTier(1);
             setTierLabel(`${n.toLocaleString()} stars loaded`);
             setTierLoading(false);
           }}
           disabled={tierLoading}
         >
           <Text style={styles.filterLabelActive}>
-            {tierLoading ? 'Loading…' : tierLabel}
+            {tierLoading ? "Loading…" : tierLabel}
           </Text>
         </Pressable>
       )}
@@ -117,9 +120,7 @@ export default function CatalogScreen() {
         )}
         contentContainerStyle={styles.list}
         showsVerticalScrollIndicator={false}
-        ListEmptyComponent={
-          <Text style={styles.empty}>No objects found</Text>
-        }
+        ListEmptyComponent={<Text style={styles.empty}>No objects found</Text>}
       />
     </View>
   );
@@ -146,7 +147,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
   },
   filterRow: {
-    flexDirection: 'row',
+    flexDirection: "row",
     paddingHorizontal: spacing.lg,
     gap: spacing.sm,
     marginBottom: spacing.md,
@@ -178,7 +179,7 @@ const styles = StyleSheet.create({
   empty: {
     color: colors.textMuted,
     fontSize: fonts.size.md,
-    textAlign: 'center',
+    textAlign: "center",
     marginTop: spacing.xxl,
   },
 });

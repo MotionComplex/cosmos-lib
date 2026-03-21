@@ -23,6 +23,8 @@
       "cosmos-lib": ["../../src"],
       "cosmos-lib/*": ["../../src/*"],
       "@/*": ["./src/*"],
+      "react": ["./node_modules/@types/react"],
+      "react/jsx-runtime": ["./node_modules/@types/react/jsx-runtime"],
       "three": ["./node_modules/@types/three/index.d.ts"],
       "three/*": ["./node_modules/@types/three/*"]
     }

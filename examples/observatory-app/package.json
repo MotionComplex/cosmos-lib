@@ -10,10 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@motioncomplex/cosmos-lib": "^1.0.9",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-router-dom": "^7.13.1",
-    "@motioncomplex/cosmos-lib": "^1.0.9",
     "three": "^0.183.0"
   },
   "devDependencies": {
