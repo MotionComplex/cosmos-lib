@@ -111,8 +111,8 @@ Remove adoption friction — most developers search npmjs.com.
 - [x] **Docs & examples:**
   - [x] Update README with public npm install instructions and React hooks section
   - [x] Add npm version/download badges to README
-  - [ ] `observatory-app`: update `package.json` to install from public npm after first publish
-  - [ ] `react-native-app`: update `package.json` to install from public npm after first publish
+  - [x] `observatory-app`: added `@motioncomplex/cosmos-lib` to `package.json` (Vite aliases still used for dev)
+  - [x] `react-native-app`: switched from `file:../../` to `^1.0.9` on public npm
 
 ---
 
