@@ -19,6 +19,13 @@ export { METEOR_SHOWERS } from './showers.js';
 export { IMAGE_FALLBACKS, resolveImages, getObjectImage, prefetchImages } from './images.js';
 export { computeFov, tryPanSTARRS, tryDSS } from './cutouts.js';
 export type { CutoutResult, CutoutOptions } from './cutouts.js';
+/** Compact star record used by tier data files. */
+export interface TierStar {
+    ra: number;
+    dec: number;
+    mag: number;
+    bv: number;
+}
 /**
  * Unified data-access facade for all built-in astronomical catalogs.
  *
@@ -419,4 +426,50 @@ export declare const Data: {
      * ```
      */
     getActiveShowers(date: Date): MeteorShower[];
+    /**
+     * Load an expanded star tier into the catalog.
+     *
+     * - **Tier 0** (default): ~200 IAU named bright stars — always bundled
+     * - **Tier 1**: ~9,100 stars to magnitude 6.5 (naked-eye limit) — ~145 KB
+     * - **Tier 2**: ~120,000 stars to magnitude 9+ — ~1.9 MB (compact binary)
+     *
+     * Loaded stars are merged into the unified catalog and become available
+     * to `search()`, `nearby()`, `all()`, `getByType('star')`, and sky map
+     * rendering. Loading is idempotent — calling again for an already-loaded
+     * tier is a no-op.
+     *
+     * @param tier - The tier to load (1 or 2).
+     * @returns A promise that resolves with the number of stars added.
+     *
+     * @remarks
+     * Star data is sourced from the HYG Database v3.8 (public domain).
+     * Attribution: David Nash, "HYG Stellar Database", https://github.com/astronexus/HYG-Database
+     *
+     * @example
+     * ```ts
+     * // Load naked-eye stars
+     * const added = await Data.loadStarTier(1)
+     * console.log(`Added ${added} stars`)
+     *
+     * // Now search finds fainter stars
+     * const faint = Data.search('hip 12345')
+     *
+     * // Sky map renders more stars
+     * renderSkyMap(canvas, Data.all(), { showMagnitudeLimit: 6.5 })
+     * ```
+     */
+    loadStarTier(tier: 1 | 2): Promise<number>;
+    /**
+     * Check which star tiers are currently loaded.
+     *
+     * @returns A set of loaded tier numbers (always includes 0).
+     *
+     * @example
+     * ```ts
+     * Data.loadedStarTiers() // Set { 0 }
+     * await Data.loadStarTier(1)
+     * Data.loadedStarTiers() // Set { 0, 1 }
+     * ```
+     */
+    loadedStarTiers(): ReadonlySet<number>;
 };

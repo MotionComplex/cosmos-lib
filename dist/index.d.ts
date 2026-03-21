@@ -33,7 +33,7 @@ export { AstroClock } from './clock.js';
 export type { AstroClockOptions, AstroClockEventMap, AstroEventType } from './clock.js';
 export type { EclipseEvent } from './eclipse.js';
 export { Data, SOLAR_SYSTEM, DEEP_SKY_EXTRAS, BRIGHT_STARS, CONSTELLATIONS, MESSIER_CATALOG, METEOR_SHOWERS, IMAGE_FALLBACKS, resolveImages, getObjectImage, prefetchImages, computeFov, tryPanSTARRS, tryDSS } from './data/index.js';
-export type { SolarSystemBody, BrightStar, Constellation, MessierObject, MeteorShower, ResolvedImage, ResolveImageOptions, CutoutResult, CutoutOptions } from './data/index.js';
+export type { SolarSystemBody, BrightStar, Constellation, MessierObject, MeteorShower, ResolvedImage, ResolveImageOptions, CutoutResult, CutoutOptions, TierStar } from './data/index.js';
 export { PLANET_TEXTURES, STAR_TEXTURES } from './data/textures.js';
 export type { TextureInfo } from './data/textures.js';
 export { Media } from './media.js';
@@ -188,6 +188,8 @@ declare const Cosmos: {
         getMessier(number: number): import("./index.js").MessierObject | null;
         showers(): readonly import("./index.js").MeteorShower[];
         getActiveShowers(date: Date): import("./index.js").MeteorShower[];
+        loadStarTier(tier: 1 | 2): Promise<number>;
+        loadedStarTiers(): ReadonlySet<number>;
     };
     readonly Media: {
         readonly chainLoad: (urls: string[]) => Promise<string>;

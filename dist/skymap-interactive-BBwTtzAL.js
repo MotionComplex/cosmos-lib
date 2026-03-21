@@ -673,7 +673,7 @@ const L = {
     return { rise: d, transit: y, set: h };
   }
 };
-function ds(n, s = 6e4, e = 128) {
+function bs(n, s = 6e4, e = 128) {
   const i = /* @__PURE__ */ new Map();
   return (t = /* @__PURE__ */ new Date()) => {
     const l = Math.round(t.getTime() / s), r = i.get(l);
@@ -682,7 +682,7 @@ function ds(n, s = 6e4, e = 128) {
     return i.size >= e && i.delete(i.keys().next().value), i.set(l, g), g;
   };
 }
-const Q = L.DEG_TO_RAD, Ss = ds((n) => {
+const Q = L.DEG_TO_RAD, Is = bs((n) => {
   const s = _.planetEcliptic("earth", n), e = ((s.lon + 180) % 360 + 360) % 360, i = -s.lat, t = _.toJulian(n), { dPsi: l } = _.nutation(t), r = e + l, g = _.trueObliquity(t) * Q, o = r * Q, a = i * Q, v = Math.atan2(
     Math.sin(o) * Math.cos(g) - Math.tan(a) * Math.sin(g),
     Math.cos(o)
@@ -724,7 +724,7 @@ const Q = L.DEG_TO_RAD, Ss = ds((n) => {
    * ```
    */
   position(n = /* @__PURE__ */ new Date()) {
-    return Ss(n);
+    return Is(n);
   },
   /**
    * Solar noon (transit) for a given observer.
@@ -834,7 +834,7 @@ const Q = L.DEG_TO_RAD, Ss = ds((n) => {
       astronomicalDusk: r.set
     };
   }
-}, M = L.DEG_TO_RAD, B = L.RAD_TO_DEG, Ds = [
+}, M = L.DEG_TO_RAD, B = L.RAD_TO_DEG, ws = [
   [0, 0, 1, 0, 6288774, -20905355],
   [2, 0, -1, 0, 1274027, -3699111],
   [2, 0, 0, 0, 658314, -2955968],
@@ -885,7 +885,7 @@ const Q = L.DEG_TO_RAD, Ss = ds((n) => {
   [0, 0, 4, 0, 537, -1117],
   [4, -1, 0, 0, 520, -1571],
   [1, 0, -2, 0, -487, -1739]
-], Cs = [
+], Rs = [
   [0, 0, 0, 1, 5128122],
   [0, 0, 1, 1, 280602],
   [0, 0, 1, -1, 277693],
@@ -916,39 +916,39 @@ const Q = L.DEG_TO_RAD, Ss = ds((n) => {
   [0, 0, 3, 1, 1107],
   [4, 0, 0, -1, 1021],
   [4, 0, -1, 1, 833]
-], Z = 29.530588861, Is = ds((n) => {
+], Z = 29.530588861, xs = bs((n) => {
   const s = _.toJulian(n), e = (s - 2451545) / 36525, i = ((218.3164477 + 481267.88123421 * e - 15786e-7 * e * e + e * e * e / 538841 - e * e * e * e / 65194e3) % 360 + 360) % 360, t = ((297.8501921 + 445267.1114034 * e - 18819e-7 * e * e + e * e * e / 545868 - e * e * e * e / 113065e3) % 360 + 360) % 360, l = ((357.5291092 + 35999.0502909 * e - 1536e-7 * e * e + e * e * e / 2449e4) % 360 + 360) % 360, r = ((134.9633964 + 477198.8675055 * e + 87414e-7 * e * e + e * e * e / 69699 - e * e * e * e / 14712e3) % 360 + 360) % 360, g = ((93.272095 + 483202.0175233 * e - 36539e-7 * e * e - e * e * e / 3526e3 + e * e * e * e / 86331e4) % 360 + 360) % 360, o = 1 - 2516e-6 * e - 74e-7 * e * e, a = o * o, v = t * M, y = l * M, c = r * M, k = g * M;
   let u = 0, f = 0;
-  for (const C of Ds) {
-    const $ = C[0] * v + C[1] * y + C[2] * c + C[3] * k;
-    let P = 1;
+  for (const C of ws) {
+    const Y = C[0] * v + C[1] * y + C[2] * c + C[3] * k;
+    let G = 1;
     const q = Math.abs(C[1]);
-    q === 1 ? P = o : q === 2 && (P = a), u += C[4] * P * Math.sin($), f += C[5] * P * Math.cos($);
+    q === 1 ? G = o : q === 2 && (G = a), u += C[4] * G * Math.sin(Y), f += C[5] * G * Math.cos(Y);
   }
   let d = 0;
-  for (const C of Cs) {
-    const $ = C[0] * v + C[1] * y + C[2] * c + C[3] * k;
-    let P = 1;
+  for (const C of Rs) {
+    const Y = C[0] * v + C[1] * y + C[2] * c + C[3] * k;
+    let G = 1;
     const q = Math.abs(C[1]);
-    q === 1 ? P = o : q === 2 && (P = a), d += C[4] * P * Math.sin($);
+    q === 1 ? G = o : q === 2 && (G = a), d += C[4] * G * Math.sin(Y);
   }
   const h = (119.75 + 131.849 * e) * M, p = (53.09 + 479264.29 * e) * M, m = (313.45 + 481266.484 * e) * M;
   u += 3958 * Math.sin(h) + 1962 * Math.sin((i - g) * M) + 318 * Math.sin(p), d += -2235 * Math.sin(i * M) + 382 * Math.sin(m) + 175 * Math.sin(h - k) + 175 * Math.sin(h + k) + 127 * Math.sin((i - r) * M) - 115 * Math.sin((i + r) * M);
-  const A = i + u / 1e6, b = d / 1e6, S = 385000.56 + f / 1e3, { dPsi: R } = _.nutation(s), H = A + R, E = _.trueObliquity(s) * M, U = H * M, X = b * M, zs = Math.atan2(
+  const A = i + u / 1e6, b = d / 1e6, S = 385000.56 + f / 1e3, { dPsi: R } = _.nutation(s), H = A + R, E = _.trueObliquity(s) * M, U = H * M, X = b * M, Ss = Math.atan2(
     Math.sin(U) * Math.cos(E) - Math.tan(X) * Math.sin(E),
     Math.cos(U)
-  ) * B, Ms = Math.asin(
+  ) * B, Ds = Math.asin(
     Math.sin(X) * Math.cos(E) + Math.cos(X) * Math.sin(E) * Math.sin(U)
-  ) * B, As = Math.asin(6378.14 / S) * B;
+  ) * B, Cs = Math.asin(6378.14 / S) * B;
   return {
-    ra: (zs % 360 + 360) % 360,
-    dec: Ms,
+    ra: (Ss % 360 + 360) % 360,
+    dec: Ds,
     distance_km: S,
     eclipticLon: (H % 360 + 360) % 360,
     eclipticLat: b,
-    parallax: As
+    parallax: Cs
   };
-}, 6e4, 64), G = {
+}, 6e4, 64), O = {
   /**
    * Geocentric equatorial and ecliptic position of the Moon.
    *
@@ -985,7 +985,7 @@ const Q = L.DEG_TO_RAD, Ss = ds((n) => {
    * ```
    */
   position(n = /* @__PURE__ */ new Date()) {
-    return Is(n);
+    return xs(n);
   },
   /**
    * Moon phase information for a given date.
@@ -1154,7 +1154,7 @@ const Q = L.DEG_TO_RAD, Ss = ds((n) => {
     ) * B;
     return { l: g, b: o };
   }
-}, ws = [
+}, Ts = [
   {
     id: "sun",
     name: "Sun",
@@ -1313,7 +1313,7 @@ const Q = L.DEG_TO_RAD, Ss = ds((n) => {
     description: "Windiest planet at 2,100 km/h; found by mathematical prediction before observation.",
     tags: ["solar-system", "planet", "ice-giant"]
   }
-], Rs = [
+], Ns = [
   {
     id: "ngc7293",
     name: "Helix Nebula",
@@ -1549,7 +1549,7 @@ const Q = L.DEG_TO_RAD, Ss = ds((n) => {
   { id: "rotanev", name: "Rotanev", con: "Del", hr: 7882, ra: 309.387, dec: 14.595, mag: 3.63, spec: "F5III", pmRa: 118.07, pmDec: -46.85, bv: 0.44 },
   { id: "sualocin", name: "Sualocin", con: "Del", hr: 7906, ra: 309.91, dec: 15.912, mag: 3.77, spec: "B9IV", pmRa: 54.8, pmDec: 8.44, bv: -0.03 },
   { id: "proxima-centauri", name: "Proxima Centauri", con: "Cen", hr: 0, ra: 217.429, dec: -62.68, mag: 11.13, spec: "M5.5Ve", pmRa: -3775.4, pmDec: 765.54, bv: 1.9 }
-], fs = [
+], _s = [
   // ────────────────────────────────────────────────────────────────
   // 1. Andromeda
   // ────────────────────────────────────────────────────────────────
@@ -3911,7 +3911,7 @@ const Q = L.DEG_TO_RAD, Ss = ds((n) => {
       [308.55, 27.09, 295.74, 24.08]
     ]
   }
-], rs = [
+], as = [
   { messier: 1, name: "Crab Nebula", ngc: "NGC 1952", type: "nebula", subtype: "supernova remnant", constellation: "Tau", ra: 83.633, dec: 22.015, mag: 8.4, size_arcmin: 6, distance_kly: 6.5, description: "Supernova remnant from SN 1054, contains a pulsar" },
   { messier: 2, name: "M2", ngc: "NGC 7089", type: "cluster", subtype: "globular cluster", constellation: "Aqr", ra: 323.363, dec: -0.823, mag: 6.3, size_arcmin: 16, distance_kly: 37.5, description: "Rich globular cluster" },
   { messier: 3, name: "M3", ngc: "NGC 5272", type: "cluster", subtype: "globular cluster", constellation: "CVn", ra: 205.548, dec: 28.377, mag: 6.2, size_arcmin: 18, distance_kly: 33.9, description: "One of the finest globular clusters" },
@@ -4022,7 +4022,7 @@ const Q = L.DEG_TO_RAD, Ss = ds((n) => {
   { messier: 108, name: "M108", ngc: "NGC 3556", type: "galaxy", subtype: "barred spiral galaxy", constellation: "UMa", ra: 167.879, dec: 55.674, mag: 10, size_arcmin: 8, distance_kly: 45e3, description: "Nearly edge-on barred spiral near Owl Nebula" },
   { messier: 109, name: "M109", ngc: "NGC 3992", type: "galaxy", subtype: "barred spiral galaxy", constellation: "UMa", ra: 179.4, dec: 53.375, mag: 9.8, size_arcmin: 8, distance_kly: 83500, description: "Barred spiral galaxy near Phecda" },
   { messier: 110, name: "M110", ngc: "NGC 205", type: "galaxy", subtype: "elliptical galaxy", constellation: "And", ra: 10.092, dec: 41.685, mag: 8.5, size_arcmin: 22, distance_kly: 2690, description: "Satellite of Andromeda Galaxy" }
-], vs = [
+], ys = [
   { id: "quadrantids", name: "Quadrantids", code: "QUA", radiantRA: 230.1, radiantDec: 48.5, solarLon: 283.16, peakDate: "Jan 04", start: "Dec 28", end: "Jan 12", zhr: 110, speed: 41, parentBody: "2003 EH1" },
   { id: "lyrids", name: "Lyrids", code: "LYR", radiantRA: 271.4, radiantDec: 33.6, solarLon: 32.32, peakDate: "Apr 22", start: "Apr 14", end: "Apr 30", zhr: 18, speed: 49, parentBody: "C/1861 G1 (Thatcher)" },
   { id: "eta-aquariids", name: "Eta Aquariids", code: "ETA", radiantRA: 338, radiantDec: -1, solarLon: 45.5, peakDate: "May 06", start: "Apr 19", end: "May 28", zhr: 50, speed: 66, parentBody: "1P/Halley" },
@@ -4047,7 +4047,7 @@ const Q = L.DEG_TO_RAD, Ss = ds((n) => {
   { id: "ursids", name: "Ursids", code: "URS", radiantRA: 217, radiantDec: 76, solarLon: 270.7, peakDate: "Dec 22", start: "Dec 17", end: "Dec 26", zhr: 10, speed: 33, parentBody: "8P/Tuttle" }
 ];
 let ss = "DEMO_KEY";
-const ks = {
+const us = {
   /**
    * Set the NASA API key used for APOD requests.
    *
@@ -4256,7 +4256,7 @@ const ks = {
       copyright: t.copyright ?? "NASA"
     }));
   }
-}, xs = {
+}, Ls = {
   /**
    * Search the ESA Hubble Space Telescope image archive.
    *
@@ -4303,7 +4303,7 @@ const ks = {
     });
   }
 };
-async function re(n) {
+async function ce(n) {
   var l;
   const s = new URLSearchParams({
     REQUEST: "doQuery",
@@ -4324,7 +4324,7 @@ async function re(n) {
   const t = (l = (await e.json()).data) == null ? void 0 : l[0];
   return t ? { id: t[0], ra: t[1], dec: t[2], type: t[3] } : null;
 }
-const Ts = {
+const Ps = {
   acrab: { g: "/rings.v3.skycell/0938/008/rings.v3.skycell.0938.008.stk.g.unconv.fits", i: "/rings.v3.skycell/0938/008/rings.v3.skycell.0938.008.stk.i.unconv.fits", r: "/rings.v3.skycell/0938/008/rings.v3.skycell.0938.008.stk.r.unconv.fits", y: "/rings.v3.skycell/0938/008/rings.v3.skycell.0938.008.stk.y.unconv.fits", z: "/rings.v3.skycell/0938/008/rings.v3.skycell.0938.008.stk.z.unconv.fits" },
   adhafera: { g: "/rings.v3.skycell/1800/085/rings.v3.skycell.1800.085.stk.g.unconv.fits", i: "/rings.v3.skycell/1800/085/rings.v3.skycell.1800.085.stk.i.unconv.fits", r: "/rings.v3.skycell/1800/085/rings.v3.skycell.1800.085.stk.r.unconv.fits", y: "/rings.v3.skycell/1800/085/rings.v3.skycell.1800.085.stk.y.unconv.fits", z: "/rings.v3.skycell/1800/085/rings.v3.skycell.1800.085.stk.z.unconv.fits" },
   adhara: { g: "/rings.v3.skycell/0658/075/rings.v3.skycell.0658.075.stk.g.unconv.fits", i: "/rings.v3.skycell/0658/075/rings.v3.skycell.0658.075.stk.i.unconv.fits", r: "/rings.v3.skycell/0658/075/rings.v3.skycell.0658.075.stk.r.unconv.fits", y: "/rings.v3.skycell/0658/075/rings.v3.skycell.0658.075.stk.y.unconv.fits", z: "/rings.v3.skycell/0658/075/rings.v3.skycell.0658.075.stk.z.unconv.fits" },
@@ -4564,7 +4564,7 @@ const Ts = {
   zosma: { g: "/rings.v3.skycell/1803/011/rings.v3.skycell.1803.011.stk.g.unconv.fits", i: "/rings.v3.skycell/1803/011/rings.v3.skycell.1803.011.stk.i.unconv.fits", r: "/rings.v3.skycell/1803/011/rings.v3.skycell.1803.011.stk.r.unconv.fits", y: "/rings.v3.skycell/1803/011/rings.v3.skycell.1803.011.stk.y.unconv.fits", z: "/rings.v3.skycell/1803/011/rings.v3.skycell.1803.011.stk.z.unconv.fits" },
   zubenelgenubi: { g: "/rings.v3.skycell/0933/092/rings.v3.skycell.0933.092.stk.g.unconv.fits", i: "/rings.v3.skycell/0933/092/rings.v3.skycell.0933.092.stk.i.unconv.fits", r: "/rings.v3.skycell/0933/092/rings.v3.skycell.0933.092.stk.r.unconv.fits", y: "/rings.v3.skycell/0933/092/rings.v3.skycell.0933.092.stk.y.unconv.fits", z: "/rings.v3.skycell/0933/092/rings.v3.skycell.0933.092.stk.z.unconv.fits" },
   zubeneschamali: { g: "/rings.v3.skycell/1111/068/rings.v3.skycell.1111.068.stk.g.unconv.fits", i: "/rings.v3.skycell/1111/068/rings.v3.skycell.1111.068.stk.i.unconv.fits", r: "/rings.v3.skycell/1111/068/rings.v3.skycell.1111.068.stk.r.unconv.fits", y: "/rings.v3.skycell/1111/068/rings.v3.skycell.1111.068.stk.y.unconv.fits", z: "/rings.v3.skycell/1111/068/rings.v3.skycell.1111.068.stk.z.unconv.fits" }
-}, Ns = {
+}, Gs = {
   star: 15,
   planet: 10,
   nebula: 20,
@@ -4572,16 +4572,16 @@ const Ts = {
   cluster: 20,
   "black-hole": 8
 };
-function Ls(n, s, e = {}) {
-  const { padding: i = 1.6, minFov: t = 4, maxFov: l = 120 } = e, r = n != null ? n * i : Ns[s] ?? 15;
+function Os(n, s, e = {}) {
+  const { padding: i = 1.6, minFov: t = 4, maxFov: l = 120 } = e, r = n != null ? n * i : Gs[s] ?? 15;
   return Math.max(t, Math.min(l, r));
 }
-const Ps = 0.25;
-async function Gs(n, s, e, i, t = {}) {
+const Es = 0.25;
+async function Fs(n, s, e, i, t = {}) {
   if (e < -30) return null;
-  const l = Ts[n];
+  const l = Ps[n];
   if (!l) return null;
-  const { outputSize: r = 1024, timeout: g = 15e3 } = t, o = Math.round(i * 60 / Ps), a = Math.max(r, Math.min(o, 1e4)), v = l.i ?? l.r ?? l.g, y = l.r ?? l.g ?? l.i, c = l.g ?? l.r ?? l.i;
+  const { outputSize: r = 1024, timeout: g = 15e3 } = t, o = Math.round(i * 60 / Es), a = Math.max(r, Math.min(o, 1e4)), v = l.i ?? l.r ?? l.g, y = l.r ?? l.g ?? l.i, c = l.g ?? l.r ?? l.i;
   if (!v && !y && !c) return null;
   const k = new URL("https://ps1images.stsci.edu/cgi-bin/fitscut.cgi");
   v && k.searchParams.set("red", v), y && k.searchParams.set("green", y), c && k.searchParams.set("blue", c), k.searchParams.set("size", String(a)), k.searchParams.set("output_size", String(Math.min(r, a))), k.searchParams.set("format", "jpg"), k.searchParams.set("autoscale", "99.5");
@@ -4602,7 +4602,7 @@ async function Gs(n, s, e, i, t = {}) {
     return null;
   }
 }
-async function Os(n, s, e, i = {}) {
+async function js(n, s, e, i = {}) {
   const { timeout: t = 15e3 } = i, l = s > -40 ? "poss2ukstu_red" : "poss1_red", r = new URL("https://archive.stsci.edu/cgi-bin/dss_search");
   r.searchParams.set("r", n.toFixed(6)), r.searchParams.set("d", s.toFixed(6)), r.searchParams.set("e", "J2000"), r.searchParams.set("w", e.toFixed(2)), r.searchParams.set("h", e.toFixed(2)), r.searchParams.set("f", "gif"), r.searchParams.set("v", l), r.searchParams.set("s", "on"), r.searchParams.set("compress", "none");
   try {
@@ -4622,12 +4622,12 @@ async function Os(n, s, e, i = {}) {
     return null;
   }
 }
-let T = null, ts = null;
-function Es(n) {
+let T = null, ls = null;
+function Bs(n) {
   T = n;
 }
-function Fs(n) {
-  ts = n;
+function Vs(n) {
+  ls = n;
 }
 const J = {
   // ── Solar system ──────────────────────────────────────────────────────────
@@ -4677,13 +4677,13 @@ const J = {
   "omega-cen": [{ filename: "Omega_Centauri_by_ESO.jpg", credit: "ESO" }],
   "m87-bh": [{ filename: "Black_hole_-_Messier_87_crop_max_res.jpg", credit: "Event Horizon Telescope · CC BY 4.0" }]
 };
-async function ps(n, s = {}) {
+async function zs(n, s = {}) {
   const { source: e = "nasa", limit: i = 5 } = s, t = [];
   if (e === "nasa" || e === "all") {
-    const l = await ks.searchImages(n, { pageSize: i });
+    const l = await us.searchImages(n, { pageSize: i });
     for (const r of l) {
       if (!r.nasaId) continue;
-      const o = (await ks.getAssets(r.nasaId)).filter((a) => /\.(jpe?g|png|tiff?)$/i.test(a));
+      const o = (await us.getAssets(r.nasaId)).filter((a) => /\.(jpe?g|png|tiff?)$/i.test(a));
       o.length > 0 && t.push({
         urls: o,
         previewUrl: r.previewUrl,
@@ -4694,7 +4694,7 @@ async function ps(n, s = {}) {
     }
   }
   if (e === "esa" || e === "all") {
-    const l = await xs.searchHubble(n, i);
+    const l = await Ls.searchHubble(n, i);
     for (const r of l) {
       const g = [r.imageUrl, r.thumbUrl].filter((o) => o !== null);
       g.length > 0 && t.push({
@@ -4709,28 +4709,28 @@ async function ps(n, s = {}) {
   return t.slice(0, i);
 }
 const K = /* @__PURE__ */ new Map();
-function ls(n, s, e) {
+function rs(n, s, e) {
   return `${n}::${s}::${e}`;
 }
-function js(n) {
+function Hs(n) {
   if (T)
     for (const s of n) {
       const e = T(s);
       if (!e) continue;
-      const i = ls(s, 1200, "nasa");
-      K.has(i) || cs(s, e.name, { prefetch: !1 }).catch(() => {
+      const i = rs(s, 1200, "nasa");
+      K.has(i) || gs(s, e.name, { prefetch: !1 }).catch(() => {
       });
     }
 }
-const ys = /^(m|ngc|ic|sh2|arp|abell)\s*\d/i;
-function Bs(n, s) {
+const ms = /^(m|ngc|ic|sh2|arp|abell)\s*\d/i;
+function Us(n, s) {
   const e = [], i = T == null ? void 0 : T(n);
   if (i != null && i.aliases)
     for (const t of i.aliases)
-      ys.test(t) && e.push(t);
-  return ys.test(n) && e.push(n.toUpperCase()), e.push(`${s} ${(i == null ? void 0 : i.type) ?? "astronomy"}`), e;
+      ms.test(t) && e.push(t);
+  return ms.test(n) && e.push(n.toUpperCase()), e.push(`${s} ${(i == null ? void 0 : i.type) ?? "astronomy"}`), e;
 }
-async function cs(n, s, e = {}) {
+async function gs(n, s, e = {}) {
   const {
     width: i = 1200,
     srcsetWidths: t = [640, 1024, 1600],
@@ -4738,7 +4738,7 @@ async function cs(n, s, e = {}) {
     cutoutTimeout: r = 15e3,
     skipCutouts: g = !0,
     prefetch: o
-  } = e, a = ls(n, i, l);
+  } = e, a = rs(n, i, l);
   if (K.has(a))
     return K.get(a) ?? null;
   let v = null;
@@ -4756,7 +4756,7 @@ async function cs(n, s, e = {}) {
   if (!v && !g && T) {
     const c = T(n);
     if (c && c.ra !== null && c.dec !== null) {
-      const k = Ls(c.size_arcmin, c.type), u = { outputSize: i, timeout: r }, f = await Gs(n, c.ra, c.dec, k, u);
+      const k = Os(c.size_arcmin, c.type), u = { outputSize: i, timeout: r }, f = await Fs(n, c.ra, c.dec, k, u);
       if (f && (v = {
         src: f.url,
         srcset: null,
@@ -4764,7 +4764,7 @@ async function cs(n, s, e = {}) {
         credit: f.credit,
         source: "panstarrs"
       }), !v) {
-        const d = await Os(c.ra, c.dec, k, u);
+        const d = await js(c.ra, c.dec, k, u);
         d && (v = {
           src: d.url,
           srcset: null,
@@ -4776,12 +4776,12 @@ async function cs(n, s, e = {}) {
     }
   }
   if (!v) {
-    const c = Bs(n, s), k = l === "nasa" ? ["nasa"] : l === "esa" ? ["esa"] : ["esa", "nasa"];
+    const c = Us(n, s), k = l === "nasa" ? ["nasa"] : l === "esa" ? ["esa"] : ["esa", "nasa"];
     for (const u of k) {
       if (v) break;
       for (const f of c)
         try {
-          const d = await ps(f, { source: u, limit: 1 });
+          const d = await zs(f, { source: u, limit: 1 });
           if (d.length > 0) {
             const h = d[0];
             v = {
@@ -4797,18 +4797,19 @@ async function cs(n, s, e = {}) {
         }
     }
   }
-  if (K.set(a, v), v && o !== !1 && T && ts) {
+  if (K.set(a, v), v && o !== !1 && T && ls) {
     const c = T(n);
     if (c && c.ra !== null && c.dec !== null) {
-      const k = typeof o == "object" ? o : {}, { radius: u = 5, limit: f = 8 } = k, d = ts({ ra: c.ra, dec: c.dec }, u).filter((h) => h.object.id !== n && !K.has(ls(h.object.id, i, l))).slice(0, f);
+      const k = typeof o == "object" ? o : {}, { radius: u = 5, limit: f = 8 } = k, d = ls({ ra: c.ra, dec: c.dec }, u).filter((h) => h.object.id !== n && !K.has(rs(h.object.id, i, l))).slice(0, f);
       for (const h of d)
-        cs(h.object.id, h.object.name, { ...e, prefetch: !1 }).catch(() => {
+        gs(h.object.id, h.object.name, { ...e, prefetch: !1 }).catch(() => {
         });
     }
   }
   return v;
 }
-function Vs(n) {
+const es = /* @__PURE__ */ new Set([0]);
+function qs(n) {
   return {
     id: n.id,
     name: n.name,
@@ -4822,7 +4823,7 @@ function Vs(n) {
     tags: ["star"]
   };
 }
-function Hs(n) {
+function Ks(n) {
   return {
     id: `m${n.messier}`,
     name: n.name,
@@ -4837,35 +4838,36 @@ function Hs(n) {
     ...n.size_arcmin != null ? { size_arcmin: n.size_arcmin } : {}
   };
 }
-const O = [
-  ...ws,
-  ...W.map(Vs),
-  ...rs.map(Hs),
-  ...Rs
-], hs = new Map(O.map((n) => [n.id, n])), Us = new Map(
-  O.flatMap(
+let P = [
+  ...Ts,
+  ...W.map(qs),
+  ...as.map(Ks),
+  ...Ns
+], cs = new Map(P.map((n) => [n.id, n])), ds = new Map(
+  P.flatMap(
     (n) => [n.name, ...n.aliases].map((s) => [s.toLowerCase(), n])
   )
 );
-Es((n) => {
-  const s = hs.get(n);
+Bs((n) => {
+  const s = cs.get(n);
   return s ? { id: s.id, ra: s.ra, dec: s.dec, size_arcmin: s.size_arcmin, type: s.type, name: s.name, aliases: s.aliases } : null;
 });
-Fs(
-  (n, s) => O.filter(
+Vs(
+  (n, s) => P.filter(
     (e) => e.ra !== null && e.dec !== null
   ).map((e) => ({
     object: e,
     separation: _.angularSeparation(n, { ra: e.ra, dec: e.dec })
   })).filter((e) => e.separation <= s).sort((e, i) => e.separation - i.separation)
 );
-const qs = new Map(
+const Ws = new Map(
   W.map((n) => [n.name.toLowerCase(), n])
-), Ks = new Map(
-  fs.map((n) => [n.abbr.toLowerCase(), n])
-), Ws = new Map(
-  rs.map((n) => [n.messier, n])
-), Ys = O.map((n) => {
+), $s = new Map(
+  _s.map((n) => [n.abbr.toLowerCase(), n])
+), Ys = new Map(
+  as.map((n) => [n.messier, n])
+);
+let fs = P.map((n) => {
   var s;
   return {
     object: n,
@@ -4874,7 +4876,8 @@ const qs = new Map(
     descriptionLower: n.description.toLowerCase(),
     subtypeLower: (s = n.subtype) == null ? void 0 : s.toLowerCase()
   };
-}), F = {
+});
+const F = {
   // ── Unified queries ────────────────────────────────────────────────────
   /**
    * Look up a celestial object by its exact identifier.
@@ -4892,7 +4895,7 @@ const qs = new Map(
    * ```
    */
   get(n) {
-    return hs.get(n) ?? null;
+    return cs.get(n) ?? null;
   },
   /**
    * Look up a celestial object by name or any known alias (case-insensitive).
@@ -4910,7 +4913,7 @@ const qs = new Map(
    * ```
    */
   getByName(n) {
-    return Us.get(n.toLowerCase()) ?? null;
+    return ds.get(n.toLowerCase()) ?? null;
   },
   /**
    * Return a shallow copy of the full unified catalog.
@@ -4927,7 +4930,7 @@ const qs = new Map(
    * ```
    */
   all() {
-    return [...O];
+    return [...P];
   },
   /**
    * Filter the unified catalog by object type.
@@ -4945,7 +4948,7 @@ const qs = new Map(
    * ```
    */
   getByType(n) {
-    return O.filter((s) => s.type === n);
+    return P.filter((s) => s.type === n);
   },
   /**
    * Filter the unified catalog by a tag string.
@@ -4963,7 +4966,7 @@ const qs = new Map(
    * ```
    */
   getByTag(n) {
-    return O.filter((s) => s.tags.includes(n));
+    return P.filter((s) => s.tags.includes(n));
   },
   /**
    * Fuzzy search across name, aliases, description, and tags.
@@ -4986,7 +4989,7 @@ const qs = new Map(
    */
   search(n) {
     const s = n.toLowerCase().trim();
-    return s ? Ys.map((e) => {
+    return s ? fs.map((e) => {
       var t;
       let i = 0;
       return e.object.id === s && (i += 100), e.nameLower === s && (i += 90), e.nameLower.startsWith(s) && (i += 50), e.aliasesLower.some((l) => l === s) && (i += 80), e.aliasesLower.some((l) => l.includes(s)) && (i += 20), e.nameLower.includes(s) && (i += 15), e.descriptionLower.includes(s) && (i += 5), e.object.tags.some((l) => l.includes(s)) && (i += 8), (t = e.subtypeLower) != null && t.includes(s) && (i += 10), { object: e.object, score: i };
@@ -5014,7 +5017,7 @@ const qs = new Map(
    * ```
    */
   nearby(n, s) {
-    return O.filter(
+    return P.filter(
       (e) => e.ra !== null && e.dec !== null
     ).map((e) => ({
       object: e,
@@ -5109,7 +5112,7 @@ const qs = new Map(
    * images.forEach(img => console.log(img.title, img.urls[0]))
    * ```
    */
-  resolveImages: ps,
+  resolveImages: zs,
   /**
    * Unified image pipeline — resolves the best available image for any
    * celestial object and returns it in an optimized, ready-to-render format.
@@ -5134,7 +5137,7 @@ const qs = new Map(
    * }
    * ```
    */
-  getImage: cs,
+  getImage: gs,
   /**
    * Prefetch images for a list of object IDs in the background.
    *
@@ -5148,7 +5151,7 @@ const qs = new Map(
    * Data.prefetchImages(filteredObjects.map(o => o.id))
    * ```
    */
-  prefetchImages: js,
+  prefetchImages: Hs,
   // ── Bright star queries ────────────────────────────────────────────────
   /**
    * Get all bright stars in the catalog (~200 IAU named stars).
@@ -5177,7 +5180,7 @@ const qs = new Map(
    * ```
    */
   getStarByName(n) {
-    return qs.get(n.toLowerCase()) ?? null;
+    return Ws.get(n.toLowerCase()) ?? null;
   },
   /**
    * Get all bright stars belonging to a given constellation.
@@ -5234,7 +5237,7 @@ const qs = new Map(
    * ```
    */
   constellations() {
-    return fs;
+    return _s;
   },
   /**
    * Look up a constellation by its 3-letter IAU abbreviation (case-insensitive).
@@ -5249,7 +5252,7 @@ const qs = new Map(
    * ```
    */
   getConstellation(n) {
-    return Ks.get(n.toLowerCase()) ?? null;
+    return $s.get(n.toLowerCase()) ?? null;
   },
   // ── Messier catalog queries ────────────────────────────────────────────
   /**
@@ -5264,7 +5267,7 @@ const qs = new Map(
    * ```
    */
   messier() {
-    return rs;
+    return as;
   },
   /**
    * Look up a Messier object by its catalog number.
@@ -5282,7 +5285,7 @@ const qs = new Map(
    * ```
    */
   getMessier(n) {
-    return Ws.get(n) ?? null;
+    return Ys.get(n) ?? null;
   },
   // ── Meteor shower queries ──────────────────────────────────────────────
   /**
@@ -5298,7 +5301,7 @@ const qs = new Map(
    * ```
    */
   showers() {
-    return vs;
+    return ys;
   },
   /**
    * Get meteor showers that are active on a given date.
@@ -5320,16 +5323,97 @@ const qs = new Map(
    */
   getActiveShowers(n) {
     const e = ((_.planetEcliptic("earth", n).lon + 180) % 360 + 360) % 360;
-    return vs.filter((i) => Math.abs(((e - i.solarLon + 180) % 360 + 360) % 360 - 180) < 20);
+    return ys.filter((i) => Math.abs(((e - i.solarLon + 180) % 360 + 360) % 360 - 180) < 20);
+  },
+  // ── Star tier loading ──────────────────────────────────────────────────
+  /**
+   * Load an expanded star tier into the catalog.
+   *
+   * - **Tier 0** (default): ~200 IAU named bright stars — always bundled
+   * - **Tier 1**: ~9,100 stars to magnitude 6.5 (naked-eye limit) — ~145 KB
+   * - **Tier 2**: ~120,000 stars to magnitude 9+ — ~1.9 MB (compact binary)
+   *
+   * Loaded stars are merged into the unified catalog and become available
+   * to `search()`, `nearby()`, `all()`, `getByType('star')`, and sky map
+   * rendering. Loading is idempotent — calling again for an already-loaded
+   * tier is a no-op.
+   *
+   * @param tier - The tier to load (1 or 2).
+   * @returns A promise that resolves with the number of stars added.
+   *
+   * @remarks
+   * Star data is sourced from the HYG Database v3.8 (public domain).
+   * Attribution: David Nash, "HYG Stellar Database", https://github.com/astronexus/HYG-Database
+   *
+   * @example
+   * ```ts
+   * // Load naked-eye stars
+   * const added = await Data.loadStarTier(1)
+   * console.log(`Added ${added} stars`)
+   *
+   * // Now search finds fainter stars
+   * const faint = Data.search('hip 12345')
+   *
+   * // Sky map renders more stars
+   * renderSkyMap(canvas, Data.all(), { showMagnitudeLimit: 6.5 })
+   * ```
+   */
+  async loadStarTier(n) {
+    if (es.has(n)) return 0;
+    let s;
+    if (n === 1)
+      s = (await import("./stars-tier1-C56Nvm8y.js")).loadTier1Stars();
+    else if (n === 2)
+      s = (await import("./stars-tier2-Ci6zwt3G.js")).loadTier2Stars();
+    else
+      throw new Error(`Unknown star tier: ${n}`);
+    const e = s.map((i, t) => ({
+      id: `hyg-t${n}-${t}`,
+      name: `HYG ${n === 1 ? t + 200 : t + 9300}`,
+      aliases: [],
+      type: "star",
+      ra: i.ra,
+      dec: i.dec,
+      magnitude: i.mag,
+      description: "",
+      tags: ["star", `tier-${n}`]
+    }));
+    for (const i of e) P.push(i);
+    for (const i of e)
+      cs.set(i.id, i), ds.set(i.name.toLowerCase(), i);
+    for (const i of e)
+      fs.push({
+        object: i,
+        nameLower: i.name.toLowerCase(),
+        aliasesLower: [],
+        descriptionLower: "",
+        subtypeLower: void 0
+      });
+    return es.add(n), e.length;
+  },
+  /**
+   * Check which star tiers are currently loaded.
+   *
+   * @returns A set of loaded tier numbers (always includes 0).
+   *
+   * @example
+   * ```ts
+   * Data.loadedStarTiers() // Set { 0 }
+   * await Data.loadStarTier(1)
+   * Data.loadedStarTiers() // Set { 0, 1 }
+   * ```
+   */
+  loadedStarTiers() {
+    return es;
   }
-}, $s = ["mercury", "venus", "mars", "jupiter", "saturn", "uranus", "neptune"];
+}, Js = ["mercury", "venus", "mars", "jupiter", "saturn", "uranus", "neptune"];
 function j(n, s) {
   if (n.ra !== null && n.dec !== null)
     return { ra: n.ra, dec: n.dec };
   if (n.type === "planet") {
     const e = n.id;
     try {
-      const i = _.planetEcliptic(e, s), t = _.planetEcliptic("earth", s), l = bs(i, t);
+      const i = _.planetEcliptic(e, s), t = _.planetEcliptic("earth", s), l = Ms(i, t);
       return _.eclipticToEquatorial(l);
     } catch {
       return null;
@@ -5340,27 +5424,27 @@ function j(n, s) {
     return { ra: e.ra, dec: e.dec };
   }
   if (n.id === "moon") {
-    const e = G.position(s);
+    const e = O.position(s);
     return { ra: e.ra, dec: e.dec };
   }
   return null;
 }
-function bs(n, s) {
+function Ms(n, s) {
   const e = Math.PI / 180, i = n.r * Math.cos(n.lat * e) * Math.cos(n.lon * e), t = n.r * Math.cos(n.lat * e) * Math.sin(n.lon * e), l = n.r * Math.sin(n.lat * e), r = s.r * Math.cos(s.lat * e) * Math.cos(s.lon * e), g = s.r * Math.cos(s.lat * e) * Math.sin(s.lon * e), o = s.r * Math.sin(s.lat * e), a = i - r, v = t - g, y = l - o, c = (Math.atan2(v, a) * 180 / Math.PI % 360 + 360) % 360, k = Math.atan2(y, Math.sqrt(a * a + v * v)) * 180 / Math.PI;
   return { lon: c, lat: k };
 }
-function Js(n) {
+function Xs(n) {
   if (n <= 0) return 1 / 0;
   const s = 90 - n, e = s * Math.PI / 180;
   return 1 / (Math.cos(e) + 0.50572 * Math.pow(96.07995 - s, -1.6364));
 }
-function es(n) {
+function ns(n) {
   const s = n.date ?? /* @__PURE__ */ new Date(), i = I.twilight(n).astronomicalDusk;
   if (!i) return null;
   const t = new Date(s.valueOf() + 864e5), r = I.twilight({ ...n, date: t }).astronomicalDawn;
   return r ? { start: i, end: r } : null;
 }
-const ce = {
+const ae = {
   /**
    * Objects currently above the horizon, sorted by altitude (highest first).
    *
@@ -5389,7 +5473,7 @@ const ce = {
       constellation: l,
       tag: r,
       limit: g = 50
-    } = s, o = n.date ?? /* @__PURE__ */ new Date(), a = G.position(o), v = { ra: a.ra, dec: a.dec }, y = G.phase(o);
+    } = s, o = n.date ?? /* @__PURE__ */ new Date(), a = O.position(o), v = { ra: a.ra, dec: a.dec }, y = O.phase(o);
     let c = F.all();
     if (t && (c = c.filter((u) => t.includes(u.type))), r && (c = c.filter((u) => u.tags.includes(r))), l) {
       const u = F.getStarsByConstellation(l), f = new Set(u.map((d) => d.id));
@@ -5402,7 +5486,7 @@ const ce = {
       if (!f) continue;
       const d = _.equatorialToHorizontal(f, { ...n, date: o });
       if (d.alt < e) continue;
-      const h = _.angularSeparation(f, v), p = us(h, y.illumination);
+      const h = _.angularSeparation(f, v), p = ps(h, y.illumination);
       k.push({
         object: u,
         alt: d.alt,
@@ -5436,7 +5520,7 @@ const ce = {
   bestWindow(n, s, e = 10) {
     const i = F.get(n);
     if (!i) return null;
-    const t = es(s);
+    const t = ns(s);
     if (!t) return null;
     const { start: l, end: r } = t, g = r.valueOf() - l.valueOf(), o = 60, a = g / o;
     let v = -1 / 0, y = l, c = null, k = null, u = !1;
@@ -5471,7 +5555,7 @@ const ce = {
   visibilityCurve(n, s, e = 100) {
     const i = F.get(n);
     if (!i) return null;
-    const t = es(s);
+    const t = ns(s);
     if (!t) return null;
     const { start: l, end: r } = t, o = (r.valueOf() - l.valueOf()) / e, a = [];
     for (let v = 0; v <= e; v++) {
@@ -5499,11 +5583,11 @@ const ce = {
    * ```
    */
   planetEvents(n, s = {}) {
-    const { planets: e = $s, days: i = 365 } = s, t = n.date ?? /* @__PURE__ */ new Date(), l = [];
+    const { planets: e = Js, days: i = 365 } = s, t = n.date ?? /* @__PURE__ */ new Date(), l = [];
     for (const r of e) {
       let g = -1, o = !0;
       for (let a = 0; a <= i; a++) {
-        const v = new Date(t.valueOf() + a * 864e5), y = Xs(r, v);
+        const v = new Date(t.valueOf() + a * 864e5), y = Qs(r, v);
         if (a > 0) {
           const c = y > g;
           !c && o && g > 150 && l.push({
@@ -5546,7 +5630,7 @@ const ce = {
     if (!e) return null;
     const i = s.date ?? /* @__PURE__ */ new Date(), t = j(e, i);
     if (!t) return null;
-    const l = G.position(i), r = { ra: l.ra, dec: l.dec }, g = G.phase(i), o = _.angularSeparation(t, r), a = us(o, g.illumination);
+    const l = O.position(i), r = { ra: l.ra, dec: l.dec }, g = O.phase(i), o = _.angularSeparation(t, r), a = ps(o, g.illumination);
     return { separation: o, illumination: g.illumination, score: a };
   },
   /**
@@ -5571,27 +5655,27 @@ const ce = {
   airmassCurve(n, s, e = 100) {
     const i = F.get(n);
     if (!i) return null;
-    const t = es(s);
+    const t = ns(s);
     if (!t) return null;
     const { start: l, end: r } = t, o = (r.valueOf() - l.valueOf()) / e, a = [];
     for (let v = 0; v <= e; v++) {
       const y = new Date(l.valueOf() + v * o), c = j(i, y);
       if (!c) return null;
       const k = _.equatorialToHorizontal(c, { ...s, date: y });
-      k.alt > 0 && a.push({ date: y, alt: k.alt, airmass: Js(k.alt) });
+      k.alt > 0 && a.push({ date: y, alt: k.alt, airmass: Xs(k.alt) });
     }
     return a;
   }
 };
-function Xs(n, s) {
-  const e = _.planetEcliptic(n, s), i = _.planetEcliptic("earth", s), t = bs(e, i), l = _.eclipticToEquatorial(t), r = I.position(s);
+function Qs(n, s) {
+  const e = _.planetEcliptic(n, s), i = _.planetEcliptic("earth", s), t = Ms(e, i), l = _.eclipticToEquatorial(t), r = I.position(s);
   return _.angularSeparation(l, { ra: r.ra, dec: r.dec });
 }
-function us(n, s) {
+function ps(n, s) {
   const e = Math.max(0, Math.min(1, (120 - n) / 115));
   return s * e;
 }
-class ae {
+class ge {
   constructor(s = {}) {
     this._playing = !1, this._disposed = !1, this._lastWallTime = null, this._timerId = null, this._rafId = null, this._listeners = /* @__PURE__ */ new Map(), this._tick = () => {
       this._disposed || !this._playing || (this._advance(), this._emitTick(), this._scheduleNext());
@@ -5746,17 +5830,17 @@ class ae {
         break;
       }
       case "moonrise": {
-        const l = G.riseTransitSet(i);
+        const l = O.riseTransitSet(i);
         t = this._nextOccurrence(l.rise);
         break;
       }
       case "moonset": {
-        const l = G.riseTransitSet(i);
+        const l = O.riseTransitSet(i);
         t = this._nextOccurrence(l.set);
         break;
       }
       case "moon-transit": {
-        const l = G.riseTransitSet(i);
+        const l = O.riseTransitSet(i);
         t = this._nextOccurrence(l.transit);
         break;
       }
@@ -5806,7 +5890,7 @@ class ae {
   }
 }
 const N = L.DEG_TO_RAD;
-function as(n, s, e = 500) {
+function os(n, s, e = 500) {
   const i = s.ra * N, t = s.dec * N, l = n.ra * N, r = n.dec * N, g = l - i, o = Math.sin(t) * Math.sin(r) + Math.cos(t) * Math.cos(r) * Math.cos(g), a = 2 / (1 + o);
   return {
     x: a * Math.cos(r) * Math.sin(g) * e,
@@ -5814,7 +5898,7 @@ function as(n, s, e = 500) {
     visible: o > -0.95
   };
 }
-function gs(n, s) {
+function vs(n, s) {
   const { width: e, height: i } = s, t = (n.ra - 180) * N, l = n.dec * N;
   let r = l;
   for (let a = 0; a < 10; a++) {
@@ -5825,7 +5909,7 @@ function gs(n, s) {
   const g = e / 2 + e / (2 * Math.PI) * (2 * Math.SQRT2 / Math.PI) * t * Math.cos(r), o = i / 2 - i / 2 * Math.SQRT2 * Math.sin(r);
   return { x: g, y: o, visible: !0 };
 }
-function os(n, s, e = 400) {
+function ks(n, s, e = 400) {
   const i = s.ra * N, t = s.dec * N, l = n.ra * N, r = n.dec * N, g = l - i, o = Math.sin(t) * Math.sin(r) + Math.cos(t) * Math.cos(r) * Math.cos(g);
   return o <= 0 ? { x: 0, y: 0, visible: !1 } : {
     x: e * Math.cos(r) * Math.sin(g) / o,
@@ -5833,7 +5917,7 @@ function os(n, s, e = 400) {
     visible: o > 0
   };
 }
-function Qs(n) {
+function Zs(n) {
   var i;
   if (n.type === "nebula") return "#ff7744";
   if (n.type === "galaxy") return "#ffddaa";
@@ -5850,7 +5934,7 @@ function Qs(n) {
   };
   return s && s in e ? e[s] ?? "#ffffff" : "#ffffff";
 }
-function _s(n, s, e = {}) {
+function As(n, s, e = {}) {
   const {
     projection: i = "stereographic",
     center: t = { ra: 0, dec: 0 },
@@ -5865,8 +5949,8 @@ function _s(n, s, e = {}) {
   if (!c) throw new Error("Canvas 2D context not available");
   const k = n.width, u = n.height, f = k / 2, d = u / 2, h = (p) => {
     if (i === "mollweide")
-      return gs(p, { width: k, height: u });
-    const m = i === "gnomonic" ? os(p, t, l) : as(p, t, l);
+      return vs(p, { width: k, height: u });
+    const m = i === "gnomonic" ? ks(p, t, l) : os(p, t, l);
     return { x: f + m.x, y: d - m.y, visible: m.visible };
   };
   if (c.fillStyle = a, c.fillRect(0, 0, k, u), r) {
@@ -5918,7 +6002,7 @@ function _s(n, s, e = {}) {
     if (p.ra === null || p.dec === null || p.magnitude !== null && p.magnitude > o) continue;
     const m = h({ ra: p.ra, dec: p.dec });
     if (!m.visible || m.x < -50 || m.x > k + 50 || m.y < -50 || m.y > u + 50) continue;
-    const A = p.magnitude ?? 5, b = Math.max(1.5, Math.min(10, (6 - A) * 0.9 + 1.5)), S = Qs(p);
+    const A = p.magnitude ?? 5, b = Math.max(1.5, Math.min(10, (6 - A) * 0.9 + 1.5)), S = Zs(p);
     if (c.save(), p.type === "galaxy")
       c.strokeStyle = S, c.lineWidth = 1, c.beginPath(), c.ellipse(m.x, m.y, b * 2.5, b * 1.2, 0.4, 0, Math.PI * 2), c.stroke();
     else if (p.type === "nebula")
@@ -5932,25 +6016,25 @@ function _s(n, s, e = {}) {
     g && A < 3.5 && (c.fillStyle = y, c.font = `${Math.max(10, 13 - A)}px sans-serif`, c.fillText(p.name, m.x + b + 4, m.y - b)), c.restore();
   }
 }
-const ge = { stereographic: as, mollweide: gs, gnomonic: os, render: _s }, Y = L.DEG_TO_RAD, V = 1 / Y;
-function Zs(n, s, e, i) {
+const oe = { stereographic: os, mollweide: vs, gnomonic: ks, render: As }, $ = L.DEG_TO_RAD, V = 1 / $;
+function se(n, s, e, i) {
   const t = n / i, l = s / i, r = Math.sqrt(t * t + l * l);
   if (r === 0) return { ra: e.ra, dec: e.dec };
-  const g = 2 * Math.atan(r / 2), o = Math.sin(g), a = Math.cos(g), v = e.dec * Y, y = e.ra * Y, c = Math.asin(a * Math.sin(v) + l * o * Math.cos(v) / r) * V, k = (y + Math.atan2(
+  const g = 2 * Math.atan(r / 2), o = Math.sin(g), a = Math.cos(g), v = e.dec * $, y = e.ra * $, c = Math.asin(a * Math.sin(v) + l * o * Math.cos(v) / r) * V, k = (y + Math.atan2(
     t * o,
     r * Math.cos(v) * a - l * Math.sin(v) * o
   )) * V;
   return !isFinite(k) || !isFinite(c) ? null : { ra: (k % 360 + 360) % 360, dec: c };
 }
-function se(n, s, e, i) {
-  const t = n / i, l = s / i, r = Math.sqrt(t * t + l * l), g = e.dec * Y, o = e.ra * Y, a = Math.atan(r), v = Math.sin(a), y = Math.cos(a);
+function ee(n, s, e, i) {
+  const t = n / i, l = s / i, r = Math.sqrt(t * t + l * l), g = e.dec * $, o = e.ra * $, a = Math.atan(r), v = Math.sin(a), y = Math.cos(a);
   let c, k;
   return r === 0 ? (c = e.dec, k = e.ra) : (c = Math.asin(y * Math.sin(g) + l * v * Math.cos(g) / r) * V, k = (o + Math.atan2(
     t * v,
     r * Math.cos(g) * y - l * Math.sin(g) * v
   )) * V), !isFinite(k) || !isFinite(c) ? null : { ra: (k % 360 + 360) % 360, dec: c };
 }
-function ee(n, s, e, i) {
+function ne(n, s, e, i) {
   const l = -(s - i / 2) / (i / 2) / Math.SQRT2;
   if (Math.abs(l) > 1) return null;
   const r = Math.asin(l), g = (n - e / 2) / (e / (2 * Math.PI)), o = Math.cos(r);
@@ -5963,13 +6047,13 @@ function ee(n, s, e, i) {
   const y = Math.asin(v), c = ((a * V + 180) % 360 + 360) % 360, k = y * V;
   return !isFinite(c) || !isFinite(k) ? null : { ra: c, dec: k };
 }
-function ms(n, s, e, i, t, l, r) {
+function hs(n, s, e, i, t, l, r) {
   if (t === "mollweide")
-    return ee(n, s, e, i);
+    return ne(n, s, e, i);
   const g = e / 2, o = i / 2, a = n - g, v = o - s;
-  return t === "gnomonic" ? se(a, v, l, r) : Zs(a, v, l, r);
+  return t === "gnomonic" ? ee(a, v, l, r) : se(a, v, l, r);
 }
-function ns(n, s, e, i) {
+function is(n, s, e, i) {
   let t = null, l = 1 / 0;
   for (const r of n) {
     const g = r.x - s, o = r.y - e, a = g * g + o * o, v = Math.max(i, r.radius);
@@ -5977,7 +6061,7 @@ function ns(n, s, e, i) {
   }
   return t;
 }
-const is = L.DEG_TO_RAD, ne = 250, ie = 10, w = {
+const ts = L.DEG_TO_RAD, ie = 250, te = 10, w = {
   panEnabled: !0,
   zoomEnabled: !0,
   selectEnabled: !0,
@@ -5987,7 +6071,7 @@ const is = L.DEG_TO_RAD, ne = 250, ie = 10, w = {
   hitRadius: 15,
   realTimeInterval: 1e3
 };
-class te {
+class le {
   constructor(s, e, i = {}) {
     var r, g;
     this._projectedCache = [], this._selectedObject = null, this._hoveredObject = null, this._listeners = /* @__PURE__ */ new Map(), this._rafId = null, this._dirty = !1, this._realTimeTimer = null, this._pointers = /* @__PURE__ */ new Map(), this._disposed = !1, this._panAnimId = null, this._onPointerDown = (o) => {
@@ -6007,7 +6091,7 @@ class te {
       if (y && this._pointers.size === 1 && (this._opts.panEnabled ?? w.panEnabled)) {
         const c = a - y.lastX, k = v - y.lastY;
         if (y.lastX = a, y.lastY = v, this._view.projection === "mollweide") {
-          const u = this._canvas.width, f = this._canvas.height, d = ms(a - c, v - k, u, f, "mollweide", this._view.center, this._view.scale), h = ms(a, v, u, f, "mollweide", this._view.center, this._view.scale);
+          const u = this._canvas.width, f = this._canvas.height, d = hs(a - c, v - k, u, f, "mollweide", this._view.center, this._view.scale), h = hs(a, v, u, f, "mollweide", this._view.center, this._view.scale);
           if (d && h) {
             let p = d.ra - h.ra;
             p > 180 && (p -= 360), p < -180 && (p += 360), this._view.center = {
@@ -6016,7 +6100,7 @@ class te {
             }, this._markDirty(), this._emitViewChange();
           }
         } else {
-          const u = c / this._view.scale / is, f = k / this._view.scale / is;
+          const u = c / this._view.scale / ts, f = k / this._view.scale / ts;
           this._view.center = {
             ra: ((this._view.center.ra - u) % 360 + 360) % 360,
             dec: Math.max(-90, Math.min(90, this._view.center.dec + f))
@@ -6037,7 +6121,7 @@ class te {
         return;
       }
       if (this._pointers.size === 0 && (this._opts.hoverEnabled ?? w.hoverEnabled)) {
-        const c = this._opts.hitRadius ?? w.hitRadius, k = ns(this._projectedCache, a, v, c), u = (k == null ? void 0 : k.object) ?? null;
+        const c = this._opts.hitRadius ?? w.hitRadius, k = is(this._projectedCache, a, v, c), u = (k == null ? void 0 : k.object) ?? null;
         u !== this._hoveredObject && (this._hoveredObject = u, this._markDirty(), this._emit("hover", {
           object: u,
           point: k ? { x: k.x, y: k.y, visible: !0 } : null,
@@ -6049,8 +6133,8 @@ class te {
       const a = this._pointers.get(o.pointerId);
       if (this._pointers.delete(o.pointerId), !a) return;
       const v = performance.now() - a.startTime, y = Math.hypot(a.lastX - a.startX, a.lastY - a.startY);
-      if (v < ne && y < ie && (this._opts.selectEnabled ?? w.selectEnabled)) {
-        const c = this._opts.hitRadius ?? w.hitRadius, k = ns(this._projectedCache, a.lastX, a.lastY, c);
+      if (v < ie && y < te && (this._opts.selectEnabled ?? w.selectEnabled)) {
+        const c = this._opts.hitRadius ?? w.hitRadius, k = is(this._projectedCache, a.lastX, a.lastY, c);
         k ? (this._selectedObject = k.object, this._markDirty(), this._emit("select", {
           object: k.object,
           point: { x: k.x, y: k.y, visible: !0 },
@@ -6148,7 +6232,7 @@ class te {
    * Return the celestial object at a given canvas pixel position, or `null`.
    */
   objectAt(s, e) {
-    const i = this._opts.hitRadius ?? w.hitRadius, t = ns(this._projectedCache, s, e, i);
+    const i = this._opts.hitRadius ?? w.hitRadius, t = is(this._projectedCache, s, e, i);
     return (t == null ? void 0 : t.object) ?? null;
   }
   // ── Data ─────────────────────────────────────────────────────────────────
@@ -6192,7 +6276,7 @@ class te {
   render() {
     if (this._disposed) return;
     const s = this._canvas, e = this._ctx, i = s.width, t = s.height;
-    _s(s, this._objects, {
+    As(s, this._objects, {
       ...this._opts,
       center: this._view.center,
       scale: this._view.scale,
@@ -6240,8 +6324,8 @@ class te {
   _project(s) {
     const e = this._canvas.width, i = this._canvas.height;
     if (this._view.projection === "mollweide")
-      return gs(s, { width: e, height: i });
-    const t = this._view.projection === "gnomonic" ? os(s, this._view.center, this._view.scale) : as(s, this._view.center, this._view.scale);
+      return vs(s, { width: e, height: i });
+    const t = this._view.projection === "gnomonic" ? ks(s, this._view.center, this._view.scale) : os(s, this._view.center, this._view.scale);
     return { x: e / 2 + t.x, y: i / 2 - t.y, visible: t.visible };
   }
   /** Rebuild the projected-object cache used for hit-testing and highlights. */
@@ -6280,7 +6364,7 @@ class te {
       const a = 72;
       let v = !1;
       for (let y = 0; y <= a; y++) {
-        const c = y / a * 2 * Math.PI, k = r.dec + l.radiusDeg * Math.sin(c), u = Math.cos(r.dec * is), f = r.ra + (u > 1e-6 ? l.radiusDeg * Math.cos(c) / u : 0), d = this._project({ ra: f, dec: Math.max(-90, Math.min(90, k)) });
+        const c = y / a * 2 * Math.PI, k = r.dec + l.radiusDeg * Math.sin(c), u = Math.cos(r.dec * ts), f = r.ra + (u > 1e-6 ? l.radiusDeg * Math.cos(c) / u : 0), d = this._project({ ra: f, dec: Math.max(-90, Math.min(90, k)) });
         if (!d.visible) {
           v = !1;
           continue;
@@ -6338,40 +6422,40 @@ class te {
     );
   }
 }
-function oe(n, s, e) {
-  return new te(n, s, e);
+function ve(n, s, e) {
+  return new le(n, s, e);
 }
 export {
   _ as A,
   W as B,
   L as C,
   F as D,
-  xs as E,
-  te as I,
-  G as M,
-  ks as N,
-  ce as P,
+  Ls as E,
+  le as I,
+  O as M,
+  us as N,
+  ae as P,
   I as S,
-  re as a,
-  ae as b,
-  oe as c,
-  fs as d,
-  Rs as e,
+  ce as a,
+  ge as b,
+  ve as c,
+  _s as d,
+  Ns as e,
   J as f,
-  os as g,
-  rs as h,
-  vs as i,
-  ws as j,
-  ge as k,
-  ms as l,
-  gs as m,
-  Ls as n,
-  cs as o,
-  js as p,
-  ps as q,
-  _s as r,
-  as as s,
-  Qs as t,
-  Os as u,
-  Gs as v
+  ks as g,
+  as as h,
+  ys as i,
+  Ts as j,
+  oe as k,
+  hs as l,
+  vs as m,
+  Os as n,
+  gs as o,
+  Hs as p,
+  zs as q,
+  As as r,
+  os as s,
+  Zs as t,
+  js as u,
+  Fs as v
 };
