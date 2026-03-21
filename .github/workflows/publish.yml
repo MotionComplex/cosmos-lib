@@ -37,14 +37,5 @@ jobs:
       - name: Run build
         run: npm run build
 
-      - name: Bump patch version
-        run: npm version patch --no-git-tag-version
-
-      - name: Commit version bump
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "chore: bump version [skip ci]"
-          file_pattern: "package.json package-lock.json"
-
       - name: Publish to npm with provenance
         run: npm publish --provenance --access public
