@@ -13,7 +13,8 @@
  */
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Sun, Moon, AstroMath, Data, Eclipse, Planner } from 'cosmos-lib'
+import { Sun, Moon, AstroMath, Data, Eclipse } from 'cosmos-lib'
+import { useMoonPhase, useTwilight, useWhatsUp } from 'cosmos-lib/react'
 import { useObserverCtx } from '../App'
 import { useNow } from '../hooks/useNow'
 import { MoonPhaseIcon } from '../components/MoonPhaseIcon'
@@ -29,6 +30,7 @@ const DOCS_ENTRIES: DocEntry[] = [
   { module: 'Eclipse', functions: ['nextSolar', 'nextLunar'], description: 'Finds the next upcoming solar or lunar eclipse to display in the eclipse preview card.', docsPath: 'docs/api/sun-moon-eclipse.md#eclipse' },
   { module: 'Data', functions: ['getActiveShowers', 'all'], description: 'Retrieves currently active meteor showers and the full object catalog to find bright objects visible above the horizon.', docsPath: 'docs/api/data.md' },
   { module: 'Planner', functions: ['whatsUp'], description: 'Returns the brightest objects currently above the horizon, sorted by altitude, with moon interference scoring.', docsPath: 'docs/api/planner.md' },
+  { module: 'React Hooks', functions: ['useMoonPhase', 'useTwilight', 'useWhatsUp'], description: 'Reactive hooks replacing manual useMemo + API calls for moon phase, twilight times, and visible objects.', docsPath: 'docs/api/react.md' },
 ]
 
 const DOCS_GUIDES = [
@@ -44,24 +46,27 @@ export function Observatory() {
   const now = useNow(5000)
   const navigate = useNavigate()
 
+  // ── React hooks from cosmos-lib/react ─────────────────────────────────
+  const moonPhase = useMoonPhase(undefined, 5000)
+  const twilight = useTwilight(observer, now)
+  const whatsUp = useWhatsUp({ ...observer, date: now }, { minAltitude: 10, magnitudeLimit: 4, limit: 6 }, 10_000)
+
   const data = useMemo(() => {
     const obs = { ...observer, date: now }
 
-    // Sun position & twilight — docs: docs/api/sun-moon-eclipse.md#sun
+    // Sun position — docs: docs/api/sun-moon-eclipse.md#sun
     const sunPos = Sun.position(now)
     const sunHoriz = AstroMath.equatorialToHorizontal(
       { ra: sunPos.ra, dec: sunPos.dec },
       obs
     )
-    const twilight = Sun.twilight(obs)
 
-    // Moon position, phase & rise/set — docs: docs/api/sun-moon-eclipse.md#moon
+    // Moon position & rise/set — docs: docs/api/sun-moon-eclipse.md#moon
     const moonPos = Moon.position(now)
     const moonHoriz = AstroMath.equatorialToHorizontal(
       { ra: moonPos.ra, dec: moonPos.dec },
       obs
     )
-    const moonPhase = Moon.phase(now)
     const moonRTS = Moon.riseTransitSet(obs)
 
     // Astronomical time calculations — docs: docs/api/math.md#time
@@ -83,14 +88,10 @@ export function Observatory() {
     // Active meteor showers — docs: docs/api/data.md#datagetactiveshowers
     const activeShowers = Data.getActiveShowers(now)
 
-    // What's visible tonight — uses Planner.whatsUp
-    // docs: docs/api/planner.md#plannerwhatsup
-    const whatsUp = Planner.whatsUp(obs, { minAltitude: 10, magnitudeLimit: 4, limit: 6 })
-
     return {
-      sunPos, sunHoriz, twilight, moonPos, moonHoriz, moonPhase, moonRTS,
+      sunPos, sunHoriz, moonPos, moonHoriz, moonRTS,
       jd, j2k, lst, siderealTime, eot, nextEclipse, activeShowers,
-      whatsUp, isDark: sunHoriz.alt < -6,
+      isDark: sunHoriz.alt < -6,
     }
   }, [observer, now])
 
@@ -114,10 +115,10 @@ export function Observatory() {
         </div>
         <div className={styles.heroRight}>
           <div className={styles.moonHero} role="button" tabIndex={0} onClick={() => navigate('/moon')} onKeyDown={e => e.key === 'Enter' && navigate('/moon')}>
-            <MoonPhaseIcon phase={data.moonPhase.phase} size={80} />
+            <MoonPhaseIcon phase={moonPhase.phase} size={80} />
             <div className={styles.moonLabel}>
-              <span className={styles.phaseName}>{data.moonPhase.name.replace(/-/g, ' ')}</span>
-              <span className={styles.illumination}>{(data.moonPhase.illumination * 100).toFixed(0)}% illuminated</span>
+              <span className={styles.phaseName}>{moonPhase.name.replace(/-/g, ' ')}</span>
+              <span className={styles.illumination}>{(moonPhase.illumination * 100).toFixed(0)}% illuminated</span>
             </div>
           </div>
         </div>
@@ -156,23 +157,23 @@ export function Observatory() {
           <div className={styles.bodyStats}>
             <div className={styles.bodyStat}>
               <span className={styles.bodyStatLabel}>Sunrise</span>
-              <span className={styles.bodyStatValue}>{formatTime(data.twilight.sunrise)}</span>
+              <span className={styles.bodyStatValue}>{formatTime(twilight.sunrise)}</span>
             </div>
             <div className={styles.bodyStat}>
               <span className={styles.bodyStatLabel}>Solar Noon</span>
-              <span className={styles.bodyStatValue}>{formatTime(data.twilight.solarNoon)}</span>
+              <span className={styles.bodyStatValue}>{formatTime(twilight.solarNoon)}</span>
             </div>
             <div className={styles.bodyStat}>
               <span className={styles.bodyStatLabel}>Sunset</span>
-              <span className={styles.bodyStatValue}>{formatTime(data.twilight.sunset)}</span>
+              <span className={styles.bodyStatValue}>{formatTime(twilight.sunset)}</span>
             </div>
             <div className={styles.bodyStat}>
               <span className={styles.bodyStatLabel}>Civil Dusk</span>
-              <span className={styles.bodyStatValue}>{formatTime(data.twilight.civilDusk)}</span>
+              <span className={styles.bodyStatValue}>{formatTime(twilight.civilDusk)}</span>
             </div>
             <div className={styles.bodyStat}>
               <span className={styles.bodyStatLabel}>Astro Dusk</span>
-              <span className={styles.bodyStatValue}>{formatTime(data.twilight.astronomicalDusk)}</span>
+              <span className={styles.bodyStatValue}>{formatTime(twilight.astronomicalDusk)}</span>
             </div>
             <div className={styles.bodyStat}>
               <span className={styles.bodyStatLabel}>Distance</span>
@@ -192,11 +193,11 @@ export function Observatory() {
           <div className={styles.bodyStats}>
             <div className={styles.bodyStat}>
               <span className={styles.bodyStatLabel}>Phase</span>
-              <span className={styles.bodyStatValue}>{data.moonPhase.name.replace(/-/g, ' ')}</span>
+              <span className={styles.bodyStatValue}>{moonPhase.name.replace(/-/g, ' ')}</span>
             </div>
             <div className={styles.bodyStat}>
               <span className={styles.bodyStatLabel}>Age</span>
-              <span className={styles.bodyStatValue}>{data.moonPhase.age.toFixed(1)} days</span>
+              <span className={styles.bodyStatValue}>{moonPhase.age.toFixed(1)} days</span>
             </div>
             <div className={styles.bodyStat}>
               <span className={styles.bodyStatLabel}>Moonrise</span>
@@ -219,11 +220,11 @@ export function Observatory() {
       </section>
 
       {/* Tonight's highlights — powered by Planner.whatsUp */}
-      {data.whatsUp.length > 0 && (
+      {whatsUp.length > 0 && (
         <section className={styles.section}>
           <h2 className={styles.sectionTitle}>Visible Now</h2>
           <div className={`${styles.objectGrid} stagger-grid`}>
-            {data.whatsUp.map((v, i) => (
+            {whatsUp.map((v, i) => (
                 <div
                   key={`${v.object.id}-${i}`}
                   className={styles.objectCard}

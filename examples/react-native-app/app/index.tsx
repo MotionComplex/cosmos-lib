@@ -8,6 +8,7 @@ import {
   Pressable,
 } from 'react-native';
 import { Sun, Moon, Data, AstroMath, Planner } from '@motioncomplex/cosmos-lib';
+import { useMoonPhase, useTwilight } from '@motioncomplex/cosmos-lib/react';
 import { GlassCard } from '../src/components/GlassCard';
 import { SectionHeader } from '../src/components/SectionHeader';
 import { StarField } from '../src/components/StarField';
@@ -37,14 +38,15 @@ export default function TonightScreen() {
   // Time offset in hours from now (for time-travel slider)
   const [hourOffset, setHourOffset] = useState(0);
 
-  const data = useMemo(() => {
-    const now = new Date(Date.now() + hourOffset * 3_600_000);
-    // Default observer: London
-    const observer = { lat: 51.5, lng: -0.12, date: now };
+  const now = useMemo(() => new Date(Date.now() + hourOffset * 3_600_000), [hourOffset]);
+  const observer = useMemo(() => ({ lat: 51.5, lng: -0.12, date: now }), [now]);
 
+  // ── React hooks from cosmos-lib/react ─────────────────────────────────
+  const moonPhase = useMoonPhase(now);
+  const twilight = useTwilight(observer, now);
+
+  const data = useMemo(() => {
     const sunPos = Sun.position(now);
-    const twilight = Sun.twilight(observer);
-    const moonPhase = Moon.phase(now);
     const moonPos = Moon.position(now);
 
     // Bright objects visible tonight — powered by Planner.whatsUp
@@ -66,10 +68,10 @@ export default function TonightScreen() {
       .filter((p) => p.alt > -10)
       .sort((a, b) => b.alt - a.alt);
 
-    return { sunPos, twilight, moonPhase, moonPos, whatsUp, planets, now };
-  }, [hourOffset]);
+    return { sunPos, moonPos, whatsUp, planets };
+  }, [hourOffset, now, observer]);
 
-  const { twilight, moonPhase, whatsUp, planets, now } = data;
+  const { whatsUp, planets } = data;
 
   return (
     <View style={styles.container}>

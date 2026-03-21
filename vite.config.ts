@@ -22,15 +22,16 @@ export default defineConfig({
       entry: {
         index: resolve(__dirname, 'src/index.ts'),
         'three/index': resolve(__dirname, 'src/three/index.ts'),
+        'react/index': resolve(__dirname, 'src/react/index.tsx'),
       },
       formats: ['es', 'cjs'],
       fileName: (format, entryName) =>
         format === 'cjs' ? `${entryName}.cjs` : `${entryName}.js`,
     },
     rollupOptions: {
-      external: ['three'],
+      external: ['three', 'react', 'react/jsx-runtime'],
       output: {
-        globals: { three: 'THREE' },
+        globals: { three: 'THREE', react: 'React', 'react/jsx-runtime': 'jsxRuntime' },
       },
     },
     sourcemap: 'hidden',

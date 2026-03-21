@@ -72,24 +72,24 @@ Decouple observation time from wall-clock time.
 
 ## P4 — React Hooks
 
-**Status:** Not started
-**Entry point:** New `src/react/` directory, exported as `@motioncomplex/cosmos-lib/react`
+**Status:** Complete
+**Entry point:** `src/react/index.tsx`, exported as `@motioncomplex/cosmos-lib/react`
 
 Meet developers where they are.
 
-- [ ] `useSkyPosition(objectId, observer)` — reactive alt/az
-- [ ] `useMoonPhase(date?)` — current phase, illumination, name
-- [ ] `useAstroClock(options)` — clock instance with React lifecycle
-- [ ] `useWhatsUp(observer, options)` — reactive visible objects list
-- [ ] `useTwilight(observer, date?)` — dawn/dusk times
-- [ ] `<SkyMap />` component wrapping the interactive sky map
-- [ ] SSR-safe — no DOM access during server render
-- [ ] React as optional peer dependency (like Three.js pattern)
-- [ ] **Docs & examples:**
-  - [ ] TypeDoc comments on every hook (params, return value, re-render behaviour, SSR safety)
-  - [ ] Usage guide with code samples (basic usage, combining hooks, SSR patterns)
-  - [ ] `observatory-app`: refactor `Observatory.tsx` + `MoonView.tsx` to replace inline `useMemo` chains with `useSkyPosition`, `useMoonPhase`, `useTwilight`, `useWhatsUp`
-  - [ ] `react-native-app`: refactor Tonight screen (`index.tsx`) and Detail screen to use hooks instead of manual `useMemo` + `AstroMath` calls
+- [x] `useSkyPosition(objectId, observer)` — reactive alt/az
+- [x] `useMoonPhase(date?)` — current phase, illumination, name
+- [x] `useAstroClock(options)` — clock instance with React lifecycle
+- [x] `useWhatsUp(observer, options)` — reactive visible objects list
+- [x] `useTwilight(observer, date?)` — dawn/dusk times
+- [x] `<SkyMap />` component wrapping the interactive sky map
+- [x] SSR-safe — no DOM access during server render
+- [x] React as optional peer dependency (like Three.js pattern)
+- [x] **Docs & examples:**
+  - [x] TypeDoc comments on every hook (params, return value, re-render behaviour, SSR safety)
+  - [x] Usage guide with code samples (basic usage, combining hooks, SSR patterns)
+  - [x] `observatory-app`: `Observatory.tsx` refactored to use `useMoonPhase`, `useTwilight`, `useWhatsUp` hooks replacing manual `useMemo` chains
+  - [x] `react-native-app`: Tonight screen refactored to use `useMoonPhase` and `useTwilight` hooks
 
 ---
 

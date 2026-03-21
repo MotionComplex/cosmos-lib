@@ -29,6 +29,11 @@
       "types": "./dist/three/index.d.ts",
       "import": "./dist/three/index.js",
       "require": "./dist/three/index.cjs"
+    },
+    "./react": {
+      "types": "./dist/react/index.d.ts",
+      "import": "./dist/react/index.js",
+      "require": "./dist/react/index.cjs"
     }
   },
   "main": "./dist/index.cjs",
@@ -46,10 +51,14 @@
     "prepublishOnly": "npm run typecheck && npm test && npm run build"
   },
   "devDependencies": {
+    "@testing-library/react": "^16.3.2",
     "@types/node": "^22.19.15",
+    "@types/react": "^19.2.14",
     "@types/three": "^0.183.1",
     "@vitest/coverage-v8": "^4.1.0",
     "happy-dom": "^20.8.4",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
     "rollup-plugin-visualizer": "^6.0.11",
     "three": "^0.160.0",
     "typedoc": "^0.28.17",
@@ -60,10 +69,14 @@
     "vitest": "^4.1.0"
   },
   "peerDependencies": {
+    "react": ">=18.0.0",
     "three": ">=0.150.0"
   },
   "peerDependenciesMeta": {
     "three": {
+      "optional": true
+    },
+    "react": {
       "optional": true
     }
   },
