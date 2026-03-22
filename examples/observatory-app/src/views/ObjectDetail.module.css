@@ -321,13 +321,11 @@
 @media (max-width: 768px) {
   .page { padding: 0 0 80px; }
 
-  /* Fixed hero image that stays behind scrolling content */
+  /* Hero pinned at top of scroll container — content slides over it */
   .hero {
     margin: 0;
-    position: fixed;
+    position: sticky;
     top: 0;
-    left: 0;
-    right: 0;
     z-index: 0;
   }
 
@@ -367,9 +365,8 @@
   .heroContent { display: none; }
   .backBtn { display: none; }
 
-  /* Scrollable content slides up over the fixed hero — full width */
+  /* Scrollable content slides up over the sticky hero */
   .scrollContent {
-    margin-top: 55vh;
     position: relative;
     z-index: 2;
   }
