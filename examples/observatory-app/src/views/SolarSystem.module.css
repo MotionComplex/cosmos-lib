@@ -3,7 +3,7 @@
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 24px;
   padding-bottom: 60px;
   animation: fadeUp 0.5s var(--ease-out) both;
 }
