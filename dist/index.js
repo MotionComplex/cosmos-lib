@@ -1,63 +1,63 @@
-import { C as A, M as k, A as h, P as C, D as E, S as b, c as oe, I as ie, g as se, m as le, s as ce, r as de, a as me, E as ue, N as pe, b as fe } from "./skymap-interactive-BBwTtzAL.js";
-import { B as Ie, d as Fe, e as He, f as Ye, h as Xe, i as qe, j as Ue, k as Ke, l as Ge, n as Ze, o as Ve, p as je, q as Be, t as Qe, u as Je, v as et } from "./skymap-interactive-BBwTtzAL.js";
-import { M as he } from "./media-DVOcIMa1.js";
-const ge = {
+import { C as E, M as A, A as g, P as D, D as _, S as w, c as $e, I as ze, g as Fe, m as He, s as Ye, r as Xe, a as qe, E as Ge, N as Ue, b as Ke } from "./skymap-interactive-BBwTtzAL.js";
+import { B as kt, d as wt, e as At, f as Lt, h as Et, i as Mt, j as Ot, k as Nt, l as Ct, n as vt, o as _t, p as Wt, q as It, t as Tt, u as Rt, v as Dt } from "./skymap-interactive-BBwTtzAL.js";
+import { M as Ze } from "./media-DVOcIMa1.js";
+const je = {
   // ── Distance ───────────────────────────────────────────────────────────────
   /**
    * Convert Astronomical Units to kilometres.
    * @param au - Distance in AU.
    * @returns Distance in kilometres.
    */
-  auToKm: (e) => e * A.AU_TO_KM,
+  auToKm: (e) => e * E.AU_TO_KM,
   /**
    * Convert kilometres to Astronomical Units.
    * @param km - Distance in kilometres.
    * @returns Distance in AU.
    */
-  kmToAu: (e) => e / A.AU_TO_KM,
+  kmToAu: (e) => e / E.AU_TO_KM,
   /**
    * Convert light-years to parsecs.
    * @param ly - Distance in light-years.
    * @returns Distance in parsecs.
    */
-  lyToPc: (e) => e / A.PC_TO_LY,
+  lyToPc: (e) => e / E.PC_TO_LY,
   /**
    * Convert parsecs to light-years.
    * @param pc - Distance in parsecs.
    * @returns Distance in light-years.
    */
-  pcToLy: (e) => e * A.PC_TO_LY,
+  pcToLy: (e) => e * E.PC_TO_LY,
   /**
    * Convert parsecs to kilometres.
    * @param pc - Distance in parsecs.
    * @returns Distance in kilometres.
    */
-  pcToKm: (e) => e * A.PC_TO_KM,
+  pcToKm: (e) => e * E.PC_TO_KM,
   /**
    * Convert light-years to kilometres.
    * @param ly - Distance in light-years.
    * @returns Distance in kilometres.
    */
-  lyToKm: (e) => e * A.LY_TO_KM,
+  lyToKm: (e) => e * E.LY_TO_KM,
   /**
    * Convert kilometres to light-years.
    * @param km - Distance in kilometres.
    * @returns Distance in light-years.
    */
-  kmToLy: (e) => e / A.LY_TO_KM,
+  kmToLy: (e) => e / E.LY_TO_KM,
   // ── Angular ────────────────────────────────────────────────────────────────
   /**
    * Convert degrees to radians.
    * @param d - Angle in degrees.
    * @returns Angle in radians.
    */
-  degToRad: (e) => e * A.DEG_TO_RAD,
+  degToRad: (e) => e * E.DEG_TO_RAD,
   /**
    * Convert radians to degrees.
    * @param r - Angle in radians.
    * @returns Angle in degrees.
    */
-  radToDeg: (e) => e * A.RAD_TO_DEG,
+  radToDeg: (e) => e * E.RAD_TO_DEG,
   /**
    * Convert arcseconds to degrees.
    * @param a - Angle in arcseconds.
@@ -96,10 +96,10 @@ const ge = {
    * ```
    */
   formatDistance(e) {
-    const n = e / A.AU_TO_KM;
-    if (n < 0.01) return `${e.toFixed(0)} km`;
-    if (n < 1e3) return `${n.toPrecision(4)} AU`;
-    const t = e / A.LY_TO_KM;
+    const a = e / E.AU_TO_KM;
+    if (a < 0.01) return `${e.toFixed(0)} km`;
+    if (a < 1e3) return `${a.toPrecision(4)} AU`;
+    const t = e / E.LY_TO_KM;
     return t < 1e6 ? `${t.toPrecision(4)} ly` : `${(t / 1e6).toPrecision(4)} Mly`;
   },
   /**
@@ -115,8 +115,8 @@ const ge = {
    * ```
    */
   formatAngle(e) {
-    const n = e < 0 ? "-" : "", t = Math.abs(e), r = Math.floor(t), a = Math.floor((t - r) * 60), i = ((t - r) * 60 - a) * 60;
-    return `${n}${r}°${a}′${i.toFixed(1)}″`;
+    const a = e < 0 ? "-" : "", t = Math.abs(e), r = Math.floor(t), n = Math.floor((t - r) * 60), i = ((t - r) * 60 - n) * 60;
+    return `${a}${r}°${n}′${i.toFixed(1)}″`;
   },
   /**
    * Format Right Ascension from decimal degrees into hours/minutes/seconds.
@@ -131,10 +131,10 @@ const ge = {
    * ```
    */
   formatRA(e) {
-    const n = (e % 360 + 360) % 360, t = Math.floor(n / 15), r = Math.floor((n / 15 - t) * 60), a = ((n / 15 - t) * 60 - r) * 60;
-    return `${t}h ${r}m ${a.toFixed(1)}s`;
+    const a = (e % 360 + 360) % 360, t = Math.floor(a / 15), r = Math.floor((a / 15 - t) * 60), n = ((a / 15 - t) * 60 - r) * 60;
+    return `${t}h ${r}m ${n.toFixed(1)}s`;
   }
-}, G = {
+}, be = {
   /**
    * Find the next solar eclipse after the given date.
    *
@@ -156,11 +156,11 @@ const ge = {
    * ```
    */
   nextSolar(e = /* @__PURE__ */ new Date()) {
-    let n = new Date(e);
+    let a = new Date(e);
     for (let t = 0; t < 26; t++) {
-      const r = k.nextPhase(n, "new"), a = this._checkSolarEclipse(r);
-      if (a) return a;
-      n = new Date(r.valueOf() + 864e5);
+      const r = A.nextPhase(a, "new"), n = this._checkSolarEclipse(r);
+      if (n) return n;
+      a = new Date(r.valueOf() + 864e5);
     }
     return null;
   },
@@ -185,11 +185,11 @@ const ge = {
    * ```
    */
   nextLunar(e = /* @__PURE__ */ new Date()) {
-    let n = new Date(e);
+    let a = new Date(e);
     for (let t = 0; t < 26; t++) {
-      const r = k.nextPhase(n, "full"), a = this._checkLunarEclipse(r);
-      if (a) return a;
-      n = new Date(r.valueOf() + 864e5);
+      const r = A.nextPhase(a, "full"), n = this._checkLunarEclipse(r);
+      if (n) return n;
+      a = new Date(r.valueOf() + 864e5);
     }
     return null;
   },
@@ -231,25 +231,25 @@ const ge = {
    * solar.forEach(e => console.log(`${e.subtype} solar eclipse: ${e.date.toISOString()}`))
    * ```
    */
-  search(e, n, t) {
+  search(e, a, t) {
     const r = [];
-    let a = new Date(e);
-    const i = n.valueOf();
-    for (; a.valueOf() < i; ) {
+    let n = new Date(e);
+    const i = a.valueOf();
+    for (; n.valueOf() < i; ) {
       if (t !== "lunar") {
-        const o = k.nextPhase(a, "new");
+        const o = A.nextPhase(n, "new");
         if (o.valueOf() > i) break;
         const s = this._checkSolarEclipse(o);
         s && r.push(s);
       }
       if (t !== "solar") {
-        const o = k.nextPhase(a, "full");
+        const o = A.nextPhase(n, "full");
         if (o.valueOf() <= i) {
           const s = this._checkLunarEclipse(o);
           s && r.push(s);
         }
       }
-      a = new Date(a.valueOf() + 15 * 864e5);
+      n = new Date(n.valueOf() + 15 * 864e5);
     }
     return r.sort((o, s) => o.date.valueOf() - s.date.valueOf()), r.filter(
       (o, s) => s === 0 || Math.abs(o.date.valueOf() - r[s - 1].date.valueOf()) > 864e5
@@ -269,23 +269,23 @@ const ge = {
    * @returns An {@link EclipseEvent} if a solar eclipse occurs at this new moon, or `null` otherwise.
    */
   _checkSolarEclipse(e) {
-    const n = k.position(e), t = h.planetEcliptic("earth", e), r = ((t.lon + 180) % 360 + 360) % 360;
-    if (Math.abs(n.eclipticLat) > 1.5) return null;
-    const i = t.r * 1495978707e-1, o = Math.atan2(696e3, i) * (180 / Math.PI), s = Math.atan2(1737.4, n.distance_km) * (180 / Math.PI), l = h.angularSeparation(
-      n,
-      h.eclipticToEquatorial({ lon: r, lat: 0 })
-    ), c = o + s;
-    if (l > c * 1.5) return null;
-    let d, m;
-    if (s >= o && l < s - o)
-      d = "total", m = 1;
-    else if (s < o && l < o - s)
-      d = "annular", m = s / o;
-    else if (l < c)
-      d = "partial", m = (c - l) / (2 * o);
+    const a = A.position(e), t = g.planetEcliptic("earth", e), r = ((t.lon + 180) % 360 + 360) % 360;
+    if (Math.abs(a.eclipticLat) > 1.5) return null;
+    const i = t.r * 1495978707e-1, o = Math.atan2(696e3, i) * (180 / Math.PI), s = Math.atan2(1737.4, a.distance_km) * (180 / Math.PI), c = g.angularSeparation(
+      a,
+      g.eclipticToEquatorial({ lon: r, lat: 0 })
+    ), d = o + s;
+    if (c > d * 1.5) return null;
+    let l, m;
+    if (s >= o && c < s - o)
+      l = "total", m = 1;
+    else if (s < o && c < o - s)
+      l = "annular", m = s / o;
+    else if (c < d)
+      l = "partial", m = (d - c) / (2 * o);
     else
       return null;
-    return { type: "solar", subtype: d, date: e, magnitude: m };
+    return { type: "solar", subtype: l, date: e, magnitude: m };
   },
   /**
    * Check if a full moon produces a lunar eclipse.
@@ -307,29 +307,29 @@ const ge = {
    * @returns An {@link EclipseEvent} if a lunar eclipse occurs at this full moon, or `null` otherwise.
    */
   _checkLunarEclipse(e) {
-    const n = k.position(e), t = Math.abs(n.eclipticLat), r = Math.atan2(6371, n.distance_km) * (180 / Math.PI), a = r * 2.6, i = r * 4.3, o = Math.atan2(1737.4, n.distance_km) * (180 / Math.PI);
+    const a = A.position(e), t = Math.abs(a.eclipticLat), r = Math.atan2(6371, a.distance_km) * (180 / Math.PI), n = r * 2.6, i = r * 4.3, o = Math.atan2(1737.4, a.distance_km) * (180 / Math.PI);
     if (t > i + o) return null;
-    let s, l;
-    if (t < a - o)
-      s = "total", l = (a - t) / (2 * o);
-    else if (t < a + o)
-      s = "partial", l = (a + o - t) / (2 * o);
+    let s, c;
+    if (t < n - o)
+      s = "total", c = (n - t) / (2 * o);
+    else if (t < n + o)
+      s = "partial", c = (n + o - t) / (2 * o);
     else if (t < i + o)
-      s = "penumbral", l = (i + o - t) / (2 * o);
+      s = "penumbral", c = (i + o - t) / (2 * o);
     else
       return null;
-    return { type: "lunar", subtype: s, date: e, magnitude: Math.min(l, 1) };
+    return { type: "lunar", subtype: s, date: e, magnitude: Math.min(c, 1) };
   }
-}, ye = [
+}, Ve = [
   { target: "new", name: "New Moon" },
   { target: "first-quarter", name: "First Quarter Moon" },
   { target: "full", name: "Full Moon" },
   { target: "last-quarter", name: "Last Quarter Moon" }
 ];
-function X(e) {
+function le(e) {
   return e.charAt(0).toUpperCase() + e.slice(1);
 }
-const Se = {
+const Be = {
   /**
    * Find upcoming astronomical events within a date range.
    *
@@ -349,32 +349,32 @@ const Se = {
    * )
    * ```
    */
-  nextEvents(e, n = {}) {
-    const { days: t = 90, categories: r, limit: a = 50 } = n, i = e.date ?? /* @__PURE__ */ new Date(), o = new Date(i.valueOf() + t * 864e5), s = [], l = (c) => !r || r.includes(c);
-    if (l("moon-phase") && s.push(...xe(i, o)), l("eclipse") && s.push(...be(i, o)), l("meteor-shower") && s.push(...ke(i, o)), l("opposition") || l("conjunction")) {
-      const c = C.planetEvents(e, { days: t });
-      for (const d of c)
-        if (l(d.type)) {
-          let m, g;
+  nextEvents(e, a = {}) {
+    const { days: t = 90, categories: r, limit: n = 50 } = a, i = e.date ?? /* @__PURE__ */ new Date(), o = new Date(i.valueOf() + t * 864e5), s = [], c = (d) => !r || r.includes(d);
+    if (c("moon-phase") && s.push(...Qe(i, o)), c("eclipse") && s.push(...Je(i, o)), c("meteor-shower") && s.push(...et(i, o)), c("opposition") || c("conjunction")) {
+      const d = D.planetEvents(e, { days: t });
+      for (const l of d)
+        if (c(l.type)) {
+          let m, h;
           try {
-            const p = h.planetEcliptic(d.planet, d.date), f = h.eclipticToEquatorial(p);
-            m = f.ra, g = f.dec;
+            const f = g.planetEcliptic(l.planet, l.date), p = g.eclipticToEquatorial(f);
+            m = p.ra, h = p.dec;
           } catch {
           }
           s.push({
-            category: d.type,
-            title: `${X(d.planet)} ${d.type}`,
-            date: d.date,
-            detail: `Solar elongation: ${d.elongation.toFixed(1)}°`,
+            category: l.type,
+            title: `${le(l.planet)} ${l.type}`,
+            date: l.date,
+            detail: `Solar elongation: ${l.elongation.toFixed(1)}°`,
             ra: m,
-            dec: g
+            dec: h
           });
         }
     }
-    if (l("elongation") && s.push(...we(i, t)), l("equinox") && s.push(...U(i, o, "equinox")), l("solstice") && s.push(...U(i, o, "solstice")), e.lat !== void 0 && e.lng !== void 0)
-      for (const c of s)
-        c.ra !== void 0 && c.dec !== void 0 && (c.visibility = Ae(c, e));
-    return s.sort((c, d) => c.date.valueOf() - d.date.valueOf()), s.slice(0, a);
+    if (c("elongation") && s.push(...tt(i, t)), c("equinox") && s.push(...ye(i, o, "equinox")), c("solstice") && s.push(...ye(i, o, "solstice")), e.lat !== void 0 && e.lng !== void 0)
+      for (const d of s)
+        d.ra !== void 0 && d.dec !== void 0 && (d.visibility = nt(d, e));
+    return s.sort((d, l) => d.date.valueOf() - l.date.valueOf()), s.slice(0, n);
   },
   /**
    * Find the next occurrence of a specific event category.
@@ -390,8 +390,8 @@ const Se = {
    * const nextOpposition = Events.nextEvent('opposition', { lat: 47, lng: 8 })
    * ```
    */
-  nextEvent(e, n, t = 365) {
-    return this.nextEvents(n, { days: t, categories: [e], limit: 1 })[0] ?? null;
+  nextEvent(e, a, t = 365) {
+    return this.nextEvents(a, { days: t, categories: [e], limit: 1 })[0] ?? null;
   },
   /**
    * Export events as an iCal (`.ics`) string.
@@ -411,15 +411,15 @@ const Se = {
    * download('astro-events.ics', ical, 'text/calendar')
    * ```
    */
-  toICal(e, n = "Astronomical Events") {
+  toICal(e, a = "Astronomical Events") {
     const t = [
       "BEGIN:VCALENDAR",
       "VERSION:2.0",
       "PRODID:-//cosmos-lib//Astronomical Events//EN",
-      `X-WR-CALNAME:${n}`
+      `X-WR-CALNAME:${a}`
     ];
     for (const r of e) {
-      const a = r.date, i = `${a.getUTCFullYear()}${String(a.getUTCMonth() + 1).padStart(2, "0")}${String(a.getUTCDate()).padStart(2, "0")}`, o = `${i}-${r.category}-${r.title.replace(/\s/g, "-").toLowerCase()}@cosmos-lib`;
+      const n = r.date, i = `${n.getUTCFullYear()}${String(n.getUTCMonth() + 1).padStart(2, "0")}${String(n.getUTCDate()).padStart(2, "0")}`, o = `${i}-${r.category}-${r.title.replace(/\s/g, "-").toLowerCase()}@cosmos-lib`;
       t.push(
         "BEGIN:VEVENT",
         `DTSTART;VALUE=DATE:${i}`,
@@ -431,41 +431,41 @@ const Se = {
 `);
   }
 };
-function xe(e, n) {
+function Qe(e, a) {
   const t = [];
-  for (const { target: r, name: a } of ye) {
+  for (const { target: r, name: n } of Ve) {
     let i = new Date(e.valueOf());
     for (let o = 0; o < 20; o++) {
-      const s = k.nextPhase(i, r);
-      if (s.valueOf() > n.valueOf()) break;
-      const l = k.position(s);
+      const s = A.nextPhase(i, r);
+      if (s.valueOf() > a.valueOf()) break;
+      const c = A.position(s);
       t.push({
         category: "moon-phase",
-        title: a,
+        title: n,
         date: s,
-        ra: l.ra,
-        dec: l.dec
+        ra: c.ra,
+        dec: c.dec
       }), i = new Date(s.valueOf() + 864e5);
     }
   }
   return t;
 }
-function be(e, n) {
-  return G.search(e, n).map((r) => ({
+function Je(e, a) {
+  return be.search(e, a).map((r) => ({
     category: "eclipse",
-    title: `${X(r.subtype)} ${r.type} eclipse`,
+    title: `${le(r.subtype)} ${r.type} eclipse`,
     date: r.date,
     detail: `Magnitude: ${r.magnitude.toFixed(3)}`
   }));
 }
-function ke(e, n) {
+function et(e, a) {
   const t = [], r = /* @__PURE__ */ new Set();
-  for (let a = e.valueOf(); a <= n.valueOf(); a += 864e5) {
-    const i = new Date(a), o = E.getActiveShowers(i);
+  for (let n = e.valueOf(); n <= a.valueOf(); n += 864e5) {
+    const i = new Date(n), o = _.getActiveShowers(i);
     for (const s of o) {
       if (r.has(s.id)) continue;
-      const c = ((h.planetEcliptic("earth", i).lon + 180) % 360 + 360) % 360;
-      Math.abs(((c - s.solarLon + 180) % 360 + 360) % 360 - 180) < 2 && (r.add(s.id), t.push({
+      const d = ((g.planetEcliptic("earth", i).lon + 180) % 360 + 360) % 360;
+      Math.abs(((d - s.solarLon + 180) % 360 + 360) % 360 - 180) < 2 && (r.add(s.id), t.push({
         category: "meteor-shower",
         title: `${s.name} meteor shower peak`,
         date: i,
@@ -478,45 +478,45 @@ function ke(e, n) {
   }
   return t;
 }
-function we(e, n) {
+function tt(e, a) {
   const t = [], r = ["mercury", "venus"];
-  for (const a of r) {
+  for (const n of r) {
     let i = 0, o = !0;
-    for (let s = 0; s <= n; s++) {
-      const l = new Date(e.valueOf() + s * 864e5), c = h.planetEcliptic(a, l), d = h.eclipticToEquatorial(c), m = b.position(l), g = h.angularSeparation(d, { ra: m.ra, dec: m.dec });
+    for (let s = 0; s <= a; s++) {
+      const c = new Date(e.valueOf() + s * 864e5), d = g.planetEcliptic(n, c), l = g.eclipticToEquatorial(d), m = w.position(c), h = g.angularSeparation(l, { ra: m.ra, dec: m.dec });
       if (s > 0) {
-        const p = g > i;
-        if (!p && o && i > 15) {
-          const f = c.lon, y = m.eclipticLon;
-          let u = f - y;
+        const f = h > i;
+        if (!f && o && i > 15) {
+          const p = d.lon, S = m.eclipticLon;
+          let u = p - S;
           u > 180 && (u -= 360), u < -180 && (u += 360);
           const x = u > 0 ? "east (evening)" : "west (morning)";
           t.push({
             category: "elongation",
-            title: `${X(a)} greatest elongation`,
+            title: `${le(n)} greatest elongation`,
             date: new Date(e.valueOf() + (s - 1) * 864e5),
             detail: `${i.toFixed(1)}° ${x}`
           });
         }
-        o = p;
+        o = f;
       }
-      i = g;
+      i = h;
     }
   }
   return t;
 }
-function U(e, n, t) {
-  const r = [], a = t === "equinox" ? [{ lon: 0, name: "Vernal equinox (March)" }, { lon: 180, name: "Autumnal equinox (September)" }] : [{ lon: 90, name: "Summer solstice (June)" }, { lon: 270, name: "Winter solstice (December)" }];
-  for (const { lon: i, name: o } of a) {
+function ye(e, a, t) {
+  const r = [], n = t === "equinox" ? [{ lon: 0, name: "Vernal equinox (March)" }, { lon: 180, name: "Autumnal equinox (September)" }] : [{ lon: 90, name: "Summer solstice (June)" }, { lon: 270, name: "Winter solstice (December)" }];
+  for (const { lon: i, name: o } of n) {
     let s = -1;
-    for (let l = 0; l <= (n.valueOf() - e.valueOf()) / 864e5; l++) {
-      const c = new Date(e.valueOf() + l * 864e5), m = b.position(c).eclipticLon;
-      if (l > 0) {
-        let g = !1;
-        i === 0 ? g = s > 350 && m < 10 : g = s < i && m >= i, g && r.push({
+    for (let c = 0; c <= (a.valueOf() - e.valueOf()) / 864e5; c++) {
+      const d = new Date(e.valueOf() + c * 864e5), m = w.position(d).eclipticLon;
+      if (c > 0) {
+        let h = !1;
+        i === 0 ? h = s > 350 && m < 10 : h = s < i && m >= i, h && r.push({
           category: t,
           title: o,
-          date: c,
+          date: d,
           detail: `Sun ecliptic longitude: ${m.toFixed(2)}°`
         });
       }
@@ -525,89 +525,89 @@ function U(e, n, t) {
   }
   return r;
 }
-function Ae(e, n) {
-  const t = e.ra, r = e.dec, a = e.date, o = b.twilight({ ...n, date: a }).astronomicalDusk, l = b.twilight({ ...n, date: new Date(a.valueOf() + 864e5) }).astronomicalDawn, c = k.phase(a), d = k.position(a), m = h.angularSeparation({ ra: t, dec: r }, { ra: d.ra, dec: d.dec }), g = Math.max(0, Math.min(1, (120 - m) / 115)), p = c.illumination * g;
-  if (!o || !l)
+function nt(e, a) {
+  const t = e.ra, r = e.dec, n = e.date, o = w.twilight({ ...a, date: n }).astronomicalDusk, c = w.twilight({ ...a, date: new Date(n.valueOf() + 864e5) }).astronomicalDawn, d = A.phase(n), l = A.position(n), m = g.angularSeparation({ ra: t, dec: r }, { ra: l.ra, dec: l.dec }), h = Math.max(0, Math.min(1, (120 - m) / 115)), f = d.illumination * h;
+  if (!o || !c)
     return {
       visible: !1,
-      peakAltitude: h.equatorialToHorizontal({ ra: t, dec: r }, { ...n, date: a }).alt,
-      moonInterference: p,
+      peakAltitude: g.equatorialToHorizontal({ ra: t, dec: r }, { ...a, date: n }).alt,
+      moonInterference: f,
       summary: "No astronomical darkness at this location"
     };
-  const f = o.valueOf(), y = l.valueOf();
+  const p = o.valueOf(), S = c.valueOf();
   let u = -90;
-  for (let w = f; w <= y; w += 18e5) {
-    const L = h.equatorialToHorizontal({ ra: t, dec: r }, { ...n, date: new Date(w) });
-    L.alt > u && (u = L.alt);
+  for (let k = p; k <= S; k += 18e5) {
+    const M = g.equatorialToHorizontal({ ra: t, dec: r }, { ...a, date: new Date(k) });
+    M.alt > u && (u = M.alt);
   }
   const x = u > 10;
-  let S;
-  return x ? p > 0.5 ? S = `Visible at ${u.toFixed(0)}° alt, but strong moon interference (${(p * 100).toFixed(0)}%)` : p > 0.2 ? S = `Good — ${u.toFixed(0)}° alt, moderate moon (${(p * 100).toFixed(0)}%)` : u > 50 ? S = `Excellent — ${u.toFixed(0)}° alt, dark skies` : S = `Good — ${u.toFixed(0)}° alt, low moon interference` : S = u > 0 ? `Low visibility — peak altitude only ${u.toFixed(0)}° above horizon` : "Not visible — target never rises above horizon at this location", { visible: x, peakAltitude: u, moonInterference: p, summary: S };
+  let y;
+  return x ? f > 0.5 ? y = `Visible at ${u.toFixed(0)}° alt, but strong moon interference (${(f * 100).toFixed(0)}%)` : f > 0.2 ? y = `Good — ${u.toFixed(0)}° alt, moderate moon (${(f * 100).toFixed(0)}%)` : u > 50 ? y = `Excellent — ${u.toFixed(0)}° alt, dark skies` : y = `Good — ${u.toFixed(0)}° alt, low moon interference` : y = u > 0 ? `Low visibility — peak altitude only ${u.toFixed(0)}° above horizon` : "Not visible — target never rises above horizon at this location", { visible: x, peakAltitude: u, moonInterference: f, summary: y };
 }
-const W = [
+const Z = [
   // Canon DSLR
-  { id: "canon-6d-mk2", name: "Canon EOS 6D Mark II", brand: "Canon", type: "dslr", sensorWidth: 35.9, sensorHeight: 24, pixelSize: 5.73, pixelsX: 6240, pixelsY: 4160 },
-  { id: "canon-5d-mk4", name: "Canon EOS 5D Mark IV", brand: "Canon", type: "dslr", sensorWidth: 36, sensorHeight: 24, pixelSize: 5.36, pixelsX: 6720, pixelsY: 4480 },
-  { id: "canon-80d", name: "Canon EOS 80D", brand: "Canon", type: "dslr", sensorWidth: 22.5, sensorHeight: 15, pixelSize: 3.72, pixelsX: 6e3, pixelsY: 4e3 },
-  { id: "canon-t7i", name: "Canon EOS Rebel T7i", brand: "Canon", type: "dslr", sensorWidth: 22.3, sensorHeight: 14.9, pixelSize: 3.72, pixelsX: 6e3, pixelsY: 4e3 },
+  { id: "canon-6d-mk2", name: "Canon EOS 6D Mark II", brand: "Canon", type: "dslr", sensorWidth: 35.9, sensorHeight: 24, pixelSize: 5.73, pixelsX: 6240, pixelsY: 4160, readNoise: 3.8, recommendedISO: 800 },
+  { id: "canon-5d-mk4", name: "Canon EOS 5D Mark IV", brand: "Canon", type: "dslr", sensorWidth: 36, sensorHeight: 24, pixelSize: 5.36, pixelsX: 6720, pixelsY: 4480, readNoise: 3.4, recommendedISO: 800 },
+  { id: "canon-80d", name: "Canon EOS 80D", brand: "Canon", type: "dslr", sensorWidth: 22.5, sensorHeight: 15, pixelSize: 3.72, pixelsX: 6e3, pixelsY: 4e3, readNoise: 3.2, recommendedISO: 800 },
+  { id: "canon-t7i", name: "Canon EOS Rebel T7i", brand: "Canon", type: "dslr", sensorWidth: 22.3, sensorHeight: 14.9, pixelSize: 3.72, pixelsX: 6e3, pixelsY: 4e3, readNoise: 3.3, recommendedISO: 800 },
   // Canon Mirrorless
-  { id: "canon-eos-r", name: "Canon EOS R", brand: "Canon", type: "mirrorless", sensorWidth: 36, sensorHeight: 24, pixelSize: 5.36, pixelsX: 6720, pixelsY: 4480 },
-  { id: "canon-eos-ra", name: "Canon EOS Ra", brand: "Canon", type: "mirrorless", sensorWidth: 36, sensorHeight: 24, pixelSize: 5.36, pixelsX: 6720, pixelsY: 4480, astroModified: !0 },
-  { id: "canon-eos-r5", name: "Canon EOS R5", brand: "Canon", type: "mirrorless", sensorWidth: 36, sensorHeight: 24, pixelSize: 4.39, pixelsX: 8192, pixelsY: 5464 },
-  { id: "canon-eos-r6-mk2", name: "Canon EOS R6 Mark II", brand: "Canon", type: "mirrorless", sensorWidth: 36, sensorHeight: 24, pixelSize: 5.97, pixelsX: 6e3, pixelsY: 4e3 },
+  { id: "canon-eos-r", name: "Canon EOS R", brand: "Canon", type: "mirrorless", sensorWidth: 36, sensorHeight: 24, pixelSize: 5.36, pixelsX: 6720, pixelsY: 4480, readNoise: 3, recommendedISO: 1600 },
+  { id: "canon-eos-ra", name: "Canon EOS Ra", brand: "Canon", type: "mirrorless", sensorWidth: 36, sensorHeight: 24, pixelSize: 5.36, pixelsX: 6720, pixelsY: 4480, astroModified: !0, readNoise: 3, recommendedISO: 1600 },
+  { id: "canon-eos-r5", name: "Canon EOS R5", brand: "Canon", type: "mirrorless", sensorWidth: 36, sensorHeight: 24, pixelSize: 4.39, pixelsX: 8192, pixelsY: 5464, readNoise: 2.8, recommendedISO: 1600 },
+  { id: "canon-eos-r6-mk2", name: "Canon EOS R6 Mark II", brand: "Canon", type: "mirrorless", sensorWidth: 36, sensorHeight: 24, pixelSize: 5.97, pixelsX: 6e3, pixelsY: 4e3, readNoise: 2.6, recommendedISO: 1600 },
   // Nikon
-  { id: "nikon-d810a", name: "Nikon D810A", brand: "Nikon", type: "dslr", sensorWidth: 35.9, sensorHeight: 24, pixelSize: 4.88, pixelsX: 7360, pixelsY: 4912, astroModified: !0 },
-  { id: "nikon-d850", name: "Nikon D850", brand: "Nikon", type: "dslr", sensorWidth: 35.9, sensorHeight: 23.9, pixelSize: 4.34, pixelsX: 8256, pixelsY: 5504 },
-  { id: "nikon-z6-iii", name: "Nikon Z6 III", brand: "Nikon", type: "mirrorless", sensorWidth: 35.9, sensorHeight: 23.9, pixelSize: 5.94, pixelsX: 6048, pixelsY: 4032 },
-  { id: "nikon-z8", name: "Nikon Z8", brand: "Nikon", type: "mirrorless", sensorWidth: 35.9, sensorHeight: 23.9, pixelSize: 4.34, pixelsX: 8256, pixelsY: 5504 },
+  { id: "nikon-d810a", name: "Nikon D810A", brand: "Nikon", type: "dslr", sensorWidth: 35.9, sensorHeight: 24, pixelSize: 4.88, pixelsX: 7360, pixelsY: 4912, astroModified: !0, readNoise: 2.8, recommendedISO: 800 },
+  { id: "nikon-d850", name: "Nikon D850", brand: "Nikon", type: "dslr", sensorWidth: 35.9, sensorHeight: 23.9, pixelSize: 4.34, pixelsX: 8256, pixelsY: 5504, readNoise: 2.6, recommendedISO: 800 },
+  { id: "nikon-z6-iii", name: "Nikon Z6 III", brand: "Nikon", type: "mirrorless", sensorWidth: 35.9, sensorHeight: 23.9, pixelSize: 5.94, pixelsX: 6048, pixelsY: 4032, readNoise: 2.4, recommendedISO: 1600 },
+  { id: "nikon-z8", name: "Nikon Z8", brand: "Nikon", type: "mirrorless", sensorWidth: 35.9, sensorHeight: 23.9, pixelSize: 4.34, pixelsX: 8256, pixelsY: 5504, readNoise: 2.5, recommendedISO: 1600 },
   // Sony
-  { id: "sony-a7iii", name: "Sony A7 III", brand: "Sony", type: "mirrorless", sensorWidth: 35.6, sensorHeight: 23.8, pixelSize: 5.93, pixelsX: 6e3, pixelsY: 4e3 },
-  { id: "sony-a7iv", name: "Sony A7 IV", brand: "Sony", type: "mirrorless", sensorWidth: 35.9, sensorHeight: 23.9, pixelSize: 5.09, pixelsX: 7008, pixelsY: 4672 },
-  { id: "sony-a7cr", name: "Sony A7CR", brand: "Sony", type: "mirrorless", sensorWidth: 35.7, sensorHeight: 23.8, pixelSize: 3.73, pixelsX: 9568, pixelsY: 6380 },
-  { id: "sony-a7s-iii", name: "Sony A7S III", brand: "Sony", type: "mirrorless", sensorWidth: 35.6, sensorHeight: 23.8, pixelSize: 8.4, pixelsX: 4240, pixelsY: 2832 },
+  { id: "sony-a7iii", name: "Sony A7 III", brand: "Sony", type: "mirrorless", sensorWidth: 35.6, sensorHeight: 23.8, pixelSize: 5.93, pixelsX: 6e3, pixelsY: 4e3, readNoise: 3.3, recommendedISO: 800 },
+  { id: "sony-a7iv", name: "Sony A7 IV", brand: "Sony", type: "mirrorless", sensorWidth: 35.9, sensorHeight: 23.9, pixelSize: 5.09, pixelsX: 7008, pixelsY: 4672, readNoise: 2.5, recommendedISO: 1600 },
+  { id: "sony-a7cr", name: "Sony A7CR", brand: "Sony", type: "mirrorless", sensorWidth: 35.7, sensorHeight: 23.8, pixelSize: 3.73, pixelsX: 9568, pixelsY: 6380, readNoise: 2.2, recommendedISO: 1600 },
+  { id: "sony-a7s-iii", name: "Sony A7S III", brand: "Sony", type: "mirrorless", sensorWidth: 35.6, sensorHeight: 23.8, pixelSize: 8.4, pixelsX: 4240, pixelsY: 2832, readNoise: 2, recommendedISO: 3200 },
   // ZWO Dedicated Astro
-  { id: "zwo-asi294mc-pro", name: "ZWO ASI294MC Pro", brand: "ZWO", type: "dedicated", sensorWidth: 19.1, sensorHeight: 13, pixelSize: 4.63, pixelsX: 4144, pixelsY: 2822 },
-  { id: "zwo-asi2600mc-pro", name: "ZWO ASI2600MC Pro", brand: "ZWO", type: "dedicated", sensorWidth: 23.5, sensorHeight: 15.7, pixelSize: 3.76, pixelsX: 6248, pixelsY: 4176 },
-  { id: "zwo-asi533mc-pro", name: "ZWO ASI533MC Pro", brand: "ZWO", type: "dedicated", sensorWidth: 11.31, sensorHeight: 11.31, pixelSize: 3.76, pixelsX: 3008, pixelsY: 3008 },
-  { id: "zwo-asi585mc", name: "ZWO ASI585MC", brand: "ZWO", type: "dedicated", sensorWidth: 12.84, sensorHeight: 9.64, pixelSize: 2.9, pixelsX: 4432, pixelsY: 3326 },
-  { id: "zwo-asi071mc-pro", name: "ZWO ASI071MC Pro", brand: "ZWO", type: "dedicated", sensorWidth: 23.6, sensorHeight: 15.6, pixelSize: 4.78, pixelsX: 4944, pixelsY: 3284 },
-  { id: "zwo-asi183mc-pro", name: "ZWO ASI183MC Pro", brand: "ZWO", type: "dedicated", sensorWidth: 13.2, sensorHeight: 8.8, pixelSize: 2.4, pixelsX: 5496, pixelsY: 3672 },
+  { id: "zwo-asi294mc-pro", name: "ZWO ASI294MC Pro", brand: "ZWO", type: "dedicated", sensorWidth: 19.1, sensorHeight: 13, pixelSize: 4.63, pixelsX: 4144, pixelsY: 2822, readNoise: 1.2, recommendedGain: 120 },
+  { id: "zwo-asi2600mc-pro", name: "ZWO ASI2600MC Pro", brand: "ZWO", type: "dedicated", sensorWidth: 23.5, sensorHeight: 15.7, pixelSize: 3.76, pixelsX: 6248, pixelsY: 4176, readNoise: 1.5, recommendedGain: 100 },
+  { id: "zwo-asi533mc-pro", name: "ZWO ASI533MC Pro", brand: "ZWO", type: "dedicated", sensorWidth: 11.31, sensorHeight: 11.31, pixelSize: 3.76, pixelsX: 3008, pixelsY: 3008, readNoise: 1, recommendedGain: 100 },
+  { id: "zwo-asi585mc", name: "ZWO ASI585MC", brand: "ZWO", type: "dedicated", sensorWidth: 12.84, sensorHeight: 9.64, pixelSize: 2.9, pixelsX: 4432, pixelsY: 3326, readNoise: 1, recommendedGain: 250 },
+  { id: "zwo-asi071mc-pro", name: "ZWO ASI071MC Pro", brand: "ZWO", type: "dedicated", sensorWidth: 23.6, sensorHeight: 15.6, pixelSize: 4.78, pixelsX: 4944, pixelsY: 3284, readNoise: 2.3, recommendedGain: 90 },
+  { id: "zwo-asi183mc-pro", name: "ZWO ASI183MC Pro", brand: "ZWO", type: "dedicated", sensorWidth: 13.2, sensorHeight: 8.8, pixelSize: 2.4, pixelsX: 5496, pixelsY: 3672, readNoise: 1.6, recommendedGain: 111 },
   // QHY
-  { id: "qhy268c", name: "QHY268C", brand: "QHY", type: "dedicated", sensorWidth: 23.5, sensorHeight: 15.7, pixelSize: 3.76, pixelsX: 6252, pixelsY: 4176 },
-  { id: "qhy600m", name: "QHY600M", brand: "QHY", type: "dedicated", sensorWidth: 36, sensorHeight: 24, pixelSize: 3.76, pixelsX: 9576, pixelsY: 6388 },
-  { id: "qhy163c", name: "QHY163C", brand: "QHY", type: "dedicated", sensorWidth: 13.2, sensorHeight: 8.8, pixelSize: 3.8, pixelsX: 4656, pixelsY: 3522 },
-  { id: "qhy533m", name: "QHY533M", brand: "QHY", type: "dedicated", sensorWidth: 11.31, sensorHeight: 11.31, pixelSize: 3.76, pixelsX: 3008, pixelsY: 3008 },
-  { id: "qhy294c", name: "QHY294C", brand: "QHY", type: "dedicated", sensorWidth: 19.1, sensorHeight: 13, pixelSize: 4.63, pixelsX: 4144, pixelsY: 2822 },
+  { id: "qhy268c", name: "QHY268C", brand: "QHY", type: "dedicated", sensorWidth: 23.5, sensorHeight: 15.7, pixelSize: 3.76, pixelsX: 6252, pixelsY: 4176, readNoise: 1.5, recommendedGain: 56 },
+  { id: "qhy600m", name: "QHY600M", brand: "QHY", type: "dedicated", sensorWidth: 36, sensorHeight: 24, pixelSize: 3.76, pixelsX: 9576, pixelsY: 6388, readNoise: 1.5, recommendedGain: 56 },
+  { id: "qhy163c", name: "QHY163C", brand: "QHY", type: "dedicated", sensorWidth: 13.2, sensorHeight: 8.8, pixelSize: 3.8, pixelsX: 4656, pixelsY: 3522, readNoise: 1.8, recommendedGain: 75 },
+  { id: "qhy533m", name: "QHY533M", brand: "QHY", type: "dedicated", sensorWidth: 11.31, sensorHeight: 11.31, pixelSize: 3.76, pixelsX: 3008, pixelsY: 3008, readNoise: 1, recommendedGain: 56 },
+  { id: "qhy294c", name: "QHY294C", brand: "QHY", type: "dedicated", sensorWidth: 19.1, sensorHeight: 13, pixelSize: 4.63, pixelsX: 4144, pixelsY: 2822, readNoise: 1.3, recommendedGain: 120 },
   // Fujifilm
-  { id: "fuji-x-t5", name: "Fujifilm X-T5", brand: "Fujifilm", type: "mirrorless", sensorWidth: 23.5, sensorHeight: 15.6, pixelSize: 3.49, pixelsX: 6720, pixelsY: 4480 },
-  { id: "fuji-x-h2", name: "Fujifilm X-H2", brand: "Fujifilm", type: "mirrorless", sensorWidth: 23.5, sensorHeight: 15.6, pixelSize: 2.84, pixelsX: 8256, pixelsY: 5504 },
+  { id: "fuji-x-t5", name: "Fujifilm X-T5", brand: "Fujifilm", type: "mirrorless", sensorWidth: 23.5, sensorHeight: 15.6, pixelSize: 3.49, pixelsX: 6720, pixelsY: 4480, readNoise: 2.8, recommendedISO: 1600 },
+  { id: "fuji-x-h2", name: "Fujifilm X-H2", brand: "Fujifilm", type: "mirrorless", sensorWidth: 23.5, sensorHeight: 15.6, pixelSize: 2.84, pixelsX: 8256, pixelsY: 5504, readNoise: 3, recommendedISO: 1600 },
   // Player One
-  { id: "player-one-poseidon-c", name: "Player One Poseidon-C Pro", brand: "Player One", type: "dedicated", sensorWidth: 23.5, sensorHeight: 15.7, pixelSize: 3.76, pixelsX: 6248, pixelsY: 4176 },
-  { id: "player-one-uranus-c", name: "Player One Uranus-C Pro", brand: "Player One", type: "dedicated", sensorWidth: 12.84, sensorHeight: 9.64, pixelSize: 2.9, pixelsX: 4432, pixelsY: 3326 },
+  { id: "player-one-poseidon-c", name: "Player One Poseidon-C Pro", brand: "Player One", type: "dedicated", sensorWidth: 23.5, sensorHeight: 15.7, pixelSize: 3.76, pixelsX: 6248, pixelsY: 4176, readNoise: 1.5, recommendedGain: 100 },
+  { id: "player-one-uranus-c", name: "Player One Uranus-C Pro", brand: "Player One", type: "dedicated", sensorWidth: 12.84, sensorHeight: 9.64, pixelSize: 2.9, pixelsX: 4432, pixelsY: 3326, readNoise: 1, recommendedGain: 250 },
   // Canon additional
-  { id: "canon-eos-r8", name: "Canon EOS R8", brand: "Canon", type: "mirrorless", sensorWidth: 36, sensorHeight: 24, pixelSize: 5.97, pixelsX: 6e3, pixelsY: 4e3 },
-  { id: "canon-90d", name: "Canon EOS 90D", brand: "Canon", type: "dslr", sensorWidth: 22.3, sensorHeight: 14.9, pixelSize: 3.22, pixelsX: 6960, pixelsY: 4640 },
+  { id: "canon-eos-r8", name: "Canon EOS R8", brand: "Canon", type: "mirrorless", sensorWidth: 36, sensorHeight: 24, pixelSize: 5.97, pixelsX: 6e3, pixelsY: 4e3, readNoise: 2.6, recommendedISO: 1600 },
+  { id: "canon-90d", name: "Canon EOS 90D", brand: "Canon", type: "dslr", sensorWidth: 22.3, sensorHeight: 14.9, pixelSize: 3.22, pixelsX: 6960, pixelsY: 4640, readNoise: 3, recommendedISO: 800 },
   // Nikon additional
-  { id: "nikon-z5", name: "Nikon Z5", brand: "Nikon", type: "mirrorless", sensorWidth: 35.9, sensorHeight: 23.9, pixelSize: 5.94, pixelsX: 6048, pixelsY: 4032 },
-  { id: "nikon-d7500", name: "Nikon D7500", brand: "Nikon", type: "dslr", sensorWidth: 23.5, sensorHeight: 15.7, pixelSize: 4.22, pixelsX: 5568, pixelsY: 3712 },
+  { id: "nikon-z5", name: "Nikon Z5", brand: "Nikon", type: "mirrorless", sensorWidth: 35.9, sensorHeight: 23.9, pixelSize: 5.94, pixelsX: 6048, pixelsY: 4032, readNoise: 2.8, recommendedISO: 1600 },
+  { id: "nikon-d7500", name: "Nikon D7500", brand: "Nikon", type: "dslr", sensorWidth: 23.5, sensorHeight: 15.7, pixelSize: 4.22, pixelsX: 5568, pixelsY: 3712, readNoise: 3, recommendedISO: 800 },
   // Sony additional
-  { id: "sony-a6700", name: "Sony A6700", brand: "Sony", type: "mirrorless", sensorWidth: 23.5, sensorHeight: 15.6, pixelSize: 3.92, pixelsX: 6e3, pixelsY: 4e3 },
-  { id: "sony-a7rv", name: "Sony A7R V", brand: "Sony", type: "mirrorless", sensorWidth: 35.7, sensorHeight: 23.8, pixelSize: 3.73, pixelsX: 9568, pixelsY: 6380 },
+  { id: "sony-a6700", name: "Sony A6700", brand: "Sony", type: "mirrorless", sensorWidth: 23.5, sensorHeight: 15.6, pixelSize: 3.92, pixelsX: 6e3, pixelsY: 4e3, readNoise: 2.4, recommendedISO: 1600 },
+  { id: "sony-a7rv", name: "Sony A7R V", brand: "Sony", type: "mirrorless", sensorWidth: 35.7, sensorHeight: 23.8, pixelSize: 3.73, pixelsX: 9568, pixelsY: 6380, readNoise: 2.2, recommendedISO: 1600 },
   // ZWO additional
-  { id: "zwo-asi2600mm-pro", name: "ZWO ASI2600MM Pro", brand: "ZWO", type: "dedicated", sensorWidth: 23.5, sensorHeight: 15.7, pixelSize: 3.76, pixelsX: 6248, pixelsY: 4176 },
-  { id: "zwo-asi533mm-pro", name: "ZWO ASI533MM Pro", brand: "ZWO", type: "dedicated", sensorWidth: 11.31, sensorHeight: 11.31, pixelSize: 3.76, pixelsX: 3008, pixelsY: 3008 },
-  { id: "zwo-asi678mc", name: "ZWO ASI678MC", brand: "ZWO", type: "dedicated", sensorWidth: 7.7, sensorHeight: 4.3, pixelSize: 2, pixelsX: 3840, pixelsY: 2160 },
-  { id: "zwo-asi462mc", name: "ZWO ASI462MC", brand: "ZWO", type: "dedicated", sensorWidth: 5.6, sensorHeight: 3.2, pixelSize: 2.9, pixelsX: 1936, pixelsY: 1096 },
-  { id: "zwo-asi120mm", name: "ZWO ASI120MM Mini", brand: "ZWO", type: "dedicated", sensorWidth: 4.8, sensorHeight: 3.6, pixelSize: 3.75, pixelsX: 1280, pixelsY: 960 },
+  { id: "zwo-asi2600mm-pro", name: "ZWO ASI2600MM Pro", brand: "ZWO", type: "dedicated", sensorWidth: 23.5, sensorHeight: 15.7, pixelSize: 3.76, pixelsX: 6248, pixelsY: 4176, readNoise: 1.5, recommendedGain: 100 },
+  { id: "zwo-asi533mm-pro", name: "ZWO ASI533MM Pro", brand: "ZWO", type: "dedicated", sensorWidth: 11.31, sensorHeight: 11.31, pixelSize: 3.76, pixelsX: 3008, pixelsY: 3008, readNoise: 1, recommendedGain: 100 },
+  { id: "zwo-asi678mc", name: "ZWO ASI678MC", brand: "ZWO", type: "dedicated", sensorWidth: 7.7, sensorHeight: 4.3, pixelSize: 2, pixelsX: 3840, pixelsY: 2160, readNoise: 0.8, recommendedGain: 200 },
+  { id: "zwo-asi462mc", name: "ZWO ASI462MC", brand: "ZWO", type: "dedicated", sensorWidth: 5.6, sensorHeight: 3.2, pixelSize: 2.9, pixelsX: 1936, pixelsY: 1096, readNoise: 0.9, recommendedGain: 300 },
+  { id: "zwo-asi120mm", name: "ZWO ASI120MM Mini", brand: "ZWO", type: "dedicated", sensorWidth: 4.8, sensorHeight: 3.6, pixelSize: 3.75, pixelsX: 1280, pixelsY: 960, readNoise: 3, recommendedGain: 50 },
   // Altair
-  { id: "altair-26c", name: "Altair Hypercam 26C", brand: "Altair", type: "dedicated", sensorWidth: 23.5, sensorHeight: 15.7, pixelSize: 3.76, pixelsX: 6248, pixelsY: 4176 },
+  { id: "altair-26c", name: "Altair Hypercam 26C", brand: "Altair", type: "dedicated", sensorWidth: 23.5, sensorHeight: 15.7, pixelSize: 3.76, pixelsX: 6248, pixelsY: 4176, readNoise: 1.5, recommendedGain: 100 },
   // Touptek
-  { id: "touptek-2600c", name: "Touptek ATR2600C", brand: "Touptek", type: "dedicated", sensorWidth: 23.5, sensorHeight: 15.7, pixelSize: 3.76, pixelsX: 6248, pixelsY: 4176 },
+  { id: "touptek-2600c", name: "Touptek ATR2600C", brand: "Touptek", type: "dedicated", sensorWidth: 23.5, sensorHeight: 15.7, pixelSize: 3.76, pixelsX: 6248, pixelsY: 4176, readNoise: 1.5, recommendedGain: 100 },
   // Pentax
-  { id: "pentax-k-1-mk2", name: "Pentax K-1 Mark II", brand: "Pentax", type: "dslr", sensorWidth: 35.9, sensorHeight: 24, pixelSize: 4.88, pixelsX: 7360, pixelsY: 4912 },
+  { id: "pentax-k-1-mk2", name: "Pentax K-1 Mark II", brand: "Pentax", type: "dslr", sensorWidth: 35.9, sensorHeight: 24, pixelSize: 4.88, pixelsX: 7360, pixelsY: 4912, readNoise: 3, recommendedISO: 800 },
   // Olympus/OM System (MFT)
-  { id: "om-system-om-1", name: "OM System OM-1", brand: "OM System", type: "mirrorless", sensorWidth: 17.4, sensorHeight: 13, pixelSize: 3.32, pixelsX: 5184, pixelsY: 3888 }
-], P = [
+  { id: "om-system-om-1", name: "OM System OM-1", brand: "OM System", type: "mirrorless", sensorWidth: 17.4, sensorHeight: 13, pixelSize: 3.32, pixelsX: 5184, pixelsY: 3888, readNoise: 2.2, recommendedISO: 1600 }
+], j = [
   // Sky-Watcher
   { id: "sw-evostar-72ed", name: "Sky-Watcher Evostar 72ED", brand: "Sky-Watcher", type: "refractor", aperture: 72, focalLength: 420, focalRatio: 5.8 },
   { id: "sw-evostar-80ed", name: "Sky-Watcher Evostar 80ED", brand: "Sky-Watcher", type: "refractor", aperture: 80, focalLength: 600, focalRatio: 7.5 },
@@ -668,7 +668,7 @@ const W = [
   // Bresser
   { id: "bresser-ar-102", name: "Bresser Messier AR-102/1000", brand: "Bresser", type: "refractor", aperture: 102, focalLength: 1e3, focalRatio: 9.8 },
   { id: "bresser-nt-150", name: "Bresser Messier NT-150/750", brand: "Bresser", type: "reflector", aperture: 150, focalLength: 750, focalRatio: 5 }
-], N = [
+], V = [
   // Ultra-wide (Milky Way)
   { id: "rokinon-14mm-f2.8", name: "Rokinon 14mm f/2.8", brand: "Rokinon", focalLength: 14, maxAperture: 5, fNumber: 2.8, mount: "universal" },
   { id: "sigma-14mm-f1.8", name: "Sigma 14mm f/1.8 DG HSM Art", brand: "Sigma", focalLength: 14, maxAperture: 7.78, fNumber: 1.8, mount: "universal" },
@@ -725,7 +725,7 @@ const W = [
   // MFT lenses
   { id: "olympus-12mm-f2", name: "Olympus M.Zuiko 12mm f/2.0", brand: "Olympus", focalLength: 12, maxAperture: 6, fNumber: 2, mount: "mft" },
   { id: "olympus-25mm-f1.2", name: "Olympus M.Zuiko 25mm f/1.2 Pro", brand: "Olympus", focalLength: 25, maxAperture: 20.83, fNumber: 1.2, mount: "mft" }
-], T = [
+], B = [
   // Star trackers (lightweight, portable)
   { id: "ioptron-skyguider-pro", name: "iOptron SkyGuider Pro", brand: "iOptron", type: "star-tracker", maxPayloadKg: 5, periodicError: 10, autoguide: !0, goto: !1, maxUnguidedExposure: 120, referenceFocalLength: 200 },
   { id: "ioptron-skytracker-pro", name: "iOptron SkyTracker Pro", brand: "iOptron", type: "star-tracker", maxPayloadKg: 3, periodicError: 25, autoguide: !1, goto: !1, maxUnguidedExposure: 60, referenceFocalLength: 200 },
@@ -750,16 +750,16 @@ const W = [
   { id: "zwo-am5", name: "ZWO AM5", brand: "ZWO", type: "eq-mount", maxPayloadKg: 13, periodicError: 5, autoguide: !0, goto: !0, maxUnguidedExposure: 300, referenceFocalLength: 1e3 },
   { id: "zwo-am3", name: "ZWO AM3", brand: "ZWO", type: "eq-mount", maxPayloadKg: 9, periodicError: 7, autoguide: !0, goto: !0, maxUnguidedExposure: 180, referenceFocalLength: 500 }
 ];
-class Le {
-  constructor(n, t, r, a, i = null) {
-    this.camera = n, this.focalLength = t * a, this.aperture = r, this.barlowFactor = a, this.tracker = i;
+class at {
+  constructor(a, t, r, n, i = null) {
+    this.camera = a, this.focalLength = t * n, this.aperture = r, this.barlowFactor = n, this.tracker = i;
   }
   /**
    * Field of view in degrees.
    */
   fov() {
-    const n = 2 * Math.atan(this.camera.sensorWidth / (2 * this.focalLength)) * 180 / Math.PI, t = 2 * Math.atan(this.camera.sensorHeight / (2 * this.focalLength)) * 180 / Math.PI, r = Math.sqrt(this.camera.sensorWidth ** 2 + this.camera.sensorHeight ** 2), a = 2 * Math.atan(r / (2 * this.focalLength)) * 180 / Math.PI;
-    return { width: n, height: t, diagonal: a };
+    const a = 2 * Math.atan(this.camera.sensorWidth / (2 * this.focalLength)) * 180 / Math.PI, t = 2 * Math.atan(this.camera.sensorHeight / (2 * this.focalLength)) * 180 / Math.PI, r = Math.sqrt(this.camera.sensorWidth ** 2 + this.camera.sensorHeight ** 2), n = 2 * Math.atan(r / (2 * this.focalLength)) * 180 / Math.PI;
+    return { width: a, height: t, diagonal: n };
   }
   /**
    * Pixel scale in arcseconds per pixel.
@@ -773,19 +773,19 @@ class Le {
    * @param objectId - Catalog object ID (e.g. `'m42'`, `'m31'`).
    * @param overlapPercent - Mosaic overlap percentage. @defaultValue `20`
    */
-  framing(n, t = 20) {
-    const r = E.get(n);
+  framing(a, t = 20) {
+    const r = _.get(a);
     if (!r) return null;
-    const a = r.size_arcmin ?? 0;
-    if (a === 0)
+    const n = r.size_arcmin ?? 0;
+    if (n === 0)
       return { fillPercent: 0, fits: !0, orientation: "either", panels: 1, objectSize: 0, fovWidth: this.fov().width * 60 };
-    const i = this.fov(), o = i.width * 60, s = i.height * 60, l = a / o * 100, c = a / s * 100, d = Math.min(l, c), m = d <= 100, g = Math.abs(l - c) < 5 ? "either" : l < c ? "landscape" : "portrait";
-    let p = 1;
+    const i = this.fov(), o = i.width * 60, s = i.height * 60, c = n / o * 100, d = n / s * 100, l = Math.min(c, d), m = l <= 100, h = Math.abs(c - d) < 5 ? "either" : c < d ? "landscape" : "portrait";
+    let f = 1;
     if (!m) {
-      const f = o * (1 - t / 100), y = s * (1 - t / 100), u = Math.ceil(a / f), x = Math.ceil(a / y);
-      p = u * x;
+      const p = o * (1 - t / 100), S = s * (1 - t / 100), u = Math.ceil(n / p), x = Math.ceil(n / S);
+      f = u * x;
     }
-    return { fillPercent: Math.round(d), fits: m, orientation: g, panels: p, objectSize: a, fovWidth: o };
+    return { fillPercent: Math.round(l), fits: m, orientation: h, panels: f, objectSize: n, fovWidth: o };
   }
   /**
    * Maximum exposure time before star trails.
@@ -797,18 +797,18 @@ class Le {
    * @param observer - Observer location (used for declination correction if objectId provided).
    * @param objectId - Optional target — adjusts for declination.
    */
-  maxExposure(n, t) {
+  maxExposure(a, t) {
     let r;
     if (this.tracker && this.tracker.maxUnguidedExposure && this.tracker.referenceFocalLength)
       r = this.tracker.maxUnguidedExposure * (this.tracker.referenceFocalLength / this.focalLength);
     else {
-      const a = this.aperture ?? this.focalLength / 5, i = this.camera.pixelSize;
-      r = (35 * a + 30 * i) / this.focalLength;
+      const n = this.aperture ?? this.focalLength / 5, i = this.camera.pixelSize;
+      r = (35 * n + 30 * i) / this.focalLength;
     }
-    if (t && n) {
-      const a = E.get(t);
-      if (a && a.dec !== null) {
-        const i = Math.cos(a.dec * Math.PI / 180);
+    if (t && a) {
+      const n = _.get(t);
+      if (n && n.dec !== null) {
+        const i = Math.cos(n.dec * Math.PI / 180);
         i > 0.01 && (r /= i);
       }
     }
@@ -822,12 +822,12 @@ class Le {
    *
    * @param opticsWeightKg - Weight of telescope/lens in kg. Estimated if not provided.
    */
-  payloadCheck(n) {
+  payloadCheck(a) {
     if (!this.tracker) return null;
-    const t = this.camera.type === "dedicated" ? 0.5 : 0.8, r = n ?? (this.focalLength > 500 ? 4 : this.focalLength > 200 ? 2 : 1), a = Math.round((t + r) * 10) / 10, i = Math.round((this.tracker.maxPayloadKg - a) / this.tracker.maxPayloadKg * 100);
+    const t = this.camera.type === "dedicated" ? 0.5 : 0.8, r = a ?? (this.focalLength > 500 ? 4 : this.focalLength > 200 ? 2 : 1), n = Math.round((t + r) * 10) / 10, i = Math.round((this.tracker.maxPayloadKg - n) / this.tracker.maxPayloadKg * 100);
     return {
-      withinLimits: a <= this.tracker.maxPayloadKg,
-      estimatedPayloadKg: a,
+      withinLimits: n <= this.tracker.maxPayloadKg,
+      estimatedPayloadKg: n,
       maxPayloadKg: this.tracker.maxPayloadKg,
       headroomPercent: Math.max(0, i)
     };
@@ -847,91 +847,91 @@ class Le {
    * @param observer - Observer location and time.
    * @param limit - Max results. @defaultValue `10`
    */
-  bestTargets(n, t = 10) {
-    const r = C.whatsUp(n, { minAltitude: 20, magnitudeLimit: 10, limit: 50 }), a = this.fov().width * 60;
+  bestTargets(a, t = 10) {
+    const r = D.whatsUp(a, { minAltitude: 20, magnitudeLimit: 10, limit: 50 }), n = this.fov().width * 60;
     return r.filter((i) => {
       const o = i.object.size_arcmin ?? 0;
       if (o === 0) return !1;
-      const s = o / a * 100;
+      const s = o / n * 100;
       return s >= 10 && s <= 150;
     }).map((i) => ({
       ...i,
       framing: this.framing(i.object.id)
     })).sort((i, o) => {
-      const s = Math.abs(i.framing.fillPercent - 65), l = Math.abs(o.framing.fillPercent - 65);
-      return s - l;
+      const s = Math.abs(i.framing.fillPercent - 65), c = Math.abs(o.framing.fillPercent - 65);
+      return s - c;
     }).slice(0, t);
   }
   /**
    * Effective resolution and comparison to typical seeing.
    */
   resolution() {
-    const n = this.pixelScale(), t = this.aperture ?? this.focalLength / 5, r = 116 / t, a = 138.4 / t;
-    return { pixelScale: n, dawesLimit: r, raleighLimit: a };
+    const a = this.pixelScale(), t = this.aperture ?? this.focalLength / 5, r = 116 / t, n = 138.4 / t;
+    return { pixelScale: a, dawesLimit: r, raleighLimit: n };
   }
   /**
    * Sampling advice — is this setup oversampled, undersampled, or optimal?
    *
    * @param seeing - Typical seeing in arcseconds. @defaultValue `2.5`
    */
-  samplingAdvice(n = 2.5) {
-    const t = this.pixelScale(), r = t / n;
-    let a, i;
-    return r < 0.3 ? (a = "oversampled", i = `Heavily oversampled (${t.toFixed(2)}"/px vs ${n}" seeing). Consider binning 2×2 or using a shorter focal length.`) : r < 0.5 ? (a = "oversampled", i = `Slightly oversampled (${t.toFixed(2)}"/px vs ${n}" seeing). Good for lucky imaging, may benefit from 2×2 binning for faint targets.`) : r <= 1 ? (a = "optimal", i = `Well-matched to seeing (${t.toFixed(2)}"/px vs ${n}" seeing). Optimal Nyquist sampling.`) : r <= 2 ? (a = "undersampled", i = `Slightly undersampled (${t.toFixed(2)}"/px vs ${n}" seeing). Fine for wide-field, may lose fine detail.`) : (a = "undersampled", i = `Undersampled (${t.toFixed(2)}"/px vs ${n}" seeing). Good for wide-field mosaics, not ideal for small targets.`), { pixelScale: t, seeing: n, status: a, advice: i };
+  samplingAdvice(a = 2.5) {
+    const t = this.pixelScale(), r = t / a;
+    let n, i;
+    return r < 0.3 ? (n = "oversampled", i = `Heavily oversampled (${t.toFixed(2)}"/px vs ${a}" seeing). Consider binning 2×2 or using a shorter focal length.`) : r < 0.5 ? (n = "oversampled", i = `Slightly oversampled (${t.toFixed(2)}"/px vs ${a}" seeing). Good for lucky imaging, may benefit from 2×2 binning for faint targets.`) : r <= 1 ? (n = "optimal", i = `Well-matched to seeing (${t.toFixed(2)}"/px vs ${a}" seeing). Optimal Nyquist sampling.`) : r <= 2 ? (n = "undersampled", i = `Slightly undersampled (${t.toFixed(2)}"/px vs ${a}" seeing). Fine for wide-field, may lose fine detail.`) : (n = "undersampled", i = `Undersampled (${t.toFixed(2)}"/px vs ${a}" seeing). Good for wide-field mosaics, not ideal for small targets.`), { pixelScale: t, seeing: a, status: n, advice: i };
   }
 }
-const Ee = {
+const rt = {
   /**
    * Get all cameras in the database.
    */
   cameras() {
-    return W;
+    return Z;
   },
   /**
    * Look up a camera by name (case-insensitive partial match).
    */
   camera(e) {
-    const n = e.toLowerCase();
-    return W.find((t) => t.name.toLowerCase() === n || t.id === n) ?? W.find((t) => t.name.toLowerCase().includes(n)) ?? null;
+    const a = e.toLowerCase();
+    return Z.find((t) => t.name.toLowerCase() === a || t.id === a) ?? Z.find((t) => t.name.toLowerCase().includes(a)) ?? null;
   },
   /**
    * Get all telescopes in the database.
    */
   telescopes() {
-    return P;
+    return j;
   },
   /**
    * Look up a telescope by name (case-insensitive partial match).
    */
   telescope(e) {
-    const n = e.toLowerCase();
-    return P.find((t) => t.name.toLowerCase() === n || t.id === n) ?? P.find((t) => t.name.toLowerCase().includes(n)) ?? null;
+    const a = e.toLowerCase();
+    return j.find((t) => t.name.toLowerCase() === a || t.id === a) ?? j.find((t) => t.name.toLowerCase().includes(a)) ?? null;
   },
   /**
    * Get all lenses in the database.
    */
   lenses() {
-    return N;
+    return V;
   },
   /**
    * Look up a lens by name (case-insensitive partial match).
    */
   lens(e) {
-    const n = e.toLowerCase();
-    return N.find((t) => t.name.toLowerCase() === n || t.id === n) ?? N.find((t) => t.name.toLowerCase().includes(n)) ?? null;
+    const a = e.toLowerCase();
+    return V.find((t) => t.name.toLowerCase() === a || t.id === a) ?? V.find((t) => t.name.toLowerCase().includes(a)) ?? null;
   },
   /**
    * Get all trackers/mounts in the database.
    */
   trackers() {
-    return T;
+    return B;
   },
   /**
    * Look up a tracker/mount by name (case-insensitive partial match).
    */
   tracker(e) {
-    const n = e.toLowerCase();
-    return T.find((t) => t.name.toLowerCase() === n || t.id === n) ?? T.find((t) => t.name.toLowerCase().includes(n)) ?? null;
+    const a = e.toLowerCase();
+    return B.find((t) => t.name.toLowerCase() === a || t.id === a) ?? B.find((t) => t.name.toLowerCase().includes(a)) ?? null;
   },
   /**
    * Build an astrophotography rig from equipment names or specs.
@@ -957,8 +957,8 @@ const Ee = {
    * ```
    */
   rig(e) {
-    const n = typeof e.camera == "string" ? this.camera(e.camera) : e.camera;
-    if (!n) throw new Error(`Camera not found: ${e.camera}`);
+    const a = typeof e.camera == "string" ? this.camera(e.camera) : e.camera;
+    if (!a) throw new Error(`Camera not found: ${e.camera}`);
     let t, r = e.aperture ?? null;
     if (e.telescope) {
       const i = typeof e.telescope == "string" ? this.telescope(e.telescope) : e.telescope;
@@ -972,10 +972,10 @@ const Ee = {
       t = e.focalLength;
     else
       throw new Error("Must provide telescope, lens, or focalLength");
-    let a = null;
-    if (e.tracker && (a = typeof e.tracker == "string" ? this.tracker(e.tracker) : e.tracker, !a))
+    let n = null;
+    if (e.tracker && (n = typeof e.tracker == "string" ? this.tracker(e.tracker) : e.tracker, !n))
       throw new Error(`Tracker not found: ${e.tracker}`);
-    return new Le(n, t, r, e.barlow ?? 1, a);
+    return new at(a, t, r, e.barlow ?? 1, n);
   },
   /**
    * Search all equipment (cameras, telescopes, lenses) by name.
@@ -996,39 +996,69 @@ const Ee = {
    * // => cameras, telescopes, AND lenses matching "200mm"
    * ```
    */
-  search(e, n = 20) {
+  search(e, a = 20) {
     const t = e.toLowerCase();
     if (!t) return [];
     const r = [];
-    for (const a of W) {
-      const i = `${a.brand} ${a.name}`.toLowerCase();
+    for (const n of Z) {
+      const i = `${n.brand} ${n.name}`.toLowerCase();
       let o = 0;
-      i === t ? o = 100 : i.startsWith(t) ? o = 60 : i.includes(t) ? o = 30 : a.id.includes(t) && (o = 20), o > 0 && r.push({ category: "camera", name: `${a.brand} ${a.name}`, item: a, score: o });
+      i === t ? o = 100 : i.startsWith(t) ? o = 60 : i.includes(t) ? o = 30 : n.id.includes(t) && (o = 20), o > 0 && r.push({ category: "camera", name: `${n.brand} ${n.name}`, item: n, score: o });
     }
-    for (const a of P) {
-      const i = `${a.brand} ${a.name}`.toLowerCase();
+    for (const n of j) {
+      const i = `${n.brand} ${n.name}`.toLowerCase();
       let o = 0;
-      i === t ? o = 100 : i.startsWith(t) ? o = 60 : i.includes(t) ? o = 30 : a.id.includes(t) && (o = 20), o > 0 && r.push({ category: "telescope", name: `${a.brand} ${a.name}`, item: a, score: o });
+      i === t ? o = 100 : i.startsWith(t) ? o = 60 : i.includes(t) ? o = 30 : n.id.includes(t) && (o = 20), o > 0 && r.push({ category: "telescope", name: `${n.brand} ${n.name}`, item: n, score: o });
     }
-    for (const a of N) {
-      const i = `${a.brand} ${a.name}`.toLowerCase();
+    for (const n of V) {
+      const i = `${n.brand} ${n.name}`.toLowerCase();
       let o = 0;
-      i === t ? o = 100 : i.startsWith(t) ? o = 60 : i.includes(t) ? o = 30 : a.id.includes(t) && (o = 20), o > 0 && r.push({ category: "lens", name: `${a.brand} ${a.name}`, item: a, score: o });
+      i === t ? o = 100 : i.startsWith(t) ? o = 60 : i.includes(t) ? o = 30 : n.id.includes(t) && (o = 20), o > 0 && r.push({ category: "lens", name: `${n.brand} ${n.name}`, item: n, score: o });
     }
-    for (const a of T) {
-      const i = `${a.brand} ${a.name}`.toLowerCase();
+    for (const n of B) {
+      const i = `${n.brand} ${n.name}`.toLowerCase();
       let o = 0;
-      i === t ? o = 100 : i.startsWith(t) ? o = 60 : i.includes(t) ? o = 30 : a.id.includes(t) && (o = 20), o > 0 && r.push({ category: "tracker", name: `${a.brand} ${a.name}`, item: a, score: o });
+      i === t ? o = 100 : i.startsWith(t) ? o = 60 : i.includes(t) ? o = 30 : n.id.includes(t) && (o = 20), o > 0 && r.push({ category: "tracker", name: `${n.brand} ${n.name}`, item: n, score: o });
     }
-    return r.sort((a, i) => i.score - a.score).slice(0, n).map(({ category: a, name: i, item: o }) => ({ category: a, name: i, item: o }));
+    return r.sort((n, i) => i.score - n.score).slice(0, a).map(({ category: n, name: i, item: o }) => ({ category: n, name: i, item: o }));
   }
-}, R = { ra: 266.4168, dec: -29.0078 }, Me = { ra: 37.9546, dec: 89.2641 }, Ce = { ra: 317.195, dec: -88.9564 };
-function Oe(e) {
+}, Q = { ra: 266.4168, dec: -29.0078 }, ot = { ra: 37.9546, dec: 89.2641 }, it = { ra: 317.195, dec: -88.9564 };
+function Se(e) {
   if (e <= 0) return 1 / 0;
-  const n = (90 - e) * Math.PI / 180;
-  return 1 / (Math.cos(n) + 0.50572 * Math.pow(96.07995 - (90 - e), -1.6364));
+  const a = (90 - e) * Math.PI / 180;
+  return 1 / (Math.cos(a) + 0.50572 * Math.pow(96.07995 - (90 - e), -1.6364));
 }
-const _e = {
+const st = {
+  "city-center": 9,
+  "bright-suburban": 8,
+  suburban: 6,
+  "rural-suburban": 5,
+  rural: 4,
+  "dark-site": 3,
+  remote: 2,
+  pristine: 1
+}, ct = {
+  1: 22,
+  2: 21.9,
+  3: 21.7,
+  4: 20.5,
+  5: 19.5,
+  6: 18.9,
+  7: 18.4,
+  8: 17.8,
+  9: 17
+};
+function dt(e, a, t) {
+  const r = ct[Math.max(1, Math.min(9, Math.round(e)))] ?? 18.9, n = 2, i = 18.9, o = 4, s = 5, c = Math.pow(10, (i - r) / 2.5), d = (a / o) ** 2, l = (s / t) ** 2;
+  return n * c * d * l;
+}
+function lt(e) {
+  return e.bortle !== void 0 ? Math.max(1, Math.min(9, Math.round(e.bortle))) : e.skySite ? st[e.skySite] ?? 6 : 6;
+}
+function mt(e) {
+  return e >= 50 && e <= 80 ? 100 : e >= 30 && e < 50 ? 60 + (e - 30) / 20 * 40 : e > 80 && e <= 100 ? 60 + (100 - e) / 20 * 40 : e >= 10 && e < 30 ? 20 + (e - 10) / 20 * 40 : e > 100 && e <= 150 ? 20 + (150 - e) / 50 * 40 : e > 150 ? 10 : 0;
+}
+const J = {
   // ── Session Planner ──────────────────────────────────────────────────
   /**
    * Generate a scored imaging plan for a night.
@@ -1042,37 +1072,37 @@ const _e = {
    * @param options - Constraints.
    * @returns Scored targets sorted by suggested imaging order.
    */
-  sessionPlan(e, n, t = {}) {
-    const { minAltitude: r = 25, maxAirmass: a = 2, minMoonSeparation: i = 30 } = t, o = e.date ?? /* @__PURE__ */ new Date(), l = b.twilight({ ...e, date: o }).astronomicalDusk, d = b.twilight({ ...e, date: new Date(o.valueOf() + 864e5) }).astronomicalDawn;
-    if (!l || !d) return [];
-    const m = k.phase(o), g = k.position(o), p = { ra: g.ra, dec: g.dec }, f = [];
-    for (const y of n) {
-      const u = E.get(y);
+  sessionPlan(e, a, t = {}) {
+    const { minAltitude: r = 25, maxAirmass: n = 2, minMoonSeparation: i = 30 } = t, o = e.date ?? /* @__PURE__ */ new Date(), c = w.twilight({ ...e, date: o }).astronomicalDusk, l = w.twilight({ ...e, date: new Date(o.valueOf() + 864e5) }).astronomicalDawn;
+    if (!c || !l) return [];
+    const m = A.phase(o), h = A.position(o), f = { ra: h.ra, dec: h.dec }, p = [];
+    for (const S of a) {
+      const u = _.get(S);
       if (!u || u.ra === null || u.dec === null) continue;
       const x = { ra: u.ra, dec: u.dec };
-      let S = -90, w = l, L = null, $ = null, O = 1 / 0, z = 0;
-      for (let F = l.valueOf(); F <= d.valueOf(); F += 9e5) {
-        const _ = new Date(F), v = h.equatorialToHorizontal(x, { ...e, date: _ }), M = Oe(v.alt);
-        v.alt >= r && M <= a && (L || (L = _), $ = _, M < O && (O = M), M > z && (z = M)), v.alt > S && (S = v.alt, w = _);
+      let y = -90, k = c, M = null, W = null, I = 1 / 0, P = 0;
+      for (let L = c.valueOf(); L <= l.valueOf(); L += 9e5) {
+        const v = new Date(L), O = g.equatorialToHorizontal(x, { ...e, date: v }), C = Se(O.alt);
+        O.alt >= r && C <= n && (M || (M = v), W = v, C < I && (I = C), C > P && (P = C)), O.alt > y && (y = O.alt, k = v);
       }
-      if (!L || !$ || S < r) continue;
-      const I = h.angularSeparation(x, p), ee = Math.max(0, Math.min(1, (120 - I) / 115)), q = m.illumination * ee;
-      if (I < i && m.illumination > 0.3) continue;
-      const te = Math.min(S / 90, 1) * 40, ae = (1 - Math.min(O - 1, 2) / 2) * 30, ne = (1 - q) * 30, re = Math.round(te + ae + ne);
-      f.push({
-        objectId: y,
+      if (!M || !W || y < r) continue;
+      const $ = g.angularSeparation(x, f), z = Math.max(0, Math.min(1, (120 - $) / 115)), Y = m.illumination * z;
+      if ($ < i && m.illumination > 0.3) continue;
+      const T = Math.min(y / 90, 1) * 40, F = (1 - Math.min(I - 1, 2) / 2) * 30, b = (1 - Y) * 30, N = Math.round(T + F + b);
+      p.push({
+        objectId: S,
         name: u.name,
-        start: L,
-        end: $,
-        transit: w,
-        peakAltitude: S,
-        airmassRange: [Math.round(O * 100) / 100, Math.round(z * 100) / 100],
-        moonSeparation: Math.round(I),
-        moonInterference: Math.round(q * 100) / 100,
-        score: re
+        start: M,
+        end: W,
+        transit: k,
+        peakAltitude: y,
+        airmassRange: [Math.round(I * 100) / 100, Math.round(P * 100) / 100],
+        moonSeparation: Math.round($),
+        moonInterference: Math.round(Y * 100) / 100,
+        score: N
       });
     }
-    return f.sort((y, u) => y.end.valueOf() - u.end.valueOf()), f;
+    return p.sort((S, u) => S.end.valueOf() - u.end.valueOf()), p;
   },
   /**
    * Optimal imaging window for a single target.
@@ -1081,12 +1111,12 @@ const _e = {
    * @param observer - Observer location and date.
    * @param maxAirmass - Maximum acceptable airmass. @defaultValue `2.0`
    */
-  imagingWindow(e, n, t = 2) {
-    const r = C.bestWindow(e, n, 15);
+  imagingWindow(e, a, t = 2) {
+    const r = D.bestWindow(e, a, 15);
     if (!r) return null;
-    const a = E.get(e);
-    if (!a || a.ra === null || a.dec === null) return null;
-    const i = h.riseTransitSet({ ra: a.ra, dec: a.dec }, n), s = b.twilight(n).astronomicalDusk, c = b.twilight({ ...n, date: new Date((n.date ?? /* @__PURE__ */ new Date()).valueOf() + 864e5) }).astronomicalDawn, d = s && c ? (c.valueOf() - s.valueOf()) / 36e5 : 8, m = r.rise && r.set ? (r.set.valueOf() - r.rise.valueOf()) / 36e5 : d;
+    const n = _.get(e);
+    if (!n || n.ra === null || n.dec === null) return null;
+    const i = g.riseTransitSet({ ra: n.ra, dec: n.dec }, a), s = w.twilight(a).astronomicalDusk, d = w.twilight({ ...a, date: new Date((a.date ?? /* @__PURE__ */ new Date()).valueOf() + 864e5) }).astronomicalDawn, l = s && d ? (d.valueOf() - s.valueOf()) / 36e5 : 8, m = r.rise && r.set ? (r.set.valueOf() - r.rise.valueOf()) / 36e5 : l;
     return {
       start: r.rise,
       end: r.set,
@@ -1108,13 +1138,13 @@ const _e = {
    * @param params.declination - Target declination in degrees (optional, corrects for pole proximity).
    */
   maxExposure(e) {
-    const { focalLength: n, pixelSize: t = 4 } = e;
-    let a = (35 * (e.aperture ?? n / 5) + 30 * t) / n;
+    const { focalLength: a, pixelSize: t = 4 } = e;
+    let n = (35 * (e.aperture ?? a / 5) + 30 * t) / a;
     if (e.declination !== void 0) {
       const i = Math.cos(e.declination * Math.PI / 180);
-      i > 0.01 && (a /= i);
+      i > 0.01 && (n /= i);
     }
-    return Math.round(a * 10) / 10;
+    return Math.round(n * 10) / 10;
   },
   /**
    * Rule of 500 — quick max exposure estimate.
@@ -1122,8 +1152,8 @@ const _e = {
    * @param focalLength - Focal length in mm.
    * @param cropFactor - Sensor crop factor. @defaultValue `1.0`
    */
-  ruleOf500(e, n = 1) {
-    return Math.round(500 / (e * n) * 10) / 10;
+  ruleOf500(e, a = 1) {
+    return Math.round(500 / (e * a) * 10) / 10;
   },
   /**
    * Optimal sub-exposure length so sky noise dominates read noise.
@@ -1133,10 +1163,10 @@ const _e = {
    * @param params.targetRatio - Sky-to-read noise ratio. @defaultValue `3`
    */
   subExposure(e) {
-    const { readNoise: n, skyBrightness: t, targetRatio: r = 3 } = e;
+    const { readNoise: a, skyBrightness: t, targetRatio: r = 3 } = e;
     if (t <= 0) return 300;
-    const a = (r * n) ** 2 / t;
-    return Math.round(a);
+    const n = (r * a) ** 2 / t;
+    return Math.round(n);
   },
   /**
    * Total integration time needed for a target SNR.
@@ -1147,8 +1177,8 @@ const _e = {
    * @returns Total integration time in hours and number of subs.
    */
   totalIntegration(e) {
-    const { subLength: n, subSNR: t, targetSNR: r } = e, a = Math.ceil((r / t) ** 2);
-    return { hours: Math.round(a * n / 3600 * 10) / 10, subs: a };
+    const { subLength: a, subSNR: t, targetSNR: r } = e, n = Math.ceil((r / t) ** 2);
+    return { hours: Math.round(n * a / 3600 * 10) / 10, subs: n };
   },
   // ── Milky Way ────────────────────────────────────────────────────────
   /**
@@ -1157,9 +1187,9 @@ const _e = {
    * @param observer - Observer location and date.
    */
   milkyWay(e) {
-    const n = e.date ?? /* @__PURE__ */ new Date(), t = h.equatorialToHorizontal(R, { ...e, date: n }), r = h.riseTransitSet(R, e);
+    const a = e.date ?? /* @__PURE__ */ new Date(), t = g.equatorialToHorizontal(Q, { ...e, date: a }), r = g.riseTransitSet(Q, e);
     return {
-      position: { ...R },
+      position: { ...Q },
       altitude: t.alt,
       azimuth: t.az,
       aboveHorizon: t.alt > 0,
@@ -1176,14 +1206,14 @@ const _e = {
    * @returns Array of month numbers (1–12) when the core is visible at night.
    */
   milkyWaySeason(e) {
-    const n = (e.date ?? /* @__PURE__ */ new Date()).getFullYear(), t = [];
+    const a = (e.date ?? /* @__PURE__ */ new Date()).getFullYear(), t = [];
     for (let r = 1; r <= 12; r++) {
-      const a = new Date(n, r - 1, 15), i = b.twilight({ ...e, date: a });
+      const n = new Date(a, r - 1, 15), i = w.twilight({ ...e, date: n });
       if (!i.astronomicalDusk) continue;
-      const o = i.astronomicalDusk, l = b.twilight({ ...e, date: new Date(a.valueOf() + 864e5) }).astronomicalDawn;
-      if (l) {
-        for (let c = o.valueOf(); c <= l.valueOf(); c += 36e5)
-          if (h.equatorialToHorizontal(R, { ...e, date: new Date(c) }).alt > 10) {
+      const o = i.astronomicalDusk, c = w.twilight({ ...e, date: new Date(n.valueOf() + 864e5) }).astronomicalDawn;
+      if (c) {
+        for (let d = o.valueOf(); d <= c.valueOf(); d += 36e5)
+          if (g.equatorialToHorizontal(Q, { ...e, date: new Date(d) }).alt > 10) {
             t.push(r);
             break;
           }
@@ -1198,12 +1228,12 @@ const _e = {
    * @param observer - Observer location and date.
    */
   polarAlignment(e) {
-    const n = e.date ?? /* @__PURE__ */ new Date(), t = e.lat >= 0, r = t ? Me : Ce, a = h.equatorialToHorizontal(r, { ...e, date: n }), i = t ? 90 : -90, o = Math.abs(r.dec - i), c = (((h.lst(n, e.lng) - r.ra) % 360 + 360) % 360 + 180) % 360;
+    const a = e.date ?? /* @__PURE__ */ new Date(), t = e.lat >= 0, r = t ? ot : it, n = g.equatorialToHorizontal(r, { ...e, date: a }), i = t ? 90 : -90, o = Math.abs(r.dec - i), d = (((g.lst(a, e.lng) - r.ra) % 360 + 360) % 360 + 180) % 360;
     return {
       polarisOffset: Math.round(o * 1e3) / 1e3,
-      positionAngle: Math.round(c * 10) / 10,
-      polarisAltitude: a.alt,
-      polarisAzimuth: a.az,
+      positionAngle: Math.round(d * 10) / 10,
+      polarisAltitude: n.alt,
+      polarisAzimuth: n.az,
       hemisphere: t ? "north" : "south"
     };
   },
@@ -1212,30 +1242,30 @@ const _e = {
    * Golden hour times (sun altitude +6° to -4°).
    */
   goldenHour(e) {
-    const n = e.date ?? /* @__PURE__ */ new Date(), t = b.position(n), r = h.riseTransitSet(t, { ...e, date: n }, 6), a = h.riseTransitSet(t, { ...e, date: n }, -4);
+    const a = e.date ?? /* @__PURE__ */ new Date(), t = w.position(a), r = g.riseTransitSet(t, { ...e, date: a }, 6), n = g.riseTransitSet(t, { ...e, date: a }, -4);
     return {
-      morning: a.rise && r.rise ? { start: a.rise, end: r.rise } : null,
-      evening: r.set && a.set ? { start: r.set, end: a.set } : null
+      morning: n.rise && r.rise ? { start: n.rise, end: r.rise } : null,
+      evening: r.set && n.set ? { start: r.set, end: n.set } : null
     };
   },
   /**
    * Blue hour times (sun altitude -4° to -6°).
    */
   blueHour(e) {
-    const n = e.date ?? /* @__PURE__ */ new Date(), t = b.position(n), r = h.riseTransitSet(t, { ...e, date: n }, -4), a = h.riseTransitSet(t, { ...e, date: n }, -6);
+    const a = e.date ?? /* @__PURE__ */ new Date(), t = w.position(a), r = g.riseTransitSet(t, { ...e, date: a }, -4), n = g.riseTransitSet(t, { ...e, date: a }, -6);
     return {
-      morning: a.rise && r.rise ? { start: a.rise, end: r.rise } : null,
-      evening: r.set && a.set ? { start: r.set, end: a.set } : null
+      morning: n.rise && r.rise ? { start: n.rise, end: r.rise } : null,
+      evening: r.set && n.set ? { start: r.set, end: n.set } : null
     };
   },
   /**
    * Optimal flat frame window — twilight with even sky brightness (sun at -2° to -6°).
    */
   flatFrameWindow(e) {
-    const n = e.date ?? /* @__PURE__ */ new Date(), t = b.position(n), r = h.riseTransitSet(t, { ...e, date: n }, -2), a = h.riseTransitSet(t, { ...e, date: n }, -6);
+    const a = e.date ?? /* @__PURE__ */ new Date(), t = w.position(a), r = g.riseTransitSet(t, { ...e, date: a }, -2), n = g.riseTransitSet(t, { ...e, date: a }, -6);
     return {
-      morning: a.rise && r.rise ? { start: a.rise, end: r.rise } : null,
-      evening: r.set && a.set ? { start: r.set, end: a.set } : null
+      morning: n.rise && r.rise ? { start: n.rise, end: r.rise } : null,
+      evening: r.set && n.set ? { start: r.set, end: n.set } : null
     };
   },
   /**
@@ -1244,9 +1274,9 @@ const _e = {
    * @param observer - Observer location and time.
    */
   collimationStar(e) {
-    const n = C.whatsUp(e, { types: ["star"], magnitudeLimit: 3, minAltitude: 50, limit: 10 });
-    if (n.length === 0) return null;
-    const t = n.sort((r, a) => a.alt - r.alt)[0];
+    const a = D.whatsUp(e, { types: ["star"], magnitudeLimit: 3, minAltitude: 50, limit: 10 });
+    if (a.length === 0) return null;
+    const t = a.sort((r, n) => n.alt - r.alt)[0];
     return { name: t.object.name, altitude: t.alt, azimuth: t.az };
   },
   /**
@@ -1260,8 +1290,124 @@ const _e = {
    */
   sqmToNELM(e) {
     return Math.round((7.93 - 5 * Math.log10(1 + Math.pow(10, 4.316 - e / 5))) * 10) / 10;
+  },
+  // ── Rig-Aware Session Planner ───────────────────────────────────────
+  /**
+   * Generate a capture plan for a specific rig and observer.
+   *
+   * Combines target discovery, framing analysis, observing-condition
+   * scoring, and exposure guidance into a single result. Auto-discovers
+   * targets that fit well in the rig's FOV, and optionally includes
+   * explicit targets regardless of framing quality.
+   *
+   * Targets are scored by a weighted blend of observing conditions (60%)
+   * and framing quality (40%), then sequenced by set-time-first strategy
+   * (shoot western targets first).
+   *
+   * @param rig - The astrophotography rig (camera + optics + optional tracker).
+   * @param observer - Observer location and date.
+   * @param options - Planning constraints and target overrides.
+   * @returns Complete capture plan with per-target framing, exposure, and scoring.
+   *
+   * @example
+   * ```ts
+   * import { Equipment, AstroPhoto } from '@motioncomplex/cosmos-lib'
+   *
+   * const rig = Equipment.rig({ camera: 'Sony A7 III', telescope: 'Sky-Watcher Esprit 100ED' })
+   * const observer = { lat: 47.05, lng: 8.31, date: new Date('2024-08-15') }
+   *
+   * const plan = AstroPhoto.rigPlan(rig, observer)
+   * for (const t of plan.targets) {
+   *   console.log(`${t.name}: score ${t.score}, fills ${t.framing.fillPercent}% of sensor`)
+   *   console.log(`  Image ${t.start.toLocaleTimeString()}–${t.end.toLocaleTimeString()}`)
+   *   console.log(`  Max exposure: ${t.maxExposure}s, panels: ${t.framing.panels}`)
+   * }
+   * ```
+   */
+  rigPlan(e, a, t = {}) {
+    const {
+      targets: r = [],
+      autoLimit: n = 15,
+      minFillPercent: i = 10,
+      maxFillPercent: o = 150,
+      minAltitude: s = 25,
+      maxAirmass: c = 2,
+      minMoonSeparation: d = 30,
+      targetSNR: l = 25
+    } = t, m = lt(t), h = a.date ?? /* @__PURE__ */ new Date(), p = w.twilight({ ...a, date: h }).astronomicalDusk, u = w.twilight({ ...a, date: new Date(h.valueOf() + 864e5) }).astronomicalDawn;
+    if (!p || !u) return null;
+    const x = (u.valueOf() - p.valueOf()) / 36e5, y = J.flatFrameWindow({ ...a, date: h }), k = y.evening ?? y.morning, M = A.phase(h), W = A.position(h), I = { ra: W.ra, dec: W.dec }, P = e.fov().width * 60, $ = D.whatsUp(a, { minAltitude: 20, magnitudeLimit: 10, limit: 100 }), z = /* @__PURE__ */ new Set();
+    for (const b of $) {
+      const N = b.object.size_arcmin ?? 0;
+      if (N === 0) continue;
+      const L = N / P * 100;
+      if (L >= i && L <= o && z.add(b.object.id), z.size >= n) break;
+    }
+    const Y = new Set(r.map((b) => b.toLowerCase())), T = /* @__PURE__ */ new Map();
+    for (const b of Y)
+      T.set(b, "explicit");
+    for (const b of z)
+      T.has(b) || T.set(b, "auto");
+    const F = [];
+    for (const [b, N] of T) {
+      const L = _.get(b);
+      if (!L || L.ra === null || L.dec === null) continue;
+      const v = { ra: L.ra, dec: L.dec };
+      let O = -90, C = p, X = null, te = null, q = 1 / 0, ne = 0;
+      for (let se = p.valueOf(); se <= u.valueOf(); se += 9e5) {
+        const U = new Date(se), K = g.equatorialToHorizontal(v, { ...a, date: U }), H = Se(K.alt);
+        K.alt >= s && H <= c && (X || (X = U), te = U, H < q && (q = H), H > ne && (ne = H)), K.alt > O && (O = K.alt, C = U);
+      }
+      if (!X || !te || O < s) continue;
+      const ae = g.angularSeparation(v, I), Oe = Math.max(0, Math.min(1, (120 - ae) / 115)), me = M.illumination * Oe;
+      if (ae < d && M.illumination > 0.3) continue;
+      const re = e.framing(b);
+      if (!re) continue;
+      const ue = e.maxExposure(a, b), pe = e.aperture ? Math.round(e.focalLength / e.aperture * 10) / 10 : 5, R = e.camera, Ne = R.readNoise ?? (R.type === "dedicated" ? 1.5 : R.type === "mirrorless" ? 3 : 3.5), fe = dt(m, R.pixelSize, pe), Ce = J.subExposure({ readNoise: Ne, skyBrightness: fe }), G = Math.min(Ce, ue), ve = Math.max(1, Math.sqrt(G * fe * 0.1)), he = J.totalIntegration({ subLength: G, subSNR: ve, targetSNR: l }), oe = R.recommendedISO ?? null, ie = R.recommendedGain ?? null, ge = oe ? `ISO ${oe}` : ie !== null ? `Gain ${ie}` : "", _e = {
+        focalRatio: pe,
+        iso: oe,
+        gain: ie,
+        subExposure: G,
+        totalIntegration: he.hours,
+        subs: he.subs,
+        calibration: {
+          darks: 30,
+          flats: 30,
+          bias: 50,
+          darkNote: `Match ${G}s${ge ? ", " + ge : ""}, same temperature`,
+          flatNote: k ? `Shoot during twilight flat window (${k.start.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}–${k.end.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })})` : "Shoot during twilight or use an even light source"
+        }
+      }, We = Math.min(O / 90, 1) * 40, Ie = (1 - Math.min(q - 1, 2) / 2) * 30, Te = (1 - me) * 30, Re = We + Ie + Te, De = mt(re.fillPercent), Pe = Math.round(Re * 0.6 + De * 0.4);
+      F.push({
+        objectId: b,
+        name: L.name,
+        start: X,
+        end: te,
+        transit: C,
+        peakAltitude: O,
+        airmassRange: [Math.round(q * 100) / 100, Math.round(ne * 100) / 100],
+        moonSeparation: Math.round(ae),
+        moonInterference: Math.round(me * 100) / 100,
+        framing: re,
+        maxExposure: ue,
+        capture: _e,
+        score: Pe,
+        source: N
+      });
+    }
+    return F.sort((b, N) => b.end.valueOf() - N.end.valueOf()), {
+      targets: F,
+      darkness: { start: p, end: u },
+      darknessHours: Math.round(x * 10) / 10,
+      rig: {
+        focalLength: e.focalLength,
+        fov: e.fov(),
+        pixelScale: e.pixelScale(),
+        isTracked: e.isTracked
+      }
+    };
   }
-}, Ne = {
+}, ht = {
   sun: {
     id: "sun",
     name: "Sun Surface",
@@ -1417,7 +1563,7 @@ const _e = {
     width: 2048,
     height: 1024
   }
-}, Te = {
+}, gt = {
   milky_way: {
     id: "milky_way",
     name: "Milky Way Panorama",
@@ -1440,17 +1586,17 @@ const _e = {
     width: 8192,
     height: 4096
   }
-}, K = "https://www.astrobin.com/api/v1";
-let H = "", Y = "";
-const ve = {
+}, xe = "https://www.astrobin.com/api/v1";
+let ce = "", de = "";
+const ut = {
   /**
    * Set Astrobin API credentials.
    *
    * @param apiKey - Your Astrobin API key.
    * @param apiSecret - Your Astrobin API secret.
    */
-  setCredentials(e, n) {
-    H = e, Y = n;
+  setCredentials(e, a) {
+    ce = e, de = a;
   },
   /**
    * Search for cameras on Astrobin.
@@ -1465,10 +1611,10 @@ const ve = {
    * results.forEach(c => console.log(c.make, c.name))
    * ```
    */
-  async searchCameras(e, n = {}) {
-    const { limit: t = 20 } = n, r = `${K}/camera/?format=json&name__icontains=${encodeURIComponent(e)}&limit=${t}&api_key=${H}&api_secret=${Y}`, a = await fetch(r);
-    if (!a.ok) throw new Error(`Astrobin API error: ${a.status} ${a.statusText}`);
-    return ((await a.json()).objects ?? []).map((o) => ({
+  async searchCameras(e, a = {}) {
+    const { limit: t = 20 } = a, r = `${xe}/camera/?format=json&name__icontains=${encodeURIComponent(e)}&limit=${t}&api_key=${ce}&api_secret=${de}`, n = await fetch(r);
+    if (!n.ok) throw new Error(`Astrobin API error: ${n.status} ${n.statusText}`);
+    return ((await n.json()).objects ?? []).map((o) => ({
       id: o.resource_uri ?? "",
       make: o.make ?? "",
       name: o.name ?? "",
@@ -1489,10 +1635,10 @@ const ve = {
    * results.forEach(t => console.log(t.make, t.name, t.aperture))
    * ```
    */
-  async searchTelescopes(e, n = {}) {
-    const { limit: t = 20 } = n, r = `${K}/telescope/?format=json&name__icontains=${encodeURIComponent(e)}&limit=${t}&api_key=${H}&api_secret=${Y}`, a = await fetch(r);
-    if (!a.ok) throw new Error(`Astrobin API error: ${a.status} ${a.statusText}`);
-    return ((await a.json()).objects ?? []).map((o) => ({
+  async searchTelescopes(e, a = {}) {
+    const { limit: t = 20 } = a, r = `${xe}/telescope/?format=json&name__icontains=${encodeURIComponent(e)}&limit=${t}&api_key=${ce}&api_secret=${de}`, n = await fetch(r);
+    if (!n.ok) throw new Error(`Astrobin API error: ${n.status} ${n.statusText}`);
+    return ((await n.json()).objects ?? []).map((o) => ({
       id: o.resource_uri ?? "",
       make: o.make ?? "",
       name: o.name ?? "",
@@ -1522,16 +1668,16 @@ const ve = {
    * const rig = Equipment.rig({ camera: cam, telescope: 'Celestron C8' })
    * ```
    */
-  toCamera(e, n) {
-    const t = n.pixelsX ?? Math.round(n.sensorWidth * 1e3 / n.pixelSize), r = n.pixelsY ?? Math.round(n.sensorHeight * 1e3 / n.pixelSize);
+  toCamera(e, a) {
+    const t = a.pixelsX ?? Math.round(a.sensorWidth * 1e3 / a.pixelSize), r = a.pixelsY ?? Math.round(a.sensorHeight * 1e3 / a.pixelSize);
     return {
       id: `astrobin-${e.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`,
       name: `${e.make} ${e.name}`.trim(),
       brand: e.make,
       type: e.modified ? "dedicated" : "mirrorless",
-      sensorWidth: n.sensorWidth,
-      sensorHeight: n.sensorHeight,
-      pixelSize: n.pixelSize,
+      sensorWidth: a.sensorWidth,
+      sensorHeight: a.sensorHeight,
+      pixelSize: a.pixelSize,
       pixelsX: t,
       pixelsY: r,
       astroModified: e.modified || void 0
@@ -1553,8 +1699,8 @@ const ve = {
    * const rig = Equipment.rig({ camera: 'Sony A7 III', telescope: scope })
    * ```
    */
-  toTelescope(e, n) {
-    const t = (n == null ? void 0 : n.aperture) ?? e.aperture ?? 100, r = (n == null ? void 0 : n.focalLength) ?? e.min_focal_length ?? 500, a = Math.round(r / t * 10) / 10, i = {
+  toTelescope(e, a) {
+    const t = (a == null ? void 0 : a.aperture) ?? e.aperture ?? 100, r = (a == null ? void 0 : a.focalLength) ?? e.min_focal_length ?? 500, n = Math.round(r / t * 10) / 10, i = {
       refractor: "refractor",
       reflector: "reflector",
       catadioptric: "sct",
@@ -1567,226 +1713,226 @@ const ve = {
       type: i[e.type] ?? "refractor",
       aperture: t,
       focalLength: r,
-      focalRatio: a
+      focalRatio: n
     };
   }
 };
-async function Z(e, n = {}) {
-  const { duration: t = 400, easing: r = "ease-in-out", signal: a } = n;
-  if (a != null && a.aborted) return;
+async function ke(e, a = {}) {
+  const { duration: t = 400, easing: r = "ease-in-out", signal: n } = a;
+  if (n != null && n.aborted) return;
   if (!("startViewTransition" in document)) {
     await e();
     return;
   }
   document.documentElement.style.setProperty("--cosmos-vt-duration", `${t}ms`), document.documentElement.style.setProperty("--cosmos-vt-easing", r), await document.startViewTransition(e).finished;
 }
-function V(e, n = {}) {
+function we(e, a = {}) {
   const {
     delay: t = 0,
     stagger: r = 60,
-    duration: a = 500,
+    duration: n = 500,
     from: i = "bottom",
     distance: o = "20px",
     signal: s
-  } = n;
+  } = a;
   if (s != null && s.aborted) return Promise.resolve();
-  const c = {
+  const d = {
     top: `translateY(-${o})`,
     bottom: `translateY(${o})`,
     left: `translateX(-${o})`,
     right: `translateX(${o})`
-  }[i], d = [...e.children];
-  return d.forEach((m) => {
-    m.style.opacity = "0", m.style.transform = c, m.style.transition = "none";
-  }), d.length === 0 ? Promise.resolve() : new Promise((m) => {
-    const g = performance.now() + t, p = () => {
-      d.forEach((y) => {
-        y.style.opacity = "1", y.style.transform = "none", y.style.transition = "";
+  }[i], l = [...e.children];
+  return l.forEach((m) => {
+    m.style.opacity = "0", m.style.transform = d, m.style.transition = "none";
+  }), l.length === 0 ? Promise.resolve() : new Promise((m) => {
+    const h = performance.now() + t, f = () => {
+      l.forEach((S) => {
+        S.style.opacity = "1", S.style.transform = "none", S.style.transition = "";
       }), m();
     };
-    s == null || s.addEventListener("abort", p, { once: !0 });
-    const f = (y) => {
+    s == null || s.addEventListener("abort", f, { once: !0 });
+    const p = (S) => {
       if (s != null && s.aborted) return;
       let u = !0;
-      for (let x = 0; x < d.length; x++) {
-        const S = g + x * r;
-        if (y >= S) {
-          const w = d[x];
-          w.style.opacity === "0" && (w.style.transition = `opacity ${a}ms ease, transform ${a}ms cubic-bezier(0.2,0,0,1)`, w.style.opacity = "1", w.style.transform = "none"), y < S + a && (u = !1);
+      for (let x = 0; x < l.length; x++) {
+        const y = h + x * r;
+        if (S >= y) {
+          const k = l[x];
+          k.style.opacity === "0" && (k.style.transition = `opacity ${n}ms ease, transform ${n}ms cubic-bezier(0.2,0,0,1)`, k.style.opacity = "1", k.style.transform = "none"), S < y + n && (u = !1);
         } else
           u = !1;
       }
-      u ? (s == null || s.removeEventListener("abort", p), m()) : requestAnimationFrame(f);
+      u ? (s == null || s.removeEventListener("abort", f), m()) : requestAnimationFrame(p);
     };
-    requestAnimationFrame(() => requestAnimationFrame(f));
+    requestAnimationFrame(() => requestAnimationFrame(p));
   });
 }
-function j(e, n = {}) {
+function Ae(e, a = {}) {
   const {
     stagger: t = 40,
     duration: r = 300,
-    from: a = "bottom",
+    from: n = "bottom",
     distance: i = "12px",
     signal: o
-  } = n;
+  } = a;
   if (o != null && o.aborted) return Promise.resolve();
-  const l = {
+  const c = {
     top: `translateY(-${i})`,
     bottom: `translateY(${i})`,
     left: `translateX(-${i})`,
     right: `translateX(${i})`
-  }[a], c = [...e.children].reverse();
-  return c.length === 0 ? Promise.resolve() : new Promise((d) => {
-    const m = performance.now(), g = () => {
-      c.forEach((f) => {
-        f.style.opacity = "0", f.style.transform = l, f.style.transition = "";
-      }), d();
+  }[n], d = [...e.children].reverse();
+  return d.length === 0 ? Promise.resolve() : new Promise((l) => {
+    const m = performance.now(), h = () => {
+      d.forEach((p) => {
+        p.style.opacity = "0", p.style.transform = c, p.style.transition = "";
+      }), l();
     };
-    o == null || o.addEventListener("abort", g, { once: !0 });
-    const p = (f) => {
+    o == null || o.addEventListener("abort", h, { once: !0 });
+    const f = (p) => {
       if (o != null && o.aborted) return;
-      let y = !0;
-      for (let u = 0; u < c.length; u++) {
+      let S = !0;
+      for (let u = 0; u < d.length; u++) {
         const x = m + u * t;
-        if (f >= x) {
-          const S = c[u];
-          S.style.opacity !== "0" && (S.style.transition = `opacity ${r}ms ease, transform ${r}ms ease`, S.style.opacity = "0", S.style.transform = l), f < x + r && (y = !1);
+        if (p >= x) {
+          const y = d[u];
+          y.style.opacity !== "0" && (y.style.transition = `opacity ${r}ms ease, transform ${r}ms ease`, y.style.opacity = "0", y.style.transform = c), p < x + r && (S = !1);
         } else
-          y = !1;
+          S = !1;
       }
-      y ? (o == null || o.removeEventListener("abort", g), d()) : requestAnimationFrame(p);
+      S ? (o == null || o.removeEventListener("abort", h), l()) : requestAnimationFrame(f);
     };
-    requestAnimationFrame(p);
+    requestAnimationFrame(f);
   });
 }
-function D(e, n, t = 300) {
+function ee(e, a, t = 300) {
   return new Promise((r) => {
-    e.style.transition = `opacity ${t}ms ease`, e.style.opacity = n === "in" ? "1" : "0", e.style.pointerEvents = n === "in" ? "auto" : "none";
-    const a = () => {
-      e.removeEventListener("transitionend", a), r();
+    e.style.transition = `opacity ${t}ms ease`, e.style.opacity = a === "in" ? "1" : "0", e.style.pointerEvents = a === "in" ? "auto" : "none";
+    const n = () => {
+      e.removeEventListener("transitionend", n), r();
     };
-    e.addEventListener("transitionend", a, { once: !0 }), setTimeout(r, t + 50);
+    e.addEventListener("transitionend", n, { once: !0 }), setTimeout(r, t + 50);
   });
 }
-async function B(e, n, t = 400) {
-  n.style.opacity = "0", n.style.pointerEvents = "none", n.style.display = "", await Promise.all([
-    D(e, "out", t),
-    D(n, "in", t)
+async function Le(e, a, t = 400) {
+  a.style.opacity = "0", a.style.pointerEvents = "none", a.style.display = "", await Promise.all([
+    ee(e, "out", t),
+    ee(a, "in", t)
   ]), e.style.display = "none";
 }
-function Q(e, n = {}) {
-  const { duration: t = 500, easing: r = "cubic-bezier(0.4,0,0.2,1)", onDone: a, signal: i } = n;
+function Ee(e, a = {}) {
+  const { duration: t = 500, easing: r = "cubic-bezier(0.4,0,0.2,1)", onDone: n, signal: i } = a;
   if (i != null && i.aborted) return;
-  const o = e.getBoundingClientRect(), s = window.innerWidth / o.width, l = window.innerHeight / o.height, c = window.innerWidth / 2 - (o.left + o.width / 2), d = window.innerHeight / 2 - (o.top + o.height / 2);
+  const o = e.getBoundingClientRect(), s = window.innerWidth / o.width, c = window.innerHeight / o.height, d = window.innerWidth / 2 - (o.left + o.width / 2), l = window.innerHeight / 2 - (o.top + o.height / 2);
   e.style.transformOrigin = "center center", e.style.transition = "none", e.style.transform = "translate(0,0) scale(1,1)", requestAnimationFrame(() => {
     i != null && i.aborted || requestAnimationFrame(() => {
       if (i != null && i.aborted) return;
-      e.style.transition = `transform ${t}ms ${r}`, e.style.transform = `translate(${c}px, ${d}px) scale(${s}, ${l})`;
+      e.style.transition = `transform ${t}ms ${r}`, e.style.transform = `translate(${d}px, ${l}px) scale(${s}, ${c})`;
       const m = () => {
-        e.removeEventListener("transitionend", m), e.style.transform = "", e.style.transition = "", a == null || a();
+        e.removeEventListener("transitionend", m), e.style.transform = "", e.style.transition = "", n == null || n();
       };
       e.addEventListener("transitionend", m, { once: !0 }), setTimeout(m, t + 100);
     });
   });
 }
-function J(e, n = {}, t) {
-  const { duration: r = 400, easing: a = "cubic-bezier(0.4,0,0.2,1)", onDone: i, signal: o } = n;
+function Me(e, a = {}, t) {
+  const { duration: r = 400, easing: n = "cubic-bezier(0.4,0,0.2,1)", onDone: i, signal: o } = a;
   if (o != null && o.aborted) return;
-  const s = e.getBoundingClientRect(), l = s.width / window.innerWidth, c = s.height / window.innerHeight, d = s.left + s.width / 2 - window.innerWidth / 2, m = s.top + s.height / 2 - window.innerHeight / 2, g = !t, p = t ?? document.createElement("div");
-  g && (Object.assign(p.style, {
+  const s = e.getBoundingClientRect(), c = s.width / window.innerWidth, d = s.height / window.innerHeight, l = s.left + s.width / 2 - window.innerWidth / 2, m = s.top + s.height / 2 - window.innerHeight / 2, h = !t, f = t ?? document.createElement("div");
+  h && (Object.assign(f.style, {
     position: "fixed",
     inset: "0",
     pointerEvents: "none",
     zIndex: "9999",
     transformOrigin: "center center"
-  }), document.body.appendChild(p)), p.style.transition = `transform ${r}ms ${a}, opacity ${r * 0.6}ms ease ${r * 0.4}ms`;
-  const f = () => {
-    p.removeEventListener("transitionend", f), g && p.remove(), i == null || i();
+  }), document.body.appendChild(f)), f.style.transition = `transform ${r}ms ${n}, opacity ${r * 0.6}ms ease ${r * 0.4}ms`;
+  const p = () => {
+    f.removeEventListener("transitionend", p), h && f.remove(), i == null || i();
   };
   requestAnimationFrame(() => {
     if (o != null && o.aborted) {
-      f();
+      p();
       return;
     }
-    p.style.transform = `translate(${d}px, ${m}px) scale(${l}, ${c})`, p.style.opacity = "0", p.addEventListener("transitionend", f, { once: !0 }), setTimeout(f, r + 100);
+    f.style.transform = `translate(${l}px, ${m}px) scale(${c}, ${d})`, f.style.opacity = "0", f.addEventListener("transitionend", p, { once: !0 }), setTimeout(p, r + 100);
   });
 }
-const Re = {
-  morph: Z,
-  staggerIn: V,
-  staggerOut: j,
-  fade: D,
-  crossfade: B,
-  heroExpand: Q,
-  heroCollapse: J
-}, De = {
-  CONSTANTS: A,
-  Units: ge,
-  Math: h,
-  Sun: b,
-  Moon: k,
-  Eclipse: G,
-  Planner: C,
-  AstroClock: fe,
-  Events: Se,
-  Equipment: Ee,
-  AstroPhoto: _e,
-  Data: E,
-  Media: he,
-  API: { NASA: pe, ESA: ue, Astrobin: ve, resolveSimbad: me },
-  SkyMap: { render: de, stereographic: ce, mollweide: le, gnomonic: se, Interactive: ie, create: oe },
-  Transitions: { morph: Z, staggerIn: V, staggerOut: j, fade: D, crossfade: B, heroExpand: Q, heroCollapse: J }
+const yt = {
+  morph: ke,
+  staggerIn: we,
+  staggerOut: Ae,
+  fade: ee,
+  crossfade: Le,
+  heroExpand: Ee,
+  heroCollapse: Me
+}, St = {
+  CONSTANTS: E,
+  Units: je,
+  Math: g,
+  Sun: w,
+  Moon: A,
+  Eclipse: be,
+  Planner: D,
+  AstroClock: Ke,
+  Events: Be,
+  Equipment: rt,
+  AstroPhoto: J,
+  Data: _,
+  Media: Ze,
+  API: { NASA: Ue, ESA: Ge, Astrobin: ut, resolveSimbad: qe },
+  SkyMap: { render: Xe, stereographic: Ye, mollweide: He, gnomonic: Fe, Interactive: ze, create: $e },
+  Transitions: { morph: ke, staggerIn: we, staggerOut: Ae, fade: ee, crossfade: Le, heroExpand: Ee, heroCollapse: Me }
 };
 export {
-  fe as AstroClock,
-  h as AstroMath,
-  _e as AstroPhoto,
-  ve as Astrobin,
-  Ie as BRIGHT_STARS,
-  A as CONSTANTS,
-  Fe as CONSTELLATIONS,
-  He as DEEP_SKY_EXTRAS,
-  E as Data,
-  ue as ESA,
-  G as Eclipse,
-  Ee as Equipment,
-  Se as Events,
-  Ye as IMAGE_FALLBACKS,
-  ie as InteractiveSkyMap,
-  Xe as MESSIER_CATALOG,
-  qe as METEOR_SHOWERS,
-  he as Media,
-  k as Moon,
-  pe as NASA,
-  Ne as PLANET_TEXTURES,
-  C as Planner,
-  Le as Rig,
-  Ue as SOLAR_SYSTEM,
-  Te as STAR_TEXTURES,
-  Ke as SkyMap,
-  b as Sun,
-  Re as Transitions,
-  ge as Units,
-  Ge as canvasToEquatorial,
-  Ze as computeFov,
-  oe as createInteractiveSkyMap,
-  B as crossfade,
-  De as default,
-  D as fade,
-  Ve as getObjectImage,
-  se as gnomonic,
-  J as heroCollapse,
-  Q as heroExpand,
-  le as mollweide,
-  Z as morph,
-  je as prefetchImages,
-  de as renderSkyMap,
-  Be as resolveImages,
-  me as resolveSimbad,
-  Qe as spectralColor,
-  V as staggerIn,
-  j as staggerOut,
-  ce as stereographic,
-  Je as tryDSS,
-  et as tryPanSTARRS
+  Ke as AstroClock,
+  g as AstroMath,
+  J as AstroPhoto,
+  ut as Astrobin,
+  kt as BRIGHT_STARS,
+  E as CONSTANTS,
+  wt as CONSTELLATIONS,
+  At as DEEP_SKY_EXTRAS,
+  _ as Data,
+  Ge as ESA,
+  be as Eclipse,
+  rt as Equipment,
+  Be as Events,
+  Lt as IMAGE_FALLBACKS,
+  ze as InteractiveSkyMap,
+  Et as MESSIER_CATALOG,
+  Mt as METEOR_SHOWERS,
+  Ze as Media,
+  A as Moon,
+  Ue as NASA,
+  ht as PLANET_TEXTURES,
+  D as Planner,
+  at as Rig,
+  Ot as SOLAR_SYSTEM,
+  gt as STAR_TEXTURES,
+  Nt as SkyMap,
+  w as Sun,
+  yt as Transitions,
+  je as Units,
+  Ct as canvasToEquatorial,
+  vt as computeFov,
+  $e as createInteractiveSkyMap,
+  Le as crossfade,
+  St as default,
+  ee as fade,
+  _t as getObjectImage,
+  Fe as gnomonic,
+  Me as heroCollapse,
+  Ee as heroExpand,
+  He as mollweide,
+  ke as morph,
+  Wt as prefetchImages,
+  Xe as renderSkyMap,
+  It as resolveImages,
+  qe as resolveSimbad,
+  Tt as spectralColor,
+  we as staggerIn,
+  Ae as staggerOut,
+  Ye as stereographic,
+  Rt as tryDSS,
+  Dt as tryPanSTARRS
 };

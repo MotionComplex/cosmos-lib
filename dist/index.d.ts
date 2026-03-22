@@ -33,7 +33,7 @@ export { AstroClock } from './clock.js';
 export { Events } from './events.js';
 export { Equipment, Rig } from './equipment.js';
 export { AstroPhoto } from './astro-photo.js';
-export type { SessionTarget, ImagingWindow, MilkyWayInfo, PolarAlignmentInfo, SessionPlanOptions } from './astro-photo.js';
+export type { SessionTarget, ImagingWindow, MilkyWayInfo, PolarAlignmentInfo, SessionPlanOptions, RigPlanTarget, RigPlanResult, RigPlanOptions, SkySite, CaptureSettings } from './astro-photo.js';
 export type { Camera, Telescope, Lens, Tracker, FOV, FramingResult, SamplingAdvice, RigOptions } from './equipment.js';
 export type { AstroEvent, AstroEventCategory, NextEventsOptions, EventVisibility } from './events.js';
 export type { AstroClockOptions, AstroClockEventMap, AstroEventType } from './clock.js';
@@ -253,6 +253,7 @@ declare const Cosmos: {
         } | null;
         readonly bortleClass: (sqm: number) => number;
         readonly sqmToNELM: (sqm: number) => number;
+        readonly rigPlan: (rig: import("./equipment.js").Rig, observer: import("./types.js").ObserverParams, options?: import("./astro-photo.js").RigPlanOptions) => import("./astro-photo.js").RigPlanResult | null;
     };
     readonly Data: {
         get(id: string): import("./types.js").CelestialObject | null;

@@ -28,5 +28,11 @@ export interface Camera {
     pixelsY: number;
     /** Whether the IR-cut filter is modified/removed for Ha sensitivity. */
     astroModified?: boolean | undefined;
+    /** Read noise in electrons at the recommended ISO/gain setting. */
+    readNoise?: number | undefined;
+    /** Recommended ISO for astrophotography (DSLR/mirrorless cameras). */
+    recommendedISO?: number | undefined;
+    /** Recommended gain for astrophotography (dedicated astro cameras). */
+    recommendedGain?: number | undefined;
 }
 export declare const CAMERAS: readonly Camera[];

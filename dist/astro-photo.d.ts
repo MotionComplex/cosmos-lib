@@ -1,3 +1,5 @@
+import { Rig } from './equipment.js';
+import type { FramingResult, FOV } from './equipment.js';
 import type { ObserverParams, EquatorialCoord } from './types.js';
 /** A scored target in a session plan. */
 export interface SessionTarget {
@@ -73,6 +75,114 @@ export interface SessionPlanOptions {
     maxAirmass?: number | undefined;
     /** Minimum moon separation in degrees. @defaultValue `30` */
     minMoonSeparation?: number | undefined;
+}
+/**
+ * Semantic sky site labels mapped to Bortle classes.
+ *
+ * Use these human-readable labels instead of raw Bortle numbers.
+ * Each maps to a Bortle class for sky brightness estimation.
+ */
+export type SkySite = 'city-center' | 'bright-suburban' | 'suburban' | 'rural-suburban' | 'rural' | 'dark-site' | 'remote' | 'pristine';
+/** Recommended capture settings for a target. */
+export interface CaptureSettings {
+    /** Focal ratio (f-number) of the optics. */
+    focalRatio: number;
+    /** Recommended ISO (DSLR/mirrorless), or null for dedicated cameras. */
+    iso: number | null;
+    /** Recommended gain (dedicated astro cameras), or null for DSLR/mirrorless. */
+    gain: number | null;
+    /** Optimal sub-exposure length in seconds. */
+    subExposure: number;
+    /** Total integration time needed in hours. */
+    totalIntegration: number;
+    /** Number of light frames needed. */
+    subs: number;
+    /** Calibration frame recommendations. */
+    calibration: {
+        /** Recommended number of dark frames. */
+        darks: number;
+        /** Recommended number of flat frames. */
+        flats: number;
+        /** Recommended number of bias/offset frames. */
+        bias: number;
+        /** Contextual note for darks (matching settings). */
+        darkNote: string;
+        /** Contextual note for flats (when to shoot). */
+        flatNote: string;
+    };
+}
+/** A target in a rig-aware session plan. */
+export interface RigPlanTarget {
+    /** Object ID. */
+    objectId: string;
+    /** Object name. */
+    name: string;
+    /** Optimal imaging start time. */
+    start: Date;
+    /** Optimal imaging end time. */
+    end: Date;
+    /** Transit (meridian crossing) time. */
+    transit: Date;
+    /** Peak altitude in degrees. */
+    peakAltitude: number;
+    /** Airmass range [min, max] during the window. */
+    airmassRange: [number, number];
+    /** Moon separation in degrees. */
+    moonSeparation: number;
+    /** Moon interference score 0–1. */
+    moonInterference: number;
+    /** Framing analysis for this rig + target. */
+    framing: FramingResult;
+    /** Max trail-free exposure in seconds for this rig + target declination. */
+    maxExposure: number;
+    /** Recommended capture settings (ISO/gain, sub-exposure, subs, calibration). */
+    capture: CaptureSettings;
+    /** Overall quality score 0–100 (60% observing conditions, 40% framing). */
+    score: number;
+    /** Whether this target was auto-discovered or explicitly requested. */
+    source: 'auto' | 'explicit';
+}
+/** Result of a rig-aware session plan. */
+export interface RigPlanResult {
+    /** Targets sorted by suggested imaging order (set-time-first). */
+    targets: RigPlanTarget[];
+    /** Darkness window used for planning. */
+    darkness: {
+        start: Date;
+        end: Date;
+    };
+    /** Total usable darkness hours. */
+    darknessHours: number;
+    /** Rig summary for reference. */
+    rig: {
+        focalLength: number;
+        fov: FOV;
+        pixelScale: number;
+        isTracked: boolean;
+    };
+}
+/** Options for rig-aware session planning. */
+export interface RigPlanOptions {
+    /** Explicit target IDs to include (even if framing isn't ideal). */
+    targets?: string[] | undefined;
+    /** Max auto-discovered targets. @defaultValue `15` */
+    autoLimit?: number | undefined;
+    /** Minimum fill % for auto-discovered targets. @defaultValue `10` */
+    minFillPercent?: number | undefined;
+    /** Maximum fill % for auto-discovered targets. @defaultValue `150` */
+    maxFillPercent?: number | undefined;
+    /** Minimum altitude in degrees. @defaultValue `25` */
+    minAltitude?: number | undefined;
+    /** Maximum airmass. @defaultValue `2.0` */
+    maxAirmass?: number | undefined;
+    /** Minimum moon separation in degrees. @defaultValue `30` */
+    minMoonSeparation?: number | undefined;
+    /** Direct Bortle class (1–9). Overrides `skySite`. @defaultValue `6` (suburban) */
+    bortle?: number | undefined;
+    /** Semantic sky site label. Used if `bortle` is not provided. @defaultValue `'suburban'` */
+    skySite?: SkySite | undefined;
+    /** Target signal-to-noise ratio for integration time calculation. @defaultValue `25` */
+    targetSNR?: number | undefined;
 }
 /**
  * Astrophotography planning utilities.
@@ -247,4 +357,37 @@ export declare const AstroPhoto: {
      * Convert SQM to naked-eye limiting magnitude.
      */
     readonly sqmToNELM: (sqm: number) => number;
+    /**
+     * Generate a capture plan for a specific rig and observer.
+     *
+     * Combines target discovery, framing analysis, observing-condition
+     * scoring, and exposure guidance into a single result. Auto-discovers
+     * targets that fit well in the rig's FOV, and optionally includes
+     * explicit targets regardless of framing quality.
+     *
+     * Targets are scored by a weighted blend of observing conditions (60%)
+     * and framing quality (40%), then sequenced by set-time-first strategy
+     * (shoot western targets first).
+     *
+     * @param rig - The astrophotography rig (camera + optics + optional tracker).
+     * @param observer - Observer location and date.
+     * @param options - Planning constraints and target overrides.
+     * @returns Complete capture plan with per-target framing, exposure, and scoring.
+     *
+     * @example
+     * ```ts
+     * import { Equipment, AstroPhoto } from '@motioncomplex/cosmos-lib'
+     *
+     * const rig = Equipment.rig({ camera: 'Sony A7 III', telescope: 'Sky-Watcher Esprit 100ED' })
+     * const observer = { lat: 47.05, lng: 8.31, date: new Date('2024-08-15') }
+     *
+     * const plan = AstroPhoto.rigPlan(rig, observer)
+     * for (const t of plan.targets) {
+     *   console.log(`${t.name}: score ${t.score}, fills ${t.framing.fillPercent}% of sensor`)
+     *   console.log(`  Image ${t.start.toLocaleTimeString()}–${t.end.toLocaleTimeString()}`)
+     *   console.log(`  Max exposure: ${t.maxExposure}s, panels: ${t.framing.panels}`)
+     * }
+     * ```
+     */
+    readonly rigPlan: (rig: Rig, observer: ObserverParams, options?: RigPlanOptions) => RigPlanResult | null;
 };
