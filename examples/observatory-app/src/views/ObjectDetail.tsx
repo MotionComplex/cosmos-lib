@@ -314,6 +314,27 @@ export function ObjectDetail() {
 
       {/* Scrollable content — on mobile this overlaps the fixed hero */}
       <div className={styles.scrollContent}>
+        {/* Sticky object header — visible only on mobile, sticks to top on scroll */}
+        <div className={styles.stickyHeader}>
+          <div className={styles.stickyHeaderInner}>
+            <span className={styles.heroType}>{obj.type}</span>
+            <h2 className={styles.stickyName}>{obj.name}</h2>
+            {obj.aliases && obj.aliases.length > 0 && (
+              <p className={styles.heroAliases}>{obj.aliases.join(" · ")}</p>
+            )}
+            {hz && (
+              <div className={styles.heroStatus}>
+                <span className={hz.alt > 0 ? styles.above : styles.below}>
+                  {hz.alt > 0 ? "Above Horizon" : "Below Horizon"}
+                </span>
+                <span className={styles.heroCoord}>
+                  Alt {hz.alt.toFixed(2)}° · Az {hz.az.toFixed(2)}°
+                </span>
+              </div>
+            )}
+          </div>
+        </div>
+
       <div className={styles.dataGrid}>
         {/* Coordinates */}
         {ra != null && dec != null && (

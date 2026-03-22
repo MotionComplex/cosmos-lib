@@ -81,6 +81,21 @@
   z-index: 2;
 }
 
+/* Sticky object header — hidden on desktop, sticky on mobile */
+.stickyHeader {
+  display: none;
+}
+
+.stickyName {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -1.5px;
+  line-height: 1.1;
+  margin-bottom: 6px;
+  color: var(--text-primary);
+}
+
 .backBtn {
   display: inline-flex;
   align-items: center;
@@ -343,8 +358,8 @@
     min-height: 55vh;
   }
 
-  .heroContent { text-align: center; }
-  .heroStatus { justify-content: center; flex-wrap: wrap; }
+  /* Hide hero overlay text on mobile — it's in the sticky header instead */
+  .heroContent { display: none; }
   .backBtn { margin-bottom: auto; }
 
   /* Scrollable content slides up over the fixed hero */
@@ -352,10 +367,40 @@
     margin-top: 50vh;
     background: var(--bg-void);
     border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-    padding: 24px 16px 0;
+    padding: 0 16px;
     position: relative;
     z-index: 2;
     box-shadow: 0 -20px 60px rgba(3, 3, 8, 0.8);
+  }
+
+  /* Sticky object header — scrolls with content then sticks to top */
+  .stickyHeader {
+    display: block;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    margin: 0 -16px;
+    padding: 0 16px;
+  }
+
+  .stickyHeaderInner {
+    text-align: center;
+    padding: 20px 0 16px;
+    background: var(--bg-void);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .stickyHeader .heroType {
+    margin-bottom: 8px;
+  }
+
+  .stickyHeader .heroAliases {
+    margin-bottom: 12px;
+  }
+
+  .stickyHeader .heroStatus {
+    justify-content: center;
+    flex-wrap: wrap;
   }
 
   .dataGrid { grid-template-columns: 1fr; }
