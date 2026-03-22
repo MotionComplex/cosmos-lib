@@ -236,6 +236,21 @@ export function ObjectDetail() {
     return () => observer.disconnect();
   }, []);
 
+  // On mobile, disable main's scroll containment so the fixed hero
+  // and backdrop-filter work across the same compositing context
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 768px)');
+    const mainEl = document.querySelector('main');
+    if (!mq.matches || !mainEl) return;
+    const prev = { overflow: mainEl.style.overflow, height: mainEl.style.height };
+    mainEl.style.overflow = 'visible';
+    mainEl.style.height = 'auto';
+    return () => {
+      mainEl.style.overflow = prev.overflow;
+      mainEl.style.height = prev.height;
+    };
+  }, []);
+
   // Unified image pipeline — Data.getImage runs the cascade:
   // static registry (instant) → NASA API → ESA API, with caching.
   const [heroImageState, setHeroImageState] = useState<{
