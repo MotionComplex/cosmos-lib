@@ -102,28 +102,31 @@ export function Observatory() {
 
   return (
     <div className={styles.page}>
-      {/* Hero section */}
-      <section className={styles.hero}>
-        <div className={styles.heroContent}>
-          <p className={styles.greeting}>{skyCondition}</p>
-          <h1 className={styles.title}>Observatory</h1>
-          <p className={styles.subtitle}>
-            {now.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
-            <span className={styles.dot}>·</span>
-            {now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
-          </p>
-        </div>
-        <div className={styles.heroRight}>
-          <div className={styles.moonHero} role="button" tabIndex={0} onClick={() => navigate('/moon')} onKeyDown={e => e.key === 'Enter' && navigate('/moon')}>
-            <MoonPhaseIcon phase={moonPhase.phase} size={80} />
-            <div className={styles.moonLabel}>
-              <span className={styles.phaseName}>{moonPhase.name.replace(/-/g, ' ')}</span>
-              <span className={styles.illumination}>{(moonPhase.illumination * 100).toFixed(0)}% illuminated</span>
+      <div className={styles.stickyHeader}>
+        {/* Hero section */}
+        <section className={styles.hero}>
+          <div className={styles.heroContent}>
+            <p className={styles.greeting}>{skyCondition}</p>
+            <h1 className={styles.title}>Observatory</h1>
+            <p className={styles.subtitle}>
+              {now.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
+              <span className={styles.dot}>·</span>
+              {now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+            </p>
+          </div>
+          <div className={styles.heroRight}>
+            <div className={styles.moonHero} role="button" tabIndex={0} onClick={() => navigate('/moon')} onKeyDown={e => e.key === 'Enter' && navigate('/moon')}>
+              <MoonPhaseIcon phase={moonPhase.phase} size={80} />
+              <div className={styles.moonLabel}>
+                <span className={styles.phaseName}>{moonPhase.name.replace(/-/g, ' ')}</span>
+                <span className={styles.illumination}>{(moonPhase.illumination * 100).toFixed(0)}% illuminated</span>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
 
+      <div className={styles.content}>
       {/* Time cards */}
       <section className={`${styles.timeRow} stagger-grid`}>
         <div className={styles.timeCard}>
@@ -319,6 +322,7 @@ export function Observatory() {
         </div>
       </section>
       <DocsReference entries={DOCS_ENTRIES} guides={DOCS_GUIDES} />
+      </div>
     </div>
   )
 }

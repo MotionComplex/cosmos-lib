@@ -5,11 +5,24 @@
   animation: fadeUp 0.5s var(--ease-out) both;
 }
 
+/* ── Sticky header ───────────────────────────────────────────────────── */
+
+.stickyHeader {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  margin: 0 -40px;
+  padding: 24px 40px 16px;
+  background: rgba(3, 3, 8, 0.85);
+  -webkit-backdrop-filter: blur(40px) saturate(1.6);
+  backdrop-filter: blur(40px) saturate(1.6);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 20px;
   flex-shrink: 0;
 }
 
@@ -66,6 +79,7 @@
 .mapContainer {
   flex: 1;
   position: relative;
+  margin-top: 8px;
   border-radius: var(--radius-lg);
   overflow: hidden;
   border: 1px solid var(--border);
@@ -268,4 +282,6 @@
   .header { flex-direction: column; align-items: flex-start; gap: 12px; }
   .overlayControls { flex-wrap: wrap; right: 16px; }
   .page { height: calc(100vh - 120px); }
+  .stickyHeader { margin: 0; padding: 16px 16px 12px; }
+  .mapContainer { margin-top: 8px; }
 }

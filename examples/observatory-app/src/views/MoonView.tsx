@@ -73,12 +73,15 @@ export function MoonView() {
 
   return (
     <div className={styles.page}>
-      <div className={styles.header}>
-        <div>
-          <h1 className={styles.title}>Moon</h1>
-          <p className={styles.subtitle}>Lunar ephemeris & phase tracker</p>
+      <div className={styles.stickyHeader}>
+        <div className={styles.header}>
+          <div>
+            <h1 className={styles.title}>Moon</h1>
+            <p className={styles.subtitle}>Lunar ephemeris & phase tracker</p>
+          </div>
         </div>
       </div>
+      <div className={styles.content}>
 
       {/* Hero phase display */}
       <div className={styles.phaseHero}>
@@ -216,6 +219,7 @@ export function MoonView() {
         </div>
       </div>
       <DocsReference entries={DOCS_ENTRIES} />
+      </div>
     </div>
   )
 }

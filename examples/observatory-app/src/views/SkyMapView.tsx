@@ -223,28 +223,30 @@ export function SkyMapView() {
 
   return (
     <div className={styles.page}>
-      <div className={styles.header}>
-        <div>
-          <h1 className={styles.title}>Sky Map</h1>
-          <p className={styles.subtitle}>Pan, zoom, and click to explore the sky</p>
-        </div>
-        <div className={styles.controls}>
-          <div className={styles.projectionToggle}>
-            {PROJECTIONS.map(p => (
-              <button
-                key={p.key}
-                className={`${styles.projBtn} ${projection === p.key ? styles.projActive : ''}`}
-                onClick={() => setProjection(p.key)}
-              >
-                {p.label}
-              </button>
-            ))}
+      <div className={styles.stickyHeader}>
+        <div className={styles.header}>
+          <div>
+            <h1 className={styles.title}>Sky Map</h1>
+            <p className={styles.subtitle}>Pan, zoom, and click to explore the sky</p>
+          </div>
+          <div className={styles.controls}>
+            <div className={styles.projectionToggle}>
+              {PROJECTIONS.map(p => (
+                <button
+                  key={p.key}
+                  className={`${styles.projBtn} ${projection === p.key ? styles.projActive : ''}`}
+                  onClick={() => setProjection(p.key)}
+                >
+                  {p.label}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </div>
 
       {/* Time transport — powered by AstroClock */}
-      <div className={styles.controls} style={{ display: 'flex', gap: '8px', alignItems: 'center', padding: '0 16px 8px', flexWrap: 'wrap' }}>
+      <div className={styles.controls} style={{ display: 'flex', gap: '8px', alignItems: 'center', padding: '8px 0', flexWrap: 'wrap' }}>
         <button className={styles.projBtn} onClick={handlePlayPause} title={clockPlaying ? 'Pause' : 'Play'}>
           {clockPlaying ? '⏸' : '▶'}
         </button>
@@ -350,7 +352,9 @@ export function SkyMapView() {
           </button>
         </div>
       </div>
-      <DocsReference entries={DOCS_ENTRIES} guides={DOCS_GUIDES} />
+      <div style={{ paddingTop: '16px' }}>
+        <DocsReference entries={DOCS_ENTRIES} guides={DOCS_GUIDES} />
+      </div>
     </div>
   )
 }

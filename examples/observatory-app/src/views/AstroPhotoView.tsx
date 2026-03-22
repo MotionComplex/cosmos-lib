@@ -131,13 +131,16 @@ export function AstroPhotoView() {
 
   return (
     <div className={styles.page}>
-      <section className={styles.hero}>
-        <div className={styles.heroContent}>
-          <h1 className={styles.title}>Astrophotography</h1>
-          <p className={styles.subtitle}>Equipment, session planning & Milky Way tracker</p>
-        </div>
-      </section>
+      <div className={styles.stickyHeader}>
+        <section className={styles.hero}>
+          <div className={styles.heroContent}>
+            <h1 className={styles.title}>Astrophotography</h1>
+            <p className={styles.subtitle}>Equipment, session planning & Milky Way tracker</p>
+          </div>
+        </section>
+      </div>
 
+      <div className={styles.content}>
       {/* Equipment Picker */}
       <section className={styles.section}>
         <h2 className={styles.sectionTitle}>My Rig</h2>
@@ -479,6 +482,7 @@ export function AstroPhotoView() {
       </section>
 
       <DocsReference entries={DOCS_ENTRIES} />
+      </div>
     </div>
   )
 }

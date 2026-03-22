@@ -62,33 +62,37 @@ export function EventsView() {
 
   return (
     <div className={styles.page}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-        <div>
-          <h1 className={styles.title}>Upcoming Events</h1>
-          <p className={styles.subtitle}>{events.length} events in the next year</p>
+      <div className={styles.stickyHeader}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          <div>
+            <h1 className={styles.title}>Upcoming Events</h1>
+            <p className={styles.subtitle}>{events.length} events in the next year</p>
+          </div>
+          <button
+            onClick={handleExportICal}
+            style={{
+              background: 'var(--c-bg-card)',
+              border: '1px solid var(--c-border)',
+              color: 'var(--c-text-secondary)',
+              padding: '8px 16px',
+              borderRadius: 'var(--r-md)',
+              cursor: 'pointer',
+              fontSize: '13px',
+            }}
+          >
+            Export .ics
+          </button>
         </div>
-        <button
-          onClick={handleExportICal}
-          style={{
-            background: 'var(--c-bg-card)',
-            border: '1px solid var(--c-border)',
-            color: 'var(--c-text-secondary)',
-            padding: '8px 16px',
-            borderRadius: 'var(--r-md)',
-            cursor: 'pointer',
-            fontSize: '13px',
-          }}
-        >
-          Export .ics
-        </button>
       </div>
 
+      <div className={styles.content}>
       <div className={styles.timeline}>
         {events.map((event, i) => (
           <EventCard key={`${event.category}-${event.date.valueOf()}-${i}`} event={event} />
         ))}
       </div>
       <DocsReference entries={DOCS_ENTRIES} />
+      </div>
     </div>
   )
 }

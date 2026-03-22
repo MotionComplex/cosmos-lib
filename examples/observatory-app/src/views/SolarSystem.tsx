@@ -101,13 +101,16 @@ export function SolarSystem() {
 
   return (
     <div className={styles.page}>
-      <div className={styles.header}>
-        <div>
-          <h1 className={styles.title}>Solar System</h1>
-          <p className={styles.subtitle}>Real-time planetary positions</p>
+      <div className={styles.stickyHeader}>
+        <div className={styles.header}>
+          <div>
+            <h1 className={styles.title}>Solar System</h1>
+            <p className={styles.subtitle}>Real-time planetary positions</p>
+          </div>
         </div>
       </div>
 
+      <div className={styles.content}>
       {/* Top-down orrery */}
       <div className={styles.orreryCard}>
         <svg viewBox="0 0 100 100" className={styles.orrery}>
@@ -213,6 +216,7 @@ export function SolarSystem() {
         ))}
       </div>
       <DocsReference entries={DOCS_ENTRIES} guides={DOCS_GUIDES} />
+      </div>
     </div>
   )
 }

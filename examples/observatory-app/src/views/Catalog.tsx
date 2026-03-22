@@ -101,97 +101,101 @@ export function Catalog() {
 
   return (
     <div className={styles.page}>
-      <div className={styles.header}>
-        <div>
-          <h1 className={styles.title}>Catalog</h1>
-          <p className={styles.subtitle}>{results.length} celestial objects</p>
-        </div>
-      </div>
-
-      {/* Search and filters */}
-      <div className={styles.toolbar}>
-        <div className={styles.searchWrap}>
-          <span className={styles.searchIcon}>⌕</span>
-          <input
-            type="text"
-            placeholder="Search stars, galaxies, nebulae..."
-            value={query}
-            onChange={handleSearch}
-            className={styles.searchInput}
-          />
+      <div className={styles.stickyHeader}>
+        <div className={styles.header}>
+          <div>
+            <h1 className={styles.title}>Catalog</h1>
+            <p className={styles.subtitle}>{results.length} celestial objects</p>
+          </div>
         </div>
 
-        <div className={styles.filters}>
-          <div className={styles.typeFilter}>
-            {TYPES.map(t => (
-              <button
-                key={t.key}
-                className={`${styles.typeBtn} ${typeFilter === t.key ? styles.typeActive : ''}`}
-                onClick={() => setTypeFilter(t.key)}
-              >
-                {t.label}
-              </button>
-            ))}
+        {/* Search and filters */}
+        <div className={styles.toolbar}>
+          <div className={styles.searchWrap}>
+            <span className={styles.searchIcon}>⌕</span>
+            <input
+              type="text"
+              placeholder="Search stars, galaxies, nebulae..."
+              value={query}
+              onChange={handleSearch}
+              className={styles.searchInput}
+            />
           </div>
 
-          <select
-            value={sortBy}
-            onChange={e => setSortBy(e.target.value as typeof sortBy)}
-            className={styles.sortSelect}
-          >
-            <option value="name">Sort: Name</option>
-            <option value="magnitude">Sort: Brightness</option>
-            <option value="altitude">Sort: Altitude</option>
-          </select>
+          <div className={styles.filters}>
+            <div className={styles.typeFilter}>
+              {TYPES.map(t => (
+                <button
+                  key={t.key}
+                  className={`${styles.typeBtn} ${typeFilter === t.key ? styles.typeActive : ''}`}
+                  onClick={() => setTypeFilter(t.key)}
+                >
+                  {t.label}
+                </button>
+              ))}
+            </div>
+
+            <select
+              value={sortBy}
+              onChange={e => setSortBy(e.target.value as typeof sortBy)}
+              className={styles.sortSelect}
+            >
+              <option value="name">Sort: Name</option>
+              <option value="magnitude">Sort: Brightness</option>
+              <option value="altitude">Sort: Altitude</option>
+            </select>
+          </div>
         </div>
       </div>
 
-      {/* Results */}
-      <div className={`${styles.grid} stagger-grid`}>
-        {results.slice(0, 60).map(({ obj, alt }, i) => (
-          <div
-            key={`${obj.id}-${i}`}
-            className={styles.card}
-            role="button"
-            tabIndex={0}
-            onClick={() => navigate(`/object/${obj.id}`)}
-            onKeyDown={e => e.key === 'Enter' && navigate(`/object/${obj.id}`)}
-          >
-            <div className={styles.cardTop}>
-              <span className={styles.cardType}>{obj.type}</span>
-              {alt != null && alt > 0 && (
-                <span className={styles.cardVisible}>↑ {alt.toFixed(0)}°</span>
+      <div className={styles.content}>
+        {/* Results */}
+        <div className={`${styles.grid} stagger-grid`}>
+          {results.slice(0, 60).map(({ obj, alt }, i) => (
+            <div
+              key={`${obj.id}-${i}`}
+              className={styles.card}
+              role="button"
+              tabIndex={0}
+              onClick={() => navigate(`/object/${obj.id}`)}
+              onKeyDown={e => e.key === 'Enter' && navigate(`/object/${obj.id}`)}
+            >
+              <div className={styles.cardTop}>
+                <span className={styles.cardType}>{obj.type}</span>
+                {alt != null && alt > 0 && (
+                  <span className={styles.cardVisible}>↑ {alt.toFixed(0)}°</span>
+                )}
+              </div>
+
+              <h3 className={styles.cardName}>{obj.name}</h3>
+
+              {obj.aliases && obj.aliases.length > 0 && (
+                <p className={styles.cardAliases}>{obj.aliases.slice(0, 3).join(' · ')}</p>
               )}
+
+              <div className={styles.cardMeta}>
+                {obj.magnitude != null && (
+                  <span>mag {obj.magnitude.toFixed(1)}</span>
+                )}
+                {obj.distance && (
+                  <span>{obj.distance.value} {obj.distance.unit}</span>
+                )}
+                {obj.ra != null && obj.dec != null && (
+                  <span className={styles.cardCoords}>
+                    {Units.formatRA(obj.ra)} {obj.dec > 0 ? '+' : ''}{obj.dec.toFixed(1)}°
+                  </span>
+                )}
+              </div>
             </div>
+          ))}
+        </div>
 
-            <h3 className={styles.cardName}>{obj.name}</h3>
+        {results.length > 60 && (
+          <p className={styles.moreHint}>Showing 60 of {results.length} results. Refine your search to see more.</p>
+        )}
 
-            {obj.aliases && obj.aliases.length > 0 && (
-              <p className={styles.cardAliases}>{obj.aliases.slice(0, 3).join(' · ')}</p>
-            )}
-
-            <div className={styles.cardMeta}>
-              {obj.magnitude != null && (
-                <span>mag {obj.magnitude.toFixed(1)}</span>
-              )}
-              {obj.distance && (
-                <span>{obj.distance.value} {obj.distance.unit}</span>
-              )}
-              {obj.ra != null && obj.dec != null && (
-                <span className={styles.cardCoords}>
-                  {Units.formatRA(obj.ra)} {obj.dec > 0 ? '+' : ''}{obj.dec.toFixed(1)}°
-                </span>
-              )}
-            </div>
-          </div>
-        ))}
+        <DocsReference entries={DOCS_ENTRIES} guides={DOCS_GUIDES} />
       </div>
-
-      {results.length > 60 && (
-        <p className={styles.moreHint}>Showing 60 of {results.length} results. Refine your search to see more.</p>
-      )}
-
-      <DocsReference entries={DOCS_ENTRIES} guides={DOCS_GUIDES} />
     </div>
   )
 }

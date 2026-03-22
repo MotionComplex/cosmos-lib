@@ -26,13 +26,16 @@ export function EclipseView() {
 
   return (
     <div className={styles.page}>
-      <div className={styles.header}>
-        <div>
-          <h1 className={styles.title}>Eclipses</h1>
-          <p className={styles.subtitle}>Upcoming solar & lunar eclipses</p>
+      <div className={styles.stickyHeader}>
+        <div className={styles.header}>
+          <div>
+            <h1 className={styles.title}>Eclipses</h1>
+            <p className={styles.subtitle}>Upcoming solar & lunar eclipses</p>
+          </div>
         </div>
       </div>
 
+      <div className={styles.content}>
       <div className={styles.timeline}>
         {eclipses.length === 0 ? (
           <p className={styles.empty}>No eclipses found in the next 3 years.</p>
@@ -113,6 +116,7 @@ export function EclipseView() {
         )}
       </div>
       <DocsReference entries={DOCS_ENTRIES} />
+      </div>
     </div>
   )
 }
