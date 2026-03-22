@@ -130,6 +130,130 @@ targets.forEach(t => console.log(t.object.name, `${t.framing.fillPercent}% fill`
 
 ---
 
+## Rig-Aware Planner
+
+`rigPlan` is the primary planning function. Given a rig and observer, it auto-discovers targets that frame well in the rig's FOV, scores them by observing conditions + framing quality, and returns per-target capture settings:
+
+```ts
+const rig = Equipment.rig({ camera: 'ZWO ASI2600MC Pro', telescope: 'Sky-Watcher Esprit 100ED', tracker: 'ZWO AM5' })
+const plan = AstroPhoto.rigPlan(rig, { lat: 47, lng: 8, date: new Date() }, { skySite: 'rural' })
+
+if (plan) {
+  console.log(`${plan.darknessHours}h of darkness, ${plan.targets.length} targets`)
+  plan.targets.forEach(t => {
+    console.log(`${t.name}: score ${t.score}/100, fills ${t.framing.fillPercent}%`)
+    console.log(`  ${t.capture.subExposure}s subs × ${t.capture.subs} = ${t.capture.totalIntegration}h`)
+  })
+}
+```
+
+### How it works
+
+1. **Target discovery** — scans the catalog for objects whose angular size fills 10–150% of the rig's FOV width (configurable via `minFillPercent` / `maxFillPercent`)
+2. **Visibility filter** — keeps only targets above `minAltitude` (25°) with airmass ≤ `maxAirmass` (2.0) and moon separation ≥ `minMoonSeparation` (30°)
+3. **Scoring** — combined score from observing conditions (60%) and framing quality (40%):
+
+| Component | Weight | Factors |
+|-----------|--------|---------|
+| Observing | 60% | Peak altitude (40%), minimum airmass (30%), moon interference (30%) |
+| Framing | 40% | Fill percentage (sweet spot: 40–80% fill) |
+
+4. **Capture settings** — per-target recommendations: f-ratio, ISO or gain, sub-exposure length, number of subs, total integration time, and calibration frame counts (darks, flats, bias)
+5. **Set-time-first sorting** — targets that set earlier are listed first so you shoot them before they drop below the horizon
+
+### Options
+
+```ts
+AstroPhoto.rigPlan(rig, observer, {
+  skySite: 'dark-site',      // semantic Bortle label (see SkySite type)
+  bortle: 4,                 // or direct Bortle class (overrides skySite)
+  targets: ['m31', 'm42'],   // force-include these (even with poor framing)
+  autoLimit: 15,             // max auto-discovered targets (default: 15)
+  minFillPercent: 10,        // minimum fill % for discovery (default: 10)
+  maxFillPercent: 150,       // maximum fill % (default: 150)
+  minAltitude: 25,           // degrees (default: 25)
+  maxAirmass: 2.0,           // default: 2.0
+  minMoonSeparation: 30,     // degrees (default: 30)
+  targetSNR: 25,             // target signal-to-noise for integration calc (default: 25)
+})
+```
+
+### Sky site labels
+
+Semantic labels for common observing locations, mapped to Bortle classes:
+
+```ts
+type SkySite = 'pristine' | 'remote' | 'dark-site' | 'rural'
+             | 'rural-suburban' | 'suburban' | 'bright-suburban' | 'city-center'
+```
+
+| Label | Bortle | Description |
+|-------|--------|-------------|
+| `'pristine'` | 1 | Mountaintop, excellent dark sky |
+| `'remote'` | 2 | Remote, minimal light domes |
+| `'dark-site'` | 3 | Dark sky park, no nearby towns |
+| `'rural'` | 4 | Rural countryside |
+| `'rural-suburban'` | 5 | Suburban/rural transition |
+| `'suburban'` | 6 | Typical suburban (default) |
+| `'bright-suburban'` | 8 | City sky |
+| `'city-center'` | 9 | Bright inner city |
+
+### Return value — `RigPlanResult`
+
+```ts
+interface RigPlanResult {
+  targets: RigPlanTarget[]                // sorted by set-time-first
+  darkness: { start: Date; end: Date }    // astronomical twilight window
+  darknessHours: number                   // total usable hours
+  rig: { focalLength; fov; pixelScale; isTracked }
+}
+```
+
+Each `RigPlanTarget` includes:
+
+| Field | Description |
+|-------|-------------|
+| `objectId`, `name` | Catalog ID and display name |
+| `start`, `end`, `transit` | Imaging window timestamps |
+| `peakAltitude` | Highest altitude (degrees) during window |
+| `airmassRange` | `[min, max]` airmass during window |
+| `moonSeparation`, `moonInterference` | Angular distance to moon (°) and interference score (0–1) |
+| `framing` | `{ fillPercent, fits, panels, orientation, objectSize, fovWidth }` |
+| `maxExposure` | Trail-free exposure (s) accounting for target declination |
+| `capture` | `{ focalRatio, iso, gain, subExposure, subs, totalIntegration, calibration }` |
+| `score` | Combined quality 0–100 |
+| `source` | `'auto'` (discovered) or `'explicit'` (force-included) |
+
+### Multi-rig comparison
+
+Run `rigPlan` for multiple rigs to find the best equipment for each target:
+
+```ts
+const rigs = [
+  Equipment.rig({ camera: 'Sony A7 III', lens: 'Canon EF 135mm f/2L USM', tracker: 'Star Adventurer GTi' }),
+  Equipment.rig({ camera: 'ZWO ASI2600MC Pro', telescope: 'Sky-Watcher Esprit 100ED', tracker: 'ZWO AM5' }),
+  Equipment.rig({ camera: 'ZWO ASI290MC', telescope: 'Celestron C8', tracker: 'iOptron CEM26' }),
+]
+
+const plans = rigs.map(rig => AstroPhoto.rigPlan(rig, observer, { skySite: 'rural' }))
+
+// Merge targets across all plans, find the best rig per target
+const targetMap = new Map<string, { bestScore: number; bestRig: number }>()
+plans.forEach((plan, i) => {
+  if (!plan) return
+  for (const t of plan.targets) {
+    const existing = targetMap.get(t.objectId)
+    if (!existing || t.score > existing.bestScore) {
+      targetMap.set(t.objectId, { bestScore: t.score, bestRig: i })
+    }
+  }
+})
+```
+
+Wide-field rigs will discover large nebulae (North America, Veil), while long-focal-length rigs find small planetaries and galaxies. Comparing plans helps decide which rig to set up for a given night.
+
+---
+
 ## Session Planner
 
 Generate a scored imaging plan for a night. Targets are sorted by **set-time-first** strategy (shoot western targets before they set):

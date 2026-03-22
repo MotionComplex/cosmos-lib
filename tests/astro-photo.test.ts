@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { AstroPhoto } from '../src/astro-photo'
+import { Equipment } from '../src/equipment'
 
 const observer = { lat: 47.05, lng: 8.31, date: new Date('2024-08-15') }
 
@@ -154,6 +155,145 @@ describe('AstroPhoto', () => {
       const nelm = AstroPhoto.sqmToNELM(21.5)
       expect(nelm).toBeGreaterThan(5)
       expect(nelm).toBeLessThan(7)
+    })
+  })
+
+  describe('rigPlan', () => {
+    const rig = Equipment.rig({ camera: 'Sony A7 III', telescope: 'Sky-Watcher Esprit 100ED' })
+
+    it('returns auto-discovered targets with all required fields', () => {
+      const plan = AstroPhoto.rigPlan(rig, observer)
+      expect(plan).not.toBeNull()
+      if (!plan) return
+      expect(plan.targets.length).toBeGreaterThan(0)
+      for (const t of plan.targets) {
+        expect(t.objectId).toBeTypeOf('string')
+        expect(t.name).toBeTypeOf('string')
+        expect(t.start).toBeInstanceOf(Date)
+        expect(t.end).toBeInstanceOf(Date)
+        expect(t.transit).toBeInstanceOf(Date)
+        expect(t.peakAltitude).toBeGreaterThan(0)
+        expect(t.airmassRange[0]).toBeGreaterThan(0)
+        expect(t.moonSeparation).toBeGreaterThanOrEqual(0)
+        expect(t.moonInterference).toBeGreaterThanOrEqual(0)
+        expect(t.moonInterference).toBeLessThanOrEqual(1)
+        expect(t.framing).toBeDefined()
+        expect(t.framing.fillPercent).toBeGreaterThanOrEqual(0)
+        expect(t.maxExposure).toBeGreaterThan(0)
+        expect(t.score).toBeGreaterThanOrEqual(0)
+        expect(t.score).toBeLessThanOrEqual(100)
+        expect(t.source).toBe('auto')
+      }
+    })
+
+    it('includes explicit targets even with poor framing', () => {
+      // M31 is large (~180 arcmin) — may not fit well in every rig
+      const plan = AstroPhoto.rigPlan(rig, observer, { targets: ['m31'] })
+      expect(plan).not.toBeNull()
+      if (!plan) return
+      const m31 = plan.targets.find(t => t.objectId === 'm31')
+      expect(m31).toBeDefined()
+      expect(m31!.source).toBe('explicit')
+    })
+
+    it('deduplicates auto and explicit targets', () => {
+      const plan = AstroPhoto.rigPlan(rig, observer, { targets: ['m31'] })
+      if (!plan) return
+      const m31s = plan.targets.filter(t => t.objectId === 'm31')
+      expect(m31s.length).toBeLessThanOrEqual(1)
+      if (m31s.length > 0) {
+        expect(m31s[0]!.source).toBe('explicit')
+      }
+    })
+
+    it('sorts by set-time-first', () => {
+      const plan = AstroPhoto.rigPlan(rig, observer)
+      if (!plan) return
+      for (let i = 1; i < plan.targets.length; i++) {
+        expect(plan.targets[i]!.end.valueOf()).toBeGreaterThanOrEqual(plan.targets[i - 1]!.end.valueOf())
+      }
+    })
+
+    it('returns darkness window and rig metadata', () => {
+      const plan = AstroPhoto.rigPlan(rig, observer)
+      expect(plan).not.toBeNull()
+      if (!plan) return
+      expect(plan.darkness.start).toBeInstanceOf(Date)
+      expect(plan.darkness.end).toBeInstanceOf(Date)
+      expect(plan.darknessHours).toBeGreaterThan(0)
+      expect(plan.rig.focalLength).toBeGreaterThan(0)
+      expect(plan.rig.fov.width).toBeGreaterThan(0)
+      expect(plan.rig.fov.height).toBeGreaterThan(0)
+      expect(plan.rig.pixelScale).toBeGreaterThan(0)
+      expect(plan.rig.isTracked).toBe(false) // no tracker in this rig
+    })
+
+    it('respects autoLimit option', () => {
+      const plan = AstroPhoto.rigPlan(rig, observer, { autoLimit: 3 })
+      if (!plan) return
+      const autoTargets = plan.targets.filter(t => t.source === 'auto')
+      expect(autoTargets.length).toBeLessThanOrEqual(3)
+    })
+
+    it('returns null when no darkness available', () => {
+      // High arctic in summer — no astronomical darkness
+      const arcticObserver = { lat: 70, lng: 25, date: new Date('2024-06-21') }
+      const plan = AstroPhoto.rigPlan(rig, arcticObserver)
+      expect(plan).toBeNull()
+    })
+
+    it('includes capture settings with ISO, sub-exposure, subs, and calibration', () => {
+      const plan = AstroPhoto.rigPlan(rig, observer)
+      expect(plan).not.toBeNull()
+      if (!plan) return
+      expect(plan.targets.length).toBeGreaterThan(0)
+      for (const t of plan.targets) {
+        expect(t.capture).toBeDefined()
+        expect(t.capture.focalRatio).toBeGreaterThan(0)
+        // Sony A7 III has recommendedISO
+        expect(t.capture.iso).toBe(800)
+        expect(t.capture.gain).toBeNull()
+        expect(t.capture.subExposure).toBeGreaterThan(0)
+        expect(t.capture.subExposure).toBeLessThanOrEqual(t.maxExposure)
+        expect(t.capture.subs).toBeGreaterThan(0)
+        expect(t.capture.totalIntegration).toBeGreaterThan(0)
+        expect(t.capture.calibration.darks).toBe(30)
+        expect(t.capture.calibration.flats).toBe(30)
+        expect(t.capture.calibration.bias).toBe(50)
+        expect(t.capture.calibration.darkNote).toContain('ISO 800')
+        expect(t.capture.calibration.flatNote.length).toBeGreaterThan(0)
+      }
+    })
+
+    it('uses skySite semantic label for sky brightness', () => {
+      const darkPlan = AstroPhoto.rigPlan(rig, observer, { skySite: 'pristine' })
+      const cityPlan = AstroPhoto.rigPlan(rig, observer, { skySite: 'city-center' })
+      if (!darkPlan || !cityPlan) return
+      if (darkPlan.targets.length === 0 || cityPlan.targets.length === 0) return
+      // Under dark skies, sub-exposures should be longer (less sky noise to overwhelm read noise)
+      const darkSub = darkPlan.targets[0]!.capture.subExposure
+      const citySub = cityPlan.targets[0]!.capture.subExposure
+      expect(darkSub).toBeGreaterThan(citySub)
+    })
+
+    it('bortle param overrides skySite', () => {
+      const plan1 = AstroPhoto.rigPlan(rig, observer, { bortle: 2 })
+      const plan2 = AstroPhoto.rigPlan(rig, observer, { bortle: 2, skySite: 'city-center' })
+      if (!plan1 || !plan2) return
+      if (plan1.targets.length === 0 || plan2.targets.length === 0) return
+      // Same bortle → same sub-exposure regardless of skySite
+      expect(plan1.targets[0]!.capture.subExposure).toBe(plan2.targets[0]!.capture.subExposure)
+    })
+
+    it('provides capture settings for dedicated camera with gain instead of ISO', () => {
+      const astroRig = Equipment.rig({ camera: 'ZWO ASI2600MC Pro', telescope: 'Sky-Watcher Esprit 100ED' })
+      const plan = AstroPhoto.rigPlan(astroRig, observer)
+      if (!plan) return
+      if (plan.targets.length === 0) return
+      const t = plan.targets[0]!
+      expect(t.capture.iso).toBeNull()
+      expect(t.capture.gain).toBe(100)
+      expect(t.capture.calibration.darkNote).toContain('Gain 100')
     })
   })
 })
