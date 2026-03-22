@@ -382,7 +382,7 @@
     z-index: 10;
   }
 
-  /* Gradient fade from transparent → bg-void so the image peeks through when stuck */
+  /* Gradient fade from transparent → semi-opaque so the image peeks through when stuck */
   .stickyHeader::before {
     content: '';
     position: absolute;
@@ -390,7 +390,7 @@
     left: 0;
     right: 0;
     height: 40px;
-    background: linear-gradient(to bottom, transparent, var(--bg-void));
+    background: linear-gradient(to bottom, transparent, rgba(3, 3, 8, 0.7));
     pointer-events: none;
   }
 
@@ -398,8 +398,10 @@
     position: relative;
     text-align: center;
     padding: 20px 16px 16px;
-    background: var(--bg-void);
-    border-bottom: 1px solid var(--border);
+    background: rgba(3, 3, 8, 0.7);
+    -webkit-backdrop-filter: blur(20px) saturate(1.4);
+    backdrop-filter: blur(20px) saturate(1.4);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   }
 
   .stickyBackBtn {
