@@ -8,74 +8,102 @@
  * - ObserverParams type → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/types.md#coordinates Type Reference}
  * - How ObserverParams flows through coordinate transforms → {@link https://github.com/motioncomplex/cosmos-lib/blob/main/docs/guides/coordinate-systems.md Coordinate Systems Guide}
  */
-import { Routes, Route } from 'react-router-dom'
-import { Sidebar } from './components/Sidebar'
-import { Observatory } from './views/Observatory'
-import { SkyMapView } from './views/SkyMapView'
-import { SolarSystem } from './views/SolarSystem'
-import { Catalog } from './views/Catalog'
-import { MoonView } from './views/MoonView'
-import { EclipseView } from './views/EclipseView'
-import { EventsView } from './views/EventsView'
-import { AstroPhotoView } from './views/AstroPhotoView'
-import { ObjectDetail } from './views/ObjectDetail'
-import { useObserver } from './hooks/useObserver'
-import { createContext, useContext, Component } from 'react'
-import type { ObserverParams } from 'cosmos-lib'
-import type { ReactNode } from 'react'
+import { Routes, Route } from "react-router-dom";
+import { Sidebar } from "./components/Sidebar";
+import { Observatory } from "./views/Observatory";
+import { SkyMapView } from "./views/SkyMapView";
+import { SolarSystem } from "./views/SolarSystem";
+import { Catalog } from "./views/Catalog";
+import { MoonView } from "./views/MoonView";
+import { EclipseView } from "./views/EclipseView";
+import { EventsView } from "./views/EventsView";
+import { AstroPhotoView } from "./views/AstroPhotoView";
+import { ObjectDetail } from "./views/ObjectDetail";
+import { useObserver } from "./hooks/useObserver";
+import { createContext, useContext, Component } from "react";
+import type { ObserverParams } from "cosmos-lib";
+import type { ReactNode } from "react";
 
 interface ObserverCtx {
-  observer: ObserverParams
-  setObserver: (u: Partial<ObserverParams>) => void
+  observer: ObserverParams;
+  setObserver: (u: Partial<ObserverParams>) => void;
 }
 
-export const ObserverContext = createContext<ObserverCtx>({
+const ObserverContext = createContext<ObserverCtx>({
   observer: { lat: 51.47, lng: 0, date: new Date() },
   setObserver: () => {},
-})
+});
 
-export const useObserverCtx = () => useContext(ObserverContext)
+export const useObserverCtx = () => useContext(ObserverContext);
 
 // Error boundary to catch and display runtime errors
-class ErrorBoundary extends Component<{ children: ReactNode }, { error: Error | null }> {
-  state = { error: null as Error | null }
-  static getDerivedStateFromError(error: Error) { return { error } }
+class ErrorBoundary extends Component<
+  { children: ReactNode },
+  { error: Error | null }
+> {
+  state = { error: null as Error | null };
+  static getDerivedStateFromError(error: Error) {
+    return { error };
+  }
   render() {
     if (this.state.error) {
       return (
-        <div style={{ padding: 40, color: '#f88', fontFamily: 'monospace', fontSize: 13, whiteSpace: 'pre-wrap', maxWidth: '100%', overflow: 'auto' }}>
-          <h2 style={{ marginBottom: 16, color: '#f66' }}>Runtime Error</h2>
+        <div
+          style={{
+            padding: 40,
+            color: "#f88",
+            fontFamily: "monospace",
+            fontSize: 13,
+            whiteSpace: "pre-wrap",
+            maxWidth: "100%",
+            overflow: "auto",
+          }}
+        >
+          <h2 style={{ marginBottom: 16, color: "#f66" }}>Runtime Error</h2>
           <p>{this.state.error.message}</p>
-          <pre style={{ marginTop: 12, opacity: 0.6, fontSize: 11 }}>{this.state.error.stack}</pre>
+          <pre style={{ marginTop: 12, opacity: 0.6, fontSize: 11 }}>
+            {this.state.error.stack}
+          </pre>
           <button
             onClick={() => this.setState({ error: null })}
-            style={{ marginTop: 16, padding: '8px 16px', background: '#333', color: '#eee', border: '1px solid #555', borderRadius: 6, cursor: 'pointer', fontSize: 13 }}
+            style={{
+              marginTop: 16,
+              padding: "8px 16px",
+              background: "#333",
+              color: "#eee",
+              border: "1px solid #555",
+              borderRadius: 6,
+              cursor: "pointer",
+              fontSize: 13,
+            }}
           >
             Retry
           </button>
         </div>
-      )
+      );
     }
-    return this.props.children
+    return this.props.children;
   }
 }
 
 export function App() {
-  const { observer, setObserver } = useObserver()
+  const { observer, setObserver } = useObserver();
 
   return (
     <ObserverContext.Provider value={{ observer, setObserver }}>
-      <div style={{ display: 'flex', width: '100%', minHeight: '100vh' }}>
+      <div style={{ display: "flex", width: "100%", minHeight: "100vh" }}>
         <Sidebar />
-        <main style={{
-          flex: 1,
-          marginLeft: 'var(--sidebar-w)',
-          padding: '24px 40px',
-          maxWidth: '100%',
-          overflowX: 'hidden',
-          overflowY: 'auto',
-          height: '100vh',
-        }}>
+        <main
+          style={{
+            flex: 1,
+            marginLeft: "var(--sidebar-w)",
+            padding: "0 40px 24px 40px",
+            maxWidth: "100%",
+            overflowX: "hidden",
+            overflowY: "auto",
+            height: "100vh",
+          }}
+        >
           <ErrorBoundary>
             <Routes>
               <Route path="/" element={<Observatory />} />
@@ -92,5 +120,5 @@ export function App() {
         </main>
       </div>
     </ObserverContext.Provider>
-  )
+  );
 }

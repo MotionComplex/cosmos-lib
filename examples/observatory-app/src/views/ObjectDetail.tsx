@@ -352,6 +352,7 @@ export function ObjectDetail() {
           </div>
         </div>
 
+      <div className={styles.contentBody}>
       <div className={styles.dataGrid}>
         {/* Coordinates */}
         {ra != null && dec != null && (
@@ -569,6 +570,7 @@ export function ObjectDetail() {
         </div>
       )}
       <DocsReference entries={DOCS_ENTRIES} guides={DOCS_GUIDES} />
+      </div>{/* end contentBody */}
       </div>{/* end scrollContent */}
     </div>
   );

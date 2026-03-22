@@ -1,26 +1,26 @@
 .page {
-  max-width: 1000px;
-  margin: 0 auto;
+  margin: -24px 0 0;
   display: flex;
   flex-direction: column;
-  gap: 24px;
   padding-bottom: 60px;
 }
 
-/* ── Hero ────────────────────────────────────────────────────────────────── */
+/* ── Hero (sticky background image) ──────────────────────────────────── */
 
 .hero {
-  position: relative;
+  position: sticky;
+  top: 0;
+  z-index: 0;
   min-height: 180px;
-  margin: -24px -40px 0;    /* bleed into the page padding */
+  margin: -24px -40px 0;
   animation: fadeIn 0.6s var(--ease-out) both;
 }
 
 .heroWithImage {
-  min-height: 420px;
+  min-height: 70vh;
+  height: 70vh;
 }
 
-/* Background image layer */
 .heroBg {
   position: absolute;
   inset: 0;
@@ -31,7 +31,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 30%;
+  object-position: center center;
   opacity: 0;
   transform: scale(1.04);
   transition: opacity 0.8s var(--ease-out), transform 1.6s var(--ease-out);
@@ -43,7 +43,6 @@
   transform: scale(1);
 }
 
-/* Multi-stop gradient fade: bottom → page bg, sides → subtle vignette */
 .heroBgGradient {
   position: absolute;
   inset: 0;
@@ -51,20 +50,16 @@
     linear-gradient(
       to bottom,
       rgba(3, 3, 8, 0) 0%,
-      rgba(3, 3, 8, 0.03) 30%,
-      rgba(3, 3, 8, 0.45) 60%,
-      rgba(3, 3, 8, 0.85) 80%,
-      var(--bg-void) 100%
-    ),
-    radial-gradient(
-      ellipse 100% 80% at 50% 0%,
-      transparent 50%,
-      rgba(3, 3, 8, 0.6) 100%
+      rgba(3, 3, 8, 0.05) 30%,
+      rgba(3, 3, 8, 0.2) 55%,
+      rgba(3, 3, 8, 0.45) 75%,
+      rgba(3, 3, 8, 0.65) 90%,
+      rgba(3, 3, 8, 0.75) 100%
     );
   pointer-events: none;
 }
 
-/* Content positioned over the image */
+/* Old hero overlay content — hidden, replaced by sticky header */
 .heroInner {
   position: relative;
   z-index: 1;
@@ -74,20 +69,64 @@
   min-height: inherit;
   padding: 32px 40px 0;
 }
+.heroContent { display: none; }
+.backBtn { display: none; }
 
-/* Scrollable content that overlaps the fixed hero on mobile */
+/* ── Scrollable content (slides over hero) ───────────────────────────── */
+
 .scrollContent {
   position: relative;
   z-index: 2;
+  margin: 0 -40px;
 }
 
-/* Sticky object header — hidden on desktop, sticky on mobile */
+/* ── Sticky header ───────────────────────────────────────────────────── */
+
 .stickyHeader {
-  display: none;
+  display: block;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.stickyHeaderInner {
+  position: relative;
+  text-align: center;
+  padding: 24px 40px 16px;
+  background: rgba(3, 3, 8, 0.55);
+  -webkit-backdrop-filter: blur(40px) saturate(1.6);
+  backdrop-filter: blur(40px) saturate(1.6);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px 16px 0 0;
+}
+
+.stickyHeader.stuck .stickyHeaderInner {
+  border-radius: 0;
+  padding-top: 12px;
+  background: rgba(3, 3, 8, 0.95);
 }
 
 .stickyBackBtn {
-  display: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 36px;
+  height: 36px;
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  transition: all var(--duration-fast);
+  cursor: pointer;
+}
+
+.stickyBackBtn:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .stickyName {
@@ -100,30 +139,7 @@
   color: var(--text-primary);
 }
 
-.backBtn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 12px;
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.7);
-  background: rgba(6, 6, 15, 0.5);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border-radius: var(--radius-sm);
-  transition: all var(--duration-fast);
-  align-self: flex-start;
-  margin-bottom: auto;
-}
-
-.backBtn:hover {
-  color: var(--text-primary);
-  background: rgba(6, 6, 15, 0.7);
-}
-
-.heroContent {
-  padding-bottom: 8px;
-}
+/* ── Shared type/status styles ───────────────────────────────────────── */
 
 .heroType {
   font-size: 11px;
@@ -161,6 +177,7 @@
 .heroStatus {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 12px;
 }
 
@@ -197,11 +214,25 @@
   text-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
 }
 
-/* Data grid */
+/* Opaque body below the glassmorphic sticky header */
+.contentBody {
+  position: relative;
+  z-index: 1;
+  background: var(--bg-void);
+  min-height: 100vh;
+}
+
+/* ── Data grid ───────────────────────────────────────────────────────── */
+
 .dataGrid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 16px;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 24px 40px 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .dataCard {
@@ -246,9 +277,15 @@
   text-transform: capitalize;
 }
 
-/* Section */
+/* ── Section ─────────────────────────────────────────────────────────── */
+
 .section {
-  animation: fadeUp 0.5s var(--ease-out) 150ms both;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 40px 24px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .sectionTitle {
@@ -259,7 +296,8 @@
   margin-bottom: 16px;
 }
 
-/* Nearby */
+/* ── Nearby ──────────────────────────────────────────────────────────── */
+
 .nearbyGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -318,125 +356,24 @@
   to { opacity: 1; transform: translate3d(0, 0, 0); }
 }
 
+/* ── Mobile ──────────────────────────────────────────────────────────── */
+
 @media (max-width: 768px) {
   .page { padding: 0 0 80px; }
-
-  /* Hero pinned at top of scroll container — content slides over it */
-  .hero {
-    margin: 0;
-    position: sticky;
-    top: 0;
-    z-index: 0;
-  }
-
-  .heroWithImage {
-    min-height: 55vh;
-    height: 55vh;
-  }
-
-  .heroBg {
-    position: absolute;
-    inset: 0;
-  }
-
-  .heroBgImg {
-    object-position: center center;
-  }
-
-  .heroBgGradient {
-    background:
-      linear-gradient(
-        to bottom,
-        rgba(3, 3, 8, 0) 0%,
-        rgba(3, 3, 8, 0.05) 30%,
-        rgba(3, 3, 8, 0.2) 55%,
-        rgba(3, 3, 8, 0.45) 75%,
-        rgba(3, 3, 8, 0.65) 90%,
-        rgba(3, 3, 8, 0.75) 100%
-      );
-  }
-
-  .heroInner {
-    padding: 16px 20px 0;
-    min-height: 55vh;
-  }
-
-  /* Hide hero overlay text + back button on mobile — they're in the sticky header */
-  .heroContent { display: none; }
-  .backBtn { display: none; }
-
-  /* Scrollable content slides up over the sticky hero */
-  .scrollContent {
-    position: relative;
-    z-index: 2;
-  }
-
-  /* Sticky object header — scrolls with content then sticks to top */
-  .stickyHeader {
-    display: block;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-  }
-
-  /* Soft rounded transition from hero image into content */
-  .stickyHeaderInner {
-    position: relative;
-    text-align: center;
-    padding: 24px 16px 16px;
-    background: rgba(3, 3, 8, 0.55);
-    -webkit-backdrop-filter: blur(40px) saturate(1.6);
-    backdrop-filter: blur(40px) saturate(1.6);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 16px 16px 0 0;
-  }
-
-  /* When stuck to top, remove the rounded corners */
-  .stickyHeader.stuck .stickyHeaderInner {
-    border-radius: 0;
-  }
-
-  .stickyBackBtn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    top: 20px;
-    left: 12px;
-    width: 36px;
-    height: 36px;
-    font-size: 18px;
-    color: rgba(255, 255, 255, 0.7);
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-full);
-    transition: all var(--duration-fast);
-  }
-
-  .stickyBackBtn:hover {
-    color: var(--text-primary);
-    background: rgba(255, 255, 255, 0.1);
-  }
-
-  .stickyHeader .heroType {
-    margin-bottom: 8px;
-  }
-
-  .stickyHeader .heroAliases {
-    margin-bottom: 12px;
-  }
+  .hero { margin: 0; }
+  .heroInner { padding: 16px 20px 0; }
+  .scrollContent { margin: 0; }
+  .stickyHeaderInner { padding: 24px 16px 16px; }
+  .stickyBackBtn { left: 12px; }
 
   .stickyHeader .heroStatus {
-    justify-content: center;
     flex-wrap: wrap;
   }
 
-  /* Edge-to-edge cards — remove card chrome, use dividers instead */
   .dataGrid {
     grid-template-columns: 1fr;
     gap: 0;
     padding: 0 16px;
-    background: var(--bg-void);
   }
 
   .dataCard {
@@ -447,18 +384,9 @@
     padding: 20px 0;
   }
 
-  .dataCard:last-child {
-    border-bottom: none;
-  }
+  .dataCard:last-child { border-bottom: none; }
 
-  .nearbyGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  .nearbyGrid { grid-template-columns: repeat(2, 1fr); }
 
-  .section {
-    padding: 0 16px 24px;
-    background: var(--bg-void);
-  }
-
-  .sectionTitle { padding: 0; }
+  .section { padding: 0 16px 24px; }
 }
