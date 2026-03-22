@@ -3,7 +3,7 @@
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 24px;
   padding-bottom: 60px;
   animation: fadeUp 0.5s var(--ease-out) both;
 }
@@ -148,7 +148,31 @@
 }
 
 @media (max-width: 768px) {
-  .orreryCard { aspect-ratio: 1; }
-  .planetGrid { grid-template-columns: 1fr; }
-  .page { padding: 0 12px 80px; }
+  .page { padding: 0 0 80px; }
+
+  .header { padding: 16px 16px 0; }
+
+  /* Orrery — strip card chrome */
+  .orreryCard {
+    aspect-ratio: 1;
+    background: none;
+    border: none;
+    border-radius: 0;
+    padding: 0 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* Planet cards — strip chrome, use dividers (already 1fr) */
+  .planetGrid { grid-template-columns: 1fr; gap: 0; padding: 0 16px; }
+
+  .planetCard {
+    background: none;
+    border: none;
+    border-radius: 0;
+    border-bottom: 1px solid var(--border);
+    padding: 20px 0;
+  }
+
+  .planetCard:last-child { border-bottom: none; }
+  .planetCard:hover { transform: none; box-shadow: none; }
 }
