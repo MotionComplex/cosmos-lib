@@ -222,6 +222,20 @@ export function ObjectDetail() {
   const imgLoaded = imgState.loaded;
   const imgRef = useRef<HTMLImageElement>(null);
 
+  // Detect when sticky header is stuck to the top
+  const stickyRef = useRef<HTMLDivElement>(null);
+  const [isStuck, setIsStuck] = useState(false);
+  useEffect(() => {
+    const el = stickyRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsStuck(entry.intersectionRatio < 1),
+      { threshold: [1], rootMargin: '-1px 0px 0px 0px' }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   // Unified image pipeline — Data.getImage runs the cascade:
   // static registry (instant) → NASA API → ESA API, with caching.
   const [heroImageState, setHeroImageState] = useState<{
@@ -315,7 +329,7 @@ export function ObjectDetail() {
       {/* Scrollable content — on mobile this overlaps the fixed hero */}
       <div className={styles.scrollContent}>
         {/* Sticky object header — visible only on mobile, sticks to top on scroll */}
-        <div className={styles.stickyHeader}>
+        <div ref={stickyRef} className={`${styles.stickyHeader}${isStuck ? ` ${styles.stuck}` : ''}`}>
           <div className={styles.stickyHeaderInner}>
             <button className={styles.stickyBackBtn} onClick={() => navigate(-1)}>
               ←

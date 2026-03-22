@@ -350,10 +350,11 @@
       linear-gradient(
         to bottom,
         rgba(3, 3, 8, 0) 0%,
-        rgba(3, 3, 8, 0.15) 40%,
-        rgba(3, 3, 8, 0.6) 70%,
-        rgba(3, 3, 8, 0.95) 90%,
-        var(--bg-void) 100%
+        rgba(3, 3, 8, 0.1) 35%,
+        rgba(3, 3, 8, 0.35) 55%,
+        rgba(3, 3, 8, 0.65) 75%,
+        rgba(3, 3, 8, 0.85) 90%,
+        rgba(3, 3, 8, 0.95) 100%
       );
   }
 
@@ -369,7 +370,6 @@
   /* Scrollable content slides up over the fixed hero — full width */
   .scrollContent {
     margin-top: 55vh;
-    background: var(--bg-void);
     position: relative;
     z-index: 2;
   }
@@ -382,26 +382,21 @@
     z-index: 10;
   }
 
-  /* Gradient fade from transparent → semi-opaque so the image peeks through when stuck */
-  .stickyHeader::before {
-    content: '';
-    position: absolute;
-    top: -40px;
-    left: 0;
-    right: 0;
-    height: 40px;
-    background: linear-gradient(to bottom, transparent, rgba(3, 3, 8, 0.7));
-    pointer-events: none;
-  }
-
+  /* Soft rounded transition from hero image into content */
   .stickyHeaderInner {
     position: relative;
     text-align: center;
-    padding: 20px 16px 16px;
-    background: rgba(3, 3, 8, 0.7);
-    -webkit-backdrop-filter: blur(20px) saturate(1.4);
-    backdrop-filter: blur(20px) saturate(1.4);
+    padding: 24px 16px 16px;
+    background: rgba(3, 3, 8, 0.72);
+    -webkit-backdrop-filter: blur(24px) saturate(1.4);
+    backdrop-filter: blur(24px) saturate(1.4);
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 16px 16px 0 0;
+  }
+
+  /* When stuck to top, remove the rounded corners */
+  .stickyHeader.stuck .stickyHeaderInner {
+    border-radius: 0;
   }
 
   .stickyBackBtn {
@@ -444,6 +439,7 @@
     grid-template-columns: 1fr;
     gap: 0;
     padding: 0 16px;
+    background: var(--bg-void);
   }
 
   .dataCard {
