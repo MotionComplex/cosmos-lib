@@ -207,9 +207,27 @@
 }
 
 @media (max-width: 768px) {
-  .page { padding: 0 12px 80px; }
+  .page { padding: 0 0 80px; }
+
+  .header { padding: 16px 16px 0; }
+
+  .toolbar { padding: 0 16px; }
+
   .filters { flex-direction: column; align-items: flex-start; }
-  .grid { grid-template-columns: 1fr; }
-  .card { padding: 14px 16px; }
-  .header { padding: 16px 0 0; }
+
+  /* Cards — strip chrome, use dividers (already 1fr) */
+  .grid { grid-template-columns: 1fr; gap: 0; padding: 0 16px; }
+
+  .card {
+    background: none;
+    border: none;
+    border-radius: 0;
+    border-bottom: 1px solid var(--border);
+    padding: 16px 0;
+  }
+
+  .card:last-child { border-bottom: none; }
+  .card:hover { transform: none; box-shadow: none; }
+
+  .moreHint { padding: 20px 16px; }
 }

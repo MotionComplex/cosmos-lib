@@ -213,6 +213,42 @@
 }
 
 @media (max-width: 768px) {
-  .page { padding: 0 12px 80px; }
+  .page { padding: 0 0 80px; }
+
+  .header { padding: 16px 16px 0; }
+
+  /* Phase hero — strip card chrome, edge-to-edge */
+  .phaseHero {
+    background: none;
+    border: none;
+    border-radius: 0;
+    padding: 24px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
   .phaseNumbers { flex-direction: column; gap: 16px; }
+
+  /* Data grid — edge-to-edge divider layout */
+  .dataGrid {
+    gap: 0;
+    padding: 0 16px;
+  }
+
+  .dataCard {
+    background: none;
+    border: none;
+    border-radius: 0;
+    border-bottom: 1px solid var(--border);
+    padding: 20px 0;
+  }
+
+  .dataCard:last-child { border-bottom: none; }
+
+  /* Calendar — strip card chrome */
+  .calendarSection {
+    background: none;
+    border: none;
+    border-radius: 0;
+    padding: 0 16px 24px;
+  }
 }

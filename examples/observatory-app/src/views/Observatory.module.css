@@ -382,16 +382,41 @@
 }
 
 @media (max-width: 768px) {
-  .page { padding: 0 12px 80px; }
-  .hero { flex-direction: column; align-items: flex-start; gap: 16px; }
+  .page { padding: 0 0 80px; }
+
+  .hero { flex-direction: column; align-items: flex-start; gap: 16px; padding: 16px 16px 0; }
   .heroRight { width: 100%; }
   .moonHero { width: 100%; justify-content: center; }
-  .timeRow { grid-template-columns: repeat(2, 1fr); }
+
+  /* Time cards — keep grid, add section padding */
+  .timeRow { grid-template-columns: repeat(2, 1fr); padding: 0 16px; }
+
+  /* Body cards — strip chrome (already single-column from 900px) */
+  .dualGrid { gap: 0; padding: 0 16px; }
+  .bodyCard {
+    background: none;
+    border: none;
+    border-radius: 0;
+    border-bottom: 1px solid var(--border);
+    padding: 20px 0;
+  }
   .bodyStats { grid-template-columns: 1fr 1fr; }
-  .bodyCard { padding: 20px 16px; }
+
+  /* Sections get 16px padding */
+  .section { padding: 0 16px; }
+
   .objectGrid { grid-template-columns: repeat(2, 1fr); }
   .objectCard { padding: 14px; }
-  .showerCard { padding: 14px 16px; }
+
+  /* Shower cards — strip chrome, use dividers */
+  .showerCard {
+    background: none;
+    border: none;
+    border-radius: 0;
+    border-bottom: 1px solid var(--border);
+    padding: 14px 0;
+  }
+
   .eclipseCard { padding: 16px 18px; }
 }
 
