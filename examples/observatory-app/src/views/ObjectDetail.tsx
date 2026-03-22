@@ -317,6 +317,9 @@ export function ObjectDetail() {
         {/* Sticky object header — visible only on mobile, sticks to top on scroll */}
         <div className={styles.stickyHeader}>
           <div className={styles.stickyHeaderInner}>
+            <button className={styles.stickyBackBtn} onClick={() => navigate(-1)}>
+              ←
+            </button>
             <span className={styles.heroType}>{obj.type}</span>
             <h2 className={styles.stickyName}>{obj.name}</h2>
             {obj.aliases && obj.aliases.length > 0 && (

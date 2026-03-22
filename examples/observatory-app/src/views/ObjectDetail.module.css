@@ -86,6 +86,10 @@
   display: none;
 }
 
+.stickyBackBtn {
+  display: none;
+}
+
 .stickyName {
   font-family: var(--font-display);
   font-size: 28px;
@@ -358,19 +362,16 @@
     min-height: 55vh;
   }
 
-  /* Hide hero overlay text on mobile — it's in the sticky header instead */
+  /* Hide hero overlay text + back button on mobile — they're in the sticky header */
   .heroContent { display: none; }
-  .backBtn { margin-bottom: auto; }
+  .backBtn { display: none; }
 
   /* Scrollable content slides up over the fixed hero */
   .scrollContent {
-    margin-top: 50vh;
+    margin-top: 55vh;
     background: var(--bg-void);
-    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-    padding: 0 16px;
     position: relative;
     z-index: 2;
-    box-shadow: 0 -20px 60px rgba(3, 3, 8, 0.8);
   }
 
   /* Sticky object header — scrolls with content then sticks to top */
@@ -379,15 +380,36 @@
     position: sticky;
     top: 0;
     z-index: 10;
-    margin: 0 -16px;
-    padding: 0 16px;
   }
 
   .stickyHeaderInner {
+    position: relative;
     text-align: center;
-    padding: 20px 0 16px;
+    padding: 20px 16px 16px;
     background: var(--bg-void);
     border-bottom: 1px solid var(--border);
+  }
+
+  .stickyBackBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 20px;
+    left: 12px;
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-full);
+    transition: all var(--duration-fast);
+  }
+
+  .stickyBackBtn:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.1);
   }
 
   .stickyHeader .heroType {
@@ -403,15 +425,32 @@
     flex-wrap: wrap;
   }
 
-  .dataGrid { grid-template-columns: 1fr; }
+  /* Edge-to-edge cards — remove card chrome, use dividers instead */
+  .dataGrid {
+    grid-template-columns: 1fr;
+    gap: 0;
+    padding: 0 16px;
+  }
 
-  .dataCard { padding: 20px 16px; }
+  .dataCard {
+    background: none;
+    border: none;
+    border-radius: 0;
+    border-bottom: 1px solid var(--border);
+    padding: 20px 0;
+  }
+
+  .dataCard:last-child {
+    border-bottom: none;
+  }
 
   .nearbyGrid {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .section { padding: 0; }
+  .section {
+    padding: 0 16px;
+  }
 
-  .sectionTitle { padding: 0 4px; }
+  .sectionTitle { padding: 0; }
 }
