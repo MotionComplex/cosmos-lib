@@ -213,6 +213,6 @@
 }
 
 @media (max-width: 768px) {
-  .page { padding: 0 4px 80px; }
+  .page { padding: 0 12px 80px; }
   .phaseNumbers { flex-direction: column; gap: 16px; }
 }

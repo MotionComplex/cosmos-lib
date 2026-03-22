@@ -150,5 +150,5 @@
 @media (max-width: 768px) {
   .orreryCard { aspect-ratio: 1; }
   .planetGrid { grid-template-columns: 1fr; }
-  .page { padding: 0 4px 80px; }
+  .page { padding: 0 12px 80px; }
 }

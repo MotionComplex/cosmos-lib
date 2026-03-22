@@ -222,6 +222,20 @@ export function ObjectDetail() {
   const imgLoaded = imgState.loaded;
   const imgRef = useRef<HTMLImageElement>(null);
 
+  // Detect when sticky header is stuck to the top
+  const stickyRef = useRef<HTMLDivElement>(null);
+  const [isStuck, setIsStuck] = useState(false);
+  useEffect(() => {
+    const el = stickyRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsStuck(entry.intersectionRatio < 1),
+      { threshold: [1], rootMargin: '-1px 0px 0px 0px' }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   // Unified image pipeline — Data.getImage runs the cascade:
   // static registry (instant) → NASA API → ESA API, with caching.
   const [heroImageState, setHeroImageState] = useState<{
@@ -312,7 +326,32 @@ export function ObjectDetail() {
         </div>
       </div>
 
-      {/* Data sections */}
+      {/* Scrollable content — on mobile this overlaps the fixed hero */}
+      <div className={styles.scrollContent}>
+        {/* Sticky object header — visible only on mobile, sticks to top on scroll */}
+        <div ref={stickyRef} className={`${styles.stickyHeader}${isStuck ? ` ${styles.stuck}` : ''}`}>
+          <div className={styles.stickyHeaderInner}>
+            <button className={styles.stickyBackBtn} onClick={() => navigate(-1)}>
+              ←
+            </button>
+            <span className={styles.heroType}>{obj.type}</span>
+            <h2 className={styles.stickyName}>{obj.name}</h2>
+            {obj.aliases && obj.aliases.length > 0 && (
+              <p className={styles.heroAliases}>{obj.aliases.join(" · ")}</p>
+            )}
+            {hz && (
+              <div className={styles.heroStatus}>
+                <span className={hz.alt > 0 ? styles.above : styles.below}>
+                  {hz.alt > 0 ? "Above Horizon" : "Below Horizon"}
+                </span>
+                <span className={styles.heroCoord}>
+                  Alt {hz.alt.toFixed(2)}° · Az {hz.az.toFixed(2)}°
+                </span>
+              </div>
+            )}
+          </div>
+        </div>
+
       <div className={styles.dataGrid}>
         {/* Coordinates */}
         {ra != null && dec != null && (
@@ -530,6 +569,7 @@ export function ObjectDetail() {
         </div>
       )}
       <DocsReference entries={DOCS_ENTRIES} guides={DOCS_GUIDES} />
+      </div>{/* end scrollContent */}
     </div>
   );
 }

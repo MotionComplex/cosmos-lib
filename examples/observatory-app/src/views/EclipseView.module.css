@@ -175,6 +175,6 @@
 }
 
 @media (max-width: 768px) {
-  .page { padding: 0 4px 80px; }
+  .page { padding: 0 12px 80px; }
   .eclipseStats { grid-template-columns: repeat(2, 1fr); }
 }

@@ -6,6 +6,17 @@
   overflow: hidden;
 }
 
+@media (max-width: 768px) {
+  .wrapper {
+    margin-top: 0;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+    background: var(--bg-card-solid);
+  }
+}
+
 /* Toggle bar */
 .toggle {
   display: flex;
