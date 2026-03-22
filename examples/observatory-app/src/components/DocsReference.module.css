@@ -13,6 +13,7 @@
     border-left: none;
     border-right: none;
     border-bottom: none;
+    background: var(--bg-card-solid);
   }
 }
 
