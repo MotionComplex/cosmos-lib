@@ -366,7 +366,7 @@
   .heroContent { display: none; }
   .backBtn { display: none; }
 
-  /* Scrollable content slides up over the fixed hero */
+  /* Scrollable content slides up over the fixed hero — full width */
   .scrollContent {
     margin-top: 55vh;
     background: var(--bg-void);
@@ -380,6 +380,18 @@
     position: sticky;
     top: 0;
     z-index: 10;
+  }
+
+  /* Gradient fade from transparent → bg-void so the image peeks through when stuck */
+  .stickyHeader::before {
+    content: '';
+    position: absolute;
+    top: -40px;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background: linear-gradient(to bottom, transparent, var(--bg-void));
+    pointer-events: none;
   }
 
   .stickyHeaderInner {

@@ -185,6 +185,6 @@ img { display: block; max-width: 100%; }
   }
 
   main {
-    padding-bottom: 72px !important;
+    padding: 0 0 72px 0 !important;
   }
 }
