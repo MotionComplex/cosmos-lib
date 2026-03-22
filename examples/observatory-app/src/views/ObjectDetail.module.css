@@ -457,6 +457,7 @@
 
   .section {
     padding: 0 16px;
+    background: var(--bg-void);
   }
 
   .sectionTitle { padding: 0; }
