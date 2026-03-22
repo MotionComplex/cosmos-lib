@@ -382,11 +382,17 @@
 }
 
 @media (max-width: 768px) {
-  .page { padding: 0 4px 80px; }
-  .hero { flex-direction: column; align-items: flex-start; gap: 20px; }
+  .page { padding: 0 12px 80px; }
+  .hero { flex-direction: column; align-items: flex-start; gap: 16px; }
   .heroRight { width: 100%; }
   .moonHero { width: 100%; justify-content: center; }
-  .bodyStats { grid-template-columns: 1fr; }
+  .timeRow { grid-template-columns: repeat(2, 1fr); }
+  .bodyStats { grid-template-columns: 1fr 1fr; }
+  .bodyCard { padding: 20px 16px; }
+  .objectGrid { grid-template-columns: repeat(2, 1fr); }
+  .objectCard { padding: 14px; }
+  .showerCard { padding: 14px 16px; }
+  .eclipseCard { padding: 16px 18px; }
 }
 
 @keyframes fadeUp {

@@ -312,7 +312,8 @@ export function ObjectDetail() {
         </div>
       </div>
 
-      {/* Data sections */}
+      {/* Scrollable content — on mobile this overlaps the fixed hero */}
+      <div className={styles.scrollContent}>
       <div className={styles.dataGrid}>
         {/* Coordinates */}
         {ra != null && dec != null && (
@@ -530,6 +531,7 @@ export function ObjectDetail() {
         </div>
       )}
       <DocsReference entries={DOCS_ENTRIES} guides={DOCS_GUIDES} />
+      </div>{/* end scrollContent */}
     </div>
   );
 }

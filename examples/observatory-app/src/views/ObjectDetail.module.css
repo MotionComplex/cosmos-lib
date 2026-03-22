@@ -75,6 +75,12 @@
   padding: 32px 40px 0;
 }
 
+/* Scrollable content that overlaps the fixed hero on mobile */
+.scrollContent {
+  position: relative;
+  z-index: 2;
+}
+
 .backBtn {
   display: inline-flex;
   align-items: center;
@@ -294,12 +300,73 @@
 }
 
 @media (max-width: 768px) {
-  .page { padding: 0 4px 80px; }
-  .hero { margin: -24px -16px 0; }
-  .heroWithImage { min-height: 360px; }
-  .heroInner { padding: 20px 16px 0; }
+  .page { padding: 0 0 80px; }
+
+  /* Fixed hero image that stays behind scrolling content */
+  .hero {
+    margin: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 0;
+  }
+
+  .heroWithImage {
+    min-height: 55vh;
+    height: 55vh;
+  }
+
+  .heroBg {
+    position: absolute;
+    inset: 0;
+  }
+
+  .heroBgImg {
+    object-position: center center;
+  }
+
+  .heroBgGradient {
+    background:
+      linear-gradient(
+        to bottom,
+        rgba(3, 3, 8, 0) 0%,
+        rgba(3, 3, 8, 0.15) 40%,
+        rgba(3, 3, 8, 0.6) 70%,
+        rgba(3, 3, 8, 0.95) 90%,
+        var(--bg-void) 100%
+      );
+  }
+
+  .heroInner {
+    padding: 16px 20px 0;
+    min-height: 55vh;
+  }
+
   .heroContent { text-align: center; }
   .heroStatus { justify-content: center; flex-wrap: wrap; }
   .backBtn { margin-bottom: auto; }
+
+  /* Scrollable content slides up over the fixed hero */
+  .scrollContent {
+    margin-top: 50vh;
+    background: var(--bg-void);
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    padding: 24px 16px 0;
+    position: relative;
+    z-index: 2;
+    box-shadow: 0 -20px 60px rgba(3, 3, 8, 0.8);
+  }
+
   .dataGrid { grid-template-columns: 1fr; }
+
+  .dataCard { padding: 20px 16px; }
+
+  .nearbyGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .section { padding: 0; }
+
+  .sectionTitle { padding: 0 4px; }
 }
