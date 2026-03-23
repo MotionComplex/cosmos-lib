@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Data, Units, CONSTANTS } from '@motioncomplex/cosmos-lib'
+import { Data, Units } from '@motioncomplex/cosmos-lib'
 import type { GalacticCoord, EquatorialCoord } from '@motioncomplex/cosmos-lib'
 import { challenges } from '../data/challenges'
 import { ChallengeDetail } from '../components/ChallengeDetail'
@@ -199,7 +199,7 @@ export function CosmicRays() {
         <canvas ref={canvasRef} style={{ width: '100%', height: 400 }} />
       </div>
       <p className={styles.coordCaption}>
-        Projection: Galactic Aitoff — l ∈ [0°, 360°], b ∈ [-90°, +90°] | Orange = UHECRs, gray = catalog objects
+        Equirectangular projection — l ∈ [0°, 360°], b ∈ [-90°, +90°] | Orange = UHECRs, gray = catalog objects
       </p>
 
       {/* Detection Events */}
@@ -258,12 +258,12 @@ export function CosmicRays() {
             </div>
           </div>
           <div className={styles.callout}>
-            The key challenge: magnetic field deflection between the source and
-            Earth can shift the apparent arrival direction by 10-30°. An event
-            near the galactic plane (|b| &lt; 15°) passes through stronger fields,
-            making source identification harder. The light travel distance at this
-            energy corresponds to ~{CONSTANTS.C_KM_S.toFixed(0)} km/s
-            propagation, subject to GZK cutoff losses over &gt;100 Mpc.
+            The key challenge: galactic and extragalactic magnetic fields deflect
+            charged particles by 10–30° between source and Earth. Events near
+            the galactic plane (|b| &lt; 15°) traverse stronger fields, making source
+            identification harder. At these extreme energies, the GZK effect
+            limits the horizon to ~100 Mpc — protons above ~50 EeV lose energy
+            via interactions with the cosmic microwave background.
           </div>
         </>
       )}

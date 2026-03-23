@@ -42,11 +42,11 @@ export const challenges: Challenge[] = [
     route: '/cosmic-rays',
     datasources: [
       { name: 'Pierre Auger Observatory', description: 'Largest UHECR detector — public event data', url: 'https://opendata.auger.org' },
-      { name: 'Telescope Array', description: 'Northern-hemisphere UHECR detector data', url: 'https://www.telescopearray.org/' },
+      { name: 'CRDB', description: 'Community cosmic-ray database — aggregated spectra from Auger, TA, and more', url: 'https://lpsc.in2p3.fr/crdb/' },
       { name: 'CRPropa 3', description: 'Cosmic ray propagation framework', url: 'https://crpropa.desy.de/' },
     ],
     gettingStarted: [
-      { step: 1, title: 'Understand galactic coordinates', description: 'Use AstroMath.equatorialToGalactic() to convert sky positions between reference frames.' },
+      { step: 1, title: 'Understand galactic coordinates', description: 'Convert sky positions between equatorial (RA/Dec) and galactic (l/b) reference frames.' },
       { step: 2, title: 'Map UHECR arrival directions', description: 'Plot simulated detections on a galactic coordinate grid to see clustering patterns.' },
       { step: 3, title: 'Model magnetic deflection', description: 'Estimate how galactic magnetic fields bend particle trajectories by 10-30 degrees.' },
       { step: 4, title: 'Correlate with source candidates', description: 'Cross-match deflection-corrected directions with known AGN and gamma-ray burst catalogs.' },
@@ -67,7 +67,7 @@ export const challenges: Challenge[] = [
     route: '/compression',
     datasources: [
       { name: 'Multimodal Universe', description: 'The primary 100 TB dataset for astronomical AI benchmarking', url: 'https://github.com/MultimodalUniverse/MultimodalUniverse' },
-      { name: 'AstroCompress', description: 'Benchmark for astronomical data compression', url: 'https://github.com/AstroCompress' },
+      { name: 'AstroCompress', description: 'Neural compression benchmark for astronomical imaging data', url: 'https://huggingface.co/AstroCompress' },
       { name: 'MAST Archive', description: 'Mikulski Archive — Hubble, JWST, TESS data', url: 'https://archive.stsci.edu/' },
     ],
     gettingStarted: [
