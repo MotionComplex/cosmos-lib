@@ -1,12 +1,5 @@
 import { useMemo } from 'react'
-import {
-  Data,
-  BRIGHT_STARS,
-  MESSIER_CATALOG,
-  CONSTELLATIONS,
-  METEOR_SHOWERS,
-  SOLAR_SYSTEM,
-} from '@motioncomplex/cosmos-lib'
+import { Data } from '@motioncomplex/cosmos-lib'
 import { challenges } from '../data/challenges'
 import { ChallengeDetail } from '../components/ChallengeDetail'
 import styles from './DataCompression.module.css'
@@ -23,64 +16,63 @@ const telescopeData = [
 
 const maxTB = Math.max(...telescopeData.map((t) => t.tbPerNight))
 
-function estimateSize(obj: unknown): number {
-  return new TextEncoder().encode(JSON.stringify(obj)).length
-}
+const compressionApproaches = [
+  {
+    name: 'Rice / HCompress',
+    type: 'Lossless',
+    ratio: '2–3×',
+    status: 'Standard in FITS',
+    desc: 'Integer-optimized coding used in FITS tile compression. Fast, predictable, universally supported.',
+  },
+  {
+    name: 'fpack (CFITSIO)',
+    type: 'Lossy option',
+    ratio: '6–10×',
+    status: 'Widely used',
+    desc: 'Quantization + Rice. Configurable loss via q-parameter. Default for many survey pipelines.',
+  },
+  {
+    name: 'SZIP / LZ4',
+    type: 'Lossless',
+    ratio: '1.5–2.5×',
+    status: 'Used in HDF5',
+    desc: 'General-purpose fast codecs. LZ4 is favored for real-time pipelines due to decompression speed.',
+  },
+  {
+    name: 'Neural compression',
+    type: 'Lossy (learned)',
+    ratio: '10–100×',
+    status: 'Research',
+    desc: 'Autoencoders trained on astronomical images. Promising ratios but validation of science-readiness is ongoing.',
+  },
+]
 
-/** Scale comparison: how cosmos-lib catalogs compare to real observatory data */
-const scaleComparisons = [
-  { label: 'cosmos-lib catalogs', bytes: 0, unit: '', isPlaceholder: true },
-  { label: 'Single Hubble FITS image', bytes: 170 * 1024 * 1024, unit: '~170 MB', isPlaceholder: false },
-  { label: 'Single JWST NIRCam mosaic', bytes: 1.2 * 1024 * 1024 * 1024, unit: '~1.2 GB', isPlaceholder: false },
-  { label: 'Rubin single-night output', bytes: 20 * 1024 * 1024 * 1024 * 1024, unit: '20 TB', isPlaceholder: false },
-  { label: 'SKA single-night output', bytes: 157 * 1024 * 1024 * 1024 * 1024, unit: '157 TB', isPlaceholder: false },
+const scaleNumbers = [
+  { label: 'Single CCD readout', size: '~33 MB', detail: '4096×4096 px × 16-bit', color: '#a78bfa' },
+  { label: 'Single Hubble FITS', size: '~170 MB', detail: 'Multi-extension, calibrated', color: '#fbbf24' },
+  { label: 'JWST NIRCam mosaic', size: '~1.2 GB', detail: 'Multiple detectors, dithered', color: '#22d3ee' },
+  { label: 'Rubin per night', size: '20 TB', detail: '~800 exposures × 3.2 Gpx', color: '#34d399' },
+  { label: 'Rubin 10-year survey', size: '~60 PB', detail: 'Full LSST dataset', color: '#34d399' },
+  { label: 'SKA per night', size: '157 TB', detail: 'Visibility data, pre-imaging', color: '#22d3ee' },
 ]
 
 export function DataCompression() {
-  const catalogStats = useMemo(() => {
-    const allObjects = Data.all()
-    const totalSize =
-      estimateSize(BRIGHT_STARS) +
-      estimateSize(MESSIER_CATALOG) +
-      estimateSize(CONSTELLATIONS) +
-      estimateSize(METEOR_SHOWERS) +
-      estimateSize(SOLAR_SYSTEM)
-
-    return {
-      totalObjects: allObjects.length,
-      stars: BRIGHT_STARS.length,
-      messier: MESSIER_CATALOG.length,
-      constellations: CONSTELLATIONS.length,
-      showers: METEOR_SHOWERS.length,
-      planets: SOLAR_SYSTEM.length,
-      totalSizeKB: (totalSize / 1024).toFixed(1),
-      totalSizeBytes: totalSize,
-      fieldsPerObject: Object.keys(allObjects[0] || {}).length,
-    }
-  }, [])
-
   const searchDemo = useMemo(() => {
     const start = performance.now()
     const results = Data.search('nebula')
     const elapsed = performance.now() - start
-    return { results: results.slice(0, 8), count: results.length, ms: elapsed.toFixed(2) }
+    return { results: results.slice(0, 6), count: results.length, ms: elapsed.toFixed(2) }
   }, [])
-
-  // Fill in the placeholder with actual catalog size
-  const comparisons = scaleComparisons.map((c) =>
-    c.isPlaceholder
-      ? { ...c, bytes: catalogStats.totalSizeBytes, unit: `${catalogStats.totalSizeKB} KB` }
-      : c,
-  )
 
   return (
     <ChallengeDetail challenge={challenge}>
       {/* Data Generation Rates */}
       <div className={styles.sectionTitle}>Data Generation Rates — TB per Night</div>
       <p className={styles.desc}>
-        The Vera C. Rubin Observatory will produce ~20 TB nightly. The Square
-        Kilometre Array will dwarf everything at ~157 TB/night. Even a 1% improvement
-        in lossless compression would save petabytes per year.
+        Next-generation observatories will produce data faster than it can be stored
+        or transmitted. The Vera C. Rubin Observatory alone will generate ~20 TB per
+        night — and its 10-year survey will total ~60 PB. Efficient compression
+        isn't optional; it's an existential requirement.
       </p>
       <div className={styles.barChart}>
         {telescopeData.map((t) => (
@@ -102,106 +94,90 @@ export function DataCompression() {
         ))}
       </div>
 
-      {/* Scale comparison */}
-      <div className={styles.sectionTitle}>Scale Comparison — Catalog vs. Real Data</div>
+      {/* Scale of the data */}
+      <div className={styles.sectionTitle}>Scale of Astronomical Data</div>
       <p className={styles.desc}>
-        The cosmos-lib catalogs are structured metadata — coordinates, magnitudes,
-        and names for ~{catalogStats.totalObjects} objects. Real observatory data
-        is raw pixel arrays: a single Hubble FITS image is ~170 MB, and a single
-        night of Rubin data is 240 million× larger than the entire cosmos-lib catalog.
+        Astronomical data is stored in FITS (Flexible Image Transport System), the
+        standard format since 1981. A single CCD frame is 16-bit pixel data —
+        small individually, but multiplied across thousands of exposures per night.
       </p>
-      <div className={styles.scaleChart}>
-        {comparisons.map((c, i) => {
-          // Use log scale for the bar widths
-          const logMax = Math.log10(comparisons[comparisons.length - 1].bytes)
-          const logVal = c.bytes > 0 ? Math.log10(c.bytes) : 0
-          const pct = (logVal / logMax) * 100
-          return (
-            <div className={styles.scaleRow} key={i}>
-              <div className={styles.scaleLabel}>{c.label}</div>
-              <div className={styles.scaleTrack}>
-                <div
-                  className={styles.scaleFill}
-                  style={{
-                    width: `${Math.max(pct, 2)}%`,
-                    background: i === 0 ? 'var(--accent)' : `rgba(255,255,255,${0.08 + i * 0.05})`,
-                  }}
-                />
-                <span className={styles.scaleValue}>{c.unit}</span>
-              </div>
+      <div className={styles.scaleGrid}>
+        {scaleNumbers.map((item) => (
+          <div className={styles.scaleCard} key={item.label}>
+            <div className={styles.scaleCardSize} style={{ color: item.color }}>
+              {item.size}
             </div>
-          )
-        })}
+            <div className={styles.scaleCardLabel}>{item.label}</div>
+            <div className={styles.scaleCardDetail}>{item.detail}</div>
+          </div>
+        ))}
       </div>
-      <p className={styles.scaleCaption}>
-        Logarithmic scale. Each step represents orders of magnitude more data.
-      </p>
 
-      {/* Catalog Breakdown */}
-      <div className={styles.sectionTitle}>cosmos-lib Catalog Breakdown</div>
+      {/* Compression approaches */}
+      <div className={styles.sectionTitle}>Compression Approaches</div>
       <p className={styles.desc}>
-        Despite being tiny compared to observatory data, these catalogs demonstrate
-        the same structural challenges: mixed data types, nullable fields, variable
-        precision, and the need for efficient querying.
+        The core tradeoff: lossless compression preserves every bit but only
+        achieves 2–3× ratios. Lossy methods reach 10–100× but must be validated
+        to ensure no science is destroyed — a miscompressed faint galaxy looks
+        the same as noise to a careless algorithm.
       </p>
-      <div className={`${styles.statRow} stagger-grid`}>
-        <div className={styles.statBox}>
-          <div className={styles.statLabel}>Total Objects</div>
-          <div className={styles.statValue}>{catalogStats.totalObjects.toLocaleString()}</div>
-        </div>
-        <div className={styles.statBox}>
-          <div className={styles.statLabel}>Catalog Size</div>
-          <div className={styles.statValue}>{catalogStats.totalSizeKB} KB</div>
-        </div>
-        <div className={styles.statBox}>
-          <div className={styles.statLabel}>Fields / Object</div>
-          <div className={styles.statValue}>{catalogStats.fieldsPerObject}</div>
-        </div>
-      </div>
-
       <div className={styles.tableCard}>
         <table>
           <thead>
             <tr>
-              <th>Catalog</th>
-              <th>Objects</th>
-              <th>Description</th>
+              <th>Method</th>
+              <th>Type</th>
+              <th>Ratio</th>
+              <th>Status</th>
+              <th>Notes</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td style={{ color: 'var(--text-primary)', fontWeight: 600 }}>Bright Stars</td>
-              <td>{catalogStats.stars}</td>
-              <td>Named stars with magnitudes, spectral types, coordinates</td>
-            </tr>
-            <tr>
-              <td style={{ color: 'var(--text-primary)', fontWeight: 600 }}>Messier Catalog</td>
-              <td>{catalogStats.messier}</td>
-              <td>Nebulae, clusters, galaxies (M1–M110)</td>
-            </tr>
-            <tr>
-              <td style={{ color: 'var(--text-primary)', fontWeight: 600 }}>Constellations</td>
-              <td>{catalogStats.constellations}</td>
-              <td>IAU boundaries, asterism lines, star references</td>
-            </tr>
-            <tr>
-              <td style={{ color: 'var(--text-primary)', fontWeight: 600 }}>Meteor Showers</td>
-              <td>{catalogStats.showers}</td>
-              <td>Annual showers with radiant, peak date, ZHR</td>
-            </tr>
-            <tr>
-              <td style={{ color: 'var(--text-primary)', fontWeight: 600 }}>Solar System</td>
-              <td>{catalogStats.planets}</td>
-              <td>Planets + Moon + Sun with orbital elements</td>
-            </tr>
+            {compressionApproaches.map((a) => (
+              <tr key={a.name}>
+                <td style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{a.name}</td>
+                <td>
+                  <span className={`${styles.typeBadge} ${a.type === 'Lossless' ? styles.typeLossless : styles.typeLossy}`}>
+                    {a.type}
+                  </span>
+                </td>
+                <td style={{ fontFamily: 'var(--font-mono)', fontSize: 12 }}>{a.ratio}</td>
+                <td>{a.status}</td>
+                <td className={styles.noteCell}>{a.desc}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
 
-      {/* Search Demo */}
-      <div className={styles.sectionTitle}>Search Performance Demo</div>
+      {/* The cost problem */}
+      <div className={styles.sectionTitle}>Why 1% Matters</div>
+      <div className={`${styles.statRow} stagger-grid`}>
+        <div className={styles.statBox}>
+          <div className={styles.statLabel}>Rubin yearly output</div>
+          <div className={styles.statValue}>~7 PB</div>
+        </div>
+        <div className={styles.statBox}>
+          <div className={styles.statLabel}>1% better compression</div>
+          <div className={styles.statValue}>70 TB saved</div>
+        </div>
+        <div className={styles.statBox}>
+          <div className={styles.statLabel}>Cloud storage cost</div>
+          <div className={styles.statValue}>~$1.4M/yr</div>
+        </div>
+      </div>
+      <p className={styles.desc} style={{ marginTop: 14 }}>
+        At ~$20/TB/month for archival storage, saving 70 TB annually translates to
+        ~$1.4M per year — for a single observatory. Multiply across all major
+        facilities and the savings become enormous. This is why the AstroCompress
+        benchmark exists: to systematically evaluate whether neural codecs can
+        outperform Rice/HCompress without destroying science.
+      </p>
+
+      {/* Search Demo — kept small */}
+      <div className={styles.sectionTitle}>Live Demo — Catalog Search</div>
       <p className={styles.desc}>
-        Searching for <code>"nebula"</code> across the catalog using <code>Data.search()</code>:
+        Searching <code>Data.search("nebula")</code> across the bundled catalog:
       </p>
       <div className={styles.statRow} style={{ gridTemplateColumns: 'repeat(2, 1fr)' }}>
         <div className={styles.statBox}>
@@ -245,12 +221,10 @@ export function DataCompression() {
 
       {/* cosmos-lib callout */}
       <div className={styles.callout}>
-        <strong>cosmos-lib integration:</strong> This page introspects the bundled
-        catalogs (<code>BRIGHT_STARS</code>, <code>MESSIER_CATALOG</code>,{' '}
-        <code>CONSTELLATIONS</code>, etc.) and uses <code>Data.search()</code> to
-        demonstrate structured data querying. The scale comparison above illustrates
-        why neural compression research — like the AstroCompress benchmark — is
-        critical for next-generation observatories.
+        <strong>cosmos-lib integration:</strong> This page uses{' '}
+        <code>Data.search()</code> to demonstrate querying structured
+        astronomical catalogs — the same type of metadata that must be
+        compressed and indexed at scale in real observatory pipelines.
       </div>
     </ChallengeDetail>
   )

@@ -47,57 +47,37 @@
   white-space: nowrap;
 }
 
-.scaleChart {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+.scaleGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
 }
 
-.scaleRow {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+.scaleCard {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
 }
 
-.scaleLabel {
-  width: 160px;
+.scaleCardSize {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  margin-bottom: 4px;
+}
+
+.scaleCardLabel {
   font-size: 12px;
-  color: var(--text-secondary);
-  text-align: right;
-  flex-shrink: 0;
-}
-
-.scaleTrack {
-  flex: 1;
-  height: 24px;
-  background: rgba(255, 255, 255, 0.02);
-  border-radius: var(--radius-xs);
-  position: relative;
-  overflow: hidden;
-}
-
-.scaleFill {
-  height: 100%;
-  border-radius: var(--radius-xs);
-  transition: width 1s var(--ease-out);
-}
-
-.scaleValue {
-  position: absolute;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 11px;
   font-weight: 600;
-  color: var(--text-secondary);
-  font-family: var(--font-mono);
+  color: var(--text-primary);
+  margin-bottom: 2px;
 }
 
-.scaleCaption {
+.scaleCardDetail {
   font-size: 11px;
   color: var(--text-muted);
-  font-style: italic;
-  margin-top: 4px;
 }
 
 .statRow {
@@ -146,6 +126,32 @@
   background: var(--bg-elevated);
 }
 
+.noteCell {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  max-width: 260px;
+}
+
+.typeBadge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.typeLossless {
+  background: rgba(52, 211, 153, 0.1);
+  color: #34d399;
+}
+
+.typeLossy {
+  background: rgba(251, 191, 36, 0.1);
+  color: #fbbf24;
+}
+
 .callout {
   background: var(--compression-dim);
   border: 1px solid rgba(52, 211, 153, 0.15);
@@ -172,13 +178,12 @@
     grid-template-columns: 1fr;
   }
 
-  .barLabel {
-    width: 90px;
-    font-size: 11px;
+  .scaleGrid {
+    grid-template-columns: repeat(2, 1fr);
   }
 
-  .scaleLabel {
-    width: 100px;
+  .barLabel {
+    width: 90px;
     font-size: 11px;
   }
 }
