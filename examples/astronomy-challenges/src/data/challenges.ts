@@ -1,12 +1,29 @@
+export interface Datasource {
+  name: string
+  description: string
+  url: string
+}
+
+export interface LearningStep {
+  step: number
+  title: string
+  description: string
+}
+
 export interface Challenge {
   id: string
   title: string
   shortTitle: string
+  icon: string
   description: string
   goal: string
   color: string
-  badgeClass: string
+  colorDim: string
+  difficulty: 1 | 2 | 3 | 4 | 5
+  tags: string[]
   route: string
+  datasources: Datasource[]
+  gettingStarted: LearningStep[]
 }
 
 export const challenges: Challenge[] = [
@@ -14,34 +31,76 @@ export const challenges: Challenge[] = [
     id: 'cosmic-rays',
     title: 'The Cosmic Ray Origin Problem',
     shortTitle: 'Cosmic Rays',
+    icon: '⚡',
     description:
       'We detect Ultra-High Energy Cosmic Rays hitting Earth, but we don\'t know exactly where they come from or how they reach such extreme speeds.',
     goal: 'Create models that can trace these particles back through galactic magnetic fields to their source.',
-    color: '#f59e0b',
-    badgeClass: 'badge--cosmic',
+    color: 'var(--cosmic-ray)',
+    colorDim: 'var(--cosmic-ray-dim)',
+    difficulty: 4,
+    tags: ['Particle Physics', 'Galactic Fields', 'Coordinate Transforms'],
     route: '/cosmic-rays',
+    datasources: [
+      { name: 'Pierre Auger Observatory', description: 'Largest UHECR detector — public event data', url: 'https://www.auger.org/science/public-data' },
+      { name: 'Telescope Array', description: 'Northern-hemisphere UHECR detector data', url: 'https://www.telescopearray.org/' },
+      { name: 'CRPropa 3', description: 'Cosmic ray propagation framework', url: 'https://crpropa.desy.de/' },
+    ],
+    gettingStarted: [
+      { step: 1, title: 'Understand galactic coordinates', description: 'Use AstroMath.equatorialToGalactic() to convert sky positions between reference frames.' },
+      { step: 2, title: 'Map UHECR arrival directions', description: 'Plot simulated detections on a galactic coordinate grid to see clustering patterns.' },
+      { step: 3, title: 'Model magnetic deflection', description: 'Estimate how galactic magnetic fields bend particle trajectories by 10-30 degrees.' },
+      { step: 4, title: 'Correlate with source candidates', description: 'Cross-match deflection-corrected directions with known AGN and gamma-ray burst catalogs.' },
+    ],
   },
   {
     id: 'compression',
     title: 'The Neural Compression Bottleneck',
     shortTitle: 'Data Compression',
+    icon: '🗜',
     description:
-      'Modern telescopes (like the Vera C. Rubin Observatory) generate so much data that we cannot physically transmit it all without losing detail.',
+      'Modern telescopes generate so much data that we cannot physically transmit it all without losing detail. The Vera C. Rubin Observatory alone produces 20 TB per night.',
     goal: 'Develop AI-driven, lossless compression that preserves scientific integrity (e.g., the AstroCompress challenge).',
-    color: '#10b981',
-    badgeClass: 'badge--compress',
+    color: 'var(--compression)',
+    colorDim: 'var(--compression-dim)',
+    difficulty: 3,
+    tags: ['Machine Learning', 'Data Pipeline', 'Benchmarking'],
     route: '/compression',
+    datasources: [
+      { name: 'Multimodal Universe', description: 'The primary 100 TB dataset for astronomical AI benchmarking', url: 'https://multimodal-universe.github.io/' },
+      { name: 'AstroCompress', description: 'Benchmark for astronomical data compression', url: 'https://github.com/AstroCompress' },
+      { name: 'MAST Archive', description: 'Mikulski Archive — Hubble, JWST, TESS data', url: 'https://archive.stsci.edu/' },
+    ],
+    gettingStarted: [
+      { step: 1, title: 'Inspect catalog structure', description: 'Examine cosmos-lib BRIGHT_STARS, MESSIER_CATALOG, and other datasets to understand field types.' },
+      { step: 2, title: 'Measure baseline sizes', description: 'Calculate JSON-serialized sizes and field counts to establish a compression baseline.' },
+      { step: 3, title: 'Profile data generation rates', description: 'Compare TB/night across observatories to understand the scale of the bottleneck.' },
+      { step: 4, title: 'Benchmark search performance', description: 'Use Data.search() to test how indexing strategies affect query speed at scale.' },
+    ],
   },
   {
     id: 'direct-imaging',
     title: 'The Direct Imaging Challenge',
     shortTitle: 'Direct Imaging',
+    icon: '🔭',
     description:
-      'Finding an Earth-like planet is easy; "seeing" it through the glare of its parent star is nearly impossible.',
+      'Finding an Earth-like planet is easy; "seeing" it through the glare of its parent star is nearly impossible. Contrast ratios exceed 10 billion to 1.',
     goal: 'Improve post-processing algorithms to "scrub" starlight and reveal faint planetary biosignatures.',
-    color: '#8b5cf6',
-    badgeClass: 'badge--imaging',
+    color: 'var(--imaging)',
+    colorDim: 'var(--imaging-dim)',
+    difficulty: 5,
+    tags: ['Optics', 'Signal Processing', 'Exoplanets'],
     route: '/direct-imaging',
+    datasources: [
+      { name: 'NASA Exoplanet Archive', description: 'Confirmed exoplanets with orbital and detection data', url: 'https://exoplanetarchive.ipac.caltech.edu/' },
+      { name: 'Zooniverse', description: 'Citizen science — help classify exoplanet candidates', url: 'https://www.zooniverse.org/projects?discipline=astronomy' },
+      { name: 'Kaggle Astronomy', description: 'Competitions for exoplanet detection and classification', url: 'https://www.kaggle.com/datasets?search=exoplanet' },
+    ],
+    gettingStarted: [
+      { step: 1, title: 'Understand contrast ratios', description: 'Learn how magnitude differences translate to brightness ratios using the astronomical magnitude system.' },
+      { step: 2, title: 'Visualize the problem', description: 'See how coronagraphs block starlight and why residual speckle noise overwhelms planetary signals.' },
+      { step: 3, title: 'Check sky conditions', description: 'Use Sun.position() and Moon.phase() to determine optimal observation windows.' },
+      { step: 4, title: 'Study known detections', description: 'Analyze the handful of directly imaged systems to understand current detection limits.' },
+    ],
   },
 ]
 
