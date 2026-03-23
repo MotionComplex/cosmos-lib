@@ -38,6 +38,7 @@ Both example apps must reference the new version. Update these files:
 
 1. **`examples/observatory-app/package.json`** — update `@motioncomplex/cosmos-lib` dependency to `^<new-version>`
 2. **`examples/react-native-app/package.json`** — update `@motioncomplex/cosmos-lib` dependency to `^<new-version>`
+3. **`examples/astronomy-challenges/package.json`** — update `@motioncomplex/cosmos-lib` dependency to `^<new-version>`
 
 Do NOT run `npm install` in example apps — just update the version specifier in their `package.json`. The lockfiles will update naturally when the apps are next installed.
 
