@@ -1,4 +1,4 @@
-import { useEffect, useRef, useMemo } from 'react'
+import { useEffect, useRef, useMemo, useState } from 'react'
 import { Sun, Moon, Data, Units } from '@motioncomplex/cosmos-lib'
 import { challenges } from '../data/challenges'
 import { ChallengeDetail } from '../components/ChallengeDetail'
@@ -14,7 +14,12 @@ const exoplanetSystems = [
   { name: 'Earth (from 10 pc)', starMag: -26.74 + 5 * Math.log10(10 / (1 / 206265)), planetMag: 30.0, separationArcsec: 0.1, distance: 10.0, method: 'Hypothetical', discovered: 0 },
 ]
 
-function drawContrastDemo(ctx: CanvasRenderingContext2D, w: number, h: number) {
+function drawStarView(
+  ctx: CanvasRenderingContext2D,
+  w: number,
+  h: number,
+  showCoronagraph: boolean,
+) {
   ctx.clearRect(0, 0, w, h)
   ctx.fillStyle = '#040810'
   ctx.fillRect(0, 0, w, h)
@@ -22,9 +27,12 @@ function drawContrastDemo(ctx: CanvasRenderingContext2D, w: number, h: number) {
   const cx = w / 2
   const cy = h / 2
 
-  // Star PSF
-  for (let r = 200; r > 0; r -= 2) {
-    const alpha = Math.pow(r / 200, -2) * 0.01
+  // Star PSF — the overwhelming glare
+  const psfRadius = showCoronagraph ? 200 : 220
+  for (let r = psfRadius; r > 0; r -= 2) {
+    const baseAlpha = Math.pow(r / psfRadius, -2) * 0.01
+    // Without coronagraph, the glare is much brighter
+    const alpha = showCoronagraph ? baseAlpha : baseAlpha * 3
     ctx.fillStyle = `rgba(255, 248, 220, ${Math.min(alpha, 1)})`
     ctx.beginPath()
     ctx.arc(cx, cy, r, 0, Math.PI * 2)
@@ -32,71 +40,96 @@ function drawContrastDemo(ctx: CanvasRenderingContext2D, w: number, h: number) {
   }
 
   // Star core
-  const starGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, 30)
+  const coreSize = showCoronagraph ? 30 : 50
+  const starGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, coreSize)
   starGrad.addColorStop(0, 'rgba(255, 255, 255, 1)')
   starGrad.addColorStop(0.3, 'rgba(255, 250, 230, 0.8)')
   starGrad.addColorStop(1, 'rgba(255, 248, 200, 0)')
   ctx.fillStyle = starGrad
   ctx.beginPath()
-  ctx.arc(cx, cy, 30, 0, Math.PI * 2)
+  ctx.arc(cx, cy, coreSize, 0, Math.PI * 2)
   ctx.fill()
 
   // Diffraction spikes
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)'
-  ctx.lineWidth = 1
+  const spikeAlpha = showCoronagraph ? 0.15 : 0.3
+  ctx.strokeStyle = `rgba(255, 255, 255, ${spikeAlpha})`
+  ctx.lineWidth = showCoronagraph ? 1 : 1.5
+  const spikeLen = showCoronagraph ? 180 : 220
   for (let angle = 0; angle < Math.PI; angle += Math.PI / 4) {
     ctx.beginPath()
     ctx.moveTo(cx + Math.cos(angle) * 20, cy + Math.sin(angle) * 20)
-    ctx.lineTo(cx + Math.cos(angle) * 180, cy + Math.sin(angle) * 180)
+    ctx.lineTo(cx + Math.cos(angle) * spikeLen, cy + Math.sin(angle) * spikeLen)
     ctx.stroke()
     ctx.beginPath()
     ctx.moveTo(cx - Math.cos(angle) * 20, cy - Math.sin(angle) * 20)
-    ctx.lineTo(cx - Math.cos(angle) * 180, cy - Math.sin(angle) * 180)
+    ctx.lineTo(cx - Math.cos(angle) * spikeLen, cy - Math.sin(angle) * spikeLen)
     ctx.stroke()
   }
 
-  // Coronagraph mask
-  ctx.fillStyle = '#040810'
-  ctx.beginPath()
-  ctx.arc(cx, cy, 15, 0, Math.PI * 2)
-  ctx.fill()
-  ctx.strokeStyle = 'rgba(167, 139, 250, 0.5)'
-  ctx.lineWidth = 1
-  ctx.beginPath()
-  ctx.arc(cx, cy, 15, 0, Math.PI * 2)
-  ctx.stroke()
-
-  // Planet
+  // Planet position
   const planetX = cx + 80
   const planetY = cy - 30
-  const planetGrad = ctx.createRadialGradient(planetX, planetY, 0, planetX, planetY, 5)
-  planetGrad.addColorStop(0, 'rgba(167, 139, 250, 0.8)')
-  planetGrad.addColorStop(1, 'rgba(167, 139, 250, 0)')
-  ctx.fillStyle = planetGrad
-  ctx.beginPath()
-  ctx.arc(planetX, planetY, 5, 0, Math.PI * 2)
-  ctx.fill()
-  ctx.fillStyle = 'rgba(167, 139, 250, 0.9)'
-  ctx.beginPath()
-  ctx.arc(planetX, planetY, 2, 0, Math.PI * 2)
-  ctx.fill()
 
-  // Arrow
-  ctx.strokeStyle = 'rgba(167, 139, 250, 0.6)'
-  ctx.lineWidth = 1
-  ctx.setLineDash([4, 4])
-  ctx.beginPath()
-  ctx.moveTo(planetX + 10, planetY - 10)
-  ctx.lineTo(planetX + 40, planetY - 30)
-  ctx.stroke()
-  ctx.setLineDash([])
+  if (showCoronagraph) {
+    // Coronagraph mask blocks the star core
+    ctx.fillStyle = '#040810'
+    ctx.beginPath()
+    ctx.arc(cx, cy, 15, 0, Math.PI * 2)
+    ctx.fill()
+    ctx.strokeStyle = 'rgba(167, 139, 250, 0.5)'
+    ctx.lineWidth = 1
+    ctx.beginPath()
+    ctx.arc(cx, cy, 15, 0, Math.PI * 2)
+    ctx.stroke()
 
-  ctx.fillStyle = 'rgba(167, 139, 250, 0.9)'
-  ctx.font = '11px Inter'
-  ctx.fillText('Planet (10 billion x fainter)', planetX + 44, planetY - 26)
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.6)'
-  ctx.fillText('Star (with coronagraph mask)', cx + 20, cy + 40)
+    // Planet becomes visible with coronagraph
+    const planetGrad = ctx.createRadialGradient(planetX, planetY, 0, planetX, planetY, 8)
+    planetGrad.addColorStop(0, 'rgba(167, 139, 250, 0.9)')
+    planetGrad.addColorStop(0.5, 'rgba(167, 139, 250, 0.4)')
+    planetGrad.addColorStop(1, 'rgba(167, 139, 250, 0)')
+    ctx.fillStyle = planetGrad
+    ctx.beginPath()
+    ctx.arc(planetX, planetY, 8, 0, Math.PI * 2)
+    ctx.fill()
+    ctx.fillStyle = 'rgba(167, 139, 250, 0.95)'
+    ctx.beginPath()
+    ctx.arc(planetX, planetY, 2.5, 0, Math.PI * 2)
+    ctx.fill()
 
+    // Arrow + label
+    ctx.strokeStyle = 'rgba(167, 139, 250, 0.6)'
+    ctx.lineWidth = 1
+    ctx.setLineDash([4, 4])
+    ctx.beginPath()
+    ctx.moveTo(planetX + 12, planetY - 12)
+    ctx.lineTo(planetX + 40, planetY - 30)
+    ctx.stroke()
+    ctx.setLineDash([])
+
+    ctx.fillStyle = 'rgba(167, 139, 250, 0.9)'
+    ctx.font = '11px Inter'
+    ctx.fillText('Planet (10 billion × fainter)', planetX + 44, planetY - 26)
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.5)'
+    ctx.fillText('Coronagraph mask', cx + 20, cy + 40)
+  } else {
+    // Without coronagraph — planet is completely invisible in the glare
+    // Draw a circle where the planet SHOULD be, but it's lost
+    ctx.strokeStyle = 'rgba(167, 139, 250, 0.15)'
+    ctx.lineWidth = 1
+    ctx.setLineDash([3, 3])
+    ctx.beginPath()
+    ctx.arc(planetX, planetY, 10, 0, Math.PI * 2)
+    ctx.stroke()
+    ctx.setLineDash([])
+
+    ctx.fillStyle = 'rgba(167, 139, 250, 0.4)'
+    ctx.font = '11px Inter'
+    ctx.fillText('Planet location (invisible)', planetX + 14, planetY + 4)
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.5)'
+    ctx.fillText('Raw starlight — no coronagraph', cx - 80, cy + 50)
+  }
+
+  // Scale bar
   ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)'
   ctx.lineWidth = 1
   ctx.beginPath()
@@ -110,13 +143,11 @@ function drawContrastDemo(ctx: CanvasRenderingContext2D, w: number, h: number) {
 
 export function DirectImaging() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const [showCoronagraph, setShowCoronagraph] = useState(false)
 
   const now = new Date()
   const sunPos = Sun.position(now)
   const moonPhase = Moon.phase(now)
-
-  // Derive sun altitude from declination as a rough approximation
-  // (actual altitude depends on observer location, but dec gives a sense of sky position)
   const sunDec = sunPos.dec
 
   const brightestStars = useMemo(() => {
@@ -136,24 +167,44 @@ export function DirectImaging() {
     canvas.width = rect.width * dpr
     canvas.height = rect.height * dpr
     ctx.scale(dpr, dpr)
-    drawContrastDemo(ctx, rect.width, rect.height)
-  }, [])
+    drawStarView(ctx, rect.width, rect.height, showCoronagraph)
+  }, [showCoronagraph])
 
   return (
     <ChallengeDetail challenge={challenge}>
       {/* Coronagraph */}
-      <div className={styles.sectionTitle}>Simulated Coronagraph View</div>
+      <div className={styles.sectionTitle}>
+        {showCoronagraph ? 'With Coronagraph' : 'Raw Starlight'} — Simulated View
+      </div>
       <p className={styles.desc}>
-        A coronagraph blocks the star's core light, but residual glare still
-        overwhelms the faint planetary signal. Post-processing algorithms like ADI,
-        SDI, and PCA must subtract this noise.
+        {showCoronagraph
+          ? 'The coronagraph blocks the star\'s core, reducing glare enough to reveal the planet. But residual speckle noise still requires post-processing (ADI, SDI, PCA) to confirm detections.'
+          : 'Without a coronagraph, the star\'s light completely overwhelms the planet. The planet is 10 billion times fainter — like spotting a firefly next to a searchlight from miles away.'}
       </p>
       <div className={styles.vizCard}>
         <canvas ref={canvasRef} style={{ width: '100%', height: 400 }} />
       </div>
+      <div className={styles.toggleRow}>
+        <button
+          className={`${styles.toggleBtn} ${!showCoronagraph ? styles.toggleActive : ''}`}
+          onClick={() => setShowCoronagraph(false)}
+        >
+          Raw starlight
+        </button>
+        <button
+          className={`${styles.toggleBtn} ${showCoronagraph ? styles.toggleActive : ''}`}
+          onClick={() => setShowCoronagraph(true)}
+        >
+          With coronagraph
+        </button>
+      </div>
 
       {/* Sky Context */}
       <div className={styles.sectionTitle}>Current Sky Context</div>
+      <p className={styles.desc}>
+        Direct imaging requires dark skies and minimal moonlight. Low moon
+        illumination and the Sun below the horizon are ideal conditions.
+      </p>
       <div className={`${styles.statRow} stagger-grid`}>
         <div className={styles.statBox}>
           <div className={styles.statLabel}>Sun RA</div>
@@ -179,6 +230,11 @@ export function DirectImaging() {
 
       {/* Exoplanet Systems */}
       <div className={styles.sectionTitle}>Known Directly Imaged Systems</div>
+      <p className={styles.desc}>
+        Only a handful of exoplanets have ever been directly imaged — all are
+        young, massive gas giants far from their host stars. Imaging an
+        Earth-like planet remains out of reach with current technology.
+      </p>
       <div className={styles.tableCard}>
         <table>
           <thead>

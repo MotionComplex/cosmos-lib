@@ -93,6 +93,36 @@
   color: var(--cosmic-ray);
 }
 
+.toggleRow {
+  display: flex;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.toggleBtn {
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+  font-family: var(--font-sans);
+}
+
+.toggleBtn:hover {
+  border-color: var(--border-hover);
+  color: var(--text-primary);
+}
+
+.toggleActive {
+  background: var(--imaging-dim);
+  border-color: rgba(167, 139, 250, 0.3);
+  color: var(--imaging);
+}
+
 .callout {
   background: var(--imaging-dim);
   border: 1px solid rgba(167, 139, 250, 0.15);

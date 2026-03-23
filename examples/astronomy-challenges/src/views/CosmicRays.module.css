@@ -83,6 +83,27 @@
   font-variant-numeric: tabular-nums;
 }
 
+.rarityNote {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--text-muted);
+  border-radius: var(--radius-sm);
+  padding: 14px 18px;
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+.rarityNote strong {
+  color: var(--text-primary);
+}
+
+.rarityNote em {
+  color: var(--cosmic-ray);
+  font-style: normal;
+  font-weight: 500;
+}
+
 .callout {
   background: var(--cosmic-ray-dim);
   border: 1px solid rgba(245, 158, 11, 0.15);

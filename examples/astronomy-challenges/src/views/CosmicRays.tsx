@@ -189,6 +189,9 @@ export function CosmicRays() {
     drawGalacticMap(ctx, rect.width, rect.height, events, nearbyObjects)
   }, [events, nearbyObjects])
 
+  const aboveGZK = events.filter((e) => e.energyEV >= 5e19).length
+  const above1e20 = events.filter((e) => e.energyEV >= 1e20).length
+
   return (
     <ChallengeDetail challenge={challenge}>
       {/* Galactic Map */}
@@ -201,6 +204,17 @@ export function CosmicRays() {
       <p className={styles.coordCaption}>
         Equirectangular projection — l ∈ [0°, 360°], b ∈ [-90°, +90°] | Orange = UHECRs, gray = catalog objects
       </p>
+
+      {/* Rarity context */}
+      <div className={styles.rarityNote}>
+        <strong>Note on rarity:</strong> This dataset of {events.length} events
+        ({aboveGZK} above the GZK threshold of 50 EeV, {above1e20} above 10²⁰ eV) is
+        intentionally dense for visualization purposes. In reality, the Pierre Auger
+        Observatory published ~100 events above 57 EeV collected over 17 years
+        (2004–2021). Only two cosmic rays above 10²⁰ eV have ever been recorded: the{' '}
+        <em>Oh-My-God particle</em> (1991, ~3×10²⁰ eV) and the{' '}
+        <em>Amaterasu particle</em> (2021, ~2.4×10²⁰ eV).
+      </div>
 
       {/* Detection Events */}
       <div className={styles.sectionTitle}>Simulated Detection Events</div>

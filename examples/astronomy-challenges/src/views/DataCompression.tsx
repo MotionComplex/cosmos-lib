@@ -27,6 +27,15 @@ function estimateSize(obj: unknown): number {
   return new TextEncoder().encode(JSON.stringify(obj)).length
 }
 
+/** Scale comparison: how cosmos-lib catalogs compare to real observatory data */
+const scaleComparisons = [
+  { label: 'cosmos-lib catalogs', bytes: 0, unit: '', isPlaceholder: true },
+  { label: 'Single Hubble FITS image', bytes: 170 * 1024 * 1024, unit: '~170 MB', isPlaceholder: false },
+  { label: 'Single JWST NIRCam mosaic', bytes: 1.2 * 1024 * 1024 * 1024, unit: '~1.2 GB', isPlaceholder: false },
+  { label: 'Rubin single-night output', bytes: 20 * 1024 * 1024 * 1024 * 1024, unit: '20 TB', isPlaceholder: false },
+  { label: 'SKA single-night output', bytes: 157 * 1024 * 1024 * 1024 * 1024, unit: '157 TB', isPlaceholder: false },
+]
+
 export function DataCompression() {
   const catalogStats = useMemo(() => {
     const allObjects = Data.all()
@@ -45,6 +54,7 @@ export function DataCompression() {
       showers: METEOR_SHOWERS.length,
       planets: SOLAR_SYSTEM.length,
       totalSizeKB: (totalSize / 1024).toFixed(1),
+      totalSizeBytes: totalSize,
       fieldsPerObject: Object.keys(allObjects[0] || {}).length,
     }
   }, [])
@@ -56,13 +66,21 @@ export function DataCompression() {
     return { results: results.slice(0, 8), count: results.length, ms: elapsed.toFixed(2) }
   }, [])
 
+  // Fill in the placeholder with actual catalog size
+  const comparisons = scaleComparisons.map((c) =>
+    c.isPlaceholder
+      ? { ...c, bytes: catalogStats.totalSizeBytes, unit: `${catalogStats.totalSizeKB} KB` }
+      : c,
+  )
+
   return (
     <ChallengeDetail challenge={challenge}>
       {/* Data Generation Rates */}
       <div className={styles.sectionTitle}>Data Generation Rates — TB per Night</div>
       <p className={styles.desc}>
         The Vera C. Rubin Observatory will produce ~20 TB nightly. The Square
-        Kilometre Array will dwarf everything at ~157 TB/night.
+        Kilometre Array will dwarf everything at ~157 TB/night. Even a 1% improvement
+        in lossless compression would save petabytes per year.
       </p>
       <div className={styles.barChart}>
         {telescopeData.map((t) => (
@@ -84,8 +102,48 @@ export function DataCompression() {
         ))}
       </div>
 
+      {/* Scale comparison */}
+      <div className={styles.sectionTitle}>Scale Comparison — Catalog vs. Real Data</div>
+      <p className={styles.desc}>
+        The cosmos-lib catalogs are structured metadata — coordinates, magnitudes,
+        and names for ~{catalogStats.totalObjects} objects. Real observatory data
+        is raw pixel arrays: a single Hubble FITS image is ~170 MB, and a single
+        night of Rubin data is 240 million× larger than the entire cosmos-lib catalog.
+      </p>
+      <div className={styles.scaleChart}>
+        {comparisons.map((c, i) => {
+          // Use log scale for the bar widths
+          const logMax = Math.log10(comparisons[comparisons.length - 1].bytes)
+          const logVal = c.bytes > 0 ? Math.log10(c.bytes) : 0
+          const pct = (logVal / logMax) * 100
+          return (
+            <div className={styles.scaleRow} key={i}>
+              <div className={styles.scaleLabel}>{c.label}</div>
+              <div className={styles.scaleTrack}>
+                <div
+                  className={styles.scaleFill}
+                  style={{
+                    width: `${Math.max(pct, 2)}%`,
+                    background: i === 0 ? 'var(--accent)' : `rgba(255,255,255,${0.08 + i * 0.05})`,
+                  }}
+                />
+                <span className={styles.scaleValue}>{c.unit}</span>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+      <p className={styles.scaleCaption}>
+        Logarithmic scale. Each step represents orders of magnitude more data.
+      </p>
+
       {/* Catalog Breakdown */}
       <div className={styles.sectionTitle}>cosmos-lib Catalog Breakdown</div>
+      <p className={styles.desc}>
+        Despite being tiny compared to observatory data, these catalogs demonstrate
+        the same structural challenges: mixed data types, nullable fields, variable
+        precision, and the need for efficient querying.
+      </p>
       <div className={`${styles.statRow} stagger-grid`}>
         <div className={styles.statBox}>
           <div className={styles.statLabel}>Total Objects</div>
@@ -189,9 +247,10 @@ export function DataCompression() {
       <div className={styles.callout}>
         <strong>cosmos-lib integration:</strong> This page introspects the bundled
         catalogs (<code>BRIGHT_STARS</code>, <code>MESSIER_CATALOG</code>,{' '}
-        <code>CONSTELLATIONS</code>, etc.) to demonstrate the scale of structured
-        astronomical data. It uses <code>Data.search()</code> to show how
-        even small datasets benefit from efficient indexing.
+        <code>CONSTELLATIONS</code>, etc.) and uses <code>Data.search()</code> to
+        demonstrate structured data querying. The scale comparison above illustrates
+        why neural compression research — like the AstroCompress benchmark — is
+        critical for next-generation observatories.
       </div>
     </ChallengeDetail>
   )
