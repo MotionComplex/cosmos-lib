@@ -1,0 +1,107 @@
+.sectionTitle {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+  margin-bottom: 14px;
+}
+
+.vizCard {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  overflow: hidden;
+}
+
+.vizCard canvas {
+  display: block;
+  width: 100%;
+  border-radius: var(--radius-sm);
+}
+
+.tableCard {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.tableCard table {
+  margin: 0;
+  min-width: 600px;
+}
+
+.tableCard th {
+  background: var(--bg-elevated);
+}
+
+.contrastBadge {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--imaging);
+}
+
+.methodBadge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.methodDirect {
+  background: var(--imaging-dim);
+  color: var(--imaging);
+}
+
+.methodOther {
+  background: var(--cosmic-ray-dim);
+  color: var(--cosmic-ray);
+}
+
+.toggleRow {
+  display: flex;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.toggleBtn {
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+  font-family: var(--font-sans);
+}
+
+.toggleBtn:hover {
+  border-color: var(--border-hover);
+  color: var(--text-primary);
+}
+
+.toggleActive {
+  background: var(--imaging-dim);
+  border-color: rgba(167, 139, 250, 0.3);
+  color: var(--imaging);
+}
+
+.desc {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.65;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 768px) {
+  .vizCard {
+    padding: 12px;
+  }
+}

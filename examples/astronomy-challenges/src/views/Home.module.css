@@ -1,0 +1,284 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  padding: 0 40px 60px;
+  animation: fadeUp 0.5s var(--ease-out) both;
+}
+
+/* ── Sticky Header ── */
+.stickyHeader {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  backdrop-filter: blur(40px) saturate(1.6);
+  background: rgba(2, 6, 8, 0.85);
+  border-bottom: 1px solid var(--border);
+  margin: 0 -40px;
+  padding: 16px 40px;
+}
+
+.headerInner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.headerIcon {
+  font-size: 16px;
+}
+
+.headerTitle {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+}
+
+/* ── Hero ── */
+.hero {
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
+  padding-top: 48px;
+  padding-bottom: 8px;
+}
+
+.heroGreeting {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--accent);
+  margin-bottom: 16px;
+}
+
+.heroTitle {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 5vw, 52px);
+  font-weight: 700;
+  letter-spacing: -1px;
+  background: linear-gradient(135deg, var(--text-primary) 40%, var(--text-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 16px;
+  line-height: 1.15;
+}
+
+.heroSub {
+  color: var(--text-secondary);
+  font-size: 15px;
+  line-height: 1.7;
+  max-width: 640px;
+}
+
+/* ── Content ── */
+.content {
+  flex: 1;
+  padding-top: 40px;
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/* ── Section ── */
+.sectionLabel {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--text-muted);
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.sectionTitle {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.4px;
+}
+
+/* ── Challenge Cards ── */
+.challengeGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 14px;
+}
+
+.challengeCard {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  text-decoration: none;
+  color: inherit;
+  transition: all var(--duration-base) var(--ease-out);
+  position: relative;
+  overflow: hidden;
+}
+
+.challengeCard:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  color: inherit;
+}
+
+.cardTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.cardIcon {
+  font-size: 28px;
+}
+
+.cardBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.cardTitle {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+  margin-bottom: 10px;
+  color: var(--text-primary);
+}
+
+.cardDesc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.65;
+  flex: 1;
+}
+
+.cardFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+.cardDifficulty {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.difficultyLabel {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+.difficultyDots {
+  display: flex;
+  gap: 3px;
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--border);
+}
+
+.dotFilled {
+  composes: dot;
+}
+
+.cardCta {
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.cardTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 12px;
+}
+
+.cardTag {
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-size: 10px;
+  font-weight: 500;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+}
+
+/* ── Info Card ── */
+.infoCard {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  backdrop-filter: blur(20px);
+}
+
+.infoCard p {
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .page {
+    padding: 0 20px 90px;
+  }
+
+  .stickyHeader {
+    margin: 0 -20px;
+    padding: 12px 20px;
+  }
+
+  .hero {
+    padding-top: 32px;
+  }
+
+  .heroTitle {
+    font-size: clamp(24px, 7vw, 36px);
+  }
+
+  .heroSub {
+    font-size: 14px;
+  }
+
+  .content {
+    padding-top: 32px;
+    gap: 32px;
+  }
+
+  .challengeGrid {
+    grid-template-columns: 1fr;
+  }
+}

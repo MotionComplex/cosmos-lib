@@ -11,7 +11,7 @@
 ### Key rules
 
 - **Library version** lives in root `package.json` (currently semver, 1.x.x range)
-- **Example apps must stay in sync** — both `examples/observatory-app/package.json` and `examples/react-native-app/package.json` reference the lib as `^<version>` and must be updated on every release
+- **Example apps must stay in sync** — `examples/observatory-app/package.json`, `examples/react-native-app/package.json`, and `examples/astronomy-challenges/package.json` reference the lib as `^<version>` and must be updated on every release
 - **Never push automatically** — the CI publish workflow triggers on push to main, so always let the user decide when to push
 - **CI does the publishing** — `.github/workflows/publish.yml` runs typecheck + test + build + `npm publish --provenance` on push to main
 - **Commit format for releases:** `chore: release v<version>`
@@ -23,6 +23,7 @@
 |-----|-----------|-----------------|
 | `observatory-app` | Vite aliases to `../../src` (live source) | `@motioncomplex/cosmos-lib: ^x.x.x` in package.json |
 | `react-native-app` | Published npm package directly | `@motioncomplex/cosmos-lib: ^x.x.x` in package.json |
+| `astronomy-challenges` | Published npm package directly | `@motioncomplex/cosmos-lib: ^x.x.x` in package.json |
 
 ## Build & test
 
@@ -42,6 +43,7 @@ npm run size         # bundle size check (max 200KB)
 - `src/data/` — bundled catalogs (stars, deep-sky, solar system, meteor showers)
 - `examples/observatory-app/` — Vite + React web demo
 - `examples/react-native-app/` — Expo/React Native demo
+- `examples/astronomy-challenges/` — Vite + React app exploring unsolved astronomy problems
 - `tests/` — vitest test suite
 - `docs/` — API documentation
 
