@@ -86,43 +86,6 @@
   gap: 40px;
 }
 
-/* ── Stats Row ── */
-.statsRow {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-}
-
-.statCard {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: 18px 20px;
-  backdrop-filter: blur(20px);
-  transition: border-color var(--duration-base) var(--ease-out);
-}
-
-.statCard:hover {
-  border-color: var(--border-hover);
-}
-
-.statLabel {
-  font-size: 10px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--text-muted);
-  margin-bottom: 6px;
-}
-
-.statValue {
-  font-family: var(--font-display);
-  font-size: 26px;
-  font-weight: 700;
-  letter-spacing: -0.5px;
-  font-variant-numeric: tabular-nums;
-}
-
 /* ── Section ── */
 .sectionLabel {
   font-size: 10px;
@@ -287,82 +250,6 @@
   line-height: 1.7;
 }
 
-/* ── Resources ── */
-.resourceGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 10px;
-}
-
-.resourceCard {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: 16px 18px;
-  text-decoration: none;
-  color: inherit;
-  transition: all var(--duration-base) var(--ease-out);
-}
-
-.resourceCard:hover {
-  border-color: var(--border-accent);
-  background: var(--bg-card-hover);
-  transform: translateY(-1px);
-  color: inherit;
-}
-
-.rcIcon {
-  flex-shrink: 0;
-  font-size: 14px;
-  margin-top: 2px;
-}
-
-.rcName {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: 3px;
-}
-
-.rcDesc {
-  font-size: 11px;
-  color: var(--text-secondary);
-  line-height: 1.5;
-}
-
-/* ── Events ── */
-.eventsTable {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-.eventsTable table {
-  margin: 0;
-  min-width: 400px;
-}
-
-.eventsTable th {
-  background: var(--bg-elevated);
-}
-
-.eventBadge {
-  display: inline-block;
-  padding: 2px 8px;
-  border-radius: var(--radius-full);
-  font-size: 10px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  background: var(--accent-dim);
-  color: var(--accent);
-}
-
 /* ── Mobile ── */
 @media (max-width: 768px) {
   .page {
@@ -391,30 +278,7 @@
     gap: 32px;
   }
 
-  .statsRow {
-    grid-template-columns: 1fr 1fr;
-  }
-
   .challengeGrid {
     grid-template-columns: 1fr;
   }
-
-  .resourceGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .statValue {
-    font-size: 22px;
-  }
-
-  .statCard {
-    padding: 14px 16px;
-  }
-}
-
-.source {
-  font-size: 11px;
-  color: var(--text-muted);
-  font-style: italic;
-  margin-top: 6px;
 }

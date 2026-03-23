@@ -1,5 +1,4 @@
-import { useEffect, useRef, useMemo, useState } from 'react'
-import { Sun, Moon, Data, Units } from '@motioncomplex/cosmos-lib'
+import { useEffect, useRef, useState } from 'react'
 import { challenges } from '../data/challenges'
 import { ChallengeDetail } from '../components/ChallengeDetail'
 import styles from './DirectImaging.module.css'
@@ -145,18 +144,6 @@ export function DirectImaging() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [showCoronagraph, setShowCoronagraph] = useState(false)
 
-  const now = new Date()
-  const sunPos = Sun.position(now)
-  const moonPhase = Moon.phase(now)
-  const sunDec = sunPos.dec
-
-  const brightestStars = useMemo(() => {
-    return Data.all()
-      .filter((obj) => obj.type === 'star' && obj.magnitude != null)
-      .sort((a, b) => (a.magnitude ?? 99) - (b.magnitude ?? 99))
-      .slice(0, 5)
-  }, [])
-
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
@@ -198,38 +185,6 @@ export function DirectImaging() {
           With coronagraph
         </button>
       </div>
-
-      {/* Sky Context */}
-      <div className={styles.sectionTitle}>Current Sky Context</div>
-      <p className={styles.desc}>
-        Direct imaging requires dark skies and minimal moonlight. Low moon
-        illumination and the Sun below the horizon are ideal conditions.
-      </p>
-      <div className={`${styles.statRow} stagger-grid`}>
-        <div className={styles.statBox}>
-          <div className={styles.statLabel}>Sun RA</div>
-          <div className={styles.statValue} style={{ fontSize: 14 }}>
-            {Units.formatRA(sunPos.ra)}
-          </div>
-        </div>
-        <div className={styles.statBox}>
-          <div className={styles.statLabel}>Sun Dec</div>
-          <div className={styles.statValue} style={{ fontSize: 14 }}>
-            {Units.formatAngle(sunDec)}
-          </div>
-        </div>
-        <div className={styles.statBox}>
-          <div className={styles.statLabel}>Moon Illumination</div>
-          <div className={styles.statValue}>{(moonPhase.illumination * 100).toFixed(0)}%</div>
-        </div>
-        <div className={styles.statBox}>
-          <div className={styles.statLabel}>Moon Phase</div>
-          <div className={styles.statValue} style={{ fontSize: 14 }}>{moonPhase.name}</div>
-        </div>
-      </div>
-      <p className={styles.source}>
-        Live sun position and moon phase from cosmos-lib
-      </p>
 
       {/* Exoplanet Systems */}
       <div className={styles.sectionTitle}>Known Directly Imaged Systems</div>
@@ -273,40 +228,6 @@ export function DirectImaging() {
           </tbody>
         </table>
       </div>
-
-      {/* Brightest Stars */}
-      <div className={styles.sectionTitle}>Brightest Stars — Typical Imaging Targets</div>
-      <p className={styles.desc}>
-        Direct imaging targets nearby, bright stars where a massive young
-        planet might be detectable at wide separation. These are the brightest
-        stars in the sky — the type of hosts that current instruments can probe.
-      </p>
-      <div className={styles.tableCard}>
-        <table>
-          <thead>
-            <tr>
-              <th>Star</th>
-              <th>Magnitude</th>
-              <th>RA / Dec</th>
-            </tr>
-          </thead>
-          <tbody>
-            {brightestStars.map((star) => (
-              <tr key={star.id}>
-                <td style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{star.name}</td>
-                <td style={{ fontVariantNumeric: 'tabular-nums' }}>{star.magnitude?.toFixed(2)}</td>
-                <td>
-                  {star.ra != null ? Units.formatRA(star.ra) : '—'} /{' '}
-                  {star.dec != null ? Units.formatAngle(star.dec) : '—'}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <p className={styles.source}>
-        Star catalog and magnitudes from cosmos-lib
-      </p>
 
     </ChallengeDetail>
   )

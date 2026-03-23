@@ -20,36 +20,6 @@
   border-radius: var(--radius-sm);
 }
 
-.statRow {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-}
-
-.statBox {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: 16px 18px;
-}
-
-.statLabel {
-  font-size: 10px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--text-muted);
-  margin-bottom: 6px;
-}
-
-.statValue {
-  font-family: var(--font-display);
-  font-size: 18px;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-  word-break: break-word;
-}
-
 .tableCard {
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -123,13 +93,6 @@
   color: var(--imaging);
 }
 
-.source {
-  font-size: 11px;
-  color: var(--text-muted);
-  font-style: italic;
-  margin-top: 6px;
-}
-
 .desc {
   font-size: 14px;
   color: var(--text-secondary);
@@ -138,10 +101,6 @@
 }
 
 @media (max-width: 768px) {
-  .statRow {
-    grid-template-columns: 1fr 1fr;
-  }
-
   .vizCard {
     padding: 12px;
   }
