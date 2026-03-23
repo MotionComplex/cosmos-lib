@@ -55,6 +55,9 @@ export function Home() {
             <div className={styles.statValue}>{upcomingEvents.length}</div>
           </div>
         </div>
+        <p className={styles.source}>
+          Catalog count and upcoming events from cosmos-lib
+        </p>
 
         {/* Challenge Cards */}
         <div>

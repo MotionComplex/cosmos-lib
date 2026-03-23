@@ -204,6 +204,9 @@ export function CosmicRays() {
       <p className={styles.coordCaption}>
         Equirectangular projection — l ∈ [0°, 360°], b ∈ [-90°, +90°] | Orange = UHECRs, gray = catalog objects
       </p>
+      <p className={styles.source}>
+        Catalog objects from cosmos-lib · coordinates converted to galactic frame
+      </p>
 
       {/* Rarity context */}
       <div className={styles.rarityNote}>

@@ -123,6 +123,13 @@
   color: var(--imaging);
 }
 
+.source {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-style: italic;
+  margin-top: 6px;
+}
+
 .desc {
   font-size: 14px;
   color: var(--text-secondary);

@@ -127,3 +127,10 @@
     padding: 12px;
   }
 }
+
+.source {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-style: italic;
+  margin-top: 6px;
+}

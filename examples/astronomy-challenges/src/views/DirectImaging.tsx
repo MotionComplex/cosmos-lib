@@ -227,6 +227,9 @@ export function DirectImaging() {
           <div className={styles.statValue} style={{ fontSize: 14 }}>{moonPhase.name}</div>
         </div>
       </div>
+      <p className={styles.source}>
+        Live sun position and moon phase from cosmos-lib
+      </p>
 
       {/* Exoplanet Systems */}
       <div className={styles.sectionTitle}>Known Directly Imaged Systems</div>
@@ -301,6 +304,9 @@ export function DirectImaging() {
           </tbody>
         </table>
       </div>
+      <p className={styles.source}>
+        Star catalog and magnitudes from cosmos-lib
+      </p>
 
     </ChallengeDetail>
   )
