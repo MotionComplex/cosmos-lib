@@ -41,7 +41,7 @@ export const challenges: Challenge[] = [
     tags: ['Particle Physics', 'Galactic Fields', 'Coordinate Transforms'],
     route: '/cosmic-rays',
     datasources: [
-      { name: 'Pierre Auger Observatory', description: 'Largest UHECR detector — public event data', url: 'https://www.auger.org/science/public-data' },
+      { name: 'Pierre Auger Observatory', description: 'Largest UHECR detector — public event data', url: 'https://opendata.auger.org' },
       { name: 'Telescope Array', description: 'Northern-hemisphere UHECR detector data', url: 'https://www.telescopearray.org/' },
       { name: 'CRPropa 3', description: 'Cosmic ray propagation framework', url: 'https://crpropa.desy.de/' },
     ],
@@ -66,7 +66,7 @@ export const challenges: Challenge[] = [
     tags: ['Machine Learning', 'Data Pipeline', 'Benchmarking'],
     route: '/compression',
     datasources: [
-      { name: 'Multimodal Universe', description: 'The primary 100 TB dataset for astronomical AI benchmarking', url: 'https://multimodal-universe.github.io/' },
+      { name: 'Multimodal Universe', description: 'The primary 100 TB dataset for astronomical AI benchmarking', url: 'https://github.com/MultimodalUniverse/MultimodalUniverse' },
       { name: 'AstroCompress', description: 'Benchmark for astronomical data compression', url: 'https://github.com/AstroCompress' },
       { name: 'MAST Archive', description: 'Mikulski Archive — Hubble, JWST, TESS data', url: 'https://archive.stsci.edu/' },
     ],
@@ -108,12 +108,12 @@ export const resources = [
   {
     name: 'Frontiers Roadmap',
     description: 'A curated series of "Grand Challenge" articles across all sub-fields.',
-    url: 'https://www.frontiersin.org/journals/astronomy-and-space-sciences/sections',
+    url: 'https://www.frontiersin.org/journals/astronomy-and-space-sciences',
   },
   {
     name: 'Multimodal Universe',
     description: 'The primary 100 TB dataset for astronomical AI benchmarking.',
-    url: 'https://multimodal-universe.github.io/',
+    url: 'https://github.com/MultimodalUniverse/MultimodalUniverse',
   },
   {
     name: 'Kaggle Astronomy',
