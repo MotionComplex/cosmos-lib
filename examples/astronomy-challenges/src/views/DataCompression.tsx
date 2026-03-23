@@ -1,5 +1,3 @@
-import { useMemo } from 'react'
-import { Data } from '@motioncomplex/cosmos-lib'
 import { challenges } from '../data/challenges'
 import { ChallengeDetail } from '../components/ChallengeDetail'
 import styles from './DataCompression.module.css'
@@ -57,13 +55,6 @@ const scaleNumbers = [
 ]
 
 export function DataCompression() {
-  const searchDemo = useMemo(() => {
-    const start = performance.now()
-    const results = Data.search('nebula')
-    const elapsed = performance.now() - start
-    return { results: results.slice(0, 6), count: results.length, ms: elapsed.toFixed(2) }
-  }, [])
-
   return (
     <ChallengeDetail challenge={challenge}>
       {/* Data Generation Rates */}
@@ -174,50 +165,6 @@ export function DataCompression() {
         outperform Rice/HCompress without destroying science.
       </p>
 
-      {/* Search Demo — kept small */}
-      <div className={styles.sectionTitle}>Live Demo — Catalog Search</div>
-      <p className={styles.desc}>
-        Searching <code>Data.search("nebula")</code> across the bundled catalog:
-      </p>
-      <div className={styles.statRow} style={{ gridTemplateColumns: 'repeat(2, 1fr)' }}>
-        <div className={styles.statBox}>
-          <div className={styles.statLabel}>Results Found</div>
-          <div className={styles.statValue} style={{ color: 'var(--compression)' }}>
-            {searchDemo.count}
-          </div>
-        </div>
-        <div className={styles.statBox}>
-          <div className={styles.statLabel}>Search Time</div>
-          <div className={styles.statValue}>{searchDemo.ms} ms</div>
-        </div>
-      </div>
-
-      <div className={styles.tableCard}>
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Type</th>
-              <th>RA</th>
-              <th>Dec</th>
-            </tr>
-          </thead>
-          <tbody>
-            {searchDemo.results.map((r, i) => (
-              <tr key={i}>
-                <td style={{ color: 'var(--text-primary)' }}>{r.name}</td>
-                <td>{r.type}</td>
-                <td style={{ fontVariantNumeric: 'tabular-nums' }}>
-                  {r.ra != null ? r.ra.toFixed(4) + '°' : '—'}
-                </td>
-                <td style={{ fontVariantNumeric: 'tabular-nums' }}>
-                  {r.dec != null ? r.dec.toFixed(4) + '°' : '—'}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
 
     </ChallengeDetail>
   )
