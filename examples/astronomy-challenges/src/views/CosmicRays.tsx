@@ -282,13 +282,6 @@ export function CosmicRays() {
         </>
       )}
 
-      {/* cosmos-lib callout */}
-      <div className={styles.callout}>
-        <strong>cosmos-lib integration:</strong> This visualization uses
-        equatorial-to-galactic coordinate conversion to map simulated UHECR
-        arrival directions onto a galactic coordinate grid alongside{' '}
-        {nearbyObjects.length} catalog objects from <code>Data.all()</code>.
-      </div>
     </ChallengeDetail>
   )
 }

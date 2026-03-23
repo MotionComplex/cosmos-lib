@@ -272,10 +272,11 @@ export function DirectImaging() {
       </div>
 
       {/* Brightest Stars */}
-      <div className={styles.sectionTitle}>Reference: Brightest Stars in Catalog</div>
+      <div className={styles.sectionTitle}>Brightest Stars — Typical Imaging Targets</div>
       <p className={styles.desc}>
-        The brightest stars from <code>Data.all()</code> — these are the types of
-        host stars around which direct imaging is attempted.
+        Direct imaging targets nearby, bright stars where a massive young
+        planet might be detectable at wide separation. These are the brightest
+        stars in the sky — the type of hosts that current instruments can probe.
       </p>
       <div className={styles.tableCard}>
         <table>
@@ -301,13 +302,6 @@ export function DirectImaging() {
         </table>
       </div>
 
-      {/* cosmos-lib callout */}
-      <div className={styles.callout}>
-        <strong>cosmos-lib integration:</strong> This page uses{' '}
-        <code>Sun.position()</code>, <code>Moon.phase()</code>, and{' '}
-        <code>Data.all()</code> to provide real astronomical context — current sky
-        conditions and reference star magnitudes that frame the direct imaging challenge.
-      </div>
     </ChallengeDetail>
   )
 }

@@ -27,8 +27,8 @@ export function Home() {
         <h1 className={styles.heroTitle}>Grand Challenges</h1>
         <p className={styles.heroSub}>
           Foundational problems that, if solved, would represent major leaps forward
-          for the entire field. Explore each challenge interactively using{' '}
-          <code>cosmos-lib</code>.
+          for the entire field. Explore each challenge with live data and
+          interactive visualizations.
         </p>
       </div>
 

@@ -219,13 +219,6 @@ export function DataCompression() {
         </table>
       </div>
 
-      {/* cosmos-lib callout */}
-      <div className={styles.callout}>
-        <strong>cosmos-lib integration:</strong> This page uses{' '}
-        <code>Data.search()</code> to demonstrate querying structured
-        astronomical catalogs — the same type of metadata that must be
-        compressed and indexed at scale in real observatory pipelines.
-      </div>
     </ChallengeDetail>
   )
 }

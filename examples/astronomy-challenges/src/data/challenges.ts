@@ -71,10 +71,10 @@ export const challenges: Challenge[] = [
       { name: 'MAST Archive', description: 'Mikulski Archive — Hubble, JWST, TESS data', url: 'https://archive.stsci.edu/' },
     ],
     gettingStarted: [
-      { step: 1, title: 'Inspect catalog structure', description: 'Examine cosmos-lib BRIGHT_STARS, MESSIER_CATALOG, and other datasets to understand field types.' },
-      { step: 2, title: 'Measure baseline sizes', description: 'Calculate JSON-serialized sizes and field counts to establish a compression baseline.' },
-      { step: 3, title: 'Profile data generation rates', description: 'Compare TB/night across observatories to understand the scale of the bottleneck.' },
-      { step: 4, title: 'Benchmark search performance', description: 'Use Data.search() to test how indexing strategies affect query speed at scale.' },
+      { step: 1, title: 'Understand FITS format', description: 'Learn how astronomical data is stored: 16-bit pixel arrays, multi-extension headers, and WCS metadata.' },
+      { step: 2, title: 'Profile data generation rates', description: 'Compare TB/night across observatories to understand the scale of the bottleneck.' },
+      { step: 3, title: 'Compare compression approaches', description: 'Evaluate lossless (Rice, LZ4) vs lossy (fpack, neural) methods and their tradeoffs for scientific data.' },
+      { step: 4, title: 'Validate science preservation', description: 'Ensure compression artifacts don\'t destroy faint signals — the key differentiator from general-purpose codecs.' },
     ],
   },
   {
@@ -98,7 +98,7 @@ export const challenges: Challenge[] = [
     gettingStarted: [
       { step: 1, title: 'Understand contrast ratios', description: 'Learn how magnitude differences translate to brightness ratios using the astronomical magnitude system.' },
       { step: 2, title: 'Visualize the problem', description: 'See how coronagraphs block starlight and why residual speckle noise overwhelms planetary signals.' },
-      { step: 3, title: 'Check sky conditions', description: 'Use Sun.position() and Moon.phase() to determine optimal observation windows.' },
+      { step: 3, title: 'Check sky conditions', description: 'Determine optimal observation windows based on Sun position, Moon phase, and atmospheric seeing.' },
       { step: 4, title: 'Study known detections', description: 'Analyze the handful of directly imaged systems to understand current detection limits.' },
     ],
   },
