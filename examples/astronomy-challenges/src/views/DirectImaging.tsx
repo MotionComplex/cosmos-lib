@@ -1,5 +1,5 @@
 import { useEffect, useRef, useMemo } from 'react'
-import { Sun, Moon, Data, Units } from 'cosmos-lib'
+import { Sun, Moon, Data, Units } from '@motioncomplex/cosmos-lib'
 import { challenges } from '../data/challenges'
 import { ChallengeDetail } from '../components/ChallengeDetail'
 import styles from './DirectImaging.module.css'
@@ -112,13 +112,16 @@ export function DirectImaging() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   const now = new Date()
-  const observer = { latitude: 0, longitude: 0, elevation: 0 }
-  const sunPos = Sun.position(now, observer)
+  const sunPos = Sun.position(now)
   const moonPhase = Moon.phase(now)
+
+  // Derive sun altitude from declination as a rough approximation
+  // (actual altitude depends on observer location, but dec gives a sense of sky position)
+  const sunDec = sunPos.dec
 
   const brightestStars = useMemo(() => {
     return Data.all()
-      .filter((obj) => obj.type === 'star' && obj.magnitude !== undefined)
+      .filter((obj) => obj.type === 'star' && obj.magnitude != null)
       .sort((a, b) => (a.magnitude ?? 99) - (b.magnitude ?? 99))
       .slice(0, 5)
   }, [])
@@ -153,30 +156,24 @@ export function DirectImaging() {
       <div className={styles.sectionTitle}>Current Sky Context</div>
       <div className={`${styles.statRow} stagger-grid`}>
         <div className={styles.statBox}>
-          <div className={styles.statLabel}>Sun Altitude</div>
-          <div className={styles.statValue}>{sunPos.altitude.toFixed(1)}°</div>
+          <div className={styles.statLabel}>Sun RA</div>
+          <div className={styles.statValue} style={{ fontSize: 14 }}>
+            {Units.formatRA(sunPos.ra)}
+          </div>
         </div>
         <div className={styles.statBox}>
-          <div className={styles.statLabel}>Moon Phase</div>
+          <div className={styles.statLabel}>Sun Dec</div>
+          <div className={styles.statValue} style={{ fontSize: 14 }}>
+            {Units.formatAngle(sunDec)}
+          </div>
+        </div>
+        <div className={styles.statBox}>
+          <div className={styles.statLabel}>Moon Illumination</div>
           <div className={styles.statValue}>{(moonPhase.illumination * 100).toFixed(0)}%</div>
         </div>
         <div className={styles.statBox}>
-          <div className={styles.statLabel}>Phase Name</div>
-          <div className={styles.statValue} style={{ fontSize: 14 }}>{moonPhase.phaseName}</div>
-        </div>
-        <div className={styles.statBox}>
-          <div className={styles.statLabel}>Sky Condition</div>
-          <div className={styles.statValue} style={{ fontSize: 14 }}>
-            {sunPos.altitude < -18
-              ? 'Astro Dark'
-              : sunPos.altitude < -12
-                ? 'Nautical'
-                : sunPos.altitude < -6
-                  ? 'Civil Twi'
-                  : sunPos.altitude < 0
-                    ? 'Twilight'
-                    : 'Daylight'}
-          </div>
+          <div className={styles.statLabel}>Moon Phase</div>
+          <div className={styles.statValue} style={{ fontSize: 14 }}>{moonPhase.name}</div>
         </div>
       </div>
 
@@ -238,7 +235,10 @@ export function DirectImaging() {
               <tr key={star.id}>
                 <td style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{star.name}</td>
                 <td style={{ fontVariantNumeric: 'tabular-nums' }}>{star.magnitude?.toFixed(2)}</td>
-                <td>{Units.degToHMS(star.ra)} / {Units.degToDMS(star.dec)}</td>
+                <td>
+                  {star.ra != null ? Units.formatRA(star.ra) : '—'} /{' '}
+                  {star.dec != null ? Units.formatAngle(star.dec) : '—'}
+                </td>
               </tr>
             ))}
           </tbody>

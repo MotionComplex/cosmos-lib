@@ -1,11 +1,38 @@
 import { useEffect, useRef, useState } from 'react'
-import { AstroMath, Data, Units, CONSTANTS } from 'cosmos-lib'
-import type { GalacticCoord, EquatorialCoord } from 'cosmos-lib'
+import { Data, Units, CONSTANTS } from '@motioncomplex/cosmos-lib'
+import type { GalacticCoord, EquatorialCoord } from '@motioncomplex/cosmos-lib'
 import { challenges } from '../data/challenges'
 import { ChallengeDetail } from '../components/ChallengeDetail'
 import styles from './CosmicRays.module.css'
 
 const challenge = challenges.find((c) => c.id === 'cosmic-rays')!
+
+/** Convert equatorial (ra, dec in degrees) to galactic (l, b in degrees) */
+function equatorialToGalactic(eq: EquatorialCoord): GalacticCoord {
+  const deg2rad = Math.PI / 180
+  const rad2deg = 180 / Math.PI
+  // North Galactic Pole (J2000)
+  const raGP = 192.85948 * deg2rad
+  const decGP = 27.12825 * deg2rad
+  const lNCP = 122.93192 * deg2rad
+
+  const ra = eq.ra * deg2rad
+  const dec = eq.dec * deg2rad
+
+  const sinB = Math.sin(decGP) * Math.sin(dec) +
+    Math.cos(decGP) * Math.cos(dec) * Math.cos(ra - raGP)
+  const b = Math.asin(sinB)
+
+  const cosB = Math.cos(b)
+  const sinLoff = Math.cos(dec) * Math.sin(ra - raGP) / cosB
+  const cosLoff = (Math.cos(decGP) * Math.sin(dec) -
+    Math.sin(decGP) * Math.cos(dec) * Math.cos(ra - raGP)) / cosB
+
+  let l = lNCP - Math.atan2(sinLoff, cosLoff)
+  l = ((l * rad2deg) % 360 + 360) % 360
+
+  return { l, b: b * rad2deg }
+}
 
 interface CosmicRayEvent {
   id: string
@@ -28,7 +55,7 @@ function generateSimulatedEvents(): CosmicRayEvent[] {
   ]
   return seeds.map((s, i) => {
     const eq: EquatorialCoord = { ra: s.ra, dec: s.dec }
-    const gal = AstroMath.equatorialToGalactic(eq)
+    const gal = equatorialToGalactic(eq)
     const exp = Math.floor(Math.log10(s.e))
     const mantissa = (s.e / Math.pow(10, exp)).toFixed(1)
     return {
@@ -143,8 +170,9 @@ export function CosmicRays() {
 
   const nearbyObjects = Data.all()
     .slice(0, 200)
+    .filter((obj) => obj.ra != null && obj.dec != null)
     .map((obj) => {
-      const gal = AstroMath.equatorialToGalactic({ ra: obj.ra, dec: obj.dec })
+      const gal = equatorialToGalactic({ ra: obj.ra!, dec: obj.dec! })
       return { name: obj.name, l: gal.l, b: gal.b }
     })
 
@@ -192,7 +220,7 @@ export function CosmicRays() {
                 <td style={{ color: 'var(--cosmic-ray)', fontWeight: 600 }}>{evt.id}</td>
                 <td style={{ fontFamily: 'var(--font-mono)', fontSize: 12 }}>{evt.energy}</td>
                 <td>
-                  {Units.degToHMS(evt.arrival.ra)} / {Units.degToDMS(evt.arrival.dec)}
+                  {Units.formatRA(evt.arrival.ra)} / {Units.formatAngle(evt.arrival.dec)}
                 </td>
                 <td>
                   {evt.galactic.l.toFixed(2)}° / {evt.galactic.b.toFixed(2)}°
@@ -234,7 +262,7 @@ export function CosmicRays() {
             Earth can shift the apparent arrival direction by 10-30°. An event
             near the galactic plane (|b| &lt; 15°) passes through stronger fields,
             making source identification harder. The light travel distance at this
-            energy corresponds to ~{(CONSTANTS.C / 1000).toFixed(0)} km/s
+            energy corresponds to ~{CONSTANTS.C_KM_S.toFixed(0)} km/s
             propagation, subject to GZK cutoff losses over &gt;100 Mpc.
           </div>
         </>
@@ -242,11 +270,10 @@ export function CosmicRays() {
 
       {/* cosmos-lib callout */}
       <div className={styles.callout}>
-        <strong>cosmos-lib integration:</strong> This visualization uses{' '}
-        <code>AstroMath.equatorialToGalactic()</code> to convert simulated UHECR
-        arrival directions into galactic coordinates, then overlays them on a
-        galactic coordinate grid alongside {nearbyObjects.length} catalog objects
-        from <code>Data.all()</code>.
+        <strong>cosmos-lib integration:</strong> This visualization uses
+        equatorial-to-galactic coordinate conversion to map simulated UHECR
+        arrival directions onto a galactic coordinate grid alongside{' '}
+        {nearbyObjects.length} catalog objects from <code>Data.all()</code>.
       </div>
     </ChallengeDetail>
   )

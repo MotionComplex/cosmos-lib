@@ -20,12 +20,8 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
     "paths": {
-      "cosmos-lib": ["../../src"],
-      "cosmos-lib/*": ["../../src/*"],
-      "@/*": ["./src/*"],
-      "react": ["./node_modules/@types/react"],
-      "react/jsx-runtime": ["./node_modules/@types/react/jsx-runtime"]
+      "@/*": ["./src/*"]
     }
   },
-  "include": ["src", "../../src"]
+  "include": ["src"]
 }

@@ -6,7 +6,7 @@ import {
   CONSTELLATIONS,
   METEOR_SHOWERS,
   SOLAR_SYSTEM,
-} from 'cosmos-lib'
+} from '@motioncomplex/cosmos-lib'
 import { challenges } from '../data/challenges'
 import { ChallengeDetail } from '../components/ChallengeDetail'
 import styles from './DataCompression.module.css'
@@ -173,8 +173,12 @@ export function DataCompression() {
               <tr key={i}>
                 <td style={{ color: 'var(--text-primary)' }}>{r.name}</td>
                 <td>{r.type}</td>
-                <td style={{ fontVariantNumeric: 'tabular-nums' }}>{r.ra.toFixed(4)}°</td>
-                <td style={{ fontVariantNumeric: 'tabular-nums' }}>{r.dec.toFixed(4)}°</td>
+                <td style={{ fontVariantNumeric: 'tabular-nums' }}>
+                  {r.ra != null ? r.ra.toFixed(4) + '°' : '—'}
+                </td>
+                <td style={{ fontVariantNumeric: 'tabular-nums' }}>
+                  {r.dec != null ? r.dec.toFixed(4) + '°' : '—'}
+                </td>
               </tr>
             ))}
           </tbody>

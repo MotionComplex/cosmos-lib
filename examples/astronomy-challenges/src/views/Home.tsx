@@ -1,13 +1,12 @@
 import { Link } from 'react-router-dom'
-import { Data, Events } from 'cosmos-lib'
+import { Data, Events } from '@motioncomplex/cosmos-lib'
 import { challenges, resources } from '../data/challenges'
 import styles from './Home.module.css'
 
 export function Home() {
   const catalogCount = Data.all().length
   const constellationCount = 88
-  const upcomingEvents = Events.nextEvents(new Date(), {
-    observer: { latitude: 0, longitude: 0, elevation: 0 },
+  const upcomingEvents = Events.nextEvents({ lat: 0, lng: 0 }, {
     days: 30,
     limit: 5,
   })
