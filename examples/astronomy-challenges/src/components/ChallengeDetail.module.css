@@ -23,6 +23,7 @@
   gap: 12px;
   max-width: 1100px;
   margin: 0 auto;
+  min-width: 0;
 }
 
 .backBtn {
@@ -39,6 +40,7 @@
   cursor: pointer;
   transition: all var(--duration-fast) var(--ease-out);
   text-decoration: none;
+  flex-shrink: 0;
 }
 
 .backBtn:hover {
@@ -52,6 +54,10 @@
   font-size: 16px;
   font-weight: 600;
   letter-spacing: -0.3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
 }
 
 .headerBadge {
@@ -64,6 +70,7 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  flex-shrink: 0;
 }
 
 /* ── Hero ── */
@@ -71,7 +78,8 @@
   max-width: 1100px;
   margin: 0 auto;
   width: 100%;
-  padding-top: 40px;
+  padding-top: 48px;
+  padding-bottom: 8px;
 }
 
 .heroGreeting {
@@ -79,19 +87,20 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 2px;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
 }
 
 .heroTitle {
   font-family: var(--font-display);
-  font-size: clamp(28px, 4vw, 44px);
+  font-size: clamp(24px, 4vw, 44px);
   font-weight: 700;
   letter-spacing: -1px;
   background: linear-gradient(135deg, var(--text-primary) 30%, var(--text-secondary));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
+  line-height: 1.15;
 }
 
 .heroDescription {
@@ -106,7 +115,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-top: 16px;
+  margin-top: 20px;
 }
 
 .difficultyLabel {
@@ -138,7 +147,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  margin-top: 14px;
+  margin-top: 16px;
 }
 
 .tag {
@@ -154,13 +163,13 @@
 /* ── Content ── */
 .content {
   flex: 1;
-  padding-top: 32px;
+  padding-top: 40px;
   max-width: 1100px;
   margin: 0 auto;
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 36px;
 }
 
 /* ── Problem Statement Card ── */
@@ -168,7 +177,7 @@
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 24px 28px;
+  padding: 28px 28px;
   backdrop-filter: blur(20px);
   transition: border-color var(--duration-base) var(--ease-out);
 }
@@ -179,7 +188,7 @@
 
 .goalIcon {
   font-size: 20px;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .goalTitle {
@@ -187,12 +196,12 @@
   font-size: 15px;
   font-weight: 600;
   letter-spacing: -0.2px;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   color: var(--text-primary);
 }
 
 .goalText {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text-secondary);
   line-height: 1.7;
 }
@@ -201,7 +210,7 @@
 .stepsSection {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 18px;
 }
 
 .stepsTitle {
@@ -221,7 +230,7 @@
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  padding: 18px 20px;
+  padding: 20px;
   transition: all var(--duration-base) var(--ease-out);
 }
 
@@ -234,13 +243,13 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 22px;
-  height: 22px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   font-family: var(--font-mono);
   font-size: 11px;
   font-weight: 700;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .stepTitle {
@@ -248,20 +257,20 @@
   font-size: 13px;
   font-weight: 600;
   letter-spacing: -0.2px;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 
 .stepDesc {
   font-size: 12px;
   color: var(--text-secondary);
-  line-height: 1.6;
+  line-height: 1.65;
 }
 
 /* ── Datasources ── */
 .datasourcesSection {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
 .datasourcesTitle {
@@ -331,18 +340,39 @@
 .vizSection {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 24px;
 }
 
 /* ── Mobile ── */
 @media (max-width: 768px) {
   .page {
-    padding: 0 16px 80px;
+    padding: 0 20px 90px;
   }
 
   .stickyHeader {
-    margin: 0 -16px;
-    padding: 12px 16px;
+    margin: 0 -20px;
+    padding: 12px 20px;
+  }
+
+  .headerTitle {
+    display: none;
+  }
+
+  .hero {
+    padding-top: 32px;
+  }
+
+  .heroTitle {
+    font-size: clamp(22px, 6vw, 32px);
+  }
+
+  .heroDescription {
+    font-size: 14px;
+  }
+
+  .content {
+    padding-top: 32px;
+    gap: 32px;
   }
 
   .stepsGrid,
@@ -351,10 +381,6 @@
   }
 
   .goalCard {
-    background: none;
-    border: none;
-    border-bottom: 1px solid var(--border);
-    border-radius: 0;
-    padding: 20px 0;
+    padding: 20px;
   }
 }

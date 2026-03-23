@@ -228,6 +228,11 @@ th, td {
   padding: 10px 14px;
   border-bottom: 1px solid var(--border);
   font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+td {
+  white-space: normal;
 }
 
 th {
@@ -250,6 +255,7 @@ td {
 
   .app-main {
     margin-left: 0;
-    padding-bottom: 64px;
+    padding-bottom: 68px;
+    overflow-x: hidden;
   }
 }

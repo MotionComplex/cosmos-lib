@@ -3,14 +3,14 @@
   font-size: 17px;
   font-weight: 600;
   letter-spacing: -0.3px;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 
 .vizCard {
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 24px;
+  padding: 20px;
   overflow: hidden;
 }
 
@@ -39,7 +39,7 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--text-muted);
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 
 .statValue {
@@ -47,17 +47,20 @@
   font-size: 18px;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
+  word-break: break-word;
 }
 
 .tableCard {
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  overflow: hidden;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .tableCard table {
   margin: 0;
+  min-width: 600px;
 }
 
 .tableCard th {
@@ -94,7 +97,7 @@
   background: var(--imaging-dim);
   border: 1px solid rgba(167, 139, 250, 0.15);
   border-radius: var(--radius-md);
-  padding: 16px 20px;
+  padding: 18px 20px;
   font-size: 13px;
   line-height: 1.7;
   color: var(--text-secondary);
@@ -105,14 +108,18 @@
 }
 
 .desc {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text-secondary);
-  line-height: 1.6;
-  margin-bottom: 14px;
+  line-height: 1.65;
+  margin-bottom: 16px;
 }
 
 @media (max-width: 768px) {
   .statRow {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .vizCard {
+    padding: 12px;
   }
 }
