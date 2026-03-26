@@ -5,7 +5,7 @@
     "access": "public",
     "provenance": true
   },
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "Reusable astronomical utilities: data, math, media, sky maps, NASA APIs, and UI transitions.",
   "author": "",
   "license": "MIT",

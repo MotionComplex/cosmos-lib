@@ -78,7 +78,7 @@ export declare function buildHips2fitsUrl(ra: number, dec: number, fovDeg: numbe
  * @param ra         - Right Ascension in degrees (J2000).
  * @param dec        - Declination in degrees (J2000).
  * @param fovArcmin  - Desired field of view in arcminutes.
- * @param opts       - Output size, survey, stretch, and timeout options.
+ * @param opts       - Output size, survey, stretch, and colormap options.
  */
 export declare function tryHiPS(ra: number, dec: number, fovArcmin: number, opts?: HiPSOptions): Promise<CutoutResult | null>;
 /**
