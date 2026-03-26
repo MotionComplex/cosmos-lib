@@ -9,6 +9,7 @@ function mockFetch(body: unknown, status = 200) {
     status,
     statusText: status === 200 ? 'OK' : 'Error',
     json: () => Promise.resolve(body),
+    text: () => Promise.resolve(typeof body === 'string' ? body : JSON.stringify(body)),
   }))
 }
 
@@ -52,19 +53,13 @@ const APOD_PAYLOAD = {
   copyright:   'NASA/ESA/Hubble',
 }
 
-const ESA_PAYLOAD = {
-  results: [
-    {
-      id:               'heic0601a',
-      title:            'Pillars of Creation',
-      description:      'Eagle Nebula.',
-      credit:           'NASA/ESA/STScI',
-      release_date:     '2015-01-05',
-      image_files:      [{ file_url: 'https://esahubble.org/media/original.jpg' }],
-      subject_category: ['nebulae'],
-    },
-  ],
-}
+const ESA_HTML_PAYLOAD = `<html><body><script>
+var images = [
+  { id: 'heic0601a', title: 'Pillars of Creation', width: 1280, height: 1024, src: 'https://cdn.esahubble.org/archives/images/thumb300y/heic0601a.jpg', url: '/images/heic0601a/', potw: '' }
+];
+</script></body></html>`
+
+const ESA_HTML_EMPTY = `<html><body><p>No results</p></body></html>`
 
 const SIMBAD_PAYLOAD = {
   data: [['Orion Nebula', 83.822, -5.391, 'RNe']],
@@ -208,25 +203,25 @@ describe('ESA API', () => {
 
   describe('searchHubble', () => {
     it('returns mapped ESAHubbleResult array', async () => {
-      mockFetch(ESA_PAYLOAD)
+      mockFetch(ESA_HTML_PAYLOAD)
       const results = await ESA.searchHubble('pillars')
       expect(results).toHaveLength(1)
       expect(results[0]).toMatchObject({
         id:      'heic0601a',
         title:   'Pillars of Creation',
-        credit:  'NASA/ESA/STScI',
-        tags:    ['nebulae'],
+        credit:  'ESA/Hubble',
       })
     })
 
-    it('generates thumbUrl from imageUrl', async () => {
-      mockFetch(ESA_PAYLOAD)
+    it('builds CDN image and thumb URLs from id', async () => {
+      mockFetch(ESA_HTML_PAYLOAD)
       const results = await ESA.searchHubble('pillars')
-      expect(results[0]?.thumbUrl).toContain('screen')
+      expect(results[0]?.imageUrl).toBe('https://cdn.esahubble.org/archives/images/large/heic0601a.jpg')
+      expect(results[0]?.thumbUrl).toBe('https://cdn.esahubble.org/archives/images/screen/heic0601a.jpg')
     })
 
-    it('returns empty array when results is absent', async () => {
-      mockFetch({})
+    it('returns empty array when no images var is found', async () => {
+      mockFetch(ESA_HTML_EMPTY)
       const results = await ESA.searchHubble('none')
       expect(results).toHaveLength(0)
     })

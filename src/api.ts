@@ -317,8 +317,9 @@ export const ESA = {
   /**
    * Search the ESA Hubble Space Telescope image archive.
    *
-   * Queries the ESAHubble public REST API and returns an array of
-   * {@link ESAHubbleResult} objects with image metadata and URLs.
+   * Scrapes the ESA/Hubble image search page and extracts the embedded
+   * result data. Returns an array of {@link ESAHubbleResult} objects with
+   * CDN image URLs.
    *
    * @param query - Free-text search term (e.g. `'crab nebula'`).
    * @param limit - Maximum number of results to return. Defaults to `10`.
@@ -327,7 +328,8 @@ export const ESA = {
    *          includes both a full-resolution `imageUrl` and a
    *          screen-sized `thumbUrl`.
    *
-   * @throws {Error} If the ESA API responds with a non-2xx status code.
+   * @throws {Error} If the ESA site responds with a non-2xx status code
+   *                 or the page format cannot be parsed.
    *
    * @example
    * ```ts
@@ -337,31 +339,46 @@ export const ESA = {
    * }
    * ```
    *
-   * @see {@link https://esahubble.org/api/v1/ | ESA Hubble API docs}
+   * @see {@link https://esahubble.org/images/ | ESA Hubble image archive}
    */
   async searchHubble(query: string, limit = 10): Promise<ESAHubbleResult[]> {
     const res = await fetch(
-      `https://esahubble.org/api/v1/images/?search=${encodeURIComponent(query)}&limit=${limit}`
+      `https://esahubble.org/images/?search=${encodeURIComponent(query)}`,
     )
     if (!res.ok) throw new Error(`ESA Hubble API error: ${res.status}`)
-    const json = await res.json() as {
-      results?: Array<{
-        id?: string; title?: string; description?: string; credit?: string
-        release_date?: string; image_files?: Array<{ file_url?: string }>
-        subject_category?: string[]
-      }>
+    const html = await res.text()
+
+    // The search page embeds results as: var images = [ {id, title, ...}, ... ];
+    const match = html.match(/var\s+images\s*=\s*(\[[\s\S]*?\]);/)
+    if (!match) return []
+
+    let parsed: Array<{ id?: string; title?: string }>
+    try {
+      // The embedded JS uses single quotes and unquoted keys — normalise to valid JSON.
+      // Quote bare keys (only those after { or ,) before converting quotes, to avoid
+      // matching colons inside URL strings like "https://".
+      const jsonStr = match[1]!
+        .replace(/([{,])\s*(\w+)\s*:/g, '$1"$2":')
+        .replace(/'/g, '"')
+        .replace(/,\s*([}\]])/g, '$1')
+      parsed = JSON.parse(jsonStr) as Array<{ id?: string; title?: string }>
+    } catch {
+      return []
     }
-    return (json.results ?? []).map(item => {
-      const fileUrl = item.image_files?.[0]?.file_url ?? null
+
+    return parsed.slice(0, limit).map(item => {
+      const id = item.id ?? ''
+      const imageUrl = id ? `https://cdn.esahubble.org/archives/images/large/${id}.jpg` : null
+      const thumbUrl = id ? `https://cdn.esahubble.org/archives/images/screen/${id}.jpg` : null
       return {
-        id:          item.id          ?? '',
-        title:       item.title       ?? '',
-        description: item.description ?? '',
-        credit:      item.credit      ?? '',
-        date:        item.release_date ?? '',
-        imageUrl:    fileUrl,
-        thumbUrl:    fileUrl?.replace('original', 'screen') ?? null,
-        tags:        item.subject_category ?? [],
+        id,
+        title:       item.title ?? '',
+        description: '',
+        credit:      'ESA/Hubble',
+        date:        '',
+        imageUrl,
+        thumbUrl,
+        tags:        [],
       }
     })
   },
