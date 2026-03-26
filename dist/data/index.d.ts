@@ -17,8 +17,8 @@ export { CONSTELLATIONS } from './constellations.js';
 export { MESSIER_CATALOG } from './messier.js';
 export { METEOR_SHOWERS } from './showers.js';
 export { IMAGE_FALLBACKS, resolveImages, getObjectImage, prefetchImages } from './images.js';
-export { computeFov, tryPanSTARRS, tryDSS } from './cutouts.js';
-export type { CutoutResult, CutoutOptions } from './cutouts.js';
+export { computeFov, tryHiPS, buildHips2fitsUrl, tryPanSTARRS, tryDSS } from './cutouts.js';
+export type { CutoutResult, CutoutOptions, HiPSOptions, HiPSStretch } from './cutouts.js';
 /** Compact star record used by tier data files. */
 export interface TierStar {
     ra: number;

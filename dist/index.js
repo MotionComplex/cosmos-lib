@@ -1,5 +1,5 @@
-import { C as E, M as A, A as g, P as D, D as _, S as w, c as $e, I as ze, g as Fe, m as He, s as Ye, r as Xe, a as qe, E as Ge, N as Ue, b as Ke } from "./skymap-interactive-BBwTtzAL.js";
-import { B as kt, d as wt, e as At, f as Lt, h as Et, i as Mt, j as Ot, k as Nt, l as Ct, n as vt, o as _t, p as Wt, q as It, t as Tt, u as Rt, v as Dt } from "./skymap-interactive-BBwTtzAL.js";
+import { C as E, M as A, A as g, P, D as _, S as w, c as $e, I as ze, g as Fe, m as He, s as Ye, r as Xe, a as qe, E as Ge, N as Ue, b as Ke } from "./skymap-interactive-Co7yJAQY.js";
+import { B as kt, d as wt, e as At, f as Lt, h as Et, i as Mt, j as Ot, k as Nt, l as Ct, n as vt, o as _t, p as Wt, q as It, t as Tt, u as Rt, v as Pt, w as Dt, x as $t } from "./skymap-interactive-Co7yJAQY.js";
 import { M as Ze } from "./media-DVOcIMa1.js";
 const je = {
   // ── Distance ───────────────────────────────────────────────────────────────
@@ -352,7 +352,7 @@ const Be = {
   nextEvents(e, a = {}) {
     const { days: t = 90, categories: r, limit: n = 50 } = a, i = e.date ?? /* @__PURE__ */ new Date(), o = new Date(i.valueOf() + t * 864e5), s = [], c = (d) => !r || r.includes(d);
     if (c("moon-phase") && s.push(...Qe(i, o)), c("eclipse") && s.push(...Je(i, o)), c("meteor-shower") && s.push(...et(i, o)), c("opposition") || c("conjunction")) {
-      const d = D.planetEvents(e, { days: t });
+      const d = P.planetEvents(e, { days: t });
       for (const l of d)
         if (c(l.type)) {
           let m, h;
@@ -848,7 +848,7 @@ class at {
    * @param limit - Max results. @defaultValue `10`
    */
   bestTargets(a, t = 10) {
-    const r = D.whatsUp(a, { minAltitude: 20, magnitudeLimit: 10, limit: 50 }), n = this.fov().width * 60;
+    const r = P.whatsUp(a, { minAltitude: 20, magnitudeLimit: 10, limit: 50 }), n = this.fov().width * 60;
     return r.filter((i) => {
       const o = i.object.size_arcmin ?? 0;
       if (o === 0) return !1;
@@ -1080,10 +1080,10 @@ const J = {
       const u = _.get(S);
       if (!u || u.ra === null || u.dec === null) continue;
       const x = { ra: u.ra, dec: u.dec };
-      let y = -90, k = c, M = null, W = null, I = 1 / 0, P = 0;
+      let y = -90, k = c, M = null, W = null, I = 1 / 0, D = 0;
       for (let L = c.valueOf(); L <= l.valueOf(); L += 9e5) {
         const v = new Date(L), O = g.equatorialToHorizontal(x, { ...e, date: v }), C = Se(O.alt);
-        O.alt >= r && C <= n && (M || (M = v), W = v, C < I && (I = C), C > P && (P = C)), O.alt > y && (y = O.alt, k = v);
+        O.alt >= r && C <= n && (M || (M = v), W = v, C < I && (I = C), C > D && (D = C)), O.alt > y && (y = O.alt, k = v);
       }
       if (!M || !W || y < r) continue;
       const $ = g.angularSeparation(x, f), z = Math.max(0, Math.min(1, (120 - $) / 115)), Y = m.illumination * z;
@@ -1096,7 +1096,7 @@ const J = {
         end: W,
         transit: k,
         peakAltitude: y,
-        airmassRange: [Math.round(I * 100) / 100, Math.round(P * 100) / 100],
+        airmassRange: [Math.round(I * 100) / 100, Math.round(D * 100) / 100],
         moonSeparation: Math.round($),
         moonInterference: Math.round(Y * 100) / 100,
         score: N
@@ -1112,7 +1112,7 @@ const J = {
    * @param maxAirmass - Maximum acceptable airmass. @defaultValue `2.0`
    */
   imagingWindow(e, a, t = 2) {
-    const r = D.bestWindow(e, a, 15);
+    const r = P.bestWindow(e, a, 15);
     if (!r) return null;
     const n = _.get(e);
     if (!n || n.ra === null || n.dec === null) return null;
@@ -1274,7 +1274,7 @@ const J = {
    * @param observer - Observer location and time.
    */
   collimationStar(e) {
-    const a = D.whatsUp(e, { types: ["star"], magnitudeLimit: 3, minAltitude: 50, limit: 10 });
+    const a = P.whatsUp(e, { types: ["star"], magnitudeLimit: 3, minAltitude: 50, limit: 10 });
     if (a.length === 0) return null;
     const t = a.sort((r, n) => n.alt - r.alt)[0];
     return { name: t.object.name, altitude: t.alt, azimuth: t.az };
@@ -1336,11 +1336,11 @@ const J = {
       targetSNR: l = 25
     } = t, m = lt(t), h = a.date ?? /* @__PURE__ */ new Date(), p = w.twilight({ ...a, date: h }).astronomicalDusk, u = w.twilight({ ...a, date: new Date(h.valueOf() + 864e5) }).astronomicalDawn;
     if (!p || !u) return null;
-    const x = (u.valueOf() - p.valueOf()) / 36e5, y = J.flatFrameWindow({ ...a, date: h }), k = y.evening ?? y.morning, M = A.phase(h), W = A.position(h), I = { ra: W.ra, dec: W.dec }, P = e.fov().width * 60, $ = D.whatsUp(a, { minAltitude: 20, magnitudeLimit: 10, limit: 100 }), z = /* @__PURE__ */ new Set();
+    const x = (u.valueOf() - p.valueOf()) / 36e5, y = J.flatFrameWindow({ ...a, date: h }), k = y.evening ?? y.morning, M = A.phase(h), W = A.position(h), I = { ra: W.ra, dec: W.dec }, D = e.fov().width * 60, $ = P.whatsUp(a, { minAltitude: 20, magnitudeLimit: 10, limit: 100 }), z = /* @__PURE__ */ new Set();
     for (const b of $) {
       const N = b.object.size_arcmin ?? 0;
       if (N === 0) continue;
-      const L = N / P * 100;
+      const L = N / D * 100;
       if (L >= i && L <= o && z.add(b.object.id), z.size >= n) break;
     }
     const Y = new Set(r.map((b) => b.toLowerCase())), T = /* @__PURE__ */ new Map();
@@ -1377,7 +1377,7 @@ const J = {
           darkNote: `Match ${G}s${ge ? ", " + ge : ""}, same temperature`,
           flatNote: k ? `Shoot during twilight flat window (${k.start.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}–${k.end.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })})` : "Shoot during twilight or use an even light source"
         }
-      }, We = Math.min(O / 90, 1) * 40, Ie = (1 - Math.min(q - 1, 2) / 2) * 30, Te = (1 - me) * 30, Re = We + Ie + Te, De = mt(re.fillPercent), Pe = Math.round(Re * 0.6 + De * 0.4);
+      }, We = Math.min(O / 90, 1) * 40, Ie = (1 - Math.min(q - 1, 2) / 2) * 30, Te = (1 - me) * 30, Re = We + Ie + Te, Pe = mt(re.fillPercent), De = Math.round(Re * 0.6 + Pe * 0.4);
       F.push({
         objectId: b,
         name: L.name,
@@ -1391,7 +1391,7 @@ const J = {
         framing: re,
         maxExposure: ue,
         capture: _e,
-        score: Pe,
+        score: De,
         source: N
       });
     }
@@ -1872,7 +1872,7 @@ const yt = {
   Sun: w,
   Moon: A,
   Eclipse: be,
-  Planner: D,
+  Planner: P,
   AstroClock: Ke,
   Events: Be,
   Equipment: rt,
@@ -1905,7 +1905,7 @@ export {
   A as Moon,
   Ue as NASA,
   ht as PLANET_TEXTURES,
-  D as Planner,
+  P as Planner,
   at as Rig,
   Ot as SOLAR_SYSTEM,
   gt as STAR_TEXTURES,
@@ -1913,26 +1913,28 @@ export {
   w as Sun,
   yt as Transitions,
   je as Units,
-  Ct as canvasToEquatorial,
-  vt as computeFov,
+  Ct as buildHips2fitsUrl,
+  vt as canvasToEquatorial,
+  _t as computeFov,
   $e as createInteractiveSkyMap,
   Le as crossfade,
   St as default,
   ee as fade,
-  _t as getObjectImage,
+  Wt as getObjectImage,
   Fe as gnomonic,
   Me as heroCollapse,
   Ee as heroExpand,
   He as mollweide,
   ke as morph,
-  Wt as prefetchImages,
+  It as prefetchImages,
   Xe as renderSkyMap,
-  It as resolveImages,
+  Tt as resolveImages,
   qe as resolveSimbad,
-  Tt as spectralColor,
+  Rt as spectralColor,
   we as staggerIn,
   Ae as staggerOut,
   Ye as stereographic,
-  Rt as tryDSS,
-  Dt as tryPanSTARRS
+  Pt as tryDSS,
+  Dt as tryHiPS,
+  $t as tryPanSTARRS
 };

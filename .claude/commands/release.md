@@ -46,9 +46,13 @@ Do NOT run `npm install` in example apps — just update the version specifier i
 
 Run `npm install` in the **root** only (to sync `package-lock.json` with the new version).
 
-## Step 6 — Commit & tag
+## Step 6 — Rebuild for release
 
-Stage all changed files and create a single commit:
+Run `npm run build` again so that `dist/` reflects the bumped version and any source changes. The pre-flight build in step 1 validated correctness, but the version in `package.json` has changed since then, so rebuild.
+
+## Step 7 — Commit & tag
+
+Stage all changed files **including `dist/`** (build output is tracked in this repo) and create a single commit:
 
 ```
 chore: release v<version>
@@ -56,7 +60,7 @@ chore: release v<version>
 
 Then create a git tag: `git tag v<version>`
 
-## Step 7 — Summary
+## Step 8 — Summary
 
 Print a summary:
 - Old version → New version

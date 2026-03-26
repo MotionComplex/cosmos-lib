@@ -222,6 +222,76 @@
   min-height: 100vh;
 }
 
+/* ── Image source selector ───────────────────────────────────────────── */
+
+.imageSourceSection {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px 40px 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.imageSourceBar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.imageSourceLabel {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.imageSourceOptions {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.imageSourceBtn {
+  font-size: 12px;
+  font-weight: 500;
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--duration-fast);
+  white-space: nowrap;
+}
+
+.imageSourceBtn:hover {
+  border-color: var(--border-hover);
+  color: var(--text-primary);
+}
+
+.imageSourceBtnActive {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.imageSourceStatus {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 8px;
+}
+
+.imageSourceCredit {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 8px;
+  opacity: 0.7;
+}
+
 /* ── Data grid ───────────────────────────────────────────────────────── */
 
 .dataGrid {
@@ -369,6 +439,10 @@
   .stickyHeader .heroStatus {
     flex-wrap: wrap;
   }
+
+  .imageSourceSection { padding: 16px 16px 0; }
+
+  .imageSourceBar { flex-direction: column; align-items: flex-start; gap: 8px; }
 
   .dataGrid {
     grid-template-columns: 1fr;

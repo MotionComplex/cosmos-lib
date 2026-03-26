@@ -17,8 +17,9 @@
  */
 import { useMemo, useState, useRef, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Data, AstroMath, Units, Sun, Moon, CONSTANTS, Planner } from "cosmos-lib";
+import { Data, AstroMath, Units, Sun, Moon, CONSTANTS, Planner, tryHiPS, tryPanSTARRS, tryDSS, computeFov, IMAGE_FALLBACKS, resolveImages } from "cosmos-lib";
 import type { PlanetName, ObjectImageResult, VisibilityCurvePoint, MoonInterference as MoonInterferenceType } from "cosmos-lib";
+import { Media } from "cosmos-lib";
 import { useObserverCtx } from "../App";
 import { useNow } from "../hooks/useNow";
 import { formatTime } from "../utils/formatTime";
@@ -86,6 +87,78 @@ const DOCS_ENTRIES: DocEntry[] = [
 const DOCS_GUIDES = [
   { label: "Coordinate Systems", path: "docs/guides/coordinate-systems.md" },
 ];
+
+type ImageSource = "auto" | "hips" | "panstarrs" | "dss" | "wikimedia" | "nasa" | "esa";
+
+const IMAGE_SOURCES: { value: ImageSource; label: string }[] = [
+  { value: "auto", label: "Auto" },
+  { value: "hips", label: "HiPS" },
+  { value: "panstarrs", label: "Pan-STARRS" },
+  { value: "dss", label: "DSS" },
+  { value: "wikimedia", label: "Wikimedia" },
+  { value: "nasa", label: "NASA" },
+  { value: "esa", label: "ESA" },
+];
+
+async function loadImageForSource(
+  source: ImageSource,
+  obj: { id: string; name: string; ra: number | null; dec: number | null; size_arcmin?: number; type: string },
+): Promise<ObjectImageResult | null> {
+  if (source === "auto") {
+    return Data.getImage(obj.id, obj.name, { width: 1200 });
+  }
+
+  if (source === "wikimedia") {
+    const staticImages = IMAGE_FALLBACKS[obj.id];
+    if (!staticImages?.length) return null;
+    const img = staticImages[0]!;
+    return {
+      src: Media.wikimediaUrl(img.filename, 1200),
+      srcset: Media.srcset([640, 1024, 1600], (w) => Media.wikimediaUrl(img.filename, w)),
+      placeholder: Media.wikimediaUrl(img.filename, 64),
+      credit: img.credit,
+      source: "static",
+    };
+  }
+
+  if (source === "nasa" || source === "esa") {
+    const resolved = await resolveImages(obj.name, { source, limit: 1 });
+    if (!resolved.length) return null;
+    const best = resolved[0]!;
+    return {
+      src: best.previewUrl ?? best.urls[0]!,
+      srcset: null,
+      placeholder: null,
+      credit: best.credit,
+      source: best.source,
+    };
+  }
+
+  // Coordinate-based sources (hips, panstarrs, dss)
+  if (obj.ra == null || obj.dec == null) return null;
+  const fov = computeFov(obj.size_arcmin, obj.type);
+  const opts = { outputSize: 1200, timeout: 15000 };
+
+  if (source === "hips") {
+    const result = await tryHiPS(obj.ra, obj.dec, fov, opts);
+    if (!result) return null;
+    return { src: result.url, srcset: null, placeholder: null, credit: result.credit, source: "hips" };
+  }
+
+  if (source === "panstarrs") {
+    const result = await tryPanSTARRS(obj.id, obj.ra, obj.dec, fov, opts);
+    if (!result) return null;
+    return { src: result.url, srcset: null, placeholder: null, credit: result.credit, source: "panstarrs" };
+  }
+
+  if (source === "dss") {
+    const result = await tryDSS(obj.ra, obj.dec, fov, opts);
+    if (!result) return null;
+    return { src: result.url, srcset: null, placeholder: null, credit: result.credit, source: "dss" };
+  }
+
+  return null;
+}
 
 const PLANET_NAMES = [
   "mercury",
@@ -236,25 +309,37 @@ export function ObjectDetail() {
     return () => observer.disconnect();
   }, []);
 
-  // Unified image pipeline — Data.getImage runs the cascade:
-  // static registry (instant) → NASA API → ESA API, with caching.
+  // Image source selector state
+  const [imageSource, setImageSource] = useState<ImageSource>("auto");
+
+  // Unified image pipeline — loads from the selected source.
   const [heroImageState, setHeroImageState] = useState<{
     id: string | undefined;
+    source: ImageSource;
     image: ObjectImageResult | null;
     loading: boolean;
-  }>({ id: undefined, image: null, loading: false });
-  if (heroImageState.id !== id) {
-    setHeroImageState({ id, image: null, loading: true });
+  }>({ id: undefined, source: "auto", image: null, loading: false });
+  if (heroImageState.id !== id || heroImageState.source !== imageSource) {
+    setHeroImageState({ id, source: imageSource, image: null, loading: true });
+    setImgState({ id, loaded: false });
   }
   const heroImage = heroImageState.image;
   useEffect(() => {
     if (!data || !heroImageState.loading) return;
     let cancelled = false;
-    Data.getImage(data.obj.id, data.obj.name, { width: 1200 }).then(result => {
+    const obj = {
+      id: data.obj.id,
+      name: data.obj.name,
+      ra: data.ra,
+      dec: data.dec,
+      size_arcmin: data.obj.size_arcmin,
+      type: data.obj.type,
+    };
+    loadImageForSource(heroImageState.source, obj).then(result => {
       if (!cancelled) setHeroImageState(prev => ({ ...prev, image: result, loading: false }));
     });
     return () => { cancelled = true; };
-  }, [data, heroImageState.loading]);
+  }, [data, heroImageState.loading, heroImageState.source]);
 
   // Prefetch images for nearby objects so navigating to them feels instant
   const nearbyIds = useMemo(() => data?.nearby.map(n => n.object.id) ?? [], [data?.nearby]);
@@ -353,6 +438,33 @@ export function ObjectDetail() {
         </div>
 
       <div className={styles.contentBody}>
+      {/* Image source selector */}
+      <div className={styles.imageSourceSection}>
+        <div className={styles.imageSourceBar}>
+          <span className={styles.imageSourceLabel}>Image source</span>
+          <div className={styles.imageSourceOptions}>
+            {IMAGE_SOURCES.map((s) => (
+              <button
+                key={s.value}
+                className={`${styles.imageSourceBtn}${imageSource === s.value ? ` ${styles.imageSourceBtnActive}` : ""}`}
+                onClick={() => setImageSource(s.value)}
+              >
+                {s.label}
+              </button>
+            ))}
+          </div>
+        </div>
+        {heroImageState.loading && (
+          <p className={styles.imageSourceStatus}>Loading image...</p>
+        )}
+        {!heroImageState.loading && !heroImage && imageSource !== "auto" && (
+          <p className={styles.imageSourceStatus}>No image available from this source</p>
+        )}
+        {heroImage && !heroImageState.loading && (
+          <p className={styles.imageSourceCredit}>{heroImage.credit}</p>
+        )}
+      </div>
+
       <div className={styles.dataGrid}>
         {/* Coordinates */}
         {ra != null && dec != null && (
