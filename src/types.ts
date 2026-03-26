@@ -525,7 +525,7 @@ export interface ObjectImageResult {
   /** Attribution / credit string. */
   credit: string
   /** Where the image came from. */
-  source: 'static' | 'panstarrs' | 'dss' | 'nasa' | 'esa'
+  source: 'static' | 'hips' | 'panstarrs' | 'dss' | 'nasa' | 'esa'
 }
 
 /**
@@ -540,8 +540,10 @@ export interface GetImageOptions {
   source?: 'nasa' | 'esa' | 'all'
   /** Timeout in ms for coordinate-based cutout requests. @defaultValue `15000` */
   cutoutTimeout?: number
-  /** Skip coordinate-based cutout sources (Pan-STARRS, DSS) entirely. @defaultValue `true` */
+  /** Skip coordinate-based cutout sources (HiPS, Pan-STARRS, DSS) entirely. @defaultValue `true` */
   skipCutouts?: boolean
+  /** Override HiPS survey, stretch, or colormap for the hips2fits cutout. */
+  hipsOptions?: { hips?: string; stretch?: 'linear' | 'sqrt' | 'log' | 'asinh' | 'power'; cmap?: string }
   /**
    * Auto-prefetch nearby objects after resolving. Set `false` to disable.
    * When enabled, nearby objects are fetched in the background so spatial

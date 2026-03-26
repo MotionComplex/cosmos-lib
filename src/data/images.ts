@@ -1,7 +1,7 @@
 import type { ImageRef, ObjectImageResult, GetImageOptions, ProximityResult, EquatorialCoord } from '../types.js'
 import { Media } from '../media.js'
 import { NASA, ESA } from '../api.js'
-import { tryPanSTARRS, tryDSS, computeFov } from './cutouts.js'
+import { tryHiPS, tryPanSTARRS, tryDSS, computeFov } from './cutouts.js'
 import type { CutoutOptions } from './cutouts.js'
 
 // ── Catalog lookup (injected from index.ts to avoid circular imports) ────────
@@ -323,6 +323,7 @@ export async function getObjectImage(
     source = 'all',
     cutoutTimeout = 15000,
     skipCutouts = true,
+    hipsOptions,
     prefetch,
   } = opts
 
@@ -351,25 +352,40 @@ export async function getObjectImage(
     }
   }
 
-  // ── 3. Pan-STARRS cutout (coordinate-based, color) ──────────────────
+  // ── 3. Coordinate-based cutouts (HiPS → Pan-STARRS → DSS) ──────────
   if (!result && !skipCutouts && _catalogLookup) {
     const info = _catalogLookup(id)
     if (info && info.ra !== null && info.dec !== null) {
       const fov = computeFov(info.size_arcmin, info.type)
       const cutoutOpts: CutoutOptions = { outputSize: width, timeout: cutoutTimeout }
 
-      const ps1 = await tryPanSTARRS(id, info.ra, info.dec, fov, cutoutOpts)
-      if (ps1) {
+      // 3a. HiPS2FITS — full-sky colour via CDS (any object with coords)
+      const hips = await tryHiPS(info.ra, info.dec, fov, { ...cutoutOpts, ...hipsOptions })
+      if (hips) {
         result = {
-          src: ps1.url,
+          src: hips.url,
           srcset: null,
           placeholder: null,
-          credit: ps1.credit,
-          source: 'panstarrs',
+          credit: hips.credit,
+          source: 'hips',
         }
       }
 
-      // ── 4. DSS cutout (full-sky grayscale fallback) ───────────────
+      // 3b. Pan-STARRS DR2 — higher resolution where available (dec > -30)
+      if (!result) {
+        const ps1 = await tryPanSTARRS(id, info.ra, info.dec, fov, cutoutOpts)
+        if (ps1) {
+          result = {
+            src: ps1.url,
+            srcset: null,
+            placeholder: null,
+            credit: ps1.credit,
+            source: 'panstarrs',
+          }
+        }
+      }
+
+      // 3c. DSS — full-sky grayscale fallback
       if (!result) {
         const dss = await tryDSS(info.ra, info.dec, fov, cutoutOpts)
         if (dss) {
