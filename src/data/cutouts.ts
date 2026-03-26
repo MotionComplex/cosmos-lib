@@ -144,7 +144,7 @@ export function buildHips2fitsUrl(
  * @param ra         - Right Ascension in degrees (J2000).
  * @param dec        - Declination in degrees (J2000).
  * @param fovArcmin  - Desired field of view in arcminutes.
- * @param opts       - Output size, survey, stretch, and timeout options.
+ * @param opts       - Output size, survey, stretch, and colormap options.
  */
 export async function tryHiPS(
   ra: number,
@@ -152,27 +152,17 @@ export async function tryHiPS(
   fovArcmin: number,
   opts: HiPSOptions = {},
 ): Promise<CutoutResult | null> {
-  const { outputSize = 1024, timeout = 15000 } = opts
+  const { outputSize = 1024 } = opts
   const fovDeg = fovArcmin / 60
 
   const url = buildHips2fitsUrl(ra, dec, fovDeg, outputSize, outputSize, opts)
 
-  try {
-    const res = await fetch(url, {
-      method: 'HEAD',
-      signal: AbortSignal.timeout(timeout),
-    })
-    if (!res.ok) return null
-
-    const hips = opts.hips ?? 'CDS/P/DSS2/color'
-    return {
-      url,
-      format: 'jpg',
-      credit: `CDS hips2fits · ${hips}`,
-      source: 'hips',
-    }
-  } catch {
-    return null
+  const hips = opts.hips ?? 'CDS/P/DSS2/color'
+  return {
+    url,
+    format: 'jpg',
+    credit: `CDS hips2fits · ${hips}`,
+    source: 'hips',
   }
 }
 
