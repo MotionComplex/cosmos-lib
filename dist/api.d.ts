@@ -189,8 +189,9 @@ export declare const ESA: {
     /**
      * Search the ESA Hubble Space Telescope image archive.
      *
-     * Queries the ESAHubble public REST API and returns an array of
-     * {@link ESAHubbleResult} objects with image metadata and URLs.
+     * Scrapes the ESA/Hubble image search page and extracts the embedded
+     * result data. Returns an array of {@link ESAHubbleResult} objects with
+     * CDN image URLs.
      *
      * @param query - Free-text search term (e.g. `'crab nebula'`).
      * @param limit - Maximum number of results to return. Defaults to `10`.
@@ -199,7 +200,8 @@ export declare const ESA: {
      *          includes both a full-resolution `imageUrl` and a
      *          screen-sized `thumbUrl`.
      *
-     * @throws {Error} If the ESA API responds with a non-2xx status code.
+     * @throws {Error} If the ESA site responds with a non-2xx status code
+     *                 or the page format cannot be parsed.
      *
      * @example
      * ```ts
@@ -209,7 +211,7 @@ export declare const ESA: {
      * }
      * ```
      *
-     * @see {@link https://esahubble.org/api/v1/ | ESA Hubble API docs}
+     * @see {@link https://esahubble.org/images/ | ESA Hubble image archive}
      */
     searchHubble(query: string, limit?: number): Promise<ESAHubbleResult[]>;
 };
