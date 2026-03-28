@@ -1,0 +1,186 @@
+# cosmos-lib
+
+> @motioncomplex/cosmos-lib — Astronomical calculation and visualisation library for the web. Pure math + bundled catalogs, no external API dependencies for core computations. TypeScript, tree-shakeable ESM, <200KB.
+
+## Install
+
+```bash
+npm install @motioncomplex/cosmos-lib
+```
+
+## Entry Points
+
+- `@motioncomplex/cosmos-lib` — Core library: ephemeris, catalogs, planning, sky maps, media, transitions
+- `@motioncomplex/cosmos-lib/react` — SSR-safe React hooks and components
+- `@motioncomplex/cosmos-lib/three` — Three.js 3D scene factories (pass THREE at runtime)
+
+## Quick Start
+
+```ts
+import { AstroMath, Sun, Moon, Planner, Data, Equipment, Rig } from '@motioncomplex/cosmos-lib';
+// or use the convenience namespace:
+import Cosmos from '@motioncomplex/cosmos-lib';
+```
+
+## Core Modules
+
+### AstroMath — Ephemeris & Coordinate Transforms
+
+Time: `toJulian(date)`, `fromJulian(jd)`, `j2000Days(date)`, `gmst(date)`, `gast(date)`, `localSiderealTime(observer, date)`.
+
+Coordinates (all degrees, J2000): `equatorialToHorizontal(eq, observer)`, `horizontalToEquatorial(horiz, observer)`, `equatorialToEcliptic(eq)`, `eclipticToEquatorial(ecl)`, `equatorialToGalactic(eq)`, `galacticToEquatorial(gal)`.
+
+Ephemeris: `planetEcliptic(planetName, date)` (VSOP87), `nutation(jd)` (IAU 1980), `precession(eq, fromDate, toDate)`, `properMotion(eq, pmRa, pmDec, years)`, `trueObliquity(jd)`, `refraction(alt, temp?, pressure?)`.
+
+Angular & photometry: `angularSeparation(eq1, eq2)`, `distanceModulus(distance_pc)`, `apparentMagnitude(absolute, distance_pc)`.
+
+Rise/set: `riseTransitSet(eq, observer)` → `{ rise, transit, set }`.
+
+Kepler: `solveKepler(e, M)`.
+
+### Sun
+
+`position(date?)` → `{ ra, dec, distance_AU, eclipticLon }`.
+`twilight(observer, date?)` → `{ sunrise, sunset, civilDawn, civilDusk, nauticalDawn, nauticalDusk, astroDawn, astroDusk }`.
+
+### Moon
+
+`position(date?)` → `{ ra, dec, distance_km, parallax, phaseAngle, elongation }`.
+`phase(date?)` → `{ phase, illumination, age, name, distance_km, angularDiameter_arcmin }`.
+`libration(date?)`, `nextNewMoon(date?)`, `nextFullMoon(date?)`, `riseTransitSet(observer, date?)`.
+
+### Eclipse
+
+`nextSolar(date?)`, `nextLunar(date?)`, `search(startDate, endDate)`.
+Returns: type (solar/lunar), subtype (total/annular/partial/penumbral), date, magnitude.
+
+### Planner — Observation Planning
+
+`whatsUp(observer, options?)` → visible objects above horizon with moon interference scoring.
+`bestWindow(object, observer, options?)` → rise/transit/set and peak altitude window.
+`visibilityCurve(object, observer, startDate, samples)` → altitude vs time.
+`airmass(object, observer, startDate, samples)` → airmass curve.
+`planetEvents(startDate, days?)` → oppositions/conjunctions.
+Options: `minAltitude`, `magnitudeLimit`, `types`, `constellation`, `tag`.
+
+### Events — Astronomical Event Calendar
+
+`nextEvents(observer?, options?)` → unified event feed.
+`toICalendar(events)` → iCalendar export.
+Categories: moon-phase, eclipse, meteor-shower, opposition, conjunction, equinox, solstice, elongation.
+
+### AstroClock — Simulation Clock
+
+`play()`, `pause()`, `setDate(date)`, `setSpeed(multiplier)`, `snapTo(eventType, observer)`.
+Events: tick, play, pause, datechange, speedchange. Supports negative speeds for reverse.
+
+### Data — Unified Catalog Search
+
+`get(id)`, `getByName(name)`, `all()`, `getByType(type)`, `getByTag(tag)`, `search(query)` (fuzzy), `nearby(center, radiusDeg)`.
+
+Returns `CelestialObject` with: id, name, aliases, type, ra, dec, magnitude, distance, description, tags, subtype, spectral info, size.
+
+### Bundled Catalogs
+
+- **Solar System** (`SOLAR_SYSTEM`): Sun, 8 planets, Moon — diameter, mass, moons, surface temp
+- **Bright Stars** (`BRIGHT_STARS`): ~200+ named IAU stars, J2000 coords, proper motion, spectral type, B-V index. Tiered: Tier 0 (~200), Tier 1 (~50k), Tier 2 (~1.5M)
+- **Messier** (`MESSIER_CATALOG`): All 110 objects — nebulae, clusters, galaxies with NGC cross-refs
+- **Constellations** (`CONSTELLATIONS`): All 88 IAU constellations with boundaries and figure stars
+- **Meteor Showers** (`METEOR_SHOWERS`): ~23 major showers — radiant, peak, ZHR, speed, parent body
+- **Deep Sky Extras** (`DEEP_SKY_EXTRAS`): Notable objects beyond Messier
+
+### Equipment & Rig
+
+160+ catalog entries: cameras, telescopes, lenses, trackers.
+
+`Rig` class: `fov()`, `pixelScale()`, `samplingAdvice(seeing?)`, `framing(object)`, `exposureLimit(rule, targetMotion?)`.
+
+### AstroPhoto — Astrophotography Planning
+
+`sessionPlan(targets, observer, night, options?)`, `imagingWindow(object, observer, airmassThreshold?)`, `milkyWayInfo(observer, date?)`, `polarAlignmentInfo(observer, date?)`.
+Exposure calculators: NPF rule, rule of 500.
+
+### Sky Maps
+
+Static: `renderSkyMap(canvas, objects, options)`.
+Projections: `stereographic()`, `mollweide()`, `gnomonic()`.
+Interactive: `createInteractiveSkyMap(canvas, objects, options)` — pan, zoom, click-to-identify. Events: select, hover, viewchange.
+`canvasToEquatorial()` for hit-testing.
+
+### Media — Image Loading
+
+`chainLoad(urls)`, `progressiveLoad(target, options)` (placeholder → quality tiers).
+Wikimedia/Cloudinary URL builders, auto srcset generation.
+
+### Image Resolution
+
+`resolveImages(objectId, options?)`, `getObjectImage(objectId, options?)`, `prefetchImages(objectIds)`.
+`tryHiPS(coord, options?)`, `tryPanSTARRS(coord, options?)`, `tryDSS(coord, options?)`.
+
+### Transitions — View Transitions API
+
+`morph(updateFn, options)`, `staggerIn(container, options)`, `staggerOut(container, options)`, `fade(el, options)`, `crossfade(fromEl, toEl, options)`, `heroExpand(el, options)`, `heroCollapse(el, options)`.
+All support `AbortSignal` for cancellation.
+
+### Units & Constants
+
+Distance: `auToKm`, `kmToAu`, `lyToPc`, `pcToLy`, `lyToKm`, etc.
+Angular: `degToRad`, `radToDeg`, `arcsecToDeg`, `hrsToDeg`, etc.
+Formatters: `formatDistance(km)`, `formatAngle(deg)` (DMS), `formatRA(deg)` (HMS).
+
+Constants (IAU 2012): `AU_TO_KM`, `LY_TO_KM`, `PC_TO_KM`, `SOLAR_MASS_KG`, `EARTH_MASS_KG`, `J2000`, `ECLIPTIC_OBL`, etc.
+
+### External APIs
+
+**NASA**: `setApiKey(key)`, `searchImages(query, options?)`, `apod(date?)`.
+**ESA**: `hubbleSearch(query, options?)`.
+**Simbad**: `resolveSimbad(objectName)` → coordinates and type.
+**Astrobin**: `searchEquipment(query)` → cameras, telescopes.
+
+## React Hooks (`/react`)
+
+```ts
+import { useSkyPosition, useMoonPhase, useAstroClock, useWhatsUp, useTwilight, SkyMap } from '@motioncomplex/cosmos-lib/react';
+```
+
+- `useSkyPosition(objectId, observer, intervalMs?)` — reactive alt/az
+- `useMoonPhase(date?, intervalMs?)` — reactive moon phase
+- `useAstroClock(options?)` — managed clock with React lifecycle
+- `useWhatsUp(observer, options?, intervalMs?)` — reactive visible objects
+- `useTwilight(observer, date?)` — twilight times
+- `<SkyMap />` — interactive sky chart component
+
+## Three.js Factories (`/three`)
+
+```ts
+import { createPlanet, createNebula, createStarField, createOrbit, createAtmosphere, LODTextureManager, CameraFlight, SHADERS } from '@motioncomplex/cosmos-lib/three';
+```
+
+All functions accept `THREE` as a runtime argument to avoid hard dependency.
+
+## Key Types
+
+- `CelestialObject` — unified catalog entry
+- `ObjectType` — 'star' | 'planet' | 'nebula' | 'galaxy' | 'cluster' | 'black-hole' | 'moon'
+- `EquatorialCoord` — { ra, dec } degrees J2000
+- `HorizontalCoord` — { alt, az } degrees
+- `EclipticCoord` — { lon, lat }
+- `GalacticCoord` — { lon, lat }
+- `ObserverParams` — { lat, lng, date?, elevation? }
+- `Distance` — { value, unit: 'km' | 'AU' | 'ly' | 'pc' | 'kpc' | 'Mpc' }
+- `MoonPhase`, `SunPosition`, `MoonPosition`, `TwilightTimes`, `RiseTransitSet`
+- `VisibleObject`, `BestWindowResult`, `AirmassPoint`, `PlanetEvent`
+- `Camera`, `Telescope`, `Lens`, `Tracker`, `FOV`, `FramingResult`
+- `AstroEvent`, `EclipseEvent`
+
+## Peer Dependencies
+
+- `three` (>=0.150.0) — optional, only for `/three` subpath
+- React — not a peer dep; `/react` subpath uses whatever React the consumer provides
+
+## Docs
+
+- [Getting Started](docs/getting-started.md)
+- [Types Reference](docs/types.md)
+- [API Documentation](docs/api/)
+- [Guides](docs/guides/)
