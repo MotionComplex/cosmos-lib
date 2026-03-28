@@ -4670,7 +4670,7 @@ function qs(n) {
 }
 const J = {
   // ── Solar system ──────────────────────────────────────────────────────────
-  sun: [{ filename: "The_Sun_by_the_Atmospheric_Imaging_Assembly_of_NASA%27s_Solar_Dynamics_Observatory_-_20100819.jpg", credit: "NASA/SDO (AIA)" }],
+  sun: [{ filename: "The_Sun_by_the_Atmospheric_Imaging_Assembly_of_NASA's_Solar_Dynamics_Observatory_-_20100819.jpg", credit: "NASA/SDO (AIA)" }],
   mercury: [{ filename: "Mercury_in_color_-_Prockter07-edit1.jpg", credit: "NASA/Johns Hopkins APL/Carnegie Inst. Washington" }],
   venus: [{ filename: "PIA00271-_Venus_-_3D_Perspective_View_of_Maat_Mons.jpg", credit: "NASA/JPL" }],
   earth: [{ filename: "The_Blue_Marble_(remastered).jpg", credit: "NASA/Apollo 17" }],
