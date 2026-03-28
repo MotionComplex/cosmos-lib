@@ -51,7 +51,7 @@ export const IMAGE_FALLBACKS: Readonly<Record<string, ImageRef[]>> = {
   // ── Solar system ──────────────────────────────────────────────────────────
   sun:     [{ filename: "The_Sun_by_the_Atmospheric_Imaging_Assembly_of_NASA's_Solar_Dynamics_Observatory_-_20100819.jpg", credit: 'NASA/SDO (AIA)' }],
   mercury: [{ filename: 'Mercury_in_color_-_Prockter07-edit1.jpg', credit: 'NASA/Johns Hopkins APL/Carnegie Inst. Washington' }],
-  venus:   [{ filename: 'Venus_-_3D_Perspective_View_of_Maat_Mons.jpg', credit: 'NASA/JPL' }],
+  venus:   [{ filename: 'Venus_from_Mariner_10.jpg', credit: 'NASA/JPL-Caltech' }],
   earth:   [{ filename: 'The_Blue_Marble_(remastered).jpg', credit: 'NASA/Apollo 17' }],
   moon:    [{ filename: 'FullMoon2010.jpg', credit: 'Gregory H. Revera (CC BY-SA 3.0)' }],
   mars:    [{ filename: 'OSIRIS_Mars_true_color.jpg', credit: 'ESA/MPS/UPD/LAM/IAA/RSSD/INTA/UPM/DASP/IDA' }],
@@ -337,18 +337,24 @@ export async function getObjectImage(
   let result: ObjectImageResult | null = null
 
   // ── 2. Curated Wikimedia static registry ────────────────────────────
-  // These are hand-picked filenames — trust them without a HEAD check.
-  // The Special:FilePath redirect is reliable; if it ever 404s the
-  // browser's <img> onerror will handle it gracefully.
+  // Validate with a HEAD request so the pipeline falls through on 404.
   const staticImages = IMAGE_FALLBACKS[id]
   if (staticImages?.length) {
     const img = staticImages[0]!
-    result = {
-      src: Media.wikimediaUrl(img.filename, width),
-      srcset: Media.srcset(srcsetWidths, w => Media.wikimediaUrl(img.filename, w)),
-      placeholder: Media.wikimediaUrl(img.filename, 64),
-      credit: img.credit,
-      source: 'static',
+    const staticUrl = Media.wikimediaUrl(img.filename, width)
+    try {
+      const head = await fetch(staticUrl, { method: 'HEAD', redirect: 'follow' })
+      if (head.ok) {
+        result = {
+          src: staticUrl,
+          srcset: Media.srcset(srcsetWidths, w => Media.wikimediaUrl(img.filename, w)),
+          placeholder: Media.wikimediaUrl(img.filename, 64),
+          credit: img.credit,
+          source: 'static',
+        }
+      }
+    } catch {
+      // Network error — fall through to next source
     }
   }
 

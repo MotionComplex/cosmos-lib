@@ -1,6 +1,6 @@
 import { jsx as C } from "react/jsx-runtime";
 import { useRef as v, useEffect as D, useState as g, useCallback as P, useMemo as q } from "react";
-import { D as E, I as z, b as F, M as k, S as A, A as x, P as M } from "../skymap-interactive-D-_KkXnw.js";
+import { D as E, I as z, b as F, M as k, S as A, A as x, P as M } from "../skymap-interactive-wDO82b8c.js";
 const S = typeof window < "u";
 function B(t, e, r = 1e4) {
   const [l, u] = g(null);

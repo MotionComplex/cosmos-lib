@@ -402,14 +402,14 @@ const L = {
       saturn: { a: 9.53667594, da: -12506e-7, e: 0.05386179, de: -50991e-8, i: 2.48599187, di: 193609e-8, L: 49.95424423, dL: 1222.49362201, w: 92.59887831, dw: -0.41897216, O: 113.66242448, dO: -0.28867794 },
       uranus: { a: 19.18916464, da: -196176e-8, e: 0.04725744, de: -4397e-8, i: 0.77263783, di: -242939e-8, L: 313.23810451, dL: 428.48202785, w: 170.9542763, dw: 0.40805281, O: 74.01692503, dO: 0.04240589 },
       neptune: { a: 30.06992276, da: 26291e-8, e: 859048e-8, de: 5105e-8, i: 1.77004347, di: 35372e-8, L: 304.87997031, dL: 218.45945325, w: 44.96476227, dw: -0.32241464, O: 131.78422574, dO: -508664e-8 }
-    }[n], l = this.j2000Days(s) / 36525, r = i.a + i.da * l, g = i.e + i.de * l, o = i.i + i.di * l, c = i.L + i.dL * l, k = i.w + i.dw * l, y = i.O + i.dO * l, a = ((c - k) % 360 + 360) % 360, v = a * z, u = this.solveKepler(v, g), p = (Math.atan2(
+    }[n], l = this.j2000Days(s) / 36525, r = i.a + i.da * l, g = i.e + i.de * l, o = i.i + i.di * l, c = i.L + i.dL * l, k = i.w + i.dw * l, y = i.O + i.dO * l, a = ((c - k) % 360 + 360) % 360, v = a * z, u = this.solveKepler(v, g), f = (Math.atan2(
       Math.sqrt(1 - g * g) * Math.sin(u),
       Math.cos(u) - g
-    ) * D % 360 + 360) % 360, h = r * (1 - g * Math.cos(u)), d = k - y, m = (p + d) * z, S = o * z, b = Math.atan2(
+    ) * D % 360 + 360) % 360, h = r * (1 - g * Math.cos(u)), d = k - y, m = (f + d) * z, S = o * z, b = Math.atan2(
       Math.sin(m) * Math.cos(S),
       Math.cos(m)
     ) * D + y, A = Math.asin(Math.sin(m) * Math.sin(S)) * D;
-    return { lon: (b % 360 + 360) % 360, lat: A, r: h, M: a, nu: p };
+    return { lon: (b % 360 + 360) % 360, lat: A, r: h, M: a, nu: f };
   },
   // ── Precession ──────────────────────────────────────────────────────────
   /**
@@ -440,8 +440,8 @@ const L = {
    * ```
    */
   precess(n, s, e) {
-    const i = (s - 2451545) / 36525, t = (e - s) / 36525, l = (2306.2181 + 1.39656 * i - 139e-6 * i * i) * t + (0.30188 - 344e-6 * i) * t * t + 0.017998 * t * t * t, r = (2306.2181 + 1.39656 * i - 139e-6 * i * i) * t + (1.09468 + 66e-6 * i) * t * t + 0.018203 * t * t * t, g = (2004.3109 - 0.8533 * i - 217e-6 * i * i) * t - (0.42665 + 217e-6 * i) * t * t - 0.041833 * t * t * t, o = l / 3600 * z, c = r / 3600 * z, k = g / 3600 * z, y = n.ra * z, a = n.dec * z, v = Math.cos(a) * Math.sin(y + o), u = Math.cos(k) * Math.cos(a) * Math.cos(y + o) - Math.sin(k) * Math.sin(a), f = Math.sin(k) * Math.cos(a) * Math.cos(y + o) + Math.cos(k) * Math.sin(a), p = (Math.atan2(v, u) + c) * D, h = Math.asin(Math.max(-1, Math.min(1, f))) * D;
-    return { ra: (p % 360 + 360) % 360, dec: h };
+    const i = (s - 2451545) / 36525, t = (e - s) / 36525, l = (2306.2181 + 1.39656 * i - 139e-6 * i * i) * t + (0.30188 - 344e-6 * i) * t * t + 0.017998 * t * t * t, r = (2306.2181 + 1.39656 * i - 139e-6 * i * i) * t + (1.09468 + 66e-6 * i) * t * t + 0.018203 * t * t * t, g = (2004.3109 - 0.8533 * i - 217e-6 * i * i) * t - (0.42665 + 217e-6 * i) * t * t - 0.041833 * t * t * t, o = l / 3600 * z, c = r / 3600 * z, k = g / 3600 * z, y = n.ra * z, a = n.dec * z, v = Math.cos(a) * Math.sin(y + o), u = Math.cos(k) * Math.cos(a) * Math.cos(y + o) - Math.sin(k) * Math.sin(a), p = Math.sin(k) * Math.cos(a) * Math.cos(y + o) + Math.cos(k) * Math.sin(a), f = (Math.atan2(v, u) + c) * D, h = Math.asin(Math.max(-1, Math.min(1, p))) * D;
+    return { ra: (f % 360 + 360) % 360, dec: h };
   },
   // ── Nutation ────────────────────────────────────────────────────────────
   /**
@@ -486,9 +486,9 @@ const L = {
       [0, 0, -1, 2, 2, 123, 0, -53, 0]
     ];
     let v = 0, u = 0;
-    for (const f of a) {
-      const p = f[0] * y + f[1] * o + f[2] * c + f[3] * k + f[4] * g;
-      v += (f[5] + f[6] * s) * Math.sin(p), u += (f[7] + f[8] * s) * Math.cos(p);
+    for (const p of a) {
+      const f = p[0] * y + p[1] * o + p[2] * c + p[3] * k + p[4] * g;
+      v += (p[5] + p[6] * s) * Math.sin(f), u += (p[7] + p[8] * s) * Math.cos(f);
     }
     return {
       dPsi: v / (3600 * 1e4),
@@ -669,8 +669,8 @@ const L = {
       return { rise: null, transit: y, set: null };
     if (o < -1)
       return { rise: null, transit: y, set: null };
-    const v = Math.acos(o) * D / 360, u = ((k - v) % 1 + 1) % 1, f = ((k + v) % 1 + 1) % 1, p = new Date(t.valueOf() + u * 864e5), h = new Date(t.valueOf() + f * 864e5);
-    return { rise: p, transit: y, set: h };
+    const v = Math.acos(o) * D / 360, u = ((k - v) % 1 + 1) % 1, p = ((k + v) % 1 + 1) % 1, f = new Date(t.valueOf() + u * 864e5), h = new Date(t.valueOf() + p * 864e5);
+    return { rise: f, transit: y, set: h };
   }
 };
 function bs(n, s = 6e4, e = 128) {
@@ -918,23 +918,23 @@ const Q = L.DEG_TO_RAD, Is = bs((n) => {
   [4, 0, -1, 1, 833]
 ], Z = 29.530588861, xs = bs((n) => {
   const s = _.toJulian(n), e = (s - 2451545) / 36525, i = ((218.3164477 + 481267.88123421 * e - 15786e-7 * e * e + e * e * e / 538841 - e * e * e * e / 65194e3) % 360 + 360) % 360, t = ((297.8501921 + 445267.1114034 * e - 18819e-7 * e * e + e * e * e / 545868 - e * e * e * e / 113065e3) % 360 + 360) % 360, l = ((357.5291092 + 35999.0502909 * e - 1536e-7 * e * e + e * e * e / 2449e4) % 360 + 360) % 360, r = ((134.9633964 + 477198.8675055 * e + 87414e-7 * e * e + e * e * e / 69699 - e * e * e * e / 14712e3) % 360 + 360) % 360, g = ((93.272095 + 483202.0175233 * e - 36539e-7 * e * e - e * e * e / 3526e3 + e * e * e * e / 86331e4) % 360 + 360) % 360, o = 1 - 2516e-6 * e - 74e-7 * e * e, c = o * o, k = t * M, y = l * M, a = r * M, v = g * M;
-  let u = 0, f = 0;
+  let u = 0, p = 0;
   for (const C of ws) {
     const Y = C[0] * k + C[1] * y + C[2] * a + C[3] * v;
     let G = 1;
     const q = Math.abs(C[1]);
-    q === 1 ? G = o : q === 2 && (G = c), u += C[4] * G * Math.sin(Y), f += C[5] * G * Math.cos(Y);
+    q === 1 ? G = o : q === 2 && (G = c), u += C[4] * G * Math.sin(Y), p += C[5] * G * Math.cos(Y);
   }
-  let p = 0;
+  let f = 0;
   for (const C of Rs) {
     const Y = C[0] * k + C[1] * y + C[2] * a + C[3] * v;
     let G = 1;
     const q = Math.abs(C[1]);
-    q === 1 ? G = o : q === 2 && (G = c), p += C[4] * G * Math.sin(Y);
+    q === 1 ? G = o : q === 2 && (G = c), f += C[4] * G * Math.sin(Y);
   }
   const h = (119.75 + 131.849 * e) * M, d = (53.09 + 479264.29 * e) * M, m = (313.45 + 481266.484 * e) * M;
-  u += 3958 * Math.sin(h) + 1962 * Math.sin((i - g) * M) + 318 * Math.sin(d), p += -2235 * Math.sin(i * M) + 382 * Math.sin(m) + 175 * Math.sin(h - v) + 175 * Math.sin(h + v) + 127 * Math.sin((i - r) * M) - 115 * Math.sin((i + r) * M);
-  const S = i + u / 1e6, b = p / 1e6, A = 385000.56 + f / 1e3, { dPsi: R } = _.nutation(s), H = S + R, E = _.trueObliquity(s) * M, U = H * M, X = b * M, As = Math.atan2(
+  u += 3958 * Math.sin(h) + 1962 * Math.sin((i - g) * M) + 318 * Math.sin(d), f += -2235 * Math.sin(i * M) + 382 * Math.sin(m) + 175 * Math.sin(h - v) + 175 * Math.sin(h + v) + 127 * Math.sin((i - r) * M) - 115 * Math.sin((i + r) * M);
+  const S = i + u / 1e6, b = f / 1e6, A = 385000.56 + p / 1e3, { dPsi: R } = _.nutation(s), H = S + R, E = _.trueObliquity(s) * M, U = H * M, X = b * M, As = Math.atan2(
     Math.sin(U) * Math.cos(E) - Math.tan(X) * Math.sin(E),
     Math.cos(U)
   ) * B, Ds = Math.asin(
@@ -4104,11 +4104,11 @@ const us = {
     const o = await fetch(`https://images-api.nasa.gov/search?${g.toString()}`);
     if (!o.ok) throw new Error(`NASA Image API error: ${o.status} ${o.statusText}`);
     return (((k = (await o.json()).collection) == null ? void 0 : k.items) ?? []).map((y) => {
-      var a, v, u, f, p, h, d, m, S, b, A, R, H, E;
+      var a, v, u, p, f, h, d, m, S, b, A, R, H, E;
       return {
         nasaId: ((v = (a = y.data) == null ? void 0 : a[0]) == null ? void 0 : v.nasa_id) ?? "",
-        title: ((f = (u = y.data) == null ? void 0 : u[0]) == null ? void 0 : f.title) ?? "",
-        description: ((h = (p = y.data) == null ? void 0 : p[0]) == null ? void 0 : h.description) ?? "",
+        title: ((p = (u = y.data) == null ? void 0 : u[0]) == null ? void 0 : p.title) ?? "",
+        description: ((h = (f = y.data) == null ? void 0 : f[0]) == null ? void 0 : h.description) ?? "",
         date: ((m = (d = y.data) == null ? void 0 : d[0]) == null ? void 0 : m.date_created) ?? "",
         center: ((b = (S = y.data) == null ? void 0 : S[0]) == null ? void 0 : b.center) ?? "",
         keywords: ((R = (A = y.data) == null ? void 0 : A[0]) == null ? void 0 : R.keywords) ?? [],
@@ -4630,8 +4630,8 @@ async function Vs(n, s, e, i, t = {}) {
       signal: AbortSignal.timeout(g)
     });
     if (!u.ok) return null;
-    const f = u.headers.get("content-length");
-    return f && parseInt(f) < 8e3 ? null : {
+    const p = u.headers.get("content-length");
+    return p && parseInt(p) < 8e3 ? null : {
       url: v.toString(),
       format: "jpg",
       credit: "Pan-STARRS/STScI",
@@ -4672,7 +4672,7 @@ const J = {
   // ── Solar system ──────────────────────────────────────────────────────────
   sun: [{ filename: "The_Sun_by_the_Atmospheric_Imaging_Assembly_of_NASA's_Solar_Dynamics_Observatory_-_20100819.jpg", credit: "NASA/SDO (AIA)" }],
   mercury: [{ filename: "Mercury_in_color_-_Prockter07-edit1.jpg", credit: "NASA/Johns Hopkins APL/Carnegie Inst. Washington" }],
-  venus: [{ filename: "Venus_-_3D_Perspective_View_of_Maat_Mons.jpg", credit: "NASA/JPL" }],
+  venus: [{ filename: "Venus_from_Mariner_10.jpg", credit: "NASA/JPL-Caltech" }],
   earth: [{ filename: "The_Blue_Marble_(remastered).jpg", credit: "NASA/Apollo 17" }],
   moon: [{ filename: "FullMoon2010.jpg", credit: "Gregory H. Revera (CC BY-SA 3.0)" }],
   mars: [{ filename: "OSIRIS_Mars_true_color.jpg", credit: "ESA/MPS/UPD/LAM/IAA/RSSD/INTA/UPM/DASP/IDA" }],
@@ -4784,27 +4784,30 @@ async function gs(n, s, e = {}) {
   let y = null;
   const a = J[n];
   if (a != null && a.length) {
-    const v = a[0];
-    y = {
-      src: x.wikimediaUrl(v.filename, i),
-      srcset: x.srcset(t, (u) => x.wikimediaUrl(v.filename, u)),
-      placeholder: x.wikimediaUrl(v.filename, 64),
-      credit: v.credit,
-      source: "static"
-    };
+    const v = a[0], u = x.wikimediaUrl(v.filename, i);
+    try {
+      (await fetch(u, { method: "HEAD", redirect: "follow" })).ok && (y = {
+        src: u,
+        srcset: x.srcset(t, (f) => x.wikimediaUrl(v.filename, f)),
+        placeholder: x.wikimediaUrl(v.filename, 64),
+        credit: v.credit,
+        source: "static"
+      });
+    } catch {
+    }
   }
   if (!y && !g && T) {
     const v = T(n);
     if (v && v.ra !== null && v.dec !== null) {
-      const u = Os(v.size_arcmin, v.type), f = { outputSize: i, timeout: r }, p = await js(v.ra, v.dec, u, { ...f, ...o });
-      if (p && (y = {
-        src: p.url,
+      const u = Os(v.size_arcmin, v.type), p = { outputSize: i, timeout: r }, f = await js(v.ra, v.dec, u, { ...p, ...o });
+      if (f && (y = {
+        src: f.url,
         srcset: null,
         placeholder: null,
-        credit: p.credit,
+        credit: f.credit,
         source: "hips"
       }), !y) {
-        const h = await Vs(n, v.ra, v.dec, u, f);
+        const h = await Vs(n, v.ra, v.dec, u, p);
         h && (y = {
           src: h.url,
           srcset: null,
@@ -4814,7 +4817,7 @@ async function gs(n, s, e = {}) {
         });
       }
       if (!y) {
-        const h = await Hs(v.ra, v.dec, u, f);
+        const h = await Hs(v.ra, v.dec, u, p);
         h && (y = {
           src: h.url,
           srcset: null,
@@ -4827,11 +4830,11 @@ async function gs(n, s, e = {}) {
   }
   if (!y) {
     const v = Ws(n, s), u = l === "nasa" ? ["nasa"] : l === "esa" ? ["esa"] : ["esa", "nasa"];
-    for (const f of u) {
+    for (const p of u) {
       if (y) break;
-      for (const p of v)
+      for (const f of v)
         try {
-          const h = await zs(p, { source: f, limit: 1 });
+          const h = await zs(f, { source: p, limit: 1 });
           if (h.length > 0) {
             const d = h[0];
             y = {
@@ -4850,7 +4853,7 @@ async function gs(n, s, e = {}) {
   if (K.set(k, y), y && c !== !1 && T && ls) {
     const v = T(n);
     if (v && v.ra !== null && v.dec !== null) {
-      const u = typeof c == "object" ? c : {}, { radius: f = 5, limit: p = 8 } = u, h = ls({ ra: v.ra, dec: v.dec }, f).filter((d) => d.object.id !== n && !K.has(rs(d.object.id, i, l))).slice(0, p);
+      const u = typeof c == "object" ? c : {}, { radius: p = 5, limit: f = 8 } = u, h = ls({ ra: v.ra, dec: v.dec }, p).filter((d) => d.object.id !== n && !K.has(rs(d.object.id, i, l))).slice(0, f);
       for (const d of h)
         gs(d.object.id, d.object.name, { ...e, prefetch: !1 }).catch(() => {
         });
@@ -5526,26 +5529,26 @@ const ve = {
     } = s, o = n.date ?? /* @__PURE__ */ new Date(), c = O.position(o), k = { ra: c.ra, dec: c.dec }, y = O.phase(o);
     let a = F.all();
     if (t && (a = a.filter((u) => t.includes(u.type))), r && (a = a.filter((u) => u.tags.includes(r))), l) {
-      const u = F.getStarsByConstellation(l), f = new Set(u.map((p) => p.id));
-      a = a.filter((p) => f.has(p.id));
+      const u = F.getStarsByConstellation(l), p = new Set(u.map((f) => f.id));
+      a = a.filter((f) => p.has(f.id));
     }
     const v = [];
     for (const u of a) {
       if (u.magnitude !== null && u.magnitude > i) continue;
-      const f = j(u, o);
-      if (!f) continue;
-      const p = _.equatorialToHorizontal(f, { ...n, date: o });
-      if (p.alt < e) continue;
-      const h = _.angularSeparation(f, k), d = ps(h, y.illumination);
+      const p = j(u, o);
+      if (!p) continue;
+      const f = _.equatorialToHorizontal(p, { ...n, date: o });
+      if (f.alt < e) continue;
+      const h = _.angularSeparation(p, k), d = ps(h, y.illumination);
       v.push({
         object: u,
-        alt: p.alt,
-        az: p.az,
+        alt: f.alt,
+        az: f.az,
         moonSeparation: h,
         moonInterference: d
       });
     }
-    return v.sort((u, f) => f.alt - u.alt), v.slice(0, g);
+    return v.sort((u, p) => p.alt - u.alt), v.slice(0, g);
   },
   /**
    * Find the best observation window for an object on a given night.
@@ -5574,16 +5577,16 @@ const ve = {
     if (!t) return null;
     const { start: l, end: r } = t, g = r.valueOf() - l.valueOf(), o = 60, c = g / o;
     let k = -1 / 0, y = l, a = null, v = null, u = !1;
-    for (let p = 0; p <= o; p++) {
-      const h = new Date(l.valueOf() + p * c), d = j(i, h);
+    for (let f = 0; f <= o; f++) {
+      const h = new Date(l.valueOf() + f * c), d = j(i, h);
       if (!d) return null;
       const m = _.equatorialToHorizontal(d, { ...s, date: h });
-      m.alt >= e ? (!u && p > 0 && (a = h), u = !0, m.alt > k && (k = m.alt, y = h)) : (u && (v = h), u = !1);
+      m.alt >= e ? (!u && f > 0 && (a = h), u = !0, m.alt > k && (k = m.alt, y = h)) : (u && (v = h), u = !1);
     }
     if (k < e) return null;
     u && (v = null);
-    const f = j(i, l);
-    return f && _.equatorialToHorizontal(f, { ...s, date: l }).alt >= e && (a = null), { peak: y, peakAltitude: k, rise: a, set: v };
+    const p = j(i, l);
+    return p && _.equatorialToHorizontal(p, { ...s, date: l }).alt >= e && (a = null), { peak: y, peakAltitude: k, rise: a, set: v };
   },
   /**
    * Compute altitude vs. time for an object over a night.
@@ -5997,11 +6000,11 @@ function Ss(n, s, e = {}) {
     labelColor: y = "rgba(255,255,255,0.7)"
   } = e, a = n.getContext("2d");
   if (!a) throw new Error("Canvas 2D context not available");
-  const v = n.width, u = n.height, f = v / 2, p = u / 2, h = (d) => {
+  const v = n.width, u = n.height, p = v / 2, f = u / 2, h = (d) => {
     if (i === "mollweide")
       return vs(d, { width: v, height: u });
     const m = i === "gnomonic" ? ks(d, t, l) : os(d, t, l);
-    return { x: f + m.x, y: p - m.y, visible: m.visible };
+    return { x: p + m.x, y: f - m.y, visible: m.visible };
   };
   if (a.fillStyle = c, a.fillRect(0, 0, v, u), r) {
     a.strokeStyle = k, a.lineWidth = 0.5;
@@ -6141,31 +6144,31 @@ class ae {
       if (y && this._pointers.size === 1 && (this._opts.panEnabled ?? w.panEnabled)) {
         const a = c - y.lastX, v = k - y.lastY;
         if (y.lastX = c, y.lastY = k, this._view.projection === "mollweide") {
-          const u = this._canvas.width, f = this._canvas.height, p = hs(c - a, k - v, u, f, "mollweide", this._view.center, this._view.scale), h = hs(c, k, u, f, "mollweide", this._view.center, this._view.scale);
-          if (p && h) {
-            let d = p.ra - h.ra;
+          const u = this._canvas.width, p = this._canvas.height, f = hs(c - a, k - v, u, p, "mollweide", this._view.center, this._view.scale), h = hs(c, k, u, p, "mollweide", this._view.center, this._view.scale);
+          if (f && h) {
+            let d = f.ra - h.ra;
             d > 180 && (d -= 360), d < -180 && (d += 360), this._view.center = {
               ra: ((this._view.center.ra + d) % 360 + 360) % 360,
-              dec: Math.max(-90, Math.min(90, this._view.center.dec + (p.dec - h.dec)))
+              dec: Math.max(-90, Math.min(90, this._view.center.dec + (f.dec - h.dec)))
             }, this._markDirty(), this._emitViewChange();
           }
         } else {
-          const u = a / this._view.scale / ts, f = v / this._view.scale / ts;
+          const u = a / this._view.scale / ts, p = v / this._view.scale / ts;
           this._view.center = {
             ra: ((this._view.center.ra - u) % 360 + 360) % 360,
-            dec: Math.max(-90, Math.min(90, this._view.center.dec + f))
+            dec: Math.max(-90, Math.min(90, this._view.center.dec + p))
           }, this._markDirty(), this._emitViewChange();
         }
         return;
       }
       if (y && this._pointers.size === 2 && (this._opts.zoomEnabled ?? w.zoomEnabled)) {
         y.lastX = c, y.lastY = k;
-        const a = [...this._pointers.keys()], v = this._pointers.get(a[0]), u = this._pointers.get(a[1]), f = Math.hypot(v.lastX - u.lastX, v.lastY - u.lastY), p = Math.hypot(
+        const a = [...this._pointers.keys()], v = this._pointers.get(a[0]), u = this._pointers.get(a[1]), p = Math.hypot(v.lastX - u.lastX, v.lastY - u.lastY), f = Math.hypot(
           (a[0] === o.pointerId ? c - (c - y.lastX + (y.lastX - v.lastX)) : v.lastX) - u.lastX,
           (a[0] === o.pointerId ? k - (k - y.lastY + (y.lastY - v.lastY)) : v.lastY) - u.lastY
         );
-        if (p > 0) {
-          const h = f / p;
+        if (f > 0) {
+          const h = p / f;
           this._view.scale = this._clampScale(this._view.scale * h), this._markDirty(), this._emitViewChange();
         }
         return;
@@ -6414,12 +6417,12 @@ class ae {
       const c = 72;
       let k = !1;
       for (let y = 0; y <= c; y++) {
-        const a = y / c * 2 * Math.PI, v = r.dec + l.radiusDeg * Math.sin(a), u = Math.cos(r.dec * ts), f = r.ra + (u > 1e-6 ? l.radiusDeg * Math.cos(a) / u : 0), p = this._project({ ra: f, dec: Math.max(-90, Math.min(90, v)) });
-        if (!p.visible) {
+        const a = y / c * 2 * Math.PI, v = r.dec + l.radiusDeg * Math.sin(a), u = Math.cos(r.dec * ts), p = r.ra + (u > 1e-6 ? l.radiusDeg * Math.cos(a) / u : 0), f = this._project({ ra: p, dec: Math.max(-90, Math.min(90, v)) });
+        if (!f.visible) {
           k = !1;
           continue;
         }
-        k ? s.lineTo(p.x, p.y) : (s.moveTo(p.x, p.y), k = !0);
+        k ? s.lineTo(f.x, f.y) : (s.moveTo(f.x, f.y), k = !0);
       }
       if (s.stroke(), s.setLineDash([]), l.label) {
         const y = this._project({
