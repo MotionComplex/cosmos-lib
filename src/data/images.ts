@@ -337,24 +337,19 @@ export async function getObjectImage(
   let result: ObjectImageResult | null = null
 
   // ── 2. Curated Wikimedia static registry ────────────────────────────
-  // Validate with a HEAD request so the pipeline falls through on 404.
+  // These are verified filenames — trust them without a HEAD check.
+  // Wikimedia's Special:FilePath redirects cross-origin, so HEAD
+  // requests fail due to CORS in browsers. The browser's <img> onerror
+  // can handle the rare case where a filename becomes stale.
   const staticImages = IMAGE_FALLBACKS[id]
   if (staticImages?.length) {
     const img = staticImages[0]!
-    const staticUrl = Media.wikimediaUrl(img.filename, width)
-    try {
-      const head = await fetch(staticUrl, { method: 'HEAD', redirect: 'follow' })
-      if (head.ok) {
-        result = {
-          src: staticUrl,
-          srcset: Media.srcset(srcsetWidths, w => Media.wikimediaUrl(img.filename, w)),
-          placeholder: Media.wikimediaUrl(img.filename, 64),
-          credit: img.credit,
-          source: 'static',
-        }
-      }
-    } catch {
-      // Network error — fall through to next source
+    result = {
+      src: Media.wikimediaUrl(img.filename, width),
+      srcset: Media.srcset(srcsetWidths, w => Media.wikimediaUrl(img.filename, w)),
+      placeholder: Media.wikimediaUrl(img.filename, 64),
+      credit: img.credit,
+      source: 'static',
     }
   }
 
